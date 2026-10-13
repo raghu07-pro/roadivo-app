@@ -1,0 +1,56 @@
+{
+  "source": "/Users/dhavalbhanderi/Desktop/Dhruv/claude-code-starter/apps/Roadivo/Core/Playlist/LibraryError.swift",
+  "tables": {
+    "Localizable": [
+      {
+        "comment": "",
+        "key": "That doesn't look like a playlist link. Check it starts with http:// or https://.",
+        "location": {
+          "startingColumn": 34,
+          "startingLine": 14
+        }
+      },
+      {
+        "comment": "",
+        "key": "We couldn't find any channels or videos in that playlist.",
+        "location": {
+          "startingColumn": 34,
+          "startingLine": 16
+        }
+      },
+      {
+        "comment": "",
+        "key": "That file couldn't be read as a playlist.",
+        "location": {
+          "startingColumn": 34,
+          "startingLine": 18
+        }
+      },
+      {
+        "comment": "",
+        "key": "The server answered with error %lld. Check the link and try again.",
+        "location": {
+          "startingColumn": 34,
+          "startingLine": 20
+        }
+      },
+      {
+        "comment": "",
+        "key": "The playlist couldn't be downloaded. %@",
+        "location": {
+          "startingColumn": 34,
+          "startingLine": 22
+        }
+      },
+      {
+        "comment": "",
+        "key": "That item is no longer in your library.",
+        "location": {
+          "startingColumn": 34,
+          "startingLine": 24
+        }
+      }
+    ]
+  },
+  "version": 1
+}

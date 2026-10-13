@@ -1,0 +1,120 @@
+{
+  "source": "/Users/dhavalbhanderi/Desktop/Dhruv/claude-code-starter/apps/Roadivo/Features/Sources/AddSourceView.swift",
+  "tables": {
+    "Localizable": [
+      {
+        "comment": "",
+        "key": "Add a Source",
+        "location": {
+          "startingColumn": 30,
+          "startingLine": 58
+        }
+      },
+      {
+        "comment": "",
+        "key": "Name (optional)",
+        "location": {
+          "startingColumn": 19,
+          "startingLine": 108
+        }
+      },
+      {
+        "comment": "",
+        "key": "Import an M3U File",
+        "location": {
+          "startingColumn": 31,
+          "startingLine": 42
+        }
+      },
+      {
+        "comment": "",
+        "key": "Close",
+        "location": {
+          "startingColumn": 57,
+          "startingLine": 62
+        }
+      },
+      {
+        "comment": "",
+        "key": "Add",
+        "location": {
+          "startingColumn": 32,
+          "startingLine": 69
+        }
+      },
+      {
+        "comment": "",
+        "key": "Paste a subscription link or M3U content, or tap the scan icon to read a QR code.",
+        "location": {
+          "startingColumn": 18,
+          "startingLine": 95
+        }
+      },
+      {
+        "comment": "",
+        "key": "What is a source?",
+        "location": {
+          "startingColumn": 22,
+          "startingLine": 101
+        }
+      },
+      {
+        "comment": "",
+        "key": "Paste a link or a whole M3U list",
+        "location": {
+          "startingColumn": 23,
+          "startingLine": 121
+        }
+      },
+      {
+        "comment": "",
+        "key": "Scan QR code",
+        "location": {
+          "startingColumn": 42,
+          "startingLine": 145
+        }
+      },
+      {
+        "comment": "",
+        "key": "No usable link found",
+        "location": {
+          "startingColumn": 22,
+          "startingLine": 159
+        }
+      },
+      {
+        "comment": "",
+        "key": "Supports M3U/M3U8 links, M3U files and pasted M3U content.",
+        "location": {
+          "startingColumn": 22,
+          "startingLine": 160
+        }
+      },
+      {
+        "comment": "",
+        "key": "Or connect a media server",
+        "location": {
+          "startingColumn": 22,
+          "startingLine": 175
+        }
+      },
+      {
+        "comment": "",
+        "key": "Roadivo doesn't provide, host or endorse any content. Add only sources you have the right to use.",
+        "location": {
+          "startingColumn": 18,
+          "startingLine": 208
+        }
+      },
+      {
+        "comment": "",
+        "key": "Get Help",
+        "location": {
+          "startingColumn": 23,
+          "startingLine": 204
+        }
+      }
+    ]
+  },
+  "version": 1
+}

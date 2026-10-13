@@ -1,0 +1,16 @@
+{
+  "source": "/Users/dhavalbhanderi/Desktop/Dhruv/claude-code-starter/apps/Roadivo/DesignSystem/Components/ArtworkTile.swift",
+  "tables": {
+    "Localizable": [
+      {
+        "comment": "",
+        "key": "LIVE",
+        "location": {
+          "startingColumn": 14,
+          "startingLine": 66
+        }
+      }
+    ]
+  },
+  "version": 1
+}

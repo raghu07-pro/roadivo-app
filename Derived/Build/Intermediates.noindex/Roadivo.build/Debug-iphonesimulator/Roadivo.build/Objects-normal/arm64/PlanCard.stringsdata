@@ -1,0 +1,40 @@
+{
+  "source": "/Users/dhavalbhanderi/Desktop/Dhruv/claude-code-starter/apps/Roadivo/Features/Paywall/Components/PlanCard.swift",
+  "tables": {
+    "Localizable": [
+      {
+        "comment": "",
+        "key": "First week %@",
+        "location": {
+          "startingColumn": 30,
+          "startingLine": 26
+        }
+      },
+      {
+        "comment": "",
+        "key": "%@ / week",
+        "location": {
+          "startingColumn": 30,
+          "startingLine": 30
+        }
+      },
+      {
+        "comment": "",
+        "key": "One-time",
+        "location": {
+          "startingColumn": 30,
+          "startingLine": 34
+        }
+      },
+      {
+        "comment": "",
+        "key": "Most popular",
+        "location": {
+          "startingColumn": 26,
+          "startingLine": 53
+        }
+      }
+    ]
+  },
+  "version": 1
+}

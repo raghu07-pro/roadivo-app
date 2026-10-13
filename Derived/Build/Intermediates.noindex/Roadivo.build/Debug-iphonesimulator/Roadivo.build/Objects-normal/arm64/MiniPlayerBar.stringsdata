@@ -1,0 +1,48 @@
+{
+  "source": "/Users/dhavalbhanderi/Desktop/Dhruv/claude-code-starter/apps/Roadivo/Features/Player/Components/MiniPlayerBar.swift",
+  "tables": {
+    "Localizable": [
+      {
+        "comment": "",
+        "key": "Now playing: %@",
+        "location": {
+          "startingColumn": 38,
+          "startingLine": 33
+        }
+      },
+      {
+        "comment": "",
+        "key": "Opens the player",
+        "location": {
+          "startingColumn": 37,
+          "startingLine": 34
+        }
+      },
+      {
+        "comment": "",
+        "key": "Pause",
+        "location": {
+          "startingColumn": 59,
+          "startingLine": 42
+        }
+      },
+      {
+        "comment": "",
+        "key": "Play",
+        "location": {
+          "startingColumn": 75,
+          "startingLine": 42
+        }
+      },
+      {
+        "comment": "",
+        "key": "Stop playback",
+        "location": {
+          "startingColumn": 38,
+          "startingLine": 49
+        }
+      }
+    ]
+  },
+  "version": 1
+}

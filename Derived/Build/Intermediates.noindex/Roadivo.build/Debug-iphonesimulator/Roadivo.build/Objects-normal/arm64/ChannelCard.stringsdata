@@ -1,0 +1,96 @@
+{
+  "source": "/Users/dhavalbhanderi/Desktop/Dhruv/claude-code-starter/apps/Roadivo/Features/Library/Components/ChannelCard.swift",
+  "tables": {
+    "Localizable": [
+      {
+        "comment": "",
+        "key": "Delete %@?",
+        "location": {
+          "startingColumn": 18,
+          "startingLine": 61
+        }
+      },
+      {
+        "comment": "",
+        "key": "Favorite",
+        "location": {
+          "startingColumn": 52,
+          "startingLine": 71
+        }
+      },
+      {
+        "comment": "",
+        "key": "Plays this channel",
+        "location": {
+          "startingColumn": 33,
+          "startingLine": 72
+        }
+      },
+      {
+        "comment": "",
+        "key": "Remove from Favorites",
+        "location": {
+          "startingColumn": 60,
+          "startingLine": 74
+        }
+      },
+      {
+        "comment": "",
+        "key": "Add to Favorites",
+        "location": {
+          "startingColumn": 92,
+          "startingLine": 74
+        }
+      },
+      {
+        "comment": "",
+        "key": "Play",
+        "location": {
+          "startingColumn": 44,
+          "startingLine": 45
+        }
+      },
+      {
+        "comment": "",
+        "key": "Remove from Favorites",
+        "location": {
+          "startingColumn": 39,
+          "startingLine": 48
+        }
+      },
+      {
+        "comment": "",
+        "key": "Add to Favorites",
+        "location": {
+          "startingColumn": 65,
+          "startingLine": 48
+        }
+      },
+      {
+        "comment": "",
+        "key": "Delete",
+        "location": {
+          "startingColumn": 27,
+          "startingLine": 56
+        }
+      },
+      {
+        "comment": "",
+        "key": "Delete Video",
+        "location": {
+          "startingColumn": 20,
+          "startingLine": 65
+        }
+      },
+      {
+        "comment": "",
+        "key": "The video is removed from Roadivo. The original stays in Photos or Files.",
+        "location": {
+          "startingColumn": 18,
+          "startingLine": 67
+        }
+      }
+    ]
+  },
+  "version": 1
+}

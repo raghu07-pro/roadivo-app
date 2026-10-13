@@ -1,0 +1,16 @@
+{
+  "source": "/Users/dhavalbhanderi/Desktop/Dhruv/claude-code-starter/apps/Roadivo/Features/Sources/Components/SourceRow.swift",
+  "tables": {
+    "Localizable": [
+      {
+        "comment": "",
+        "key": "%lld items",
+        "location": {
+          "startingColumn": 42,
+          "startingLine": 29
+        }
+      }
+    ]
+  },
+  "version": 1
+}

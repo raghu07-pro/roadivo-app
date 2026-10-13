@@ -1,0 +1,24 @@
+{
+  "source": "/Users/dhavalbhanderi/Desktop/Dhruv/claude-code-starter/apps/Roadivo/DesignSystem/Components/ErrorView.swift",
+  "tables": {
+    "Localizable": [
+      {
+        "comment": "",
+        "key": "Something went wrong",
+        "location": {
+          "startingColumn": 19,
+          "startingLine": 9
+        }
+      },
+      {
+        "comment": "",
+        "key": "Try Again",
+        "location": {
+          "startingColumn": 38,
+          "startingLine": 14
+        }
+      }
+    ]
+  },
+  "version": 1
+}

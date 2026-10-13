@@ -1,0 +1,72 @@
+{
+  "source": "/Users/dhavalbhanderi/Desktop/Dhruv/claude-code-starter/apps/Roadivo/Core/MediaServer/MediaServerClient.swift",
+  "tables": {
+    "Localizable": [
+      {
+        "comment": "",
+        "key": "Check the server address, for example http://192.168.1.10:8096.",
+        "location": {
+          "startingColumn": 34,
+          "startingLine": 23
+        }
+      },
+      {
+        "comment": "",
+        "key": "The username or password is incorrect.",
+        "location": {
+          "startingColumn": 34,
+          "startingLine": 25
+        }
+      },
+      {
+        "comment": "",
+        "key": "Couldn't reach the server. %@",
+        "location": {
+          "startingColumn": 34,
+          "startingLine": 27
+        }
+      },
+      {
+        "comment": "",
+        "key": "The server answered with error %lld.",
+        "location": {
+          "startingColumn": 34,
+          "startingLine": 29
+        }
+      },
+      {
+        "comment": "",
+        "key": "That doesn't look like a Jellyfin or Emby server.",
+        "location": {
+          "startingColumn": 34,
+          "startingLine": 31
+        }
+      },
+      {
+        "comment": "",
+        "key": "We couldn't find any movies or episodes on that server.",
+        "location": {
+          "startingColumn": 34,
+          "startingLine": 33
+        }
+      },
+      {
+        "comment": "",
+        "key": "Movies",
+        "location": {
+          "startingColumn": 104,
+          "startingLine": 125
+        }
+      },
+      {
+        "comment": "",
+        "key": "TV",
+        "location": {
+          "startingColumn": 74,
+          "startingLine": 125
+        }
+      }
+    ]
+  },
+  "version": 1
+}

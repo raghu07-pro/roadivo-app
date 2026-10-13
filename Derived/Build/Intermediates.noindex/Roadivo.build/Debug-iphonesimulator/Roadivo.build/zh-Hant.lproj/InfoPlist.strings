@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CFBundleDisplayName</key>
+	<string>Roadivo</string>
+	<key>NSCameraUsageDescription</key>
+	<string>Roadivo 僅使用相機掃描包含播放列表連結的 QR 碼。</string>
+	<key>NSLocalNetworkUsageDescription</key>
+	<string>當你加入區域網路上的播放列表或影片伺服器時，Roadivo 會連線至它們。</string>
+</dict>
+</plist>

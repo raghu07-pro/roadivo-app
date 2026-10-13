@@ -1,0 +1,69 @@
+import Foundation
+import Observation
+
+@Observable
+@MainActor
+final class SourcesViewModel {
+    private(set) var sources: [SourceSummary] = []
+    private(set) var refreshing: Set<UUID> = []
+    var errorMessage: String?
+
+    private let repository: LibraryRepository
+
+    init(repository: LibraryRepository) {
+        self.repository = repository
+    }
+
+    func load() {
+        do {
+            sources = try repository.playlists().map {
+                SourceSummary(
+                    id: $0.id,
+                    name: $0.name,
+                    kind: $0.kind,
+                    itemCount: $0.channels.count,
+                    host: $0.sourceHost,
+                    refreshedAt: $0.refreshedAt
+                )
+            }
+        } catch {
+            errorMessage = error.localizedDescription
+        }
+    }
+
+    /// Returns true when the library changed.
+    func refresh(_ id: UUID) async -> Bool {
+        refreshing.insert(id)
+        defer { refreshing.remove(id) }
+        do {
+            try await repository.refresh(id)
+            load()
+            return true
+        } catch {
+            errorMessage = error.localizedDescription
+            return false
+        }
+    }
+
+    func delete(_ id: UUID) -> Bool {
+        do {
+            try repository.delete(id)
+            load()
+            return true
+        } catch {
+            errorMessage = error.localizedDescription
+            return false
+        }
+    }
+
+    func rename(_ id: UUID, to name: String) -> Bool {
+        do {
+            try repository.rename(id, to: name)
+            load()
+            return true
+        } catch {
+            errorMessage = error.localizedDescription
+            return false
+        }
+    }
+}

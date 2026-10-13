@@ -1,0 +1,10 @@
+Target dependency graph (5 targets)
+Target 'RoadivoUITests' in project 'Roadivo'
+➜ Explicit dependency on target 'Roadivo' in project 'Roadivo'
+Target 'RoadivoTests' in project 'Roadivo'
+➜ Explicit dependency on target 'Roadivo' in project 'Roadivo'
+➜ Explicit dependency on target 'SnapshotTesting' in project 'swift-snapshot-testing'
+Target 'SnapshotTesting' in project 'swift-snapshot-testing'
+➜ Explicit dependency on target 'SnapshotTesting' in project 'swift-snapshot-testing'
+Target 'SnapshotTesting' in project 'swift-snapshot-testing' (no dependencies)
+Target 'Roadivo' in project 'Roadivo' (no dependencies)

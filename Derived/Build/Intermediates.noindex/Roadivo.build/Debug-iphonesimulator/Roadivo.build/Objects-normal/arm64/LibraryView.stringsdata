@@ -1,0 +1,72 @@
+{
+  "source": "/Users/dhavalbhanderi/Desktop/Dhruv/claude-code-starter/apps/Roadivo/Features/Library/LibraryView.swift",
+  "tables": {
+    "Localizable": [
+      {
+        "comment": "",
+        "key": "Search channels and titles",
+        "location": {
+          "startingColumn": 66,
+          "startingLine": 32
+        }
+      },
+      {
+        "comment": "",
+        "key": "Home",
+        "location": {
+          "startingColumn": 34,
+          "startingLine": 20
+        }
+      },
+      {
+        "comment": "",
+        "key": "Add Source",
+        "location": {
+          "startingColumn": 35,
+          "startingLine": 27
+        }
+      },
+      {
+        "comment": "",
+        "key": "Continue Watching",
+        "location": {
+          "startingColumn": 57,
+          "startingLine": 64
+        }
+      },
+      {
+        "comment": "",
+        "key": "See All",
+        "location": {
+          "startingColumn": 42,
+          "startingLine": 84
+        }
+      },
+      {
+        "comment": "",
+        "key": "Your library is empty",
+        "location": {
+          "startingColumn": 19,
+          "startingLine": 124
+        }
+      },
+      {
+        "comment": "",
+        "key": "Add an M3U playlist link or file, or import videos from your iPhone.",
+        "location": {
+          "startingColumn": 18,
+          "startingLine": 126
+        }
+      },
+      {
+        "comment": "",
+        "key": "Add a Source",
+        "location": {
+          "startingColumn": 34,
+          "startingLine": 128
+        }
+      }
+    ]
+  },
+  "version": 1
+}

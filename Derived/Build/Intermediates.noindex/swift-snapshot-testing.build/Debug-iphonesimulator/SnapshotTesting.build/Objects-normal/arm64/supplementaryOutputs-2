@@ -1,0 +1,37 @@
+{
+  "/Users/dhavalbhanderi/Desktop/Dhruv/claude-code-starter/apps/Roadivo/Derived/SourcePackages/checkouts/swift-snapshot-testing/Sources/SnapshotTesting/Common/View.swift" : {
+    "const-values" : "/Users/dhavalbhanderi/Desktop/Dhruv/claude-code-starter/apps/Roadivo/Derived/Build/Intermediates.noindex/swift-snapshot-testing.build/Debug-iphonesimulator/SnapshotTesting.build/Objects-normal/arm64/View.swiftconstvalues",
+    "dependencies" : "/Users/dhavalbhanderi/Desktop/Dhruv/claude-code-starter/apps/Roadivo/Derived/Build/Intermediates.noindex/swift-snapshot-testing.build/Debug-iphonesimulator/SnapshotTesting.build/Objects-normal/arm64/View.d",
+    "diagnostics" : "/Users/dhavalbhanderi/Desktop/Dhruv/claude-code-starter/apps/Roadivo/Derived/Build/Intermediates.noindex/swift-snapshot-testing.build/Debug-iphonesimulator/SnapshotTesting.build/Objects-normal/arm64/View.dia",
+    "object" : "/Users/dhavalbhanderi/Desktop/Dhruv/claude-code-starter/apps/Roadivo/Derived/Build/Intermediates.noindex/swift-snapshot-testing.build/Debug-iphonesimulator/SnapshotTesting.build/Objects-normal/arm64/View.o",
+    "swift-dependencies" : "/Users/dhavalbhanderi/Desktop/Dhruv/claude-code-starter/apps/Roadivo/Derived/Build/Intermediates.noindex/swift-snapshot-testing.build/Debug-iphonesimulator/SnapshotTesting.build/Objects-normal/arm64/View.swiftdeps"
+  },
+  "/Users/dhavalbhanderi/Desktop/Dhruv/claude-code-starter/apps/Roadivo/Derived/SourcePackages/checkouts/swift-snapshot-testing/Sources/SnapshotTesting/Common/XCTAttachment.swift" : {
+    "const-values" : "/Users/dhavalbhanderi/Desktop/Dhruv/claude-code-starter/apps/Roadivo/Derived/Build/Intermediates.noindex/swift-snapshot-testing.build/Debug-iphonesimulator/SnapshotTesting.build/Objects-normal/arm64/XCTAttachment.swiftconstvalues",
+    "dependencies" : "/Users/dhavalbhanderi/Desktop/Dhruv/claude-code-starter/apps/Roadivo/Derived/Build/Intermediates.noindex/swift-snapshot-testing.build/Debug-iphonesimulator/SnapshotTesting.build/Objects-normal/arm64/XCTAttachment.d",
+    "diagnostics" : "/Users/dhavalbhanderi/Desktop/Dhruv/claude-code-starter/apps/Roadivo/Derived/Build/Intermediates.noindex/swift-snapshot-testing.build/Debug-iphonesimulator/SnapshotTesting.build/Objects-normal/arm64/XCTAttachment.dia",
+    "object" : "/Users/dhavalbhanderi/Desktop/Dhruv/claude-code-starter/apps/Roadivo/Derived/Build/Intermediates.noindex/swift-snapshot-testing.build/Debug-iphonesimulator/SnapshotTesting.build/Objects-normal/arm64/XCTAttachment.o",
+    "swift-dependencies" : "/Users/dhavalbhanderi/Desktop/Dhruv/claude-code-starter/apps/Roadivo/Derived/Build/Intermediates.noindex/swift-snapshot-testing.build/Debug-iphonesimulator/SnapshotTesting.build/Objects-normal/arm64/XCTAttachment.swiftdeps"
+  },
+  "/Users/dhavalbhanderi/Desktop/Dhruv/claude-code-starter/apps/Roadivo/Derived/SourcePackages/checkouts/swift-snapshot-testing/Sources/SnapshotTesting/Diff.swift" : {
+    "const-values" : "/Users/dhavalbhanderi/Desktop/Dhruv/claude-code-starter/apps/Roadivo/Derived/Build/Intermediates.noindex/swift-snapshot-testing.build/Debug-iphonesimulator/SnapshotTesting.build/Objects-normal/arm64/Diff.swiftconstvalues",
+    "dependencies" : "/Users/dhavalbhanderi/Desktop/Dhruv/claude-code-starter/apps/Roadivo/Derived/Build/Intermediates.noindex/swift-snapshot-testing.build/Debug-iphonesimulator/SnapshotTesting.build/Objects-normal/arm64/Diff.d",
+    "diagnostics" : "/Users/dhavalbhanderi/Desktop/Dhruv/claude-code-starter/apps/Roadivo/Derived/Build/Intermediates.noindex/swift-snapshot-testing.build/Debug-iphonesimulator/SnapshotTesting.build/Objects-normal/arm64/Diff.dia",
+    "object" : "/Users/dhavalbhanderi/Desktop/Dhruv/claude-code-starter/apps/Roadivo/Derived/Build/Intermediates.noindex/swift-snapshot-testing.build/Debug-iphonesimulator/SnapshotTesting.build/Objects-normal/arm64/Diff.o",
+    "swift-dependencies" : "/Users/dhavalbhanderi/Desktop/Dhruv/claude-code-starter/apps/Roadivo/Derived/Build/Intermediates.noindex/swift-snapshot-testing.build/Debug-iphonesimulator/SnapshotTesting.build/Objects-normal/arm64/Diff.swiftdeps"
+  },
+  "/Users/dhavalbhanderi/Desktop/Dhruv/claude-code-starter/apps/Roadivo/Derived/SourcePackages/checkouts/swift-snapshot-testing/Sources/SnapshotTesting/Diffing.swift" : {
+    "const-values" : "/Users/dhavalbhanderi/Desktop/Dhruv/claude-code-starter/apps/Roadivo/Derived/Build/Intermediates.noindex/swift-snapshot-testing.build/Debug-iphonesimulator/SnapshotTesting.build/Objects-normal/arm64/Diffing.swiftconstvalues",
+    "dependencies" : "/Users/dhavalbhanderi/Desktop/Dhruv/claude-code-starter/apps/Roadivo/Derived/Build/Intermediates.noindex/swift-snapshot-testing.build/Debug-iphonesimulator/SnapshotTesting.build/Objects-normal/arm64/Diffing.d",
+    "diagnostics" : "/Users/dhavalbhanderi/Desktop/Dhruv/claude-code-starter/apps/Roadivo/Derived/Build/Intermediates.noindex/swift-snapshot-testing.build/Debug-iphonesimulator/SnapshotTesting.build/Objects-normal/arm64/Diffing.dia",
+    "object" : "/Users/dhavalbhanderi/Desktop/Dhruv/claude-code-starter/apps/Roadivo/Derived/Build/Intermediates.noindex/swift-snapshot-testing.build/Debug-iphonesimulator/SnapshotTesting.build/Objects-normal/arm64/Diffing.o",
+    "swift-dependencies" : "/Users/dhavalbhanderi/Desktop/Dhruv/claude-code-starter/apps/Roadivo/Derived/Build/Intermediates.noindex/swift-snapshot-testing.build/Debug-iphonesimulator/SnapshotTesting.build/Objects-normal/arm64/Diffing.swiftdeps"
+  },
+  "/Users/dhavalbhanderi/Desktop/Dhruv/claude-code-starter/apps/Roadivo/Derived/SourcePackages/checkouts/swift-snapshot-testing/Sources/SnapshotTesting/Extensions/Wait.swift" : {
+    "const-values" : "/Users/dhavalbhanderi/Desktop/Dhruv/claude-code-starter/apps/Roadivo/Derived/Build/Intermediates.noindex/swift-snapshot-testing.build/Debug-iphonesimulator/SnapshotTesting.build/Objects-normal/arm64/Wait.swiftconstvalues",
+    "dependencies" : "/Users/dhavalbhanderi/Desktop/Dhruv/claude-code-starter/apps/Roadivo/Derived/Build/Intermediates.noindex/swift-snapshot-testing.build/Debug-iphonesimulator/SnapshotTesting.build/Objects-normal/arm64/Wait.d",
+    "diagnostics" : "/Users/dhavalbhanderi/Desktop/Dhruv/claude-code-starter/apps/Roadivo/Derived/Build/Intermediates.noindex/swift-snapshot-testing.build/Debug-iphonesimulator/SnapshotTesting.build/Objects-normal/arm64/Wait.dia",
+    "object" : "/Users/dhavalbhanderi/Desktop/Dhruv/claude-code-starter/apps/Roadivo/Derived/Build/Intermediates.noindex/swift-snapshot-testing.build/Debug-iphonesimulator/SnapshotTesting.build/Objects-normal/arm64/Wait.o",
+    "swift-dependencies" : "/Users/dhavalbhanderi/Desktop/Dhruv/claude-code-starter/apps/Roadivo/Derived/Build/Intermediates.noindex/swift-snapshot-testing.build/Debug-iphonesimulator/SnapshotTesting.build/Objects-normal/arm64/Wait.swiftdeps"
+  }
+}

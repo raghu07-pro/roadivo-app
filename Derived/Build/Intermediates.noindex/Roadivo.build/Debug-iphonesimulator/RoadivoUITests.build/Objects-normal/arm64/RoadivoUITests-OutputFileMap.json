@@ -1,0 +1,49 @@
+{
+  "" : {
+    "diagnostics" : "/Users/dhavalbhanderi/Desktop/Dhruv/claude-code-starter/apps/Roadivo/Derived/Build/Intermediates.noindex/Roadivo.build/Debug-iphonesimulator/RoadivoUITests.build/Objects-normal/arm64/RoadivoUITests-primary.dia",
+    "emit-module-dependencies" : "/Users/dhavalbhanderi/Desktop/Dhruv/claude-code-starter/apps/Roadivo/Derived/Build/Intermediates.noindex/Roadivo.build/Debug-iphonesimulator/RoadivoUITests.build/Objects-normal/arm64/RoadivoUITests-primary-emit-module.d",
+    "emit-module-diagnostics" : "/Users/dhavalbhanderi/Desktop/Dhruv/claude-code-starter/apps/Roadivo/Derived/Build/Intermediates.noindex/Roadivo.build/Debug-iphonesimulator/RoadivoUITests.build/Objects-normal/arm64/RoadivoUITests-primary-emit-module.dia",
+    "pch" : "/Users/dhavalbhanderi/Desktop/Dhruv/claude-code-starter/apps/Roadivo/Derived/Build/Intermediates.noindex/Roadivo.build/Debug-iphonesimulator/RoadivoUITests.build/Objects-normal/arm64/RoadivoUITests-primary-Bridging-header.pch",
+    "swift-dependencies" : "/Users/dhavalbhanderi/Desktop/Dhruv/claude-code-starter/apps/Roadivo/Derived/Build/Intermediates.noindex/Roadivo.build/Debug-iphonesimulator/RoadivoUITests.build/Objects-normal/arm64/RoadivoUITests-primary.swiftdeps"
+  },
+  "/Users/dhavalbhanderi/Desktop/Dhruv/claude-code-starter/apps/Roadivo/Tests/UITests/Launch.swift" : {
+    "const-values" : "/Users/dhavalbhanderi/Desktop/Dhruv/claude-code-starter/apps/Roadivo/Derived/Build/Intermediates.noindex/Roadivo.build/Debug-iphonesimulator/RoadivoUITests.build/Objects-normal/arm64/Launch.swiftconstvalues",
+    "dependencies" : "/Users/dhavalbhanderi/Desktop/Dhruv/claude-code-starter/apps/Roadivo/Derived/Build/Intermediates.noindex/Roadivo.build/Debug-iphonesimulator/RoadivoUITests.build/Objects-normal/arm64/Launch.d",
+    "diagnostics" : "/Users/dhavalbhanderi/Desktop/Dhruv/claude-code-starter/apps/Roadivo/Derived/Build/Intermediates.noindex/Roadivo.build/Debug-iphonesimulator/RoadivoUITests.build/Objects-normal/arm64/Launch.dia",
+    "index-unit-output-path" : "/Roadivo.build/Debug-iphonesimulator/RoadivoUITests.build/Objects-normal/arm64/Launch.o",
+    "llvm-bc" : "/Users/dhavalbhanderi/Desktop/Dhruv/claude-code-starter/apps/Roadivo/Derived/Build/Intermediates.noindex/Roadivo.build/Debug-iphonesimulator/RoadivoUITests.build/Objects-normal/arm64/Launch.bc",
+    "object" : "/Users/dhavalbhanderi/Desktop/Dhruv/claude-code-starter/apps/Roadivo/Derived/Build/Intermediates.noindex/Roadivo.build/Debug-iphonesimulator/RoadivoUITests.build/Objects-normal/arm64/Launch.o",
+    "swift-dependencies" : "/Users/dhavalbhanderi/Desktop/Dhruv/claude-code-starter/apps/Roadivo/Derived/Build/Intermediates.noindex/Roadivo.build/Debug-iphonesimulator/RoadivoUITests.build/Objects-normal/arm64/Launch.swiftdeps",
+    "swiftmodule" : "/Users/dhavalbhanderi/Desktop/Dhruv/claude-code-starter/apps/Roadivo/Derived/Build/Intermediates.noindex/Roadivo.build/Debug-iphonesimulator/RoadivoUITests.build/Objects-normal/arm64/Launch~partial.swiftmodule"
+  },
+  "/Users/dhavalbhanderi/Desktop/Dhruv/claude-code-starter/apps/Roadivo/Tests/UITests/LibraryFlowUITests.swift" : {
+    "const-values" : "/Users/dhavalbhanderi/Desktop/Dhruv/claude-code-starter/apps/Roadivo/Derived/Build/Intermediates.noindex/Roadivo.build/Debug-iphonesimulator/RoadivoUITests.build/Objects-normal/arm64/LibraryFlowUITests.swiftconstvalues",
+    "dependencies" : "/Users/dhavalbhanderi/Desktop/Dhruv/claude-code-starter/apps/Roadivo/Derived/Build/Intermediates.noindex/Roadivo.build/Debug-iphonesimulator/RoadivoUITests.build/Objects-normal/arm64/LibraryFlowUITests.d",
+    "diagnostics" : "/Users/dhavalbhanderi/Desktop/Dhruv/claude-code-starter/apps/Roadivo/Derived/Build/Intermediates.noindex/Roadivo.build/Debug-iphonesimulator/RoadivoUITests.build/Objects-normal/arm64/LibraryFlowUITests.dia",
+    "index-unit-output-path" : "/Roadivo.build/Debug-iphonesimulator/RoadivoUITests.build/Objects-normal/arm64/LibraryFlowUITests.o",
+    "llvm-bc" : "/Users/dhavalbhanderi/Desktop/Dhruv/claude-code-starter/apps/Roadivo/Derived/Build/Intermediates.noindex/Roadivo.build/Debug-iphonesimulator/RoadivoUITests.build/Objects-normal/arm64/LibraryFlowUITests.bc",
+    "object" : "/Users/dhavalbhanderi/Desktop/Dhruv/claude-code-starter/apps/Roadivo/Derived/Build/Intermediates.noindex/Roadivo.build/Debug-iphonesimulator/RoadivoUITests.build/Objects-normal/arm64/LibraryFlowUITests.o",
+    "swift-dependencies" : "/Users/dhavalbhanderi/Desktop/Dhruv/claude-code-starter/apps/Roadivo/Derived/Build/Intermediates.noindex/Roadivo.build/Debug-iphonesimulator/RoadivoUITests.build/Objects-normal/arm64/LibraryFlowUITests.swiftdeps",
+    "swiftmodule" : "/Users/dhavalbhanderi/Desktop/Dhruv/claude-code-starter/apps/Roadivo/Derived/Build/Intermediates.noindex/Roadivo.build/Debug-iphonesimulator/RoadivoUITests.build/Objects-normal/arm64/LibraryFlowUITests~partial.swiftmodule"
+  },
+  "/Users/dhavalbhanderi/Desktop/Dhruv/claude-code-starter/apps/Roadivo/Tests/UITests/OnboardingFlowUITests.swift" : {
+    "const-values" : "/Users/dhavalbhanderi/Desktop/Dhruv/claude-code-starter/apps/Roadivo/Derived/Build/Intermediates.noindex/Roadivo.build/Debug-iphonesimulator/RoadivoUITests.build/Objects-normal/arm64/OnboardingFlowUITests.swiftconstvalues",
+    "dependencies" : "/Users/dhavalbhanderi/Desktop/Dhruv/claude-code-starter/apps/Roadivo/Derived/Build/Intermediates.noindex/Roadivo.build/Debug-iphonesimulator/RoadivoUITests.build/Objects-normal/arm64/OnboardingFlowUITests.d",
+    "diagnostics" : "/Users/dhavalbhanderi/Desktop/Dhruv/claude-code-starter/apps/Roadivo/Derived/Build/Intermediates.noindex/Roadivo.build/Debug-iphonesimulator/RoadivoUITests.build/Objects-normal/arm64/OnboardingFlowUITests.dia",
+    "index-unit-output-path" : "/Roadivo.build/Debug-iphonesimulator/RoadivoUITests.build/Objects-normal/arm64/OnboardingFlowUITests.o",
+    "llvm-bc" : "/Users/dhavalbhanderi/Desktop/Dhruv/claude-code-starter/apps/Roadivo/Derived/Build/Intermediates.noindex/Roadivo.build/Debug-iphonesimulator/RoadivoUITests.build/Objects-normal/arm64/OnboardingFlowUITests.bc",
+    "object" : "/Users/dhavalbhanderi/Desktop/Dhruv/claude-code-starter/apps/Roadivo/Derived/Build/Intermediates.noindex/Roadivo.build/Debug-iphonesimulator/RoadivoUITests.build/Objects-normal/arm64/OnboardingFlowUITests.o",
+    "swift-dependencies" : "/Users/dhavalbhanderi/Desktop/Dhruv/claude-code-starter/apps/Roadivo/Derived/Build/Intermediates.noindex/Roadivo.build/Debug-iphonesimulator/RoadivoUITests.build/Objects-normal/arm64/OnboardingFlowUITests.swiftdeps",
+    "swiftmodule" : "/Users/dhavalbhanderi/Desktop/Dhruv/claude-code-starter/apps/Roadivo/Derived/Build/Intermediates.noindex/Roadivo.build/Debug-iphonesimulator/RoadivoUITests.build/Objects-normal/arm64/OnboardingFlowUITests~partial.swiftmodule"
+  },
+  "/Users/dhavalbhanderi/Desktop/Dhruv/claude-code-starter/apps/Roadivo/Tests/UITests/ScreenshotUITests.swift" : {
+    "const-values" : "/Users/dhavalbhanderi/Desktop/Dhruv/claude-code-starter/apps/Roadivo/Derived/Build/Intermediates.noindex/Roadivo.build/Debug-iphonesimulator/RoadivoUITests.build/Objects-normal/arm64/ScreenshotUITests.swiftconstvalues",
+    "dependencies" : "/Users/dhavalbhanderi/Desktop/Dhruv/claude-code-starter/apps/Roadivo/Derived/Build/Intermediates.noindex/Roadivo.build/Debug-iphonesimulator/RoadivoUITests.build/Objects-normal/arm64/ScreenshotUITests.d",
+    "diagnostics" : "/Users/dhavalbhanderi/Desktop/Dhruv/claude-code-starter/apps/Roadivo/Derived/Build/Intermediates.noindex/Roadivo.build/Debug-iphonesimulator/RoadivoUITests.build/Objects-normal/arm64/ScreenshotUITests.dia",
+    "index-unit-output-path" : "/Roadivo.build/Debug-iphonesimulator/RoadivoUITests.build/Objects-normal/arm64/ScreenshotUITests.o",
+    "llvm-bc" : "/Users/dhavalbhanderi/Desktop/Dhruv/claude-code-starter/apps/Roadivo/Derived/Build/Intermediates.noindex/Roadivo.build/Debug-iphonesimulator/RoadivoUITests.build/Objects-normal/arm64/ScreenshotUITests.bc",
+    "object" : "/Users/dhavalbhanderi/Desktop/Dhruv/claude-code-starter/apps/Roadivo/Derived/Build/Intermediates.noindex/Roadivo.build/Debug-iphonesimulator/RoadivoUITests.build/Objects-normal/arm64/ScreenshotUITests.o",
+    "swift-dependencies" : "/Users/dhavalbhanderi/Desktop/Dhruv/claude-code-starter/apps/Roadivo/Derived/Build/Intermediates.noindex/Roadivo.build/Debug-iphonesimulator/RoadivoUITests.build/Objects-normal/arm64/ScreenshotUITests.swiftdeps",
+    "swiftmodule" : "/Users/dhavalbhanderi/Desktop/Dhruv/claude-code-starter/apps/Roadivo/Derived/Build/Intermediates.noindex/Roadivo.build/Debug-iphonesimulator/RoadivoUITests.build/Objects-normal/arm64/ScreenshotUITests~partial.swiftmodule"
+  }
+}

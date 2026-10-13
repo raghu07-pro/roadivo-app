@@ -1,0 +1,48 @@
+{
+  "source": "/Users/dhavalbhanderi/Desktop/Dhruv/claude-code-starter/apps/Roadivo/Features/Settings/LanguageView.swift",
+  "tables": {
+    "Localizable": [
+      {
+        "comment": "",
+        "key": "Find a language",
+        "location": {
+          "startingColumn": 58,
+          "startingLine": 32
+        }
+      },
+      {
+        "comment": "",
+        "key": "Language",
+        "location": {
+          "startingColumn": 26,
+          "startingLine": 30
+        }
+      },
+      {
+        "comment": "",
+        "key": "Follow System",
+        "location": {
+          "startingColumn": 48,
+          "startingLine": 10
+        }
+      },
+      {
+        "comment": "",
+        "key": "All Languages",
+        "location": {
+          "startingColumn": 22,
+          "startingLine": 23
+        }
+      },
+      {
+        "comment": "",
+        "key": "Roadivo follows your iPhone's language unless you choose one here.",
+        "location": {
+          "startingColumn": 22,
+          "startingLine": 25
+        }
+      }
+    ]
+  },
+  "version": 1
+}

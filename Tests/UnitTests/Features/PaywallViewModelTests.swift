@@ -1,0 +1,87 @@
+import Foundation
+import Testing
+@testable import Roadivo
+
+@Suite("Paywall")
+@MainActor
+struct PaywallViewModelTests {
+    private func make(_ client: FakeStoreClient = FakeStoreClient()) -> (PaywallViewModel, ProAccess) {
+        let access = ProAccess(client: client)
+        return (PaywallViewModel(access: access, reason: .intro), access)
+    }
+
+    @Test("Loads three plans with lifetime preselected")
+    func load() async {
+        let (viewModel, _) = make()
+        await viewModel.load()
+        #expect(viewModel.phase == .loaded)
+        #expect(viewModel.offers.map(\.plan) == [.weekly, .yearly, .lifetime])
+        #expect(viewModel.selected == .lifetime)
+        #expect(viewModel.buyTitle == "$21.49 Buy now")
+        #expect(viewModel.terms.contains("No subscription"))
+    }
+
+    @Test("Subscriptions show their renewal terms and intro price")
+    func subscriptionCopy() async {
+        let (viewModel, _) = make()
+        await viewModel.load()
+        viewModel.selected = .weekly
+        #expect(viewModel.buyTitle == "Start for $0.99")
+        #expect(viewModel.terms.contains("Renews automatically"))
+    }
+
+    @Test("Per-week price uses the storefront's format and only applies to yearly")
+    func perWeek() {
+        let usd = Decimal.FormatStyle.Currency(code: "USD", locale: Locale(identifier: "en_US"))
+        #expect(PlanOffer.perWeek(.yearly, price: 45.99, format: usd) == "$0.88")
+        #expect(PlanOffer.perWeek(.weekly, price: 3.99, format: usd) == nil)
+        let inr = Decimal.FormatStyle.Currency(code: "INR", locale: Locale(identifier: "en_IN"))
+        // ICU's en_IN style puts a space after the symbol; keep whatever the storefront uses.
+        let rupees = PlanOffer.perWeek(.yearly, price: 939, format: inr)
+        #expect(rupees?.hasPrefix("₹") == true)
+        #expect(rupees?.hasSuffix("18.06") == true)
+    }
+
+    @Test("Buying unlocks Pro")
+    func buy() async {
+        let client = FakeStoreClient()
+        let (viewModel, access) = make(client)
+        await viewModel.load()
+        viewModel.selected = .yearly
+        #expect(await viewModel.buy())
+        #expect(access.isPro)
+        #expect(client.purchased == [.yearly])
+    }
+
+    @Test("Cancelling or pending leaves the user on Free")
+    func notBought() async {
+        let (cancelled, cancelledAccess) = make(FakeStoreClient(outcome: .cancelled))
+        await cancelled.load()
+        #expect(await !cancelled.buy())
+        #expect(!cancelledAccess.isPro)
+        #expect(cancelled.message == nil)
+
+        let (pending, _) = make(FakeStoreClient(outcome: .pending))
+        await pending.load()
+        #expect(await !pending.buy())
+        #expect(pending.message?.contains("waiting for approval") == true)
+    }
+
+    @Test("Restore reports when nothing was bought, and unlocks when it was")
+    func restore() async {
+        let (none, _) = make()
+        #expect(await !none.restore())
+        #expect(none.message?.contains("No previous purchase") == true)
+
+        let (owned, access) = make(FakeStoreClient(isPro: true))
+        #expect(await owned.restore())
+        #expect(access.isPro)
+    }
+
+    @Test("A store failure shows a retryable error")
+    func failure() async {
+        let (viewModel, _) = make(FakeStoreClient(failure: .productUnavailable))
+        await viewModel.load()
+        #expect(viewModel.phase == .failed(StoreError.productUnavailable.localizedDescription))
+    }
+}

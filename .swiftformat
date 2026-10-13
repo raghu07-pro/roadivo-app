@@ -1,0 +1,36 @@
+# Roadivo — SwiftFormat. Matches the CLAUDE.md conventions.
+--swiftversion 6.0
+
+--exclude Derived,.build
+
+--indent 4
+--maxwidth 120
+--wraparguments before-first
+--wrapparameters before-first
+--wrapcollections before-first
+--closingparen balanced
+--commas inline
+--trimwhitespace always
+--stripunusedargs closure-only
+--self remove
+--importgrouping testable-bottom
+--semicolons never
+--emptybraces no-space
+--ranges no-space
+--typeattributes prev-line
+--funcattributes prev-line
+--storedvarattrs same-line
+
+--enable blankLinesBetweenScopes
+--enable isEmpty
+--enable redundantType
+--enable sortedImports
+--enable trailingClosures
+
+# `redundantReturn` fights SwiftUI single-expression bodies less than it helps here.
+--disable redundantReturn
+
+# `wrapMultilineStatementBraces` puts the brace of a multi-line condition on its
+# own line, which SwiftLint's `opening_brace` rejects. The two tools have to
+# agree, so this one stays off.
+--disable wrapMultilineStatementBraces

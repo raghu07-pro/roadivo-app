@@ -1,0 +1,152 @@
+{
+  "source": "/Users/dhavalbhanderi/Desktop/Dhruv/claude-code-starter/apps/Roadivo/Features/Settings/SettingsView.swift",
+  "tables": {
+    "Localizable": [
+      {
+        "comment": "",
+        "key": "Settings",
+        "location": {
+          "startingColumn": 30,
+          "startingLine": 112
+        }
+      },
+      {
+        "comment": "",
+        "key": "Media",
+        "location": {
+          "startingColumn": 25,
+          "startingLine": 49
+        }
+      },
+      {
+        "comment": "",
+        "key": "Preferences",
+        "location": {
+          "startingColumn": 25,
+          "startingLine": 66
+        }
+      },
+      {
+        "comment": "",
+        "key": "Legal",
+        "location": {
+          "startingColumn": 25,
+          "startingLine": 79
+        }
+      },
+      {
+        "comment": "",
+        "key": "Roadivo Pro",
+        "location": {
+          "startingColumn": 38,
+          "startingLine": 21
+        }
+      },
+      {
+        "comment": "",
+        "key": "Active. Thanks for supporting Roadivo.",
+        "location": {
+          "startingColumn": 38,
+          "startingLine": 22
+        }
+      },
+      {
+        "comment": "",
+        "key": "Roadivo Pro",
+        "location": {
+          "startingColumn": 42,
+          "startingLine": 34
+        }
+      },
+      {
+        "comment": "",
+        "key": "Unlock all features",
+        "location": {
+          "startingColumn": 42,
+          "startingLine": 35
+        }
+      },
+      {
+        "comment": "",
+        "key": "Manage Sources",
+        "location": {
+          "startingColumn": 36,
+          "startingLine": 55
+        }
+      },
+      {
+        "comment": "",
+        "key": "M3U · Jellyfin · Emby · Xtream",
+        "location": {
+          "startingColumn": 37,
+          "startingLine": 56
+        }
+      },
+      {
+        "comment": "",
+        "key": "Add a Source",
+        "location": {
+          "startingColumn": 59,
+          "startingLine": 61
+        }
+      },
+      {
+        "comment": "",
+        "key": "Language",
+        "location": {
+          "startingColumn": 57,
+          "startingLine": 73
+        }
+      },
+      {
+        "comment": "",
+        "key": "Privacy Policy",
+        "location": {
+          "startingColumn": 59,
+          "startingLine": 83
+        }
+      },
+      {
+        "comment": "",
+        "key": "Terms of Use (EULA)",
+        "location": {
+          "startingColumn": 60,
+          "startingLine": 88
+        }
+      },
+      {
+        "comment": "",
+        "key": "Version",
+        "location": {
+          "startingColumn": 36,
+          "startingLine": 100
+        }
+      },
+      {
+        "comment": "",
+        "key": "Help & FAQ",
+        "location": {
+          "startingColumn": 67,
+          "startingLine": 97
+        }
+      },
+      {
+        "comment": "",
+        "key": "About",
+        "location": {
+          "startingColumn": 26,
+          "startingLine": 102
+        }
+      },
+      {
+        "comment": "",
+        "key": "Roadivo is a player only. It doesn't provide, host or recommend any content.",
+        "location": {
+          "startingColumn": 30,
+          "startingLine": 106
+        }
+      }
+    ]
+  },
+  "version": 1
+}

@@ -1,0 +1,23 @@
+{
+  "/Users/dhavalbhanderi/Desktop/Dhruv/claude-code-starter/apps/Roadivo/Tests/UnitTests/Core/CarTests.swift" : {
+    "const-values" : "/Users/dhavalbhanderi/Desktop/Dhruv/claude-code-starter/apps/Roadivo/Derived/Build/Intermediates.noindex/Roadivo.build/Debug-iphonesimulator/RoadivoTests.build/Objects-normal/arm64/CarTests.swiftconstvalues",
+    "dependencies" : "/Users/dhavalbhanderi/Desktop/Dhruv/claude-code-starter/apps/Roadivo/Derived/Build/Intermediates.noindex/Roadivo.build/Debug-iphonesimulator/RoadivoTests.build/Objects-normal/arm64/CarTests.d",
+    "diagnostics" : "/Users/dhavalbhanderi/Desktop/Dhruv/claude-code-starter/apps/Roadivo/Derived/Build/Intermediates.noindex/Roadivo.build/Debug-iphonesimulator/RoadivoTests.build/Objects-normal/arm64/CarTests.dia",
+    "object" : "/Users/dhavalbhanderi/Desktop/Dhruv/claude-code-starter/apps/Roadivo/Derived/Build/Intermediates.noindex/Roadivo.build/Debug-iphonesimulator/RoadivoTests.build/Objects-normal/arm64/CarTests.o",
+    "swift-dependencies" : "/Users/dhavalbhanderi/Desktop/Dhruv/claude-code-starter/apps/Roadivo/Derived/Build/Intermediates.noindex/Roadivo.build/Debug-iphonesimulator/RoadivoTests.build/Objects-normal/arm64/CarTests.swiftdeps"
+  },
+  "/Users/dhavalbhanderi/Desktop/Dhruv/claude-code-starter/apps/Roadivo/Tests/UnitTests/Core/LibraryRepositoryTests.swift" : {
+    "const-values" : "/Users/dhavalbhanderi/Desktop/Dhruv/claude-code-starter/apps/Roadivo/Derived/Build/Intermediates.noindex/Roadivo.build/Debug-iphonesimulator/RoadivoTests.build/Objects-normal/arm64/LibraryRepositoryTests.swiftconstvalues",
+    "dependencies" : "/Users/dhavalbhanderi/Desktop/Dhruv/claude-code-starter/apps/Roadivo/Derived/Build/Intermediates.noindex/Roadivo.build/Debug-iphonesimulator/RoadivoTests.build/Objects-normal/arm64/LibraryRepositoryTests.d",
+    "diagnostics" : "/Users/dhavalbhanderi/Desktop/Dhruv/claude-code-starter/apps/Roadivo/Derived/Build/Intermediates.noindex/Roadivo.build/Debug-iphonesimulator/RoadivoTests.build/Objects-normal/arm64/LibraryRepositoryTests.dia",
+    "object" : "/Users/dhavalbhanderi/Desktop/Dhruv/claude-code-starter/apps/Roadivo/Derived/Build/Intermediates.noindex/Roadivo.build/Debug-iphonesimulator/RoadivoTests.build/Objects-normal/arm64/LibraryRepositoryTests.o",
+    "swift-dependencies" : "/Users/dhavalbhanderi/Desktop/Dhruv/claude-code-starter/apps/Roadivo/Derived/Build/Intermediates.noindex/Roadivo.build/Debug-iphonesimulator/RoadivoTests.build/Objects-normal/arm64/LibraryRepositoryTests.swiftdeps"
+  },
+  "/Users/dhavalbhanderi/Desktop/Dhruv/claude-code-starter/apps/Roadivo/Tests/UnitTests/Core/M3UParserTests.swift" : {
+    "const-values" : "/Users/dhavalbhanderi/Desktop/Dhruv/claude-code-starter/apps/Roadivo/Derived/Build/Intermediates.noindex/Roadivo.build/Debug-iphonesimulator/RoadivoTests.build/Objects-normal/arm64/M3UParserTests.swiftconstvalues",
+    "dependencies" : "/Users/dhavalbhanderi/Desktop/Dhruv/claude-code-starter/apps/Roadivo/Derived/Build/Intermediates.noindex/Roadivo.build/Debug-iphonesimulator/RoadivoTests.build/Objects-normal/arm64/M3UParserTests.d",
+    "diagnostics" : "/Users/dhavalbhanderi/Desktop/Dhruv/claude-code-starter/apps/Roadivo/Derived/Build/Intermediates.noindex/Roadivo.build/Debug-iphonesimulator/RoadivoTests.build/Objects-normal/arm64/M3UParserTests.dia",
+    "object" : "/Users/dhavalbhanderi/Desktop/Dhruv/claude-code-starter/apps/Roadivo/Derived/Build/Intermediates.noindex/Roadivo.build/Debug-iphonesimulator/RoadivoTests.build/Objects-normal/arm64/M3UParserTests.o",
+    "swift-dependencies" : "/Users/dhavalbhanderi/Desktop/Dhruv/claude-code-starter/apps/Roadivo/Derived/Build/Intermediates.noindex/Roadivo.build/Debug-iphonesimulator/RoadivoTests.build/Objects-normal/arm64/M3UParserTests.swiftdeps"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "source": "/Users/dhavalbhanderi/Desktop/Dhruv/claude-code-starter/apps/Roadivo/Features/Shared/Brand.swift",
+  "tables": {
+    "Localizable": [
+      {
+        "comment": "",
+        "key": "Let the Journey Play.",
+        "location": {
+          "startingColumn": 51,
+          "startingLine": 5
+        }
+      }
+    ]
+  },
+  "version": 1
+}

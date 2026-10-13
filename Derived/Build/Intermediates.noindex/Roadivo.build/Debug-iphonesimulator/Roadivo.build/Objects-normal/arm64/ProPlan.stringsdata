@@ -1,0 +1,72 @@
+{
+  "source": "/Users/dhavalbhanderi/Desktop/Dhruv/claude-code-starter/apps/Roadivo/Core/Store/ProPlan.swift",
+  "tables": {
+    "Localizable": [
+      {
+        "comment": "",
+        "key": "Weekly",
+        "location": {
+          "startingColumn": 23,
+          "startingLine": 28
+        }
+      },
+      {
+        "comment": "",
+        "key": "Yearly",
+        "location": {
+          "startingColumn": 23,
+          "startingLine": 29
+        }
+      },
+      {
+        "comment": "",
+        "key": "Lifetime",
+        "location": {
+          "startingColumn": 25,
+          "startingLine": 30
+        }
+      },
+      {
+        "comment": "",
+        "key": "Flexible, cancel anytime",
+        "location": {
+          "startingColumn": 23,
+          "startingLine": 36
+        }
+      },
+      {
+        "comment": "",
+        "key": "Billed once a year, cancel anytime",
+        "location": {
+          "startingColumn": 23,
+          "startingLine": 37
+        }
+      },
+      {
+        "comment": "",
+        "key": "One-time purchase, lifetime access",
+        "location": {
+          "startingColumn": 25,
+          "startingLine": 38
+        }
+      },
+      {
+        "comment": "",
+        "key": "That plan isn't available right now. Try again later.",
+        "location": {
+          "startingColumn": 56,
+          "startingLine": 82
+        }
+      },
+      {
+        "comment": "",
+        "key": "The App Store couldn't verify this purchase.",
+        "location": {
+          "startingColumn": 48,
+          "startingLine": 83
+        }
+      }
+    ]
+  },
+  "version": 1
+}

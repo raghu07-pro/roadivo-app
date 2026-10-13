@@ -1,0 +1,86 @@
+{
+  "/Users/dhavalbhanderi/Desktop/Dhruv/claude-code-starter/apps/Roadivo/Core/Playback/PlaybackController.swift" : {
+    "const-values" : "/Users/dhavalbhanderi/Desktop/Dhruv/claude-code-starter/apps/Roadivo/Derived/Build/Intermediates.noindex/Roadivo.build/Debug-iphonesimulator/Roadivo.build/Objects-normal/arm64/PlaybackController.swiftconstvalues",
+    "dependencies" : "/Users/dhavalbhanderi/Desktop/Dhruv/claude-code-starter/apps/Roadivo/Derived/Build/Intermediates.noindex/Roadivo.build/Debug-iphonesimulator/Roadivo.build/Objects-normal/arm64/PlaybackController.d",
+    "diagnostics" : "/Users/dhavalbhanderi/Desktop/Dhruv/claude-code-starter/apps/Roadivo/Derived/Build/Intermediates.noindex/Roadivo.build/Debug-iphonesimulator/Roadivo.build/Objects-normal/arm64/PlaybackController.dia",
+    "object" : "/Users/dhavalbhanderi/Desktop/Dhruv/claude-code-starter/apps/Roadivo/Derived/Build/Intermediates.noindex/Roadivo.build/Debug-iphonesimulator/Roadivo.build/Objects-normal/arm64/PlaybackController.o",
+    "swift-dependencies" : "/Users/dhavalbhanderi/Desktop/Dhruv/claude-code-starter/apps/Roadivo/Derived/Build/Intermediates.noindex/Roadivo.build/Debug-iphonesimulator/Roadivo.build/Objects-normal/arm64/PlaybackController.swiftdeps"
+  },
+  "/Users/dhavalbhanderi/Desktop/Dhruv/claude-code-starter/apps/Roadivo/Core/Playback/VideoThumbnails.swift" : {
+    "const-values" : "/Users/dhavalbhanderi/Desktop/Dhruv/claude-code-starter/apps/Roadivo/Derived/Build/Intermediates.noindex/Roadivo.build/Debug-iphonesimulator/Roadivo.build/Objects-normal/arm64/VideoThumbnails.swiftconstvalues",
+    "dependencies" : "/Users/dhavalbhanderi/Desktop/Dhruv/claude-code-starter/apps/Roadivo/Derived/Build/Intermediates.noindex/Roadivo.build/Debug-iphonesimulator/Roadivo.build/Objects-normal/arm64/VideoThumbnails.d",
+    "diagnostics" : "/Users/dhavalbhanderi/Desktop/Dhruv/claude-code-starter/apps/Roadivo/Derived/Build/Intermediates.noindex/Roadivo.build/Debug-iphonesimulator/Roadivo.build/Objects-normal/arm64/VideoThumbnails.dia",
+    "object" : "/Users/dhavalbhanderi/Desktop/Dhruv/claude-code-starter/apps/Roadivo/Derived/Build/Intermediates.noindex/Roadivo.build/Debug-iphonesimulator/Roadivo.build/Objects-normal/arm64/VideoThumbnails.o",
+    "swift-dependencies" : "/Users/dhavalbhanderi/Desktop/Dhruv/claude-code-starter/apps/Roadivo/Derived/Build/Intermediates.noindex/Roadivo.build/Debug-iphonesimulator/Roadivo.build/Objects-normal/arm64/VideoThumbnails.swiftdeps"
+  },
+  "/Users/dhavalbhanderi/Desktop/Dhruv/claude-code-starter/apps/Roadivo/Core/Playlist/LibraryError.swift" : {
+    "const-values" : "/Users/dhavalbhanderi/Desktop/Dhruv/claude-code-starter/apps/Roadivo/Derived/Build/Intermediates.noindex/Roadivo.build/Debug-iphonesimulator/Roadivo.build/Objects-normal/arm64/LibraryError.swiftconstvalues",
+    "dependencies" : "/Users/dhavalbhanderi/Desktop/Dhruv/claude-code-starter/apps/Roadivo/Derived/Build/Intermediates.noindex/Roadivo.build/Debug-iphonesimulator/Roadivo.build/Objects-normal/arm64/LibraryError.d",
+    "diagnostics" : "/Users/dhavalbhanderi/Desktop/Dhruv/claude-code-starter/apps/Roadivo/Derived/Build/Intermediates.noindex/Roadivo.build/Debug-iphonesimulator/Roadivo.build/Objects-normal/arm64/LibraryError.dia",
+    "object" : "/Users/dhavalbhanderi/Desktop/Dhruv/claude-code-starter/apps/Roadivo/Derived/Build/Intermediates.noindex/Roadivo.build/Debug-iphonesimulator/Roadivo.build/Objects-normal/arm64/LibraryError.o",
+    "swift-dependencies" : "/Users/dhavalbhanderi/Desktop/Dhruv/claude-code-starter/apps/Roadivo/Derived/Build/Intermediates.noindex/Roadivo.build/Debug-iphonesimulator/Roadivo.build/Objects-normal/arm64/LibraryError.swiftdeps"
+  },
+  "/Users/dhavalbhanderi/Desktop/Dhruv/claude-code-starter/apps/Roadivo/Core/Playlist/M3UParser.swift" : {
+    "const-values" : "/Users/dhavalbhanderi/Desktop/Dhruv/claude-code-starter/apps/Roadivo/Derived/Build/Intermediates.noindex/Roadivo.build/Debug-iphonesimulator/Roadivo.build/Objects-normal/arm64/M3UParser.swiftconstvalues",
+    "dependencies" : "/Users/dhavalbhanderi/Desktop/Dhruv/claude-code-starter/apps/Roadivo/Derived/Build/Intermediates.noindex/Roadivo.build/Debug-iphonesimulator/Roadivo.build/Objects-normal/arm64/M3UParser.d",
+    "diagnostics" : "/Users/dhavalbhanderi/Desktop/Dhruv/claude-code-starter/apps/Roadivo/Derived/Build/Intermediates.noindex/Roadivo.build/Debug-iphonesimulator/Roadivo.build/Objects-normal/arm64/M3UParser.dia",
+    "object" : "/Users/dhavalbhanderi/Desktop/Dhruv/claude-code-starter/apps/Roadivo/Derived/Build/Intermediates.noindex/Roadivo.build/Debug-iphonesimulator/Roadivo.build/Objects-normal/arm64/M3UParser.o",
+    "swift-dependencies" : "/Users/dhavalbhanderi/Desktop/Dhruv/claude-code-starter/apps/Roadivo/Derived/Build/Intermediates.noindex/Roadivo.build/Debug-iphonesimulator/Roadivo.build/Objects-normal/arm64/M3UParser.swiftdeps"
+  },
+  "/Users/dhavalbhanderi/Desktop/Dhruv/claude-code-starter/apps/Roadivo/Core/Playlist/PlaylistEntry.swift" : {
+    "const-values" : "/Users/dhavalbhanderi/Desktop/Dhruv/claude-code-starter/apps/Roadivo/Derived/Build/Intermediates.noindex/Roadivo.build/Debug-iphonesimulator/Roadivo.build/Objects-normal/arm64/PlaylistEntry.swiftconstvalues",
+    "dependencies" : "/Users/dhavalbhanderi/Desktop/Dhruv/claude-code-starter/apps/Roadivo/Derived/Build/Intermediates.noindex/Roadivo.build/Debug-iphonesimulator/Roadivo.build/Objects-normal/arm64/PlaylistEntry.d",
+    "diagnostics" : "/Users/dhavalbhanderi/Desktop/Dhruv/claude-code-starter/apps/Roadivo/Derived/Build/Intermediates.noindex/Roadivo.build/Debug-iphonesimulator/Roadivo.build/Objects-normal/arm64/PlaylistEntry.dia",
+    "object" : "/Users/dhavalbhanderi/Desktop/Dhruv/claude-code-starter/apps/Roadivo/Derived/Build/Intermediates.noindex/Roadivo.build/Debug-iphonesimulator/Roadivo.build/Objects-normal/arm64/PlaylistEntry.o",
+    "swift-dependencies" : "/Users/dhavalbhanderi/Desktop/Dhruv/claude-code-starter/apps/Roadivo/Derived/Build/Intermediates.noindex/Roadivo.build/Debug-iphonesimulator/Roadivo.build/Objects-normal/arm64/PlaylistEntry.swiftdeps"
+  },
+  "/Users/dhavalbhanderi/Desktop/Dhruv/claude-code-starter/apps/Roadivo/Core/Playlist/PlaylistFetcher.swift" : {
+    "const-values" : "/Users/dhavalbhanderi/Desktop/Dhruv/claude-code-starter/apps/Roadivo/Derived/Build/Intermediates.noindex/Roadivo.build/Debug-iphonesimulator/Roadivo.build/Objects-normal/arm64/PlaylistFetcher.swiftconstvalues",
+    "dependencies" : "/Users/dhavalbhanderi/Desktop/Dhruv/claude-code-starter/apps/Roadivo/Derived/Build/Intermediates.noindex/Roadivo.build/Debug-iphonesimulator/Roadivo.build/Objects-normal/arm64/PlaylistFetcher.d",
+    "diagnostics" : "/Users/dhavalbhanderi/Desktop/Dhruv/claude-code-starter/apps/Roadivo/Derived/Build/Intermediates.noindex/Roadivo.build/Debug-iphonesimulator/Roadivo.build/Objects-normal/arm64/PlaylistFetcher.dia",
+    "object" : "/Users/dhavalbhanderi/Desktop/Dhruv/claude-code-starter/apps/Roadivo/Derived/Build/Intermediates.noindex/Roadivo.build/Debug-iphonesimulator/Roadivo.build/Objects-normal/arm64/PlaylistFetcher.o",
+    "swift-dependencies" : "/Users/dhavalbhanderi/Desktop/Dhruv/claude-code-starter/apps/Roadivo/Derived/Build/Intermediates.noindex/Roadivo.build/Debug-iphonesimulator/Roadivo.build/Objects-normal/arm64/PlaylistFetcher.swiftdeps"
+  },
+  "/Users/dhavalbhanderi/Desktop/Dhruv/claude-code-starter/apps/Roadivo/Core/Playlist/QRCodeReader.swift" : {
+    "const-values" : "/Users/dhavalbhanderi/Desktop/Dhruv/claude-code-starter/apps/Roadivo/Derived/Build/Intermediates.noindex/Roadivo.build/Debug-iphonesimulator/Roadivo.build/Objects-normal/arm64/QRCodeReader.swiftconstvalues",
+    "dependencies" : "/Users/dhavalbhanderi/Desktop/Dhruv/claude-code-starter/apps/Roadivo/Derived/Build/Intermediates.noindex/Roadivo.build/Debug-iphonesimulator/Roadivo.build/Objects-normal/arm64/QRCodeReader.d",
+    "diagnostics" : "/Users/dhavalbhanderi/Desktop/Dhruv/claude-code-starter/apps/Roadivo/Derived/Build/Intermediates.noindex/Roadivo.build/Debug-iphonesimulator/Roadivo.build/Objects-normal/arm64/QRCodeReader.dia",
+    "object" : "/Users/dhavalbhanderi/Desktop/Dhruv/claude-code-starter/apps/Roadivo/Derived/Build/Intermediates.noindex/Roadivo.build/Debug-iphonesimulator/Roadivo.build/Objects-normal/arm64/QRCodeReader.o",
+    "swift-dependencies" : "/Users/dhavalbhanderi/Desktop/Dhruv/claude-code-starter/apps/Roadivo/Derived/Build/Intermediates.noindex/Roadivo.build/Debug-iphonesimulator/Roadivo.build/Objects-normal/arm64/QRCodeReader.swiftdeps"
+  },
+  "/Users/dhavalbhanderi/Desktop/Dhruv/claude-code-starter/apps/Roadivo/Core/Store/FakeStoreClient.swift" : {
+    "const-values" : "/Users/dhavalbhanderi/Desktop/Dhruv/claude-code-starter/apps/Roadivo/Derived/Build/Intermediates.noindex/Roadivo.build/Debug-iphonesimulator/Roadivo.build/Objects-normal/arm64/FakeStoreClient.swiftconstvalues",
+    "dependencies" : "/Users/dhavalbhanderi/Desktop/Dhruv/claude-code-starter/apps/Roadivo/Derived/Build/Intermediates.noindex/Roadivo.build/Debug-iphonesimulator/Roadivo.build/Objects-normal/arm64/FakeStoreClient.d",
+    "diagnostics" : "/Users/dhavalbhanderi/Desktop/Dhruv/claude-code-starter/apps/Roadivo/Derived/Build/Intermediates.noindex/Roadivo.build/Debug-iphonesimulator/Roadivo.build/Objects-normal/arm64/FakeStoreClient.dia",
+    "object" : "/Users/dhavalbhanderi/Desktop/Dhruv/claude-code-starter/apps/Roadivo/Derived/Build/Intermediates.noindex/Roadivo.build/Debug-iphonesimulator/Roadivo.build/Objects-normal/arm64/FakeStoreClient.o",
+    "swift-dependencies" : "/Users/dhavalbhanderi/Desktop/Dhruv/claude-code-starter/apps/Roadivo/Derived/Build/Intermediates.noindex/Roadivo.build/Debug-iphonesimulator/Roadivo.build/Objects-normal/arm64/FakeStoreClient.swiftdeps"
+  },
+  "/Users/dhavalbhanderi/Desktop/Dhruv/claude-code-starter/apps/Roadivo/Core/Store/ProAccess.swift" : {
+    "const-values" : "/Users/dhavalbhanderi/Desktop/Dhruv/claude-code-starter/apps/Roadivo/Derived/Build/Intermediates.noindex/Roadivo.build/Debug-iphonesimulator/Roadivo.build/Objects-normal/arm64/ProAccess.swiftconstvalues",
+    "dependencies" : "/Users/dhavalbhanderi/Desktop/Dhruv/claude-code-starter/apps/Roadivo/Derived/Build/Intermediates.noindex/Roadivo.build/Debug-iphonesimulator/Roadivo.build/Objects-normal/arm64/ProAccess.d",
+    "diagnostics" : "/Users/dhavalbhanderi/Desktop/Dhruv/claude-code-starter/apps/Roadivo/Derived/Build/Intermediates.noindex/Roadivo.build/Debug-iphonesimulator/Roadivo.build/Objects-normal/arm64/ProAccess.dia",
+    "object" : "/Users/dhavalbhanderi/Desktop/Dhruv/claude-code-starter/apps/Roadivo/Derived/Build/Intermediates.noindex/Roadivo.build/Debug-iphonesimulator/Roadivo.build/Objects-normal/arm64/ProAccess.o",
+    "swift-dependencies" : "/Users/dhavalbhanderi/Desktop/Dhruv/claude-code-starter/apps/Roadivo/Derived/Build/Intermediates.noindex/Roadivo.build/Debug-iphonesimulator/Roadivo.build/Objects-normal/arm64/ProAccess.swiftdeps"
+  },
+  "/Users/dhavalbhanderi/Desktop/Dhruv/claude-code-starter/apps/Roadivo/Core/Store/ProPlan.swift" : {
+    "const-values" : "/Users/dhavalbhanderi/Desktop/Dhruv/claude-code-starter/apps/Roadivo/Derived/Build/Intermediates.noindex/Roadivo.build/Debug-iphonesimulator/Roadivo.build/Objects-normal/arm64/ProPlan.swiftconstvalues",
+    "dependencies" : "/Users/dhavalbhanderi/Desktop/Dhruv/claude-code-starter/apps/Roadivo/Derived/Build/Intermediates.noindex/Roadivo.build/Debug-iphonesimulator/Roadivo.build/Objects-normal/arm64/ProPlan.d",
+    "diagnostics" : "/Users/dhavalbhanderi/Desktop/Dhruv/claude-code-starter/apps/Roadivo/Derived/Build/Intermediates.noindex/Roadivo.build/Debug-iphonesimulator/Roadivo.build/Objects-normal/arm64/ProPlan.dia",
+    "object" : "/Users/dhavalbhanderi/Desktop/Dhruv/claude-code-starter/apps/Roadivo/Derived/Build/Intermediates.noindex/Roadivo.build/Debug-iphonesimulator/Roadivo.build/Objects-normal/arm64/ProPlan.o",
+    "swift-dependencies" : "/Users/dhavalbhanderi/Desktop/Dhruv/claude-code-starter/apps/Roadivo/Derived/Build/Intermediates.noindex/Roadivo.build/Debug-iphonesimulator/Roadivo.build/Objects-normal/arm64/ProPlan.swiftdeps"
+  },
+  "/Users/dhavalbhanderi/Desktop/Dhruv/claude-code-starter/apps/Roadivo/Core/Store/StoreKitClient.swift" : {
+    "const-values" : "/Users/dhavalbhanderi/Desktop/Dhruv/claude-code-starter/apps/Roadivo/Derived/Build/Intermediates.noindex/Roadivo.build/Debug-iphonesimulator/Roadivo.build/Objects-normal/arm64/StoreKitClient.swiftconstvalues",
+    "dependencies" : "/Users/dhavalbhanderi/Desktop/Dhruv/claude-code-starter/apps/Roadivo/Derived/Build/Intermediates.noindex/Roadivo.build/Debug-iphonesimulator/Roadivo.build/Objects-normal/arm64/StoreKitClient.d",
+    "diagnostics" : "/Users/dhavalbhanderi/Desktop/Dhruv/claude-code-starter/apps/Roadivo/Derived/Build/Intermediates.noindex/Roadivo.build/Debug-iphonesimulator/Roadivo.build/Objects-normal/arm64/StoreKitClient.dia",
+    "object" : "/Users/dhavalbhanderi/Desktop/Dhruv/claude-code-starter/apps/Roadivo/Derived/Build/Intermediates.noindex/Roadivo.build/Debug-iphonesimulator/Roadivo.build/Objects-normal/arm64/StoreKitClient.o",
+    "swift-dependencies" : "/Users/dhavalbhanderi/Desktop/Dhruv/claude-code-starter/apps/Roadivo/Derived/Build/Intermediates.noindex/Roadivo.build/Debug-iphonesimulator/Roadivo.build/Objects-normal/arm64/StoreKitClient.swiftdeps"
+  },
+  "/Users/dhavalbhanderi/Desktop/Dhruv/claude-code-starter/apps/Roadivo/Derived/Sources/TuistAssets+Roadivo.swift" : {
+    "const-values" : "/Users/dhavalbhanderi/Desktop/Dhruv/claude-code-starter/apps/Roadivo/Derived/Build/Intermediates.noindex/Roadivo.build/Debug-iphonesimulator/Roadivo.build/Objects-normal/arm64/TuistAssets+Roadivo.swiftconstvalues",
+    "dependencies" : "/Users/dhavalbhanderi/Desktop/Dhruv/claude-code-starter/apps/Roadivo/Derived/Build/Intermediates.noindex/Roadivo.build/Debug-iphonesimulator/Roadivo.build/Objects-normal/arm64/TuistAssets+Roadivo.d",
+    "diagnostics" : "/Users/dhavalbhanderi/Desktop/Dhruv/claude-code-starter/apps/Roadivo/Derived/Build/Intermediates.noindex/Roadivo.build/Debug-iphonesimulator/Roadivo.build/Objects-normal/arm64/TuistAssets+Roadivo.dia",
+    "object" : "/Users/dhavalbhanderi/Desktop/Dhruv/claude-code-starter/apps/Roadivo/Derived/Build/Intermediates.noindex/Roadivo.build/Debug-iphonesimulator/Roadivo.build/Objects-normal/arm64/TuistAssets+Roadivo.o",
+    "swift-dependencies" : "/Users/dhavalbhanderi/Desktop/Dhruv/claude-code-starter/apps/Roadivo/Derived/Build/Intermediates.noindex/Roadivo.build/Debug-iphonesimulator/Roadivo.build/Objects-normal/arm64/TuistAssets+Roadivo.swiftdeps"
+  }
+}

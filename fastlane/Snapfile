@@ -1,0 +1,14 @@
+# App Store screenshots for Roadivo: `fastlane screenshots`. See /app-screenshots.
+# Roadivo is iPhone-only; the 6.9-inch device is the size App Store Connect requires.
+devices([
+  "iPhone 17 Pro Max",
+  "iPhone 16"
+])
+
+languages(["en-US"])
+
+scheme("Roadivo")
+only_testing(["RoadivoUITests/ScreenshotUITests"])
+clear_previous_screenshots(true)
+output_directory("./fastlane/screenshots")
+override_status_bar(true)

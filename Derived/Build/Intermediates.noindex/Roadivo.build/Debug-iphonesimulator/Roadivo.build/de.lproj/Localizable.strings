@@ -1,0 +1,534 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>%@ / week</key>
+	<string>%@ / Woche</string>
+	<key>%@ Buy now</key>
+	<string>%@ Jetzt kaufen</string>
+	<key>%@ a week.</key>
+	<string>%@ pro Woche.</string>
+	<key>%@ a year.</key>
+	<string>%@ pro Jahr.</string>
+	<key>%lld</key>
+	<string>%lld</string>
+	<key>%lld items</key>
+	<string>%lld Objekte</string>
+	<key>A car display or wireless adapter that accepts AirPlay video. Start a channel, tap AirPlay and pick it. No AirPlay? Mount your iPhone and use Car Mode. Never watch video while driving.</key>
+	<string>Ein Autodisplay oder kabelloser Adapter, der AirPlay-Video unterstützt. Starte einen Sender, tippe auf AirPlay und wähle ihn aus. Kein AirPlay? Befestige dein iPhone und nutze den Automodus. Schau niemals Videos während der Fahrt.</string>
+	<key>A source is a playlist link, an M3U file, or a media server you own or subscribe to. Roadivo is a player only: it doesn't provide, host or recommend any content.</key>
+	<string>Eine Quelle ist ein Playlist-Link, eine M3U-Datei oder ein Medienserver, den du besitzt oder abonniert hast. Roadivo ist nur ein Player: Es stellt keine Inhalte bereit, hostet oder empfiehlt sie nicht.</string>
+	<key>About</key>
+	<string>Info</string>
+	<key>Active. Thanks for supporting Roadivo.</key>
+	<string>Aktiv. Danke, dass du Roadivo unterstützt.</string>
+	<key>Add</key>
+	<string>Hinzufügen</string>
+	<key>Add Source</key>
+	<string>Quelle hinzufügen</string>
+	<key>Add a Source</key>
+	<string>Quelle hinzufügen</string>
+	<key>Add a source on your iPhone</key>
+	<string>Füge auf deinem iPhone eine Quelle hinzu</string>
+	<key>Add an M3U link, file or QR code, or import videos from Photos and Files. Sorted automatically.</key>
+	<string>Füge einen M3U-Link, eine Datei oder einen QR-Code hinzu oder importiere Videos aus Fotos und Dateien. Wird automatisch sortiert.</string>
+	<key>Add an M3U playlist link or file, or import videos from your iPhone.</key>
+	<string>Füge einen M3U-Playlist-Link oder eine Datei hinzu oder importiere Videos von deinem iPhone.</string>
+	<key>Add to Favorites</key>
+	<string>Zu Favoriten hinzufügen</string>
+	<key>Adding…</key>
+	<string>Wird hinzugefügt …</string>
+	<key>AirPlay</key>
+	<string>AirPlay</string>
+	<key>AirPlay needs your iPhone and the screen on the same network, or a direct connection from an AirPlay adapter. Streams also need mobile data or Wi‑Fi; videos on this iPhone play offline.</key>
+	<string>Für AirPlay müssen dein iPhone und der Bildschirm im selben Netzwerk sein oder direkt über einen AirPlay-Adapter verbunden sein. Streams brauchen außerdem mobile Daten oder WLAN; Videos auf diesem iPhone laufen auch offline.</string>
+	<key>AirPlay sends video only to the screen you pick.</key>
+	<string>AirPlay sendet Video nur an den Bildschirm, den du auswählst.</string>
+	<key>All Languages</key>
+	<string>Alle Sprachen</string>
+	<key>Back 15 seconds</key>
+	<string>15 Sekunden zurück</string>
+	<key>Billed once a year, cancel anytime</key>
+	<string>Einmal jährlich abgerechnet, jederzeit kündbar</string>
+	<key>Bring videos over from Photos or Files and play them on the road, no connection needed.</key>
+	<string>Hol dir Videos aus Fotos oder Dateien und spiel sie unterwegs ab – ganz ohne Verbindung.</string>
+	<key>Bring your own playlists</key>
+	<string>Deine eigenen Playlists</string>
+	<key>Browse Home</key>
+	<string>Home durchsuchen</string>
+	<key>Camera and Photos</key>
+	<string>Kamera und Fotos</string>
+	<key>Camera scanning isn't available</key>
+	<string>Scannen mit der Kamera ist nicht verfügbar</string>
+	<key>Can I keep watching while I browse?</key>
+	<string>Kann ich weiterschauen, während ich stöbere?</string>
+	<key>Cancel</key>
+	<string>Abbrechen</string>
+	<key>Car Mode</key>
+	<string>Automodus</string>
+	<key>Car Mode is part of Roadivo Pro.</key>
+	<string>Der Automodus ist Teil von Roadivo Pro.</string>
+	<key>Car audio connected</key>
+	<string>Autoaudio verbunden</string>
+	<key>CarPlay</key>
+	<string>CarPlay</string>
+	<key>CarPlay connected</key>
+	<string>CarPlay verbunden</string>
+	<key>Cast to Car</key>
+	<string>Ans Auto senden</string>
+	<key>Casting with AirPlay</key>
+	<string>Streamen mit AirPlay</string>
+	<key>Channel lists, favourites and watch history are kept in the app's private storage.</key>
+	<string>Senderlisten, Favoriten und Verlauf werden im privaten Speicher der App gesichert.</string>
+	<key>Charging stops become movie time</key>
+	<string>Ladepausen werden zum Filmabend</string>
+	<key>Charging · 64%</key>
+	<string>Lädt · 64 %</string>
+	<key>Check the link opens in Safari, starts with http:// or https://, and that your subscription is active. Some providers limit how many devices can use one link.</key>
+	<string>Prüfe, ob sich der Link in Safari öffnet und mit http:// oder https:// beginnt und ob dein Abo aktiv ist. Manche Anbieter begrenzen, wie viele Geräte einen Link nutzen dürfen.</string>
+	<key>Check the server address, for example http://192.168.1.10:8096.</key>
+	<string>Prüfe die Serveradresse, zum Beispiel http://192.168.1.10:8096.</string>
+	<key>Close</key>
+	<string>Schließen</string>
+	<key>Close Roadivo from the app switcher and open it again. If a channel still won't play, refresh its source in Settings › Manage Sources. Still stuck? Contact us through Roadivo's App Store page.</key>
+	<string>Schließe Roadivo im App-Umschalter und öffne die App erneut. Wenn ein Sender immer noch nicht abspielt, aktualisiere seine Quelle unter „Einstellungen“ › „Quellen verwalten“. Klappt es immer noch nicht? Kontaktiere uns über die App Store-Seite von Roadivo.</string>
+	<key>Close scanner</key>
+	<string>Scanner schließen</string>
+	<key>Connect</key>
+	<string>Verbinden</string>
+	<key>Connect CarPlay or AirPlay</key>
+	<string>CarPlay oder AirPlay verbinden</string>
+	<key>Connect CarPlay, then open Roadivo on the car's screen to pick from Favorites, Recent and Library.</key>
+	<string>Verbinde CarPlay und öffne Roadivo auf dem Bildschirm im Auto, um aus Favoriten, Zuletzt und Mediathek zu wählen.</string>
+	<key>Connected</key>
+	<string>Verbunden</string>
+	<key>Contact</key>
+	<string>Kontakt</string>
+	<key>Continue</key>
+	<string>Weiter</string>
+	<key>Continue Watching</key>
+	<string>Weiterschauen</string>
+	<key>Couldn't import</key>
+	<string>Import fehlgeschlagen</string>
+	<key>Couldn't reach the server. %@</key>
+	<string>Server nicht erreichbar. %@</string>
+	<key>Couldn't update the source</key>
+	<string>Quelle konnte nicht aktualisiert werden</string>
+	<key>Data stored on your iPhone</key>
+	<string>Auf deinem iPhone gespeicherte Daten</string>
+	<key>Delete</key>
+	<string>Löschen</string>
+	<key>Delete %@?</key>
+	<string>%@ löschen?</string>
+	<key>Delete Video</key>
+	<string>Video löschen</string>
+	<key>Delete a source in Settings › Manage Sources, or delete the app to remove everything it stored.</key>
+	<string>Lösche eine Quelle unter „Einstellungen“ › „Quellen verwalten“ oder lösche die App, um alles zu entfernen, was sie gespeichert hat.</string>
+	<key>Deleting your data</key>
+	<string>Deine Daten löschen</string>
+	<key>Does casting need Wi‑Fi?</key>
+	<string>Braucht das Streamen WLAN?</string>
+	<key>Done</key>
+	<string>Fertig</string>
+	<key>Each group shows its first 20 channels in a row. Tap See All for the rest, or use search.</key>
+	<string>Jede Gruppe zeigt ihre ersten 20 Sender in einer Reihe. Tippe auf „Alle anzeigen“ für den Rest oder nutze die Suche.</string>
+	<key>Enter the server, username and password your IPTV provider gave you.</key>
+	<string>Gib den Server, Benutzernamen und das Passwort ein, die du von deinem IPTV-Anbieter erhalten hast.</string>
+	<key>Every playlist and media server you have</key>
+	<string>Alle deine Playlists und Medienserver</string>
+	<key>Everything you add stays on this iPhone. Links and logins are kept in the Keychain. Roadivo has no account, no ads and no tracking.</key>
+	<string>Alles, was du hinzufügst, bleibt auf diesem iPhone. Links und Anmeldedaten werden im Schlüsselbund gesichert. Roadivo hat keinen Account, keine Werbung und kein Tracking.</string>
+	<key>Exit Car Mode</key>
+	<string>Automodus beenden</string>
+	<key>Favorite</key>
+	<string>Favorit</string>
+	<key>Favorites</key>
+	<string>Favoriten</string>
+	<key>Find a language</key>
+	<string>Sprache suchen</string>
+	<key>First week %@</key>
+	<string>Erste Woche %@</string>
+	<key>First week %@, then %@ a week.</key>
+	<string>Erste Woche %@, danach %@ pro Woche.</string>
+	<key>Flexible, cancel anytime</key>
+	<string>Flexibel, jederzeit kündbar</string>
+	<key>Follow System</key>
+	<string>Wie System</string>
+	<key>For passengers, or while parked. Never watch video while driving.</key>
+	<string>Für Mitfahrende oder beim Parken. Schau niemals Videos während der Fahrt.</string>
+	<key>Forward 15 seconds</key>
+	<string>15 Sekunden vor</string>
+	<key>From an IPTV service you subscribe to (they send an M3U link, a QR code or Xtream login details), or from your own Jellyfin or Emby server. Only add sources you have the right to watch.</key>
+	<string>Von einem IPTV-Dienst, den du abonniert hast (er schickt dir einen M3U-Link, einen QR-Code oder Xtream-Anmeldedaten), oder von deinem eigenen Jellyfin- oder Emby-Server. Füge nur Quellen hinzu, die du ansehen darfst.</string>
+	<key>Get Help</key>
+	<string>Hilfe erhalten</string>
+	<key>Get Started</key>
+	<string>Los geht’s</string>
+	<key>Help &amp; FAQ</key>
+	<string>Hilfe &amp; FAQ</string>
+	<key>Home</key>
+	<string>Home</string>
+	<key>I bought Roadivo Pro, but it still says I'm not a member.</key>
+	<string>Ich habe Roadivo Pro gekauft, aber es steht immer noch da, dass ich kein Mitglied bin.</string>
+	<key>I pasted a link and it says the download failed or it isn't a valid channel list.</key>
+	<string>Ich habe einen Link eingefügt und es heißt, der Download ist fehlgeschlagen oder es ist keine gültige Senderliste.</string>
+	<key>Import Folder</key>
+	<string>Ordner importieren</string>
+	<key>Import Now</key>
+	<string>Jetzt importieren</string>
+	<key>Import Video Files</key>
+	<string>Videodateien importieren</string>
+	<key>Import an M3U File</key>
+	<string>M3U-Datei importieren</string>
+	<key>Import from Photos</key>
+	<string>Aus Fotos importieren</string>
+	<key>Importing…</key>
+	<string>Wird importiert …</string>
+	<key>Included with Roadivo Pro</key>
+	<string>In Roadivo Pro enthalten</string>
+	<key>Is my data private?</key>
+	<string>Sind meine Daten privat?</string>
+	<key>Jellyfin, Emby and Xtream, side by side</key>
+	<string>Jellyfin, Emby und Xtream nebeneinander</string>
+	<key>LIVE</key>
+	<string>LIVE</string>
+	<key>Language</key>
+	<string>Sprache</string>
+	<key>Last updated: 13 October 2026</key>
+	<string>Zuletzt aktualisiert: 13. Oktober 2026</string>
+	<key>Legal</key>
+	<string>Rechtliches</string>
+	<key>Let the Journey Play.</key>
+	<string>Let the Journey Play.</string>
+	<key>Let the Journey Play. Everything unlocked.</key>
+	<string>Let the Journey Play. Alles freigeschaltet.</string>
+	<key>Let the Journey Play. Your playlists and videos, in a player made for the road.</key>
+	<string>Let the Journey Play. Deine Playlists und Videos in einem Player für unterwegs.</string>
+	<key>Library</key>
+	<string>Mediathek</string>
+	<key>Lifetime</key>
+	<string>Dauerhaft</string>
+	<key>Loading…</key>
+	<string>Wird geladen …</string>
+	<key>M3U · Jellyfin · Emby · Xtream</key>
+	<string>M3U · Jellyfin · Emby · Xtream</string>
+	<key>Manage Sources</key>
+	<string>Quellen verwalten</string>
+	<key>Media</key>
+	<string>Medien</string>
+	<key>Media servers</key>
+	<string>Medienserver</string>
+	<key>Meet Roadivo</key>
+	<string>Das ist Roadivo</string>
+	<key>Minimize player</key>
+	<string>Player minimieren</string>
+	<key>More in %@</key>
+	<string>Mehr in %@</string>
+	<key>Most popular</key>
+	<string>Am beliebtesten</string>
+	<key>Movies</key>
+	<string>Filme</string>
+	<key>My source was added, so why does Home show only some of the channels?</key>
+	<string>Meine Quelle wurde hinzugefügt. Warum zeigt Home nur einige der Sender?</string>
+	<key>NOW PLAYING</key>
+	<string>JETZT LÄUFT</string>
+	<key>Name</key>
+	<string>Name</string>
+	<key>Name (optional)</key>
+	<string>Name (optional)</string>
+	<key>Network connections</key>
+	<string>Netzwerkverbindungen</string>
+	<key>Next channel</key>
+	<string>Nächster Sender</string>
+	<key>No QR code was found in that image.</key>
+	<string>In diesem Bild wurde kein QR-Code gefunden.</string>
+	<key>No ads, ever</key>
+	<string>Niemals Werbung</string>
+	<key>No car screen? Mount your iPhone: landscape, oversized controls, screen kept awake.</key>
+	<string>Kein Bildschirm im Auto? Befestige dein iPhone: Querformat, große Bedienelemente, Bildschirm bleibt an.</string>
+	<key>No previous purchase was found for this Apple Account.</key>
+	<string>Für diesen Apple Account wurde kein früherer Kauf gefunden.</string>
+	<key>No sources added</key>
+	<string>Keine Quellen hinzugefügt</string>
+	<key>No tracking either, free or Pro</key>
+	<string>Auch kein Tracking, ob Gratis oder Pro</string>
+	<key>No usable link found</key>
+	<string>Kein verwendbarer Link gefunden</string>
+	<key>No videos imported</key>
+	<string>Keine Videos importiert</string>
+	<key>Not connected</key>
+	<string>Nicht verbunden</string>
+	<key>Not connected to a car</key>
+	<string>Nicht mit einem Auto verbunden</string>
+	<key>Nothing here yet</key>
+	<string>Noch nichts hier</string>
+	<key>Nothing saved yet</key>
+	<string>Noch nichts gesichert</string>
+	<key>Now playing: %@</key>
+	<string>Jetzt läuft: %@</string>
+	<key>OK</key>
+	<string>OK</string>
+	<key>Ocean Quest</key>
+	<string>Ocean Quest</string>
+	<key>On CarPlay, and on a mounted iPhone</key>
+	<string>Mit CarPlay und auf einem befestigten iPhone</string>
+	<key>On this iPhone</key>
+	<string>Auf diesem iPhone</string>
+	<key>On this iPhone · %lld</key>
+	<string>Auf diesem iPhone · %lld</string>
+	<key>One-time</key>
+	<string>Einmalig</string>
+	<key>One-time purchase, lifetime access</key>
+	<string>Einmaliger Kauf, dauerhafter Zugriff</string>
+	<key>Open the Pro screen and tap Restore. Make sure you're signed in with the same Apple Account you bought with. Purchases waiting for Ask to Buy approval unlock once approved.</key>
+	<string>Öffne den Pro-Bildschirm und tippe auf „Wiederherstellen“. Achte darauf, dass du mit demselben Apple Account angemeldet bist, mit dem du gekauft hast. Käufe, die auf die Genehmigung über „Kaufanfrage“ warten, werden nach der Genehmigung freigeschaltet.</string>
+	<key>Opens the player</key>
+	<string>Öffnet den Player</string>
+	<key>Or connect a media server</key>
+	<string>Oder verbinde einen Medienserver</string>
+	<key>Other</key>
+	<string>Andere</string>
+	<key>Page %lld of %lld</key>
+	<string>Seite %lld von %lld</string>
+	<key>Password</key>
+	<string>Passwort</string>
+	<key>Paste a link or a whole M3U list</key>
+	<string>Link oder ganze M3U-Liste einfügen</string>
+	<key>Paste a subscription link or M3U content, or tap the scan icon to read a QR code.</key>
+	<string>Füge einen Abo-Link oder M3U-Inhalt ein oder tippe auf das Scan-Symbol, um einen QR-Code zu lesen.</string>
+	<key>Pasted Playlist</key>
+	<string>Eingefügte Playlist</string>
+	<key>Pause</key>
+	<string>Pause</string>
+	<key>Pay once, keep forever. No subscription, no renewals.</key>
+	<string>Einmal zahlen, für immer behalten. Kein Abo, keine Verlängerungen.</string>
+	<key>Pick Something to Watch</key>
+	<string>Wähle etwas zum Ansehen</string>
+	<key>Pick a photo</key>
+	<string>Foto auswählen</string>
+	<key>Pick a photo or screenshot of the QR code instead.</key>
+	<string>Wähle stattdessen ein Foto oder einen Screenshot des QR-Codes.</string>
+	<key>Pick up right where you left off, and keep watching in the mini player or Picture in Picture.</key>
+	<string>Mach genau da weiter, wo du aufgehört hast, und schau im Mini-Player oder mit Bild-in-Bild weiter.</string>
+	<key>Plans aren't available right now. Check your connection and try again.</key>
+	<string>Pläne sind gerade nicht verfügbar. Prüfe deine Verbindung und versuche es erneut.</string>
+	<key>Play</key>
+	<string>Abspielen</string>
+	<key>Playlist links, Xtream logins and media-server access tokens are kept in the iOS Keychain.</key>
+	<string>Playlist-Links, Xtream-Anmeldedaten und Zugriffstoken für Medienserver werden im iOS-Schlüsselbund gesichert.</string>
+	<key>Plays %@</key>
+	<string>Spielt %@ ab</string>
+	<key>Plays this channel</key>
+	<string>Spielt diesen Sender ab</string>
+	<key>Point at a QR code, or pick a photo from the top right.</key>
+	<string>Richte die Kamera auf einen QR-Code oder wähle oben rechts ein Foto aus.</string>
+	<key>Preferences</key>
+	<string>Präferenzen</string>
+	<key>Previous channel</key>
+	<string>Vorheriger Sender</string>
+	<key>Privacy</key>
+	<string>Datenschutz</string>
+	<key>Privacy Policy</key>
+	<string>Datenschutzerklärung</string>
+	<key>Purchases</key>
+	<string>Käufe</string>
+	<key>Questions about this policy? Reach us through Roadivo's App Store page.</key>
+	<string>Fragen zu dieser Erklärung? Erreiche uns über die App Store-Seite von Roadivo.</string>
+	<key>Ready</key>
+	<string>Bereit</string>
+	<key>Ready when you are</key>
+	<string>Bereit, wenn du es bist</string>
+	<key>Recent</key>
+	<string>Zuletzt</string>
+	<key>Refresh</key>
+	<string>Aktualisieren</string>
+	<key>Remove from Favorites</key>
+	<string>Aus Favoriten entfernen</string>
+	<key>Rename</key>
+	<string>Umbenennen</string>
+	<key>Rename Source</key>
+	<string>Quelle umbenennen</string>
+	<key>Renews automatically; cancel anytime in Settings › Apple Account › Subscriptions.</key>
+	<string>Verlängert sich automatisch; jederzeit kündbar unter „Einstellungen“ › „Apple Account“ › „Abonnements“.</string>
+	<key>Restore</key>
+	<string>Wiederherstellen</string>
+	<key>Resume at 42:10</key>
+	<string>Fortsetzen bei 42:10</string>
+	<key>Roadivo</key>
+	<string>Roadivo</string>
+	<key>Roadivo Privacy Policy</key>
+	<string>Roadivo-Datenschutzerklärung</string>
+	<key>Roadivo Pro</key>
+	<string>Roadivo Pro</string>
+	<key>Roadivo Pro is sold through the App Store. Apple handles payment; we never see your card or Apple Account details.</key>
+	<string>Roadivo Pro wird über den App Store verkauft. Apple wickelt die Zahlung ab; wir sehen niemals deine Karte oder deine Apple Account-Daten.</string>
+	<key>Roadivo connects only to the playlist links, IPTV providers and media servers you add, and to the stream addresses they list. Those services have their own privacy policies.</key>
+	<string>Roadivo verbindet sich nur mit den Playlist-Links, IPTV-Anbietern und Medienservern, die du hinzufügst, sowie mit den darin aufgeführten Stream-Adressen. Diese Dienste haben eigene Datenschutzerklärungen.</string>
+	<key>Roadivo doesn't provide, host or endorse any content. Add only sources you have the right to use.</key>
+	<string>Roadivo stellt keine Inhalte bereit, hostet oder unterstützt sie nicht. Füge nur Quellen hinzu, die du nutzen darfst.</string>
+	<key>Roadivo follows your iPhone's language unless you choose one here.</key>
+	<string>Roadivo verwendet die Sprache deines iPhone, außer du wählst hier eine andere.</string>
+	<key>Roadivo has no analytics, no ads and no tracking. It never asks to track you.</key>
+	<string>Roadivo hat keine Analysen, keine Werbung und kein Tracking. Die App fragt nie, ob sie dich tracken darf.</string>
+	<key>Roadivo is a media player. You bring your own playlists, media servers and videos.</key>
+	<string>Roadivo ist ein Mediaplayer. Du bringst deine eigenen Playlists, Medienserver und Videos mit.</string>
+	<key>Roadivo is a player only. It doesn't include or sell any channels or content.</key>
+	<string>Roadivo ist nur ein Player. Die App enthält oder verkauft keine Sender oder Inhalte.</string>
+	<key>Roadivo is a player only. It doesn't provide, host or recommend any content.</key>
+	<string>Roadivo ist nur ein Player. Die App stellt keine Inhalte bereit, hostet oder empfiehlt sie nicht.</string>
+	<key>Roadivo is on your car's screen</key>
+	<string>Roadivo ist auf dem Bildschirm deines Autos</string>
+	<key>Roadivo plays them. This policy explains what happens to your data.</key>
+	<string>Roadivo spielt sie ab. Diese Erklärung beschreibt, was mit deinen Daten passiert.</string>
+	<key>Roadivo sees only the photos and videos you pick.</key>
+	<string>Roadivo sieht nur die Fotos und Videos, die du auswählst.</string>
+	<key>Save</key>
+	<string>Sichern</string>
+	<key>Scan QR code</key>
+	<string>QR-Code scannen</string>
+	<key>Search channels and titles</key>
+	<string>Sender und Titel suchen</string>
+	<key>See All</key>
+	<string>Alle anzeigen</string>
+	<key>Send video to an AirPlay car display, a wireless adapter or a TV.</key>
+	<string>Sende Video an ein AirPlay-Autodisplay, einen kabellosen Adapter oder einen Fernseher.</string>
+	<key>Send video to an AirPlay car display, or mount your iPhone and switch on Car Mode.</key>
+	<string>Sende Video an ein AirPlay-Autodisplay oder befestige dein iPhone und schalte den Automodus ein.</string>
+	<key>Server address</key>
+	<string>Serveradresse</string>
+	<key>Settings</key>
+	<string>Einstellungen</string>
+	<key>Shelf</key>
+	<string>Regal</string>
+	<key>Sign in to your own server to watch its movies and shows.</key>
+	<string>Melde dich bei deinem eigenen Server an, um seine Filme und Serien anzusehen.</string>
+	<key>Skip</key>
+	<string>Überspringen</string>
+	<key>Some videos couldn't be copied from Photos.</key>
+	<string>Einige Videos konnten nicht aus Fotos kopiert werden.</string>
+	<key>Something went wrong</key>
+	<string>Ein Fehler ist aufgetreten</string>
+	<key>Sports</key>
+	<string>Sport</string>
+	<key>Start Car Mode</key>
+	<string>Automodus starten</string>
+	<key>Start for %@</key>
+	<string>Für %@ starten</string>
+	<key>Start with an M3U subscription, or link a Jellyfin or Emby server.</key>
+	<string>Starte mit einem M3U-Abo oder verknüpfe einen Jellyfin- oder Emby-Server.</string>
+	<key>Stop playback</key>
+	<string>Wiedergabe stoppen</string>
+	<key>Streams go offline, change address or use a format iPhone can't play. Jellyfin and Emby convert videos automatically; for IPTV, ask your provider for HLS (m3u8) links.</key>
+	<string>Streams gehen offline, ändern ihre Adresse oder nutzen ein Format, das das iPhone nicht abspielen kann. Jellyfin und Emby wandeln Videos automatisch um; bei IPTV frag deinen Anbieter nach HLS-Links (m3u8).</string>
+	<key>Subscribe for %@</key>
+	<string>Für %@ abonnieren</string>
+	<key>Supports M3U/M3U8 links, M3U files and pasted M3U content.</key>
+	<string>Unterstützt M3U/M3U8-Links, M3U-Dateien und eingefügte M3U-Inhalte.</string>
+	<key>Swipe to delete. Touch and hold to refresh or rename.</key>
+	<string>Zum Löschen streichen. Gedrückt halten zum Aktualisieren oder Umbenennen.</string>
+	<key>TV</key>
+	<string>TV</string>
+	<key>Terms</key>
+	<string>Bedingungen</string>
+	<key>Terms of Use (EULA)</key>
+	<string>Nutzungsbedingungen (EULA)</string>
+	<key>That doesn't look like a Jellyfin or Emby server.</key>
+	<string>Das sieht nicht nach einem Jellyfin- oder Emby-Server aus.</string>
+	<key>That doesn't look like a playlist link. Check it starts with http:// or https://.</key>
+	<string>Das sieht nicht nach einem Playlist-Link aus. Prüfe, ob er mit http:// oder https:// beginnt.</string>
+	<key>That file couldn't be read as a playlist.</key>
+	<string>Diese Datei konnte nicht als Playlist gelesen werden.</string>
+	<key>That folder has no videos Roadivo can play.</key>
+	<string>Dieser Ordner enthält keine Videos, die Roadivo abspielen kann.</string>
+	<key>That item is no longer in your library.</key>
+	<string>Dieses Objekt ist nicht mehr in deiner Mediathek.</string>
+	<key>That plan isn't available right now. Try again later.</key>
+	<string>Dieser Plan ist gerade nicht verfügbar. Versuche es später erneut.</string>
+	<key>The App Store couldn't verify this purchase.</key>
+	<string>Der App Store konnte diesen Kauf nicht bestätigen.</string>
+	<key>The camera is used only while you scan a QR code, and nothing is recorded.</key>
+	<string>Die Kamera wird nur beim Scannen eines QR-Codes verwendet, und es wird nichts aufgezeichnet.</string>
+	<key>The free plan includes one source. Go Pro for as many as you like.</key>
+	<string>Der Gratisplan umfasst eine Quelle. Mit Pro bekommst du so viele, wie du möchtest.</string>
+	<key>The playlist couldn't be downloaded. %@</key>
+	<string>Die Playlist konnte nicht geladen werden. %@</string>
+	<key>The server answered with error %lld.</key>
+	<string>Der Server hat mit Fehler %lld geantwortet.</string>
+	<key>The server answered with error %lld. Check the link and try again.</key>
+	<string>Der Server hat mit Fehler %lld geantwortet. Prüfe den Link und versuche es erneut.</string>
+	<key>The short version</key>
+	<string>Die Kurzfassung</string>
+	<key>The username or password is incorrect.</key>
+	<string>Benutzername oder Passwort ist falsch.</string>
+	<key>The video is removed from Roadivo. The original stays in Photos or Files.</key>
+	<string>Das Video wird aus Roadivo entfernt. Das Original bleibt in Fotos oder Dateien.</string>
+	<key>Their favorites, on the big screen</key>
+	<string>Lieblingsinhalte auf dem großen Bildschirm</string>
+	<key>There are no accounts, and we never sell or share personal information.</key>
+	<string>Es gibt keine Accounts, und wir verkaufen oder teilen niemals personenbezogene Daten.</string>
+	<key>This stream can't be played right now.</key>
+	<string>Dieser Stream kann gerade nicht abgespielt werden.</string>
+	<key>Touch and hold any channel, or tap the heart in the player, to keep it here.</key>
+	<string>Halte einen Sender gedrückt oder tippe im Player auf das Herz, um ihn hier zu behalten.</string>
+	<key>Travel</key>
+	<string>Reisen</string>
+	<key>Try Again</key>
+	<string>Erneut versuchen</string>
+	<key>Unlimited sources</key>
+	<string>Unbegrenzte Quellen</string>
+	<key>Unlock Roadivo Pro</key>
+	<string>Roadivo Pro freischalten</string>
+	<key>Unlock all features</key>
+	<string>Alle Funktionen freischalten</string>
+	<key>Unlock with Roadivo Pro</key>
+	<string>Mit Roadivo Pro freischalten</string>
+	<key>Username</key>
+	<string>Benutzername</string>
+	<key>Version</key>
+	<string>Version</string>
+	<key>Video</key>
+	<string>Video</string>
+	<key>Video plays on the car's display while parked, in cars with CarPlay video. Driving? Sound only.</key>
+	<string>In Autos mit CarPlay-Video läuft das Video beim Parken auf dem Autodisplay. Während der Fahrt nur Ton.</string>
+	<key>Videos you import from Photos or Files are copied into the app and deleted when you remove them.</key>
+	<string>Videos, die du aus Fotos oder Dateien importierst, werden in die App kopiert und gelöscht, wenn du sie entfernst.</string>
+	<key>We couldn't find any channels or videos in that playlist.</key>
+	<string>In dieser Playlist wurden keine Sender oder Videos gefunden.</string>
+	<key>We couldn't find any movies or episodes on that server.</key>
+	<string>Auf diesem Server wurden keine Filme oder Folgen gefunden.</string>
+	<key>Weekly</key>
+	<string>Wöchentlich</string>
+	<key>What do I need to watch in the car?</key>
+	<string>Was brauche ich, um im Auto zu schauen?</string>
+	<key>What is a source?</key>
+	<string>Was ist eine Quelle?</string>
+	<key>What is a source? Does Roadivo come with channels?</key>
+	<string>Was ist eine Quelle? Enthält Roadivo Sender?</string>
+	<key>What should I do if something goes wrong while using the app?</key>
+	<string>Was soll ich tun, wenn bei der Nutzung der App etwas schiefgeht?</string>
+	<key>Where do I find a source?</key>
+	<string>Wo finde ich eine Quelle?</string>
+	<key>Why won't a channel play?</key>
+	<string>Warum wird ein Sender nicht abgespielt?</string>
+	<key>Yearly</key>
+	<string>Jährlich</string>
+	<key>Yes. Close the player and it keeps going in the mini player, or swipe home for Picture in Picture.</key>
+	<string>Ja. Schließe den Player und die Wiedergabe läuft im Mini-Player weiter, oder streiche nach oben zum Home-Bildschirm für Bild-in-Bild.</string>
+	<key>Your Sources</key>
+	<string>Deine Quellen</string>
+	<key>Your library is empty</key>
+	<string>Deine Mediathek ist leer</string>
+	<key>Your login is kept in this iPhone's Keychain and sent only to that server.</key>
+	<string>Deine Anmeldedaten werden im Schlüsselbund dieses iPhone gesichert und nur an diesen Server gesendet.</string>
+	<key>Your password is used once to sign in. Roadivo keeps only the server's access token, in the Keychain.</key>
+	<string>Dein Passwort wird einmalig zur Anmeldung verwendet. Roadivo behält nur das Zugriffstoken des Servers, im Schlüsselbund.</string>
+	<key>Your playlists, media servers, sign-in details and videos stay on your iPhone. We don't record what you watch.</key>
+	<string>Deine Playlists, Medienserver, Anmeldedaten und Videos bleiben auf deinem iPhone. Wir zeichnen nicht auf, was du ansiehst.</string>
+	<key>Your purchase is waiting for approval. Pro unlocks as soon as it's approved.</key>
+	<string>Dein Kauf wartet auf Genehmigung. Pro wird freigeschaltet, sobald er genehmigt ist.</string>
+	<key>e.g. Living Room</key>
+	<string>z. B. Wohnzimmer</string>
+	<key>•</key>
+	<string>•</string>
+</dict>
+</plist>

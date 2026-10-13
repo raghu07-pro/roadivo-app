@@ -1,0 +1,6 @@
+// Roadivo — Debug build settings. Committed; nothing secret here.
+
+#include "Shared.xcconfig"
+
+SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG
+ENABLE_TESTABILITY = YES

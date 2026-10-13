@@ -1,0 +1,24 @@
+{
+  "source": "/Users/dhavalbhanderi/Desktop/Dhruv/claude-code-starter/apps/Roadivo/DesignSystem/Components/SectionTitle.swift",
+  "tables": {
+    "Localizable": [
+      {
+        "comment": "",
+        "key": "CarPlay",
+        "location": {
+          "startingColumn": 1,
+          "startingLine": 120
+        }
+      },
+      {
+        "comment": "",
+        "key": "AirPlay",
+        "location": {
+          "startingColumn": 1,
+          "startingLine": 120
+        }
+      }
+    ]
+  },
+  "version": 1
+}

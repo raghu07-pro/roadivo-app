@@ -1,0 +1,96 @@
+{
+  "source": "/Users/dhavalbhanderi/Desktop/Dhruv/claude-code-starter/apps/Roadivo/Features/Paywall/PaywallModels.swift",
+  "tables": {
+    "Localizable": [
+      {
+        "comment": "",
+        "key": "Let the Journey Play. Everything unlocked.",
+        "location": {
+          "startingColumn": 33,
+          "startingLine": 16
+        }
+      },
+      {
+        "comment": "",
+        "key": "The free plan includes one source. Go Pro for as many as you like.",
+        "location": {
+          "startingColumn": 24,
+          "startingLine": 17
+        }
+      },
+      {
+        "comment": "",
+        "key": "Car Mode is part of Roadivo Pro.",
+        "location": {
+          "startingColumn": 24,
+          "startingLine": 18
+        }
+      },
+      {
+        "comment": "",
+        "key": "Unlimited sources",
+        "location": {
+          "startingColumn": 20,
+          "startingLine": 33
+        }
+      },
+      {
+        "comment": "",
+        "key": "Every playlist and media server you have",
+        "location": {
+          "startingColumn": 21,
+          "startingLine": 34
+        }
+      },
+      {
+        "comment": "",
+        "key": "Car Mode",
+        "location": {
+          "startingColumn": 20,
+          "startingLine": 39
+        }
+      },
+      {
+        "comment": "",
+        "key": "On CarPlay, and on a mounted iPhone",
+        "location": {
+          "startingColumn": 21,
+          "startingLine": 40
+        }
+      },
+      {
+        "comment": "",
+        "key": "Media servers",
+        "location": {
+          "startingColumn": 20,
+          "startingLine": 45
+        }
+      },
+      {
+        "comment": "",
+        "key": "Jellyfin, Emby and Xtream, side by side",
+        "location": {
+          "startingColumn": 21,
+          "startingLine": 46
+        }
+      },
+      {
+        "comment": "",
+        "key": "No ads, ever",
+        "location": {
+          "startingColumn": 20,
+          "startingLine": 51
+        }
+      },
+      {
+        "comment": "",
+        "key": "No tracking either, free or Pro",
+        "location": {
+          "startingColumn": 21,
+          "startingLine": 52
+        }
+      }
+    ]
+  },
+  "version": 1
+}

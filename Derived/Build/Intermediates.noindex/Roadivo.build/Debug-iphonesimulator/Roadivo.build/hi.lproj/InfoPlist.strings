@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CFBundleDisplayName</key>
+	<string>Roadivo</string>
+	<key>NSCameraUsageDescription</key>
+	<string>Roadivo कैमरे का इस्तेमाल सिर्फ़ प्लेलिस्ट लिंक वाला QR कोड स्कैन करने के लिए करता है।</string>
+	<key>NSLocalNetworkUsageDescription</key>
+	<string>जब आप अपने लोकल नेटवर्क पर कोई प्लेलिस्ट या वीडियो सर्वर जोड़ते हैं, तो Roadivo उससे कनेक्ट होता है।</string>
+</dict>
+</plist>

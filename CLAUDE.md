@@ -1,0 +1,127 @@
+# Roadivo — app brief
+
+Auto-loads whenever Claude works in `apps/Roadivo/`. The competitor review,
+feature map, user flow, roadmap and name review are in `Docs/PRODUCT.md`.
+
+## What this app is
+
+An **iPhone-only** IPTV / M3U player for road trips. Users add their own M3U/M3U8
+playlists (as a link, a file, pasted text or a QR code) and their own videos
+(from Photos or Files). They watch on the phone, over AirPlay to a car display
+or adapter, or in a landscape **Car Mode** for a dashboard mount.
+
+It is for passengers, and for drivers who are parked, who already have an IPTV
+subscription or their own videos. It competes with "CarTV - M3U IPTV Player &
+Cast", with a more polished UI, an honest account of what works in the car, and
+no ads or tracking. The name is *road* + *vivo* ("alive / live"), meaning live
+TV on the road.
+
+## First-launch flow & Pro
+
+Onboarding (4 pages) → "Buy a plan" paywall (closable, shown once) → four
+tabs: **Home · Favorites · Cast to Car · Settings**.
+
+- **Free:** 1 source, unlimited videos On this iPhone, AirPlay and PiP.
+- **Pro:** unlimited sources and Car Mode, including Roadivo on CarPlay.
+- StoreKit 2 runs through `StoreClient` (`StoreKitClient`; `FakeStoreClient` for
+  tests and `-ui-testing`). Simulator runs use `StoreKit/Roadivo.storekit`.
+- Prices and product IDs are placeholders (DECISIONS 23).
+
+## Cast to Car
+
+- Roadivo's CarPlay app (`App/CarPlaySceneDelegate.swift`) shows Favorites,
+  Recent and Library, then hands playback to the shared player.
+- Video plays over AirPlay, parked only, in cars with CarPlay video. While
+  driving, the car plays sound only.
+- The tab shows live CarPlay and AirPlay status (`CarConnection`).
+- CarPlay needs Apple's entitlements; it is switched off until they are
+  granted (`ROADIVO_CARPLAY` in `Config/Shared.xcconfig`, DECISIONS 25).
+
+## Design
+
+One palette, taken from the logo (a golden-hour road whose sun is a play
+button):
+- sun amber for every action (`PrimaryButton`);
+- section titles with an amber lane marker and a quiet count (`SectionTitle`); card headers with an amber icon tile and a live status line (`CardHeader`);
+- code-drawn scenes (`RoadScene`, and `CockpitView` on onboarding);
+- Overpass type.
+
+The tagline is "Let the Journey Play." (`Brand.tagline`). No green. See
+DECISIONS 32, 33 and 37.
+
+## Localization
+
+- English plus es, fr, de, it, pt-BR, ja, ko, zh-Hans, zh-Hant and hi
+  (`Resources/Localizable.xcstrings` and `InfoPlist.xcstrings`).
+- After changing UI text:
+  1. Run `Scripts/sync-strings.sh Derived`.
+  2. Translate the new keys.
+  3. Run `python3 -I Scripts/merge-translations.py <lang>.json…`.
+- `StringCatalogTests` fails until every key is translated with matching
+  format specifiers.
+- Build each sentence as one string (no `Text + Text` fragments) so
+  translators can reorder it.
+- In code, use `String(appLocalized:)` (never `String(localized:)`) and
+  `Text(app: resource)` for stored `LocalizedStringResource`s. These follow
+  the in-app language choice live (`AppLanguage`, DECISIONS 40).
+
+## Domain / data model
+
+- **Playlist** (SwiftData):
+  - `kind` is `remote` (a link that can be refreshed), `file` (imported once or pasted) or `localVideos` (the single "On this iPhone" playlist).
+  - `sourceHost` is safe to show in the UI.
+  - The **full link lives in the Keychain** under `playlist.source.<id>`. Provider links usually embed a username and password.
+- **Channel** (SwiftData):
+  - Fields: name, `group` (from `group-title`), logo URL, stream URL, `sortIndex` (file order), `isFavorite`, `lastPlayedAt`.
+  - An imported video is stored as `roadivo-local:<file name>`, never as an absolute path.
+- **MediaItem**: a value snapshot of a Channel. Views and the player only see this.
+- **M3UParser**: a tolerant extended-M3U parser. It handles a BOM, CRLF, a missing header, quoted commas, `#EXTGRP`, `tvg-name` and relative URLs, and skips junk lines.
+
+## Business rules
+
+- **No bundled content, ever.**
+  - Release builds ship zero channels.
+  - `DemoLibrary` uses Apple's public HLS test streams and exists in DEBUG builds only, for UI tests and screenshots.
+- **Single HLS stream:** a link to one HLS stream (`#EXT-X-STREAM-INF` or `#EXT-X-TARGETDURATION`) becomes a one-item playlist.
+- **Pasted M3U text** is added directly, with no download.
+- **Refreshing a source** keeps favourites and watch history for every stream URL that is still present.
+- **Next / previous** step through the item's own group.
+- **Continue Watching** shows the 12 most recently played items.
+- **Start Car Mode** on the Car tab resumes the last-played item when nothing is playing.
+- **Deleting "On this iPhone"** also deletes the copied video files.
+
+## Backend / API
+
+None in v1 (DECISIONS 6). Everything is stored on the device.
+- `Core/Networking/APIClient` is the seam for a future service. It reads `API_BASE_URL` from `Config/*.xcconfig` (placeholder `https://api.example.com`). Nothing calls it yet.
+- Playlists are fetched directly from the user's provider by `URLSessionPlaylistFetcher`.
+
+## Constraints & non-goals
+
+- **Device:** iPhone only, iOS 17+, portrait and landscape.
+- **CarPlay:** a CarPlay video and audio app, gated on Apple's entitlements (DECISIONS 25).
+- **Not in v1:**
+  - Plex
+  - EPG
+  - MKV, raw TS and AC3
+  - screen mirroring
+  - Arabic and other right-to-left languages
+- **ATS:** `NSAllowsArbitraryLoads` is on (DECISIONS 8). Justify it in the App Review notes.
+- **Privacy:** no tracking, no ATT prompt, no third-party SDKs.
+
+## Commands
+
+```bash
+# ~/.cache is root-owned on this Mac; point Tuist's cache elsewhere.
+XDG_CACHE_HOME=$TMPDIR/tuist-cache tuist generate --no-open
+xcodebuild -workspace Roadivo.xcworkspace -scheme Roadivo \
+  -destination 'id=6F7857FB-36B5-4CCE-B165-718E2207F76D' -derivedDataPath Derived test
+swiftlint --strict && swiftformat .
+swift Scripts/generate-app-icon.swift   # redraws AppIcon (car) and AppIcon-Classic, light/dark/tinted
+```
+
+UI tests launch the app with these arguments:
+- `-ui-testing`: memory-only store, Keychain and defaults, fake App Store
+- `-pro`: the fake store starts with Pro
+- `-skip-onboarding`
+- `-demo-library`

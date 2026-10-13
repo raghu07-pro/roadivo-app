@@ -1,0 +1,72 @@
+{
+  "source": "/Users/dhavalbhanderi/Desktop/Dhruv/claude-code-starter/apps/Roadivo/Features/Onboarding/OnboardingModels.swift",
+  "tables": {
+    "Localizable": [
+      {
+        "comment": "",
+        "key": "Meet Roadivo",
+        "location": {
+          "startingColumn": 20,
+          "startingLine": 21
+        }
+      },
+      {
+        "comment": "",
+        "key": "Let the Journey Play. Your playlists and videos, in a player made for the road.",
+        "location": {
+          "startingColumn": 22,
+          "startingLine": 22
+        }
+      },
+      {
+        "comment": "",
+        "key": "Their favorites, on the big screen",
+        "location": {
+          "startingColumn": 20,
+          "startingLine": 30
+        }
+      },
+      {
+        "comment": "",
+        "key": "Send video to an AirPlay car display, or mount your iPhone and switch on Car Mode.",
+        "location": {
+          "startingColumn": 22,
+          "startingLine": 31
+        }
+      },
+      {
+        "comment": "",
+        "key": "Charging stops become movie time",
+        "location": {
+          "startingColumn": 20,
+          "startingLine": 39
+        }
+      },
+      {
+        "comment": "",
+        "key": "Pick up right where you left off, and keep watching in the mini player or Picture in Picture.",
+        "location": {
+          "startingColumn": 22,
+          "startingLine": 40
+        }
+      },
+      {
+        "comment": "",
+        "key": "Bring your own playlists",
+        "location": {
+          "startingColumn": 20,
+          "startingLine": 48
+        }
+      },
+      {
+        "comment": "",
+        "key": "Add an M3U link, file or QR code, or import videos from Photos and Files. Sorted automatically.",
+        "location": {
+          "startingColumn": 22,
+          "startingLine": 49
+        }
+      }
+    ]
+  },
+  "version": 1
+}

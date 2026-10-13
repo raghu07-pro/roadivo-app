@@ -1,0 +1,56 @@
+{
+  "source": "/Users/dhavalbhanderi/Desktop/Dhruv/claude-code-starter/apps/Roadivo/Features/Player/PlayerView.swift",
+  "tables": {
+    "Localizable": [
+      {
+        "comment": "",
+        "key": "Minimize player",
+        "location": {
+          "startingColumn": 34,
+          "startingLine": 77
+        }
+      },
+      {
+        "comment": "",
+        "key": "Try Again",
+        "location": {
+          "startingColumn": 28,
+          "startingLine": 57
+        }
+      },
+      {
+        "comment": "",
+        "key": "Car Mode",
+        "location": {
+          "startingColumn": 23,
+          "startingLine": 88
+        }
+      },
+      {
+        "comment": "",
+        "key": "Remove from Favorites",
+        "location": {
+          "startingColumn": 51,
+          "startingLine": 127
+        }
+      },
+      {
+        "comment": "",
+        "key": "Add to Favorites",
+        "location": {
+          "startingColumn": 83,
+          "startingLine": 127
+        }
+      },
+      {
+        "comment": "",
+        "key": "More in %@",
+        "location": {
+          "startingColumn": 18,
+          "startingLine": 134
+        }
+      }
+    ]
+  },
+  "version": 1
+}

@@ -1,0 +1,56 @@
+{
+  "source": "/Users/dhavalbhanderi/Desktop/Dhruv/claude-code-starter/apps/Roadivo/App/CarPlaySceneDelegate.swift",
+  "tables": {
+    "Localizable": [
+      {
+        "comment": "",
+        "key": "Favorites",
+        "location": {
+          "startingColumn": 51,
+          "startingLine": 49
+        }
+      },
+      {
+        "comment": "",
+        "key": "Recent",
+        "location": {
+          "startingColumn": 48,
+          "startingLine": 50
+        }
+      },
+      {
+        "comment": "",
+        "key": "Library",
+        "location": {
+          "startingColumn": 41,
+          "startingLine": 52
+        }
+      },
+      {
+        "comment": "",
+        "key": "Add a source on your iPhone",
+        "location": {
+          "startingColumn": 64,
+          "startingLine": 56
+        }
+      },
+      {
+        "comment": "",
+        "key": "Nothing here yet",
+        "location": {
+          "startingColumn": 65,
+          "startingLine": 67
+        }
+      },
+      {
+        "comment": "",
+        "key": "%lld items",
+        "location": {
+          "startingColumn": 83,
+          "startingLine": 73
+        }
+      }
+    ]
+  },
+  "version": 1
+}

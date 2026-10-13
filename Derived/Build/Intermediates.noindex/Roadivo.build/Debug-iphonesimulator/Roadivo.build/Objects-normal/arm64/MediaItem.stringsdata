@@ -1,0 +1,16 @@
+{
+  "source": "/Users/dhavalbhanderi/Desktop/Dhruv/claude-code-starter/apps/Roadivo/Core/Models/MediaItem.swift",
+  "tables": {
+    "Localizable": [
+      {
+        "comment": "",
+        "key": "Other",
+        "location": {
+          "startingColumn": 46,
+          "startingLine": 15
+        }
+      }
+    ]
+  },
+  "version": 1
+}

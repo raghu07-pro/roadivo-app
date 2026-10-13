@@ -1,0 +1,6 @@
+// Roadivo — Release build settings. Committed; nothing secret here.
+
+#include "Shared.xcconfig"
+
+SWIFT_COMPILATION_MODE = wholemodule
+VALIDATE_PRODUCT = YES

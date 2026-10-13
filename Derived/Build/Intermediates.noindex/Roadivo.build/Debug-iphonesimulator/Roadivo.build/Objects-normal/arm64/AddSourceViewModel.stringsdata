@@ -1,0 +1,24 @@
+{
+  "source": "/Users/dhavalbhanderi/Desktop/Dhruv/claude-code-starter/apps/Roadivo/Features/Sources/AddSourceViewModel.swift",
+  "tables": {
+    "Localizable": [
+      {
+        "comment": "",
+        "key": "Pasted Playlist",
+        "location": {
+          "startingColumn": 64,
+          "startingLine": 47
+        }
+      },
+      {
+        "comment": "",
+        "key": "No QR code was found in that image.",
+        "location": {
+          "startingColumn": 49,
+          "startingLine": 79
+        }
+      }
+    ]
+  },
+  "version": 1
+}

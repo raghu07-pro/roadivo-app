@@ -1,0 +1,16 @@
+{
+  "source": "/Users/dhavalbhanderi/Desktop/Dhruv/claude-code-starter/apps/Roadivo/DesignSystem/Components/RoutePickerButton.swift",
+  "tables": {
+    "Localizable": [
+      {
+        "comment": "",
+        "key": "AirPlay",
+        "location": {
+          "startingColumn": 58,
+          "startingLine": 14
+        }
+      }
+    ]
+  },
+  "version": 1
+}
