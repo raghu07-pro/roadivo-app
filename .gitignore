@@ -1,0 +1,56 @@
+# Roadivo — this app folder is its own git repo, so the workspace root's
+# .gitignore does not apply here.
+
+# Build output. Build with `-derivedDataPath .build/DerivedData` (see CLAUDE.md).
+.build/
+DerivedData/
+build/
+*.xcresult
+
+# Tuist writes its generated files into Derived/. Keep the generated sources
+# and Info.plists: the committed Roadivo.xcodeproj references them, so a fresh
+# clone builds without running `tuist generate`. Everything else in Derived/ is
+# build output left by older `-derivedDataPath Derived` runs.
+/Derived/*
+!/Derived/Sources/
+!/Derived/InfoPlists/
+
+# Xcode per-user state
+xcuserdata/
+*.xcuserstate
+*.xcscmblueprint
+*.xccheckout
+*.moved-aside
+timeline.xctimeline
+playground.xcworkspace
+
+# Swift Package Manager
+.swiftpm/
+
+# Archives and symbols
+*.ipa
+*.dSYM
+*.dSYM.zip
+
+# Fastlane
+fastlane/report.xml
+fastlane/Preview.html
+fastlane/screenshots/
+fastlane/test_output/
+
+# Secrets and signing — never commit these
+*.p12
+*.mobileprovision
+*.certSigningRequest
+AuthKey_*.p8
+Secrets.xcconfig
+.env
+.env.local
+.env*.local
+
+# Personal Claude Code config
+CLAUDE.local.md
+
+# OS / editor
+.DS_Store
+.vscode/

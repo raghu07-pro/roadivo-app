@@ -1,6 +1,6 @@
 # Roadivo — app brief
 
-Auto-loads whenever Claude works in `apps/Roadivo/`. The competitor review,
+Auto-loads whenever Claude works in `app/roadivo-app/`. The competitor review,
 feature map, user flow, roadmap and name review are in `Docs/PRODUCT.md`.
 
 ## What this app is
@@ -54,7 +54,8 @@ DECISIONS 32, 33 and 37.
 - English plus es, fr, de, it, pt-BR, ja, ko, zh-Hans, zh-Hant and hi
   (`Resources/Localizable.xcstrings` and `InfoPlist.xcstrings`).
 - After changing UI text:
-  1. Run `Scripts/sync-strings.sh Derived`.
+  1. Run `Scripts/sync-strings.sh .build/DerivedData` (after a test or build run
+     into that path), or with no argument to build into a temp folder first.
   2. Translate the new keys.
   3. Run `python3 -I Scripts/merge-translations.py <lang>.json…`.
 - `StringCatalogTests` fails until every key is translated with matching
@@ -112,10 +113,16 @@ None in v1 (DECISIONS 6). Everything is stored on the device.
 ## Commands
 
 ```bash
-# ~/.cache is root-owned on this Mac; point Tuist's cache elsewhere.
-XDG_CACHE_HOME=$TMPDIR/tuist-cache tuist generate --no-open
+tuist generate --no-open
+# If ~/.cache is root-owned on a Mac, Tuist crashes: prefix the line above with
+# XDG_CACHE_HOME=$TMPDIR/tuist-cache.
+
+# Build output goes to .build/DerivedData (gitignored). Never into Derived/:
+# that folder holds Tuist's generated sources, which are committed.
+# Use any installed iPhone simulator (`xcrun simctl list devices available`).
 xcodebuild -workspace Roadivo.xcworkspace -scheme Roadivo \
-  -destination 'id=6F7857FB-36B5-4CCE-B165-718E2207F76D' -derivedDataPath Derived test
+  -destination 'platform=iOS Simulator,name=iPhone 17' \
+  -derivedDataPath .build/DerivedData test
 swiftlint --strict && swiftformat .
 swift Scripts/generate-app-icon.swift   # redraws AppIcon (car) and AppIcon-Classic, light/dark/tinted
 ```
