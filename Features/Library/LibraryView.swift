@@ -18,8 +18,13 @@ struct LibraryView: View {
             content
                 .background(.roadCanvas)
                 .navigationTitle("Home")
-                .navigationDestination(for: LibrarySection.self) { section in
-                    GroupDetailView(section: section, onPlay: play, onToggleFavorite: toggleFavorite)
+                .navigationDestination(for: LibraryGroupRoute.self) { route in
+                    GroupDetailView(
+                        viewModel: viewModel,
+                        title: route.title,
+                        onPlay: play,
+                        onToggleFavorite: toggleFavorite
+                    )
                 }
                 .toolbar {
                     ToolbarItem(placement: .primaryAction) {
@@ -80,7 +85,7 @@ struct LibraryView: View {
                     VStack(alignment: .leading, spacing: Spacing.sm) {
                         SectionHeader(title: section.title, count: section.items.count) {
                             if section.items.count > carouselLimit {
-                                NavigationLink(value: section) {
+                                NavigationLink(value: LibraryGroupRoute(title: section.title)) {
                                     Text("See All").font(Typography.secondary.weight(.semibold))
                                 }
                             }
@@ -132,17 +137,19 @@ private struct EmptyLibraryView: View {
 }
 
 struct GroupDetailView: View {
-    let section: LibrarySection
+    let viewModel: LibraryViewModel
+    let title: String
     let onPlay: (MediaItem, [MediaItem]?) -> Void
     let onToggleFavorite: (MediaItem) -> Void
 
     var body: some View {
+        let items = viewModel.items(inGroup: title)
         ScrollView {
-            ChannelGrid(items: section.items, onPlay: { onPlay($0, section.items) }, onToggleFavorite: onToggleFavorite)
+            ChannelGrid(items: items, onPlay: { onPlay($0, items) }, onToggleFavorite: onToggleFavorite)
                 .padding(.vertical, Spacing.md)
         }
         .background(.roadCanvas)
-        .navigationTitle(section.title)
+        .navigationTitle(title)
         .navigationBarTitleDisplayMode(.inline)
     }
 }

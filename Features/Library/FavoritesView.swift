@@ -77,10 +77,16 @@ struct FavoritesView: View {
             ) { result in
                 guard case let .success(urls) = result else { return }
                 // The presentation flag is reset before this runs; `importKind` is not.
-                let added = importKind == .folder ? urls.first.map(localVideos.importFolder) ?? false : localVideos
-                    .importFiles(urls)
-                if added {
-                    onLibraryChanged()
+                let kind = importKind
+                Task {
+                    let added = if kind == .folder, let folder = urls.first {
+                        await localVideos.importFolder(folder)
+                    } else {
+                        await localVideos.importFiles(urls)
+                    }
+                    if added {
+                        onLibraryChanged()
+                    }
                 }
             }
             .photosPicker(isPresented: $isPickingPhotos, selection: $photoSelection, matching: .videos)
@@ -190,6 +196,8 @@ struct FavoritesView: View {
         } label: {
             Label("Import Now", systemImage: "plus")
         }
+        // One import at a time: the shelf shows "Importing…" until it finishes.
+        .disabled(localVideos.isImporting)
         .accessibilityIdentifier("local.importMenu")
     }
 
@@ -220,7 +228,7 @@ struct FavoritesView: View {
             if urls.count < picked.count {
                 localVideos.errorMessage = String(appLocalized: "Some videos couldn't be copied from Photos.")
             }
-            if localVideos.importFiles(urls, removingSourcesAfterwards: true) {
+            if await localVideos.importFiles(urls, removingSourcesAfterwards: true) {
                 onLibraryChanged()
             }
         }

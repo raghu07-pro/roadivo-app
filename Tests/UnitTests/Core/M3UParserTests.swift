@@ -68,6 +68,42 @@ struct M3UParserTests {
         #expect(M3UParser.parse(text).map(\.name) == ["Good"])
     }
 
+    @Test("A sign-in page yields no channels, even resolved against the playlist's URL")
+    func signInPageYieldsNothing() throws {
+        let base = try #require(URL(string: "http://iptv.example.com/get.php?username=me&password=old"))
+        #expect(M3UParser.parse(Fixtures.signInPage, baseURL: base).isEmpty)
+    }
+
+    @Test("A plain-text error reply yields no channels")
+    func plainTextReplyYieldsNothing() throws {
+        let base = try #require(URL(string: "http://iptv.example.com/get.php"))
+        #expect(M3UParser.parse("Unauthorized\nAccount expired\n", baseURL: base).isEmpty)
+    }
+
+    @Test("Relative lines resolve once the text declares itself an extended M3U")
+    func relativeNeedsExtendedHeader() throws {
+        let base = try #require(URL(string: "https://e.com/lists/main.m3u"))
+        #expect(M3UParser.parse("#EXTM3U\nstreams/one.m3u8", baseURL: base).map(\.streamURL.absoluteString) == [
+            "https://e.com/lists/streams/one.m3u8"
+        ])
+        #expect(M3UParser.parse("streams/one.m3u8", baseURL: base).isEmpty)
+    }
+
+    @Test("Links to files on the device are skipped")
+    func skipsFileURLs() {
+        let text = "#EXTM3U\n#EXTINF:-1,Secret\nfile:///etc/passwd\n#EXTINF:-1,Good\nhttps://e.com/good.m3u8"
+        #expect(M3UParser.parse(text).map(\.name) == ["Good"])
+    }
+
+    @Test("Web pages, XML and JSON replies are recognised; playlists are not")
+    func recognisesWebPages() {
+        #expect(M3UParser.looksLikeWebPage(Fixtures.signInPage))
+        #expect(M3UParser.looksLikeWebPage("\u{FEFF}  \n<?xml version=\"1.0\"?><tv></tv>"))
+        #expect(M3UParser.looksLikeWebPage(#"{"user_info":{"auth":0}}"#))
+        #expect(!M3UParser.looksLikeWebPage(Fixtures.playlist))
+        #expect(!M3UParser.looksLikeWebPage("https://cdn.example.com/films/coastal-echoes.mp4"))
+    }
+
     @Test("tvg-name is used when the title after the comma is empty")
     func tvgNameFallback() {
         #expect(M3UParser.parse("#EXTINF:-1 tvg-name=\"Channel 5\",\nhttp://e.com/5.ts").first?.name == "Channel 5")

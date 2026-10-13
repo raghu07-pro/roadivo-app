@@ -57,7 +57,11 @@ DECISIONS 32, 33 and 37.
   1. Run `Scripts/sync-strings.sh .build/DerivedData` (after a test or build run
      into that path), or with no argument to build into a temp folder first.
   2. Translate the new keys.
-  3. Run `python3 -I Scripts/merge-translations.py <lang>.json…`.
+  3. Run `python3 -I Scripts/merge-translations.py <lang>.json…`. It needs every
+     key in each file and rebuilds `InfoPlist.xcstrings` from them, so for a few
+     new keys add them to the catalog directly instead (DECISIONS 52). The
+     command-line sync re-sorts the catalog; keep Xcode's order to avoid a
+     whole-file diff.
 - `StringCatalogTests` fails until every key is translated with matching
   format specifiers.
 - Build each sentence as one string (no `Text + Text` fragments) so

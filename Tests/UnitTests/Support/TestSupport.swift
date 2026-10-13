@@ -53,6 +53,37 @@ final class StubMediaServer: MediaServerConnecting, @unchecked Sendable {
     }
 }
 
+/// Measures the longest stretch the main actor was blocked while `work` ran,
+/// using a 5 ms heartbeat. A frozen UI shows up as one long gap.
+@MainActor
+func longestMainActorStall(during work: () async throws -> Void) async throws -> Duration {
+    @MainActor
+    final class Gap {
+        var longest: Duration = .zero
+    }
+    let clock = ContinuousClock()
+    let gap = Gap()
+    let heartbeat = Task { @MainActor in
+        var last = clock.now
+        while !Task.isCancelled {
+            try? await Task.sleep(for: .milliseconds(5))
+            gap.longest = max(gap.longest, clock.now - last)
+            last = clock.now
+        }
+    }
+    defer { heartbeat.cancel() }
+    try await Task.sleep(for: .milliseconds(20))
+    try await work()
+    return gap.longest
+}
+
+/// An extended M3U with `count` channels spread over 40 groups.
+func bigPlaylist(_ count: Int, host: String = "s.example.com") -> String {
+    "#EXTM3U\n" + (0..<count).map {
+        "#EXTINF:-1 group-title=\"Group \($0 % 40)\",Channel \($0)\nhttps://\(host)/\($0).m3u8"
+    }.joined(separator: "\n")
+}
+
 @MainActor
 struct TestLibrary {
     let store: SwiftDataStore
@@ -103,5 +134,18 @@ enum Fixtures {
     #EXTM3U
     #EXT-X-STREAM-INF:BANDWIDTH=1280000,RESOLUTION=1280x720
     low/index.m3u8
+    """
+
+    /// What hotel Wi-Fi or an expired provider account sends back with a 200.
+    static let signInPage = """
+    <!DOCTYPE html>
+    <html>
+    <head><title>Sign in</title></head>
+    <body>
+    Welcome
+    Please sign in to continue
+    <a href="/login">Login</a>
+    </body>
+    </html>
     """
 }

@@ -7,22 +7,51 @@ protocol PlaylistFetching: Sendable {
 
 struct URLSessionPlaylistFetcher: PlaylistFetching {
     var session: URLSession = .shared
+    /// The largest provider exports (live TV, films and series) run to tens of
+    /// MB. Anything bigger isn't a playlist worth holding in memory: it is
+    /// usually a video link, which would otherwise download until iOS stops
+    /// the app.
+    var maximumBytes = 100 * 1024 * 1024
+    /// How far into the body a NUL byte marks it as video or audio. Text
+    /// playlists never contain one; TS and MP4 data has one within bytes.
+    private static let sniffLength = 4096
 
     func fetchText(from url: URL) async throws -> String {
         var request = URLRequest(url: url, timeoutInterval: 30)
         // Some IPTV servers reject requests without a player-style user agent.
         request.setValue("Roadivo/1.0 (iPhone)", forHTTPHeaderField: "User-Agent")
-        let data: Data
+        let bytes: URLSession.AsyncBytes
         let response: URLResponse
         do {
-            (data, response) = try await session.data(for: request)
+            (bytes, response) = try await session.bytes(for: request)
         } catch {
             throw LibraryError.download(error.localizedDescription)
         }
+        // Stops the transfer when reading ends early; a no-op once it finished.
+        defer { bytes.task.cancel() }
         if let http = response as? HTTPURLResponse, !(200..<300).contains(http.statusCode) {
             throw LibraryError.httpStatus(http.statusCode)
         }
-        return try PlaylistText.decode(data)
+        guard response.expectedContentLength <= Int64(maximumBytes) else { throw LibraryError.tooLarge }
+        return try await PlaylistText.decode(body(of: bytes))
+    }
+
+    private func body(of bytes: URLSession.AsyncBytes) async throws -> Data {
+        var body: [UInt8] = []
+        do {
+            for try await byte in bytes {
+                if byte == 0, body.count < Self.sniffLength {
+                    throw LibraryError.mediaFile
+                }
+                guard body.count < maximumBytes else { throw LibraryError.tooLarge }
+                body.append(byte)
+            }
+        } catch let error as LibraryError {
+            throw error
+        } catch {
+            throw LibraryError.download(error.localizedDescription)
+        }
+        return Data(body)
     }
 }
 

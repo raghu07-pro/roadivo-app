@@ -13,9 +13,25 @@ final class LibraryViewModel {
 
     let scope: LibraryScope
     private(set) var phase: Phase = .loading
-    private(set) var items: [MediaItem] = []
+    private(set) var items: [MediaItem] = [] {
+        didSet { rebuildSections() }
+    }
+
     private(set) var recent: [MediaItem] = []
-    var query = ""
+    var query = "" {
+        didSet {
+            if query != oldValue {
+                rebuildSections()
+            }
+        }
+    }
+
+    /// The items matching the search. Stored rather than computed: views read
+    /// it several times per render, and filtering a large library on every
+    /// read made typing in search stutter.
+    private(set) var filtered: [MediaItem] = []
+    /// `filtered`, grouped in first-seen order.
+    private(set) var sections: [LibrarySection] = []
 
     private let repository: LibraryRepository
 
@@ -24,30 +40,14 @@ final class LibraryViewModel {
         self.scope = scope
     }
 
-    /// The items matching the search, grouped in first-seen order.
-    var sections: [LibrarySection] {
-        var order: [String] = []
-        var groups: [String: [MediaItem]] = [:]
-        for item in filtered {
-            let title = item.groupTitle
-            if groups[title] == nil {
-                order.append(title)
-            }
-            groups[title, default: []].append(item)
-        }
-        return order.map { LibrarySection(title: $0, items: groups[$0] ?? []) }
-    }
-
-    var filtered: [MediaItem] {
-        let needle = query.trimmingCharacters(in: .whitespacesAndNewlines)
-        guard !needle.isEmpty else { return items }
-        return items.filter {
-            $0.title.localizedStandardContains(needle) || $0.group.localizedStandardContains(needle)
-        }
-    }
-
     var isSearching: Bool {
         !query.trimmingCharacters(in: .whitespaces).isEmpty
+    }
+
+    /// The current items of one group, for "See All". Read live so a favourite
+    /// changed on that screen shows at once.
+    func items(inGroup title: String) -> [MediaItem] {
+        sections.first { $0.title == title }?.items ?? []
     }
 
     func load() {
@@ -67,9 +67,19 @@ final class LibraryViewModel {
     }
 
     /// Toggles the favourite and returns the new value, or nil if it failed.
+    /// Updates the loaded items in place instead of reloading: the library
+    /// revision bump that follows already reloads every screen once.
     func toggleFavorite(_ item: MediaItem) -> Bool? {
         guard let isFavorite = try? repository.toggleFavorite(item.id) else { return nil }
-        load()
+        if scope == .favorites, !isFavorite {
+            items.removeAll { $0.id == item.id }
+            phase = items.isEmpty ? .empty : .loaded
+        } else if scope == .favorites {
+            load()
+        } else {
+            setFavorite(isFavorite, for: item.id, in: &items)
+            setFavorite(isFavorite, for: item.id, in: &recent)
+        }
         return isFavorite
     }
 
@@ -84,5 +94,28 @@ final class LibraryViewModel {
     func queue(for item: MediaItem) -> [MediaItem] {
         let group = items.filter { $0.group == item.group }
         return group.isEmpty ? [item] : group
+    }
+
+    private func setFavorite(_ isFavorite: Bool, for id: UUID, in list: inout [MediaItem]) {
+        if let index = list.firstIndex(where: { $0.id == id }) {
+            list[index].isFavorite = isFavorite
+        }
+    }
+
+    private func rebuildSections() {
+        let needle = query.trimmingCharacters(in: .whitespacesAndNewlines)
+        filtered = needle.isEmpty ? items : items.filter {
+            $0.title.localizedStandardContains(needle) || $0.group.localizedStandardContains(needle)
+        }
+        var order: [String] = []
+        var groups: [String: [MediaItem]] = [:]
+        for item in filtered {
+            let title = item.groupTitle
+            if groups[title] == nil {
+                order.append(title)
+            }
+            groups[title, default: []].append(item)
+        }
+        sections = order.map { LibrarySection(title: $0, items: groups[$0] ?? []) }
     }
 }

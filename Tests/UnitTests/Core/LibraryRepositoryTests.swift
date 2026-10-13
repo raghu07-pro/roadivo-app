@@ -73,6 +73,37 @@ struct LibraryRepositoryTests {
         #expect(try library.repository.favorites().map(\.title) == ["Football Live"])
     }
 
+    @Test("Adding a link that returns a sign-in page fails and stores nothing")
+    func addRejectsWebPage() async throws {
+        let library = try TestLibrary()
+        library.fetcher.stub(Fixtures.playlistURL, with: Fixtures.signInPage)
+
+        await #expect(throws: LibraryError.webPage) {
+            try await library.repository.addRemotePlaylist(name: "", url: Fixtures.playlistURL)
+        }
+        #expect(try library.repository.playlists().isEmpty)
+    }
+
+    @Test("A sign-in page on refresh keeps every channel and favourite")
+    func refreshRejectsWebPage() async throws {
+        let library = try TestLibrary()
+        library.fetcher.stub(Fixtures.playlistURL, with: Fixtures.playlist)
+        let id = try await library.repository.addRemotePlaylist(name: "TV", url: Fixtures.playlistURL)
+        let football = try #require(try library.repository.items().first { $0.title == "Football Live" })
+        try library.repository.toggleFavorite(football.id)
+
+        library.fetcher.stub(Fixtures.playlistURL, with: Fixtures.signInPage)
+        await #expect(throws: LibraryError.webPage) { try await library.repository.refresh(id) }
+
+        #expect(try library.repository.items().map(\.title) == [
+            "News One",
+            "News Two",
+            "Football Live",
+            "Untitled Movie"
+        ])
+        #expect(try library.repository.favorites().map(\.title) == ["Football Live"])
+    }
+
     @Test("Favourites, history, rename and deletion")
     func favoritesHistoryDelete() async throws {
         let library = try TestLibrary()
@@ -94,13 +125,13 @@ struct LibraryRepositoryTests {
     }
 
     @Test("Imported videos land on the On this iPhone shelf")
-    func importVideos() throws {
+    func importVideos() async throws {
         let library = try TestLibrary()
         let source = FileManager.default.temporaryDirectory.appending(path: "Beach Day.mp4")
         try Data("not really a video".utf8).write(to: source)
         defer { try? FileManager.default.removeItem(at: source) }
 
-        #expect(try library.repository.importVideos([source]) == 1)
+        #expect(try await library.repository.importVideos([source]) == 1)
         let local = try library.repository.localVideos()
         #expect(local.map(\.title) == ["Beach Day"])
         #expect(local.first?.isLocalFile == true)
@@ -110,6 +141,38 @@ struct LibraryRepositoryTests {
         let playlist = try #require(try library.repository.playlists().first)
         try library.repository.delete(playlist.id)
         #expect(try library.repository.localVideos().isEmpty)
+    }
+
+    @Test("Adding a 20 000-channel playlist never blocks the main actor for long")
+    func largePlaylistStaysOffMain() async throws {
+        let library = try TestLibrary()
+        let text = bigPlaylist(20000)
+
+        let stall = try await longestMainActorStall {
+            try await library.repository.addFilePlaylist(name: "Big", text: text)
+        }
+
+        #expect(try library.repository.items().count == 20000)
+        #expect(stall < .seconds(1), "The main actor was blocked for \(stall)")
+    }
+
+    @Test("Items list sources in the order they were added, each in file order")
+    func itemsKeepSourceOrder() async throws {
+        let library = try TestLibrary()
+        try await library.repository.addFilePlaylist(name: "First", text: bigPlaylist(3, host: "first.example.com"))
+        try await library.repository.addFilePlaylist(name: "Second", text: Fixtures.playlist)
+        let first = try #require(try library.repository.playlists().first)
+
+        #expect(try library.repository.items().map(\.title) == [
+            "Channel 0",
+            "Channel 1",
+            "Channel 2",
+            "News One",
+            "News Two",
+            "Football Live",
+            "Untitled Movie"
+        ])
+        #expect(try library.repository.items(in: first.id).count == 3)
     }
 
     @Test("Download failures surface as library errors")

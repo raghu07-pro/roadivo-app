@@ -26,7 +26,7 @@ final class LocalVideosViewModel {
 
     /// Copies files (from Files, or Photos exports in a temporary folder) into
     /// the library. Returns true when anything was added.
-    func importFiles(_ urls: [URL], removingSourcesAfterwards: Bool = false) -> Bool {
+    func importFiles(_ urls: [URL], removingSourcesAfterwards: Bool = false) async -> Bool {
         guard !urls.isEmpty else { return false }
         isImporting = true
         defer {
@@ -38,7 +38,7 @@ final class LocalVideosViewModel {
             }
         }
         do {
-            try repository.importVideos(urls)
+            try await repository.importVideos(urls)
             load()
             return true
         } catch {
@@ -60,7 +60,7 @@ final class LocalVideosViewModel {
     }
 
     /// Imports every video inside a picked folder (and its subfolders).
-    func importFolder(_ folder: URL) -> Bool {
+    func importFolder(_ folder: URL) async -> Bool {
         let scoped = folder.startAccessingSecurityScopedResource()
         defer {
             if scoped {
@@ -72,7 +72,7 @@ final class LocalVideosViewModel {
             errorMessage = String(appLocalized: "That folder has no videos Roadivo can play.")
             return false
         }
-        return importFiles(videos)
+        return await importFiles(videos)
     }
 
     func beginImport() {

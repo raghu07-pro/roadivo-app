@@ -184,7 +184,7 @@ struct MediaServerRepositoryTests {
         let video = FileManager.default.temporaryDirectory.appending(path: "clip-\(UUID().uuidString).mov")
         try Data("x".utf8).write(to: video)
         defer { try? FileManager.default.removeItem(at: video) }
-        try library.repository.importVideos([video])
+        try await library.repository.importVideos([video])
         #expect(library.repository.sourceCount() == 0)
         try await library.repository.addFilePlaylist(name: "TV", text: Fixtures.playlist)
         #expect(library.repository.sourceCount() == 1)

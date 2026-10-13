@@ -9,6 +9,8 @@ struct SourcesView: View {
 
     @State private var renaming: SourceSummary?
     @State private var newName = ""
+    /// The source waiting for the user to confirm its deletion.
+    @State private var deleting: SourceSummary?
 
     var body: some View {
         @Bindable var viewModel = viewModel
@@ -16,14 +18,17 @@ struct SourcesView: View {
             Section {
                 ForEach(viewModel.sources) { source in
                     SourceRow(source: source, isRefreshing: viewModel.refreshing.contains(source.id))
+                        .accessibilityIdentifier("source.\(source.name)")
                         .swipeActions(edge: .trailing) {
-                            Button(role: .destructive) {
-                                if viewModel.delete(source.id) {
-                                    onLibraryChanged()
-                                }
+                            // Not role: .destructive, which animates the row
+                            // away before the user has confirmed.
+                            Button {
+                                deleting = source
                             } label: {
                                 Label("Delete", systemImage: "trash")
                             }
+                            .tint(.red)
+                            .accessibilityIdentifier("source.delete")
                         }
                         .contextMenu { menu(for: source) }
                 }
@@ -68,6 +73,35 @@ struct SourcesView: View {
             }
             Button("Cancel", role: .cancel) { renaming = nil }
         }
+        .confirmationDialog(
+            Text("Delete \(deleting?.name ?? "")?"),
+            isPresented: Binding(
+                get: { deleting != nil },
+                set: {
+                    if !$0 {
+                        deleting = nil
+                    }
+                }
+            ),
+            titleVisibility: .visible,
+            presenting: deleting
+        ) { source in
+            Button("Delete", role: .destructive) {
+                if viewModel.delete(source.id) {
+                    onLibraryChanged()
+                }
+            }
+            .accessibilityIdentifier("sources.confirmDelete")
+        } message: { source in
+            if source.kind == .localVideos {
+                Text("All your imported videos are removed from Roadivo. The originals stay in Photos or Files.")
+            } else {
+                Text("""
+                Its channels, favorites and watch history are removed from Roadivo. To add it again, you'll need \
+                its link or login.
+                """)
+            }
+        }
         .alert(
             "Couldn't update the source",
             isPresented: Binding(
@@ -106,9 +140,7 @@ struct SourcesView: View {
             Label("Rename", systemImage: "pencil")
         }
         Button(role: .destructive) {
-            if viewModel.delete(source.id) {
-                onLibraryChanged()
-            }
+            deleting = source
         } label: {
             Label("Delete", systemImage: "trash")
         }

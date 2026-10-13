@@ -45,12 +45,12 @@ struct ReviewAndDeleteTests {
     }
 
     @Test("Deleting a video removes the row and its copied file")
-    func deleteVideo() throws {
+    func deleteVideo() async throws {
         let library = try TestLibrary()
         let source = FileManager.default.temporaryDirectory.appending(path: "Trip \(UUID().uuidString).mp4")
         try Data("x".utf8).write(to: source)
         defer { try? FileManager.default.removeItem(at: source) }
-        try library.repository.importVideos([source])
+        try await library.repository.importVideos([source])
         let video = try #require(try library.repository.localVideos().first)
         let copy = video.streamURL.path(percentEncoded: false)
         #expect(FileManager.default.fileExists(atPath: copy))

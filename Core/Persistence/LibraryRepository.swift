@@ -47,22 +47,19 @@ final class LibraryRepository {
         return (try? context.fetchCount(descriptor)) ?? 0
     }
 
-    /// Every channel in playlist order, optionally limited to one playlist.
+    /// Every channel in playlist order (sources in the order they were added,
+    /// channels in file order), optionally limited to one playlist. One sorted
+    /// fetch per source: sorting the whole library in memory by its playlist
+    /// took seconds for 30 000 channels, on every heart tap.
     func items(in playlistID: UUID? = nil) throws -> [MediaItem] {
-        var descriptor = FetchDescriptor<Channel>(sortBy: [SortDescriptor(\.sortIndex)])
-        if let playlistID {
-            descriptor.predicate = #Predicate { $0.playlist?.id == playlistID }
+        let sources = try playlistID.map { [$0] } ?? playlists().map(\.id)
+        return try sources.flatMap { id in
+            let descriptor = FetchDescriptor<Channel>(
+                predicate: #Predicate { $0.playlist?.id == id },
+                sortBy: [SortDescriptor(\.sortIndex)]
+            )
+            return try context.fetch(descriptor).compactMap(\.mediaItem)
         }
-        let channels = try context.fetch(descriptor)
-        // Keep playlists in the order they were added, channels in file order.
-        let order = try Dictionary(uniqueKeysWithValues: playlists().enumerated().map { ($1.id, $0) })
-        return channels
-            .sorted { lhs, rhs in
-                let left = lhs.playlist.flatMap { order[$0.id] } ?? .max
-                let right = rhs.playlist.flatMap { order[$0.id] } ?? .max
-                return left == right ? lhs.sortIndex < rhs.sortIndex : left < right
-            }
-            .compactMap(\.mediaItem)
     }
 
     func favorites() throws -> [MediaItem] {
@@ -119,9 +116,13 @@ final class LibraryRepository {
             throw LibraryError.invalidURL
         }
         let text = try await fetcher.fetchText(from: url)
-        let entries = M3UParser.isHLSStream(text)
-            ? [PlaylistEntry(name: displayName(name, fallback: url), group: "", logoURL: nil, streamURL: url)]
-            : M3UParser.parse(text, baseURL: url)
+        guard !M3UParser.looksLikeWebPage(text) else { throw LibraryError.webPage }
+        let entries = switch await LibraryWork.parse(text, baseURL: url) {
+        case .singleStream:
+            [PlaylistEntry(name: displayName(name, fallback: url), group: "", logoURL: nil, streamURL: url)]
+        case let .entries(entries):
+            entries
+        }
         guard !entries.isEmpty else { throw LibraryError.emptyPlaylist }
 
         let playlist = Playlist(name: displayName(name, fallback: url), kind: .remote, sourceHost: url.host())
@@ -176,7 +177,7 @@ final class LibraryRepository {
     /// Adds a playlist from M3U text (an imported .m3u file or pasted content).
     @discardableResult
     func addFilePlaylist(name: String, text: String) async throws -> UUID {
-        let entries = M3UParser.parse(text)
+        let entries = await Task.detached(priority: .userInitiated) { M3UParser.parse(text) }.value
         guard !entries.isEmpty else { throw LibraryError.emptyPlaylist }
         let playlist = Playlist(name: name, kind: .file)
         context.insert(playlist)
@@ -197,11 +198,17 @@ final class LibraryRepository {
         }
         guard let url = URL(string: stored) else { throw LibraryError.notFound }
         let text = try await fetcher.fetchText(from: url)
-        let entries = M3UParser.isHLSStream(text)
-            ? try items(in: playlistID).prefix(1).map {
+        // A sign-in page in place of the playlist must never replace the
+        // channels: favourites are matched by stream URL and would be lost.
+        guard !M3UParser.looksLikeWebPage(text) else { throw LibraryError.webPage }
+        let entries = switch await LibraryWork.parse(text, baseURL: url) {
+        case .singleStream:
+            try items(in: playlistID).prefix(1).map {
                 PlaylistEntry(name: $0.title, group: $0.group, logoURL: $0.artworkURL, streamURL: $0.streamURL)
             }
-            : M3UParser.parse(text, baseURL: url)
+        case let .entries(entries):
+            entries
+        }
         guard !entries.isEmpty else { throw LibraryError.emptyPlaylist }
         try await writer.replaceChannels(of: playlistID, with: entries)
     }
@@ -241,45 +248,34 @@ final class LibraryRepository {
     }
 
     /// Copies picked video files into the app and adds them to "On this iPhone".
-    /// `urls` come from the document picker and may be security-scoped.
+    /// `urls` come from the document picker and may be security-scoped. The
+    /// copies run off the main actor: a multi-GB video, or an iCloud file that
+    /// has to download first, can take minutes.
     @discardableResult
-    func importVideos(_ urls: [URL]) throws -> Int {
+    func importVideos(_ urls: [URL]) async throws -> Int {
         let directory = MediaLocation.videosDirectory
-        try fileManager.createDirectory(at: directory, withIntermediateDirectories: true)
+        let logger = logger
+        let copied = try await Task.detached(priority: .userInitiated) {
+            try LibraryWork.copyVideos(urls, into: directory, logger: logger)
+        }.value
+        guard !copied.isEmpty else { throw LibraryError.unreadable }
+
         let playlist = try localVideosPlaylist()
         var nextIndex = (playlist.channels.map(\.sortIndex).max() ?? -1) + 1
-        var imported = 0
-        for source in urls {
-            let scoped = source.startAccessingSecurityScopedResource()
-            defer {
-                if scoped {
-                    source.stopAccessingSecurityScopedResource()
-                }
-            }
-            let fileName = "\(UUID().uuidString)-\(source.lastPathComponent)"
-            do {
-                try fileManager.copyItem(at: source, to: directory.appending(path: fileName))
-            } catch {
-                logger.error("Video copy failed: \(error.localizedDescription, privacy: .public)")
-                continue
-            }
+        for video in copied {
             let channel = Channel(
-                name: source.deletingPathExtension().lastPathComponent,
+                name: video.title,
                 group: String(appLocalized: "On this iPhone"),
                 logoURLString: nil,
-                streamURLString: MediaLocation.localScheme + fileName,
+                streamURLString: MediaLocation.localScheme + video.fileName,
                 sortIndex: nextIndex
             )
             context.insert(channel)
             channel.playlist = playlist
             nextIndex += 1
-            imported += 1
         }
         try context.save()
-        if imported == 0 {
-            throw LibraryError.unreadable
-        }
-        return imported
+        return copied.count
     }
 
     // MARK: Helpers
@@ -321,5 +317,55 @@ final class LibraryRepository {
 
     private func sourceKey(_ id: UUID) -> String {
         "playlist.source.\(id.uuidString)"
+    }
+}
+
+/// The repository's slow work, kept off the main actor: it runs inside
+/// detached tasks, so a big import never freezes the UI.
+private enum LibraryWork {
+    /// What a downloaded text turned out to be.
+    enum ParsedText {
+        /// One HLS stream (its own link is the only item).
+        case singleStream
+        case entries([PlaylistEntry])
+    }
+
+    /// A video file copied into the app's videos folder.
+    struct CopiedVideo {
+        let title: String
+        let fileName: String
+    }
+
+    /// Parses on a background thread: a 100 000-line provider export takes
+    /// seconds, which would freeze the UI on the main actor.
+    static func parse(_ text: String, baseURL: URL) async -> ParsedText {
+        await Task.detached(priority: .userInitiated) {
+            M3UParser.isHLSStream(text) ? .singleStream : .entries(M3UParser.parse(text, baseURL: baseURL))
+        }.value
+    }
+
+    /// Copies each file into `directory` under a unique name. A file that
+    /// fails is logged and skipped so the rest still import.
+    static func copyVideos(_ urls: [URL], into directory: URL, logger: Logger) throws -> [CopiedVideo] {
+        let fileManager = FileManager.default
+        try fileManager.createDirectory(at: directory, withIntermediateDirectories: true)
+        var copied: [CopiedVideo] = []
+        for source in urls {
+            let scoped = source.startAccessingSecurityScopedResource()
+            defer {
+                if scoped {
+                    source.stopAccessingSecurityScopedResource()
+                }
+            }
+            let fileName = "\(UUID().uuidString)-\(source.lastPathComponent)"
+            do {
+                try fileManager.copyItem(at: source, to: directory.appending(path: fileName))
+            } catch {
+                logger.error("Video copy failed: \(error.localizedDescription, privacy: .public)")
+                continue
+            }
+            copied.append(CopiedVideo(title: source.deletingPathExtension().lastPathComponent, fileName: fileName))
+        }
+        return copied
     }
 }

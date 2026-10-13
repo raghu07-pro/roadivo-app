@@ -59,6 +59,39 @@ struct LibraryViewModelTests {
         #expect(favorites.phase == .empty)
     }
 
+    @Test("See All shows a favourite added on that screen")
+    func seeAllShowsFavoriteChange() async throws {
+        let (viewModel, _) = try await loaded()
+        let football = try #require(viewModel.items(inGroup: "Sports").first)
+        #expect(!football.isFavorite)
+
+        #expect(viewModel.toggleFavorite(football) == true)
+
+        #expect(viewModel.items(inGroup: "Sports").first?.isFavorite == true)
+        #expect(viewModel.toggleFavorite(football) == false)
+        #expect(viewModel.items(inGroup: "Sports").first?.isFavorite == false)
+    }
+
+    @Test("A heart tap updates Home and Continue Watching in place")
+    func favoriteUpdatesInPlace() async throws {
+        let (viewModel, library) = try await loaded()
+        let news = try #require(viewModel.items.first)
+        library.repository.markPlayed(news.id)
+        viewModel.load()
+
+        #expect(viewModel.toggleFavorite(news) == true)
+
+        #expect(viewModel.items.first?.isFavorite == true)
+        #expect(viewModel.recent.first?.isFavorite == true)
+        #expect(try library.repository.favorites().map(\.id) == [news.id])
+    }
+
+    @Test("A group that no longer exists has no items")
+    func missingGroup() async throws {
+        let (viewModel, _) = try await loaded()
+        #expect(viewModel.items(inGroup: "Nope").isEmpty)
+    }
+
     @Test("Continue Watching lists played items, newest first")
     func recent() async throws {
         let (viewModel, library) = try await loaded()

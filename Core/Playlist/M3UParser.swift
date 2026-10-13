@@ -8,26 +8,34 @@ import Foundation
 /// rather than failing the whole import.
 enum M3UParser {
     /// Parses `text` into entries in playlist order. Relative stream and logo
-    /// URLs resolve against `baseURL` (the playlist's own address).
+    /// URLs resolve against `baseURL` (the playlist's own address), but only
+    /// once the text has shown it is an extended M3U (`#EXTM3U` or `#EXTINF`).
+    /// Otherwise any stray word in a login page or an "Account expired" reply
+    /// would resolve to a bogus channel on the provider's host.
     static func parse(_ text: String, baseURL: URL? = nil) -> [PlaylistEntry] {
         var entries: [PlaylistEntry] = []
         var pending: ExtInf?
         var pendingGroup: String?
+        var relativeBase: URL?
 
         for rawLine in text.split(whereSeparator: \.isNewline) {
             let line = rawLine.trimmingCharacters(in: .whitespaces.union(CharacterSet(charactersIn: "\u{FEFF}")))
             guard !line.isEmpty else { continue }
 
             if line.hasPrefix("#") {
-                if line.uppercased().hasPrefix("#EXTINF:") {
+                let directive = line.uppercased()
+                if directive.hasPrefix("#EXTINF:") {
                     pending = ExtInf(line: String(line.dropFirst("#EXTINF:".count)))
-                } else if line.uppercased().hasPrefix("#EXTGRP:") {
+                    relativeBase = baseURL
+                } else if directive.hasPrefix("#EXTGRP:") {
                     pendingGroup = String(line.dropFirst("#EXTGRP:".count)).trimmingCharacters(in: .whitespaces)
+                } else if directive.hasPrefix("#EXTM3U") {
+                    relativeBase = baseURL
                 }
                 continue
             }
 
-            guard let streamURL = resolve(line, against: baseURL) else {
+            guard let streamURL = resolve(line, against: relativeBase) else {
                 pending = nil
                 pendingGroup = nil
                 continue
@@ -37,7 +45,7 @@ enum M3UParser {
                 .compactMap { $0?.trimmingCharacters(in: .whitespaces) }
                 .first { !$0.isEmpty } ?? fallbackName(for: streamURL)
             let group = info?.attributes["group-title"].flatMap { $0.isEmpty ? nil : $0 } ?? pendingGroup ?? ""
-            let logo = info?.attributes["tvg-logo"].flatMap { resolve($0, against: baseURL) }
+            let logo = info?.attributes["tvg-logo"].flatMap { resolve($0, against: relativeBase) }
             entries.append(PlaylistEntry(name: name, group: group, logoURL: logo, streamURL: streamURL))
             pending = nil
             pendingGroup = nil
@@ -52,20 +60,35 @@ enum M3UParser {
             || text.contains("#EXT-X-MEDIA-SEQUENCE")
     }
 
+    /// True when downloaded text is a web page, XML or a JSON reply rather than
+    /// a playlist: what a hotel or café Wi-Fi sign-in page, a provider's login
+    /// page or an expired account sends back with a 200 status.
+    static func looksLikeWebPage(_ text: String) -> Bool {
+        let start = text.first { !$0.isWhitespace && $0 != "\u{FEFF}" }
+        return start == "<" || start == "{" || start == "["
+    }
+
     static func fallbackName(for url: URL) -> String {
         let last = url.deletingPathExtension().lastPathComponent
         return last.isEmpty || last == "/" ? (url.host() ?? url.absoluteString) : last
     }
 
-    private static let playableSchemes: Set = ["http", "https", "rtmp", "rtsp", "file"]
+    /// Network schemes only: a playlist from the internet must never point
+    /// the player at files on the device.
+    private static let playableSchemes: Set = ["http", "https", "rtmp", "rtsp"]
 
     private static func resolve(_ string: String, against baseURL: URL?) -> URL? {
         let trimmed = string.trimmingCharacters(in: .whitespaces)
         guard !trimmed.isEmpty else { return nil }
         if let absolute = URL(string: trimmed), let scheme = absolute.scheme?.lowercased() {
-            return playableSchemes.contains(scheme) && (scheme == "file" || absolute.host() != nil) ? absolute : nil
+            return playableSchemes.contains(scheme) && absolute.host() != nil ? absolute : nil
         }
-        guard let baseURL, let relative = URL(string: trimmed, relativeTo: baseURL) else { return nil }
+        // A relative reference must already be a valid URL as written. iOS 17's
+        // lenient parsing would otherwise percent-encode "<html>" or a sentence
+        // into a path.
+        guard let baseURL,
+              URL(string: trimmed, encodingInvalidCharacters: false) != nil,
+              let relative = URL(string: trimmed, relativeTo: baseURL) else { return nil }
         return relative.absoluteURL
     }
 }
