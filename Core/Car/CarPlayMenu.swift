@@ -1,8 +1,7 @@
 import Foundation
 
-/// What the CarPlay screen lists: the same library as the phone, trimmed to
-/// what's sensible on a car display (CarPlay caps list length). Pure data, so
-/// it is unit-tested without a car.
+/// What the CarPlay screen lists: the phone's library trimmed to CarPlay's list limits.
+/// Pure data, so it's unit-tested without a car.
 struct CarPlayMenu: Equatable {
     struct Group: Equatable {
         let title: String

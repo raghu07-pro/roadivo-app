@@ -1,8 +1,7 @@
 import SwiftUI
 
-/// One of Light / Dark / System: a miniature of the app in that appearance
-/// (System is split down the middle), with a radio mark and the name.
-/// `isRow` lays it out sideways for the accessibility text sizes.
+/// Light / Dark / System: a miniature of the app in that appearance (System split in half), a
+/// radio mark and the name. `isRow` lays it out sideways for accessibility text sizes.
 struct AppearanceOption: View {
     let appearance: ThemeAppearance
     let isSelected: Bool

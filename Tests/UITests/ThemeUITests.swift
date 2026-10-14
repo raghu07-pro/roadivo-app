@@ -124,19 +124,8 @@ final class ThemeUITests: XCTestCase {
         try audit(app)
     }
 
-    /// Every audit type except contrast, as in the other screens' audits.
-    /// Apple's contrast audit measures text that has scrolled under the
-    /// floating tab bar or the navigation bar against the bar's glass, and
-    /// reports it without naming the element, so it can't be scoped to that
-    /// text. Contrast is checked instead by `ThemeTests` (WCAG ratios for every
-    /// accent in both appearances) and the light/dark snapshots. The real
-    /// issues the contrast audit found on these screens were fixed (DECISIONS 61).
-    ///
-    /// Also scoped out: Dynamic Type findings on text in the band just above
-    /// the floating tab bar. The audit enlarges text in place, and whatever
-    /// grows down under the bar is reported as "partially unsupported" (the
-    /// lowest Settings row, the accent swatches' second row), although it uses
-    /// a Dynamic Type text style. The largest-text snapshots check the layout.
+    /// All audits but contrast (it can't name text under the glass bars; `ThemeTests` checks WCAG),
+    /// ignoring Dynamic Type findings just above the tab bar, where enlarged text slides under it.
     private func audit(_ app: XCUIApplication) throws {
         let tabBar = app.tabBars.firstMatch.exists ? app.tabBars.firstMatch.frame : .null
         try app.performAccessibilityAudit(for: XCUIAccessibilityAuditType.all.subtracting(.contrast)) { issue in

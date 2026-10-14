@@ -1,9 +1,8 @@
 import SwiftUI
 import UIKit
 
-/// Landscape, dashboard-mounted layout for passengers: the video plus a column
-/// of oversized controls, readable at a glance. Steering-wheel buttons also
-/// work (PlaybackController's remote commands).
+/// Landscape dashboard layout for passengers: the video and oversized controls. Steering-wheel
+/// buttons also work (PlaybackController's remote commands).
 struct CarModeView: View {
     let playback: PlaybackController
     let onExit: () -> Void

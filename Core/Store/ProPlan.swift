@@ -47,9 +47,8 @@ struct PlanOffer: Identifiable, Equatable, Sendable {
     let price: Decimal
     /// The introductory price, only when this user is eligible for it.
     let introPrice: String?
-    /// The yearly price per week ("₹18.06"), formatted in the storefront's
-    /// style, not the device's: the two differ (an Indian storefront on a US
-    /// device, a locale that writes "$ 0.88").
+    /// The yearly price per week ("₹18.06") in the storefront's format, not the device's
+    /// (they differ, e.g. an Indian storefront on a US device).
     let perWeekPrice: String?
 
     var id: ProPlan {

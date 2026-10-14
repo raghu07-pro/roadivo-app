@@ -2,17 +2,8 @@ import Foundation
 import Observation
 import SwiftUI
 
-/// The language Roadivo shows, switchable live from Settings › Language.
-///
-/// iOS only applies `AppleLanguages` at the next launch, and
-/// `String(localized:)` always uses the launch language. So the app routes
-/// every lookup through this choice instead:
-/// - SwiftUI text (`Text("…")`, labels, titles) via `.environment(\.locale)` at the root;
-/// - strings built in code via `String(appLocalized:)`;
-/// - stored resources via `Text(app:)`.
-/// The root view is rebuilt when the choice changes, so every screen redraws
-/// in the new language at once. `AppleLanguages` is still written, so system
-/// texts (permission prompts, the home-screen name) follow on the next launch.
+/// The in-app language (Settings › Language), live: SwiftUI via the root locale, code via
+/// `String(appLocalized:)` and `Text(app:)`; `AppleLanguages` updates system text next launch.
 @Observable
 @MainActor
 final class AppLanguage {
@@ -66,9 +57,8 @@ enum AppLocale {
 }
 
 extension String {
-    /// `String(localized:)` in the app's chosen language. Takes a
-    /// `LocalizedStringResource`, so string-catalog extraction and
-    /// interpolation work exactly as with `String(localized:)`.
+    /// `String(localized:)` in the app's chosen language; takes a `LocalizedStringResource`, so
+    /// catalog extraction and interpolation work as usual.
     init(appLocalized resource: LocalizedStringResource) {
         var resource = resource
         resource.locale = AppLocale.current

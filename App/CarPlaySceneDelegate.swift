@@ -1,11 +1,8 @@
 import CarPlay
 import OSLog
 
-/// Roadivo on the CarPlay screen: Favorites, Recent and the library as
-/// CarPlay lists, playback through the shared player, and the system Now
-/// Playing screen. Video reaches the car display through AirPlay video, which
-/// CarPlay allows only while parked and only in cars that support it; while
-/// driving it plays sound only. Needs the CarPlay entitlement (DECISIONS 25).
+/// Roadivo on CarPlay: Favorites, Recent and Library lists, played through the shared player.
+/// Video goes over AirPlay only while parked in supported cars (sound only when driving); DECISIONS 25.
 final class CarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegate {
     private var interfaceController: CPInterfaceController?
     private let logger = Logger(subsystem: "com.roadivo", category: "CarPlay")

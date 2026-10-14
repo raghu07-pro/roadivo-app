@@ -2,9 +2,8 @@ import Foundation
 import Testing
 @testable import Roadivo
 
-/// Serves a canned response per URL, in chunks, so the fetcher's streaming
-/// limits are exercised without a network. Keyed by URL so suites running in
-/// parallel never see each other's responses.
+/// Serves canned, chunked responses keyed by URL, so the fetcher's streaming limits are tested
+/// without a network and parallel suites never see each other's responses.
 final class PlaylistURLProtocol: URLProtocol, @unchecked Sendable {
     struct Response {
         var status = 200

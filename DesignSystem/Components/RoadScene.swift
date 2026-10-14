@@ -1,9 +1,7 @@
 import SwiftUI
 
-/// The view through the windshield: sky, sun or moon, two mountain ranges and
-/// a road running to the horizon with a yellow centre line. Drawn in code, so
-/// it's original art that scales to any size; the lane dashes roll forward
-/// unless Reduce Motion is on.
+/// The view through the windshield: sky, sun or moon, mountains and a road with a yellow centre
+/// line, drawn in code; the lane dashes roll forward unless Reduce Motion is on.
 struct RoadScene: View {
     enum TimeOfDay {
         case goldenHour

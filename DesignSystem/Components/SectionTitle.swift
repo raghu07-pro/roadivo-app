@@ -1,8 +1,7 @@
 import SwiftUI
 
-/// A section title: a short lane marker in the theme's gradient, the title in
-/// Overpass, and a quiet count underneath ("24 channels"). An optional symbol
-/// replaces the marker for special sections (Continue Watching).
+/// A section title: a gradient lane marker, the Overpass title and a quiet count ("24 channels").
+/// An optional symbol replaces the marker (Continue Watching).
 struct SectionTitle: View {
     let title: String
     var detail: String?

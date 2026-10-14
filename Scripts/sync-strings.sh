@@ -1,20 +1,6 @@
 #!/usr/bin/env bash
-# Sync Resources/Localizable.xcstrings with the strings the app's code uses.
-#
-# The catalog is extracted, never hand-typed. With SWIFT_EMIT_LOC_STRINGS on
-# (Project.swift), the compiler writes every localizable literal it compiles —
-# `Text("…")`, `String(localized:)`, `LocalizedStringResource` — to a
-# `.stringsdata` file, keyed with the format specifier each interpolation
-# needs (`%lld` for an Int, `%@` for a String). `xcstringstool sync` merges
-# those into the catalog: new keys are added, keys the code no longer uses are
-# removed (or marked stale, if they carry translations), and existing comments
-# and translations are kept.
-#
-#
-# Usage: Scripts/sync-strings.sh [<derived-data path>]
-#   With a path, uses the .stringsdata a Debug simulator build of the Roadivo
-#   target already left there. Without one, builds the app into a temporary
-#   directory first (no simulator needed).
+# Syncs Resources/Localizable.xcstrings with the strings the code uses (.stringsdata + xcstringstool).
+# Usage: Scripts/sync-strings.sh [<derived-data path>] (without one, builds into a temp folder first).
 set -euo pipefail
 
 cd "$(dirname "$0")/.."

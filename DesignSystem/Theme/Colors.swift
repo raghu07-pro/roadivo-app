@@ -1,8 +1,7 @@
 import SwiftUI
 
-/// Neutral surfaces from the asset catalog (light and dark variants), and
-/// the accent from the theme the user picked (Settings › Theme). Screens
-/// never branch on the colour scheme or the accent themselves.
+/// Neutral surfaces from the asset catalog and the accent from Settings › Theme; screens never
+/// branch on the colour scheme or the accent themselves.
 extension ShapeStyle where Self == Color {
     /// Screen background: soft grey by day, asphalt by night.
     static var roadCanvas: Color {

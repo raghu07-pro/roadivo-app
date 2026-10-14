@@ -7,10 +7,8 @@ DerivedData/
 build/
 *.xcresult
 
-# Tuist writes its generated files into Derived/. Keep the generated sources
-# and Info.plists: the committed Roadivo.xcodeproj references them, so a fresh
-# clone builds without running `tuist generate`. Everything else in Derived/ is
-# build output left by older `-derivedDataPath Derived` runs.
+# Keep Tuist's generated sources and Info.plists (the committed project references them);
+# the rest of Derived/ is old build output.
 /Derived/*
 !/Derived/Sources/
 !/Derived/InfoPlists/

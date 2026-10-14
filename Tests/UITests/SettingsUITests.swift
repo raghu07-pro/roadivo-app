@@ -29,9 +29,8 @@ final class SettingsUITests: XCTestCase {
         snapshot("30-Share", app: app)
     }
 
-    /// Rate Roadivo is offered and enabled. Not tapped: without an App Store
-    /// ID it shows the system review prompt, which the test can't dismiss
-    /// reliably.
+    /// Rate Roadivo is offered and enabled; not tapped, because without an App Store ID it shows the
+    /// system review prompt, which the test can't reliably dismiss.
     func testRateIsOffered() {
         let app = XCUIApplication.roadivo(skipOnboarding: true)
         app.tabBars.buttons.element(boundBy: 3).tap()

@@ -2,9 +2,8 @@ import StoreKitTest
 import Testing
 @testable import Roadivo
 
-/// Loads StoreKit/Roadivo.storekit through Apple's test session and the real
-/// `StoreKitClient`, so a malformed file or a product-ID typo fails here
-/// instead of showing "Plans aren't available" in the simulator.
+/// Loads StoreKit/Roadivo.storekit through Apple's test session and the real `StoreKitClient`, so a
+/// malformed file or product-ID typo fails here, not as "Plans aren't available".
 @Suite("StoreKit configuration", .serialized)
 @MainActor
 struct StoreKitConfigurationTests {

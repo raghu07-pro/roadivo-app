@@ -80,9 +80,8 @@ struct ThemeTests {
         #expect(dark.hexValue == pair.dark)
     }
 
-    /// WCAG 2: accent text needs 4.5:1 on every surface it sits on; the
-    /// button label (17 pt extra-bold, "large text") needs 3:1 against both
-    /// ends of the gradient.
+    /// WCAG 2: accent text needs 4.5:1 on every surface; the button label (17 pt extra-bold,
+    /// large text) needs 3:1 against both gradient ends.
     @Test("Every accent is readable in light and dark", arguments: ThemeAccent.allCases)
     func contrast(accent: ThemeAccent) {
         let palette = accent.palette

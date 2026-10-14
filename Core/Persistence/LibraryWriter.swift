@@ -1,12 +1,8 @@
 import Foundation
 import SwiftData
 
-/// Writes large playlists off the main actor. A 10 000-channel import would
-/// otherwise freeze the UI while SwiftData inserts.
-///
-/// A plain actor that opens its own context for each write, not a
-/// `@ModelActor`: a model actor ran its work on the main thread wherever it was
-/// created, and saving 30 000 channels stalled the UI for 40 s (DECISIONS 47).
+/// Writes large playlists off the main actor, in its own context per write. Not a `@ModelActor`:
+/// that ran on the main thread and stalled the UI for 40 s on 30 000 channels (DECISIONS 47).
 actor LibraryWriter {
     private let modelContainer: ModelContainer
 

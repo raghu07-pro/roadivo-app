@@ -1,9 +1,7 @@
 import SwiftUI
 
-/// "Cast to Car": how Roadivo reaches the car's screen, with live status.
-/// Three routes, all real: Roadivo's own CarPlay app (video while parked in
-/// cars that support it, sound while driving), AirPlay to a car display or
-/// adapter, and Car Mode on a mounted iPhone.
+/// Cast to Car, with live status for the three real routes: Roadivo's CarPlay app (video when
+/// parked, sound while driving), AirPlay to a car display or adapter, and Car Mode.
 struct CarHubView: View {
     let viewModel: CarHubViewModel
     let playback: PlaybackController

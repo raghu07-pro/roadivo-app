@@ -59,6 +59,10 @@ Graphite). `AppTheme.shared` holds the choice and both apply live
 The tagline is "Let the Journey Play." (`Brand.tagline`). No green. See
 DECISIONS 33, 37 and 53–57.
 
+## Code style
+
+- Comments are one or two lines at most, in every file (owner's rule, 2026-10-14). Keep the why, drop the rest.
+
 ## Localization
 
 - English plus es, fr, de, it, pt-BR, ja, ko, zh-Hans, zh-Hant and hi

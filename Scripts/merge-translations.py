@@ -1,14 +1,6 @@
 #!/usr/bin/env python3
-"""Merge translator output into the String Catalogs.
-
-Usage (from apps/Roadivo):  python3 -I Scripts/merge-translations.py Scripts/translations/*.json
-
-Each <lang>.json is {"localizable": {source: translation}, "infoPlist": {key: text}}
-(produced from Scripts/translations/source.json). Translations go into
-Resources/Localizable.xcstrings and Resources/InfoPlist.xcstrings as
-"translated". A key missing from a file, or one whose format specifiers don't
-match the English, is reported and skipped, never written half-right.
-"""
+"""Merge translator output (Scripts/translations/<lang>.json) into the String Catalogs as "translated".
+Usage: python3 -I Scripts/merge-translations.py <lang>.json…; missing or mismatched keys are skipped."""
 import json
 import plistlib
 import re

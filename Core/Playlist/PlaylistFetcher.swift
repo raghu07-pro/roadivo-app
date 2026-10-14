@@ -7,10 +7,8 @@ protocol PlaylistFetching: Sendable {
 
 struct URLSessionPlaylistFetcher: PlaylistFetching {
     var session: URLSession = .shared
-    /// The largest provider exports (live TV, films and series) run to tens of
-    /// MB. Anything bigger isn't a playlist worth holding in memory: it is
-    /// usually a video link, which would otherwise download until iOS stops
-    /// the app.
+    /// The biggest provider exports run to tens of MB; anything larger is usually a video link,
+    /// which would download until iOS stops the app.
     var maximumBytes = 100 * 1024 * 1024
     /// How far into the body a NUL byte marks it as video or audio. Text
     /// playlists never contain one; TS and MP4 data has one within bytes.

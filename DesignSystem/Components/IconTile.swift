@@ -1,9 +1,7 @@
 import SwiftUI
 
-/// An SF Symbol on a rounded tile in the theme's colours, as in the iOS
-/// Settings app. `.filled` is the brand gradient with a light glyph (rows,
-/// card headers); `.soft` is a pale wash with an accent glyph (list rows
-/// that sit beside other content).
+/// An SF Symbol on a rounded tile, as in iOS Settings: `.filled` is the brand gradient with a
+/// light glyph, `.soft` a pale wash with an accent glyph.
 struct IconTile: View {
     enum Style {
         case filled

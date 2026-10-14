@@ -44,9 +44,8 @@ struct ChannelGrid: View {
     let onToggleFavorite: (MediaItem) -> Void
     var onDelete: ((MediaItem) -> Void)?
 
-    /// Two equal columns on every iPhone in portrait (the narrowest, at 375 pt,
-    /// fits two 150 pt cards), more in landscape. Not scaled with Dynamic
-    /// Type: larger text truncates in the card instead of dropping a column.
+    /// Two equal columns on every iPhone in portrait (375 pt fits two 150 pt cards), more in
+    /// landscape. Not scaled with Dynamic Type, so a column never drops.
     private let minimumWidth: CGFloat = 150
 
     var body: some View {

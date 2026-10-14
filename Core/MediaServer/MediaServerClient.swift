@@ -42,9 +42,8 @@ protocol MediaServerConnecting: Sendable {
     func library(for account: MediaServerAccount) async throws -> [PlaylistEntry]
 }
 
-/// Jellyfin forked from Emby and kept its REST API, so one client serves both.
-/// Video is requested as HLS (`master.m3u8`) so the server transcodes anything
-/// AVPlayer can't play directly (MKV, AC3…).
+/// Jellyfin forked from Emby and kept its API, so one client serves both. Video is requested
+/// as HLS so the server transcodes what AVPlayer can't play (MKV, AC3…).
 struct EmbyCompatibleClient: MediaServerConnecting {
     var session: URLSession = .shared
     let deviceID: String

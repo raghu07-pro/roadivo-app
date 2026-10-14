@@ -1,9 +1,8 @@
 import SwiftUI
 import UIKit
 
-/// The label for a destructive menu action ("Delete"): the title and its icon
-/// both red. The role colours the title; the icon is drawn red here so it
-/// doesn't take the app's accent tint.
+/// A destructive menu label ("Delete") with a red icon as well as the red title the role gives,
+/// so the icon doesn't take the accent tint.
 struct DestructiveLabel: View {
     let title: LocalizedStringKey
     let systemImage: String

@@ -1,8 +1,7 @@
 import Foundation
 
-/// The app's only path to a backend. Roadivo v1 has no backend (DECISIONS 6):
-/// this is the seam a future sync or remote-config service plugs into, with
-/// the base URL taken from `API_BASE_URL` in the build's xcconfig.
+/// The seam for a future backend (none in v1, DECISIONS 6); the base URL comes from
+/// `API_BASE_URL` in the build's xcconfig.
 struct APIClient: Sendable {
     let baseURL: URL
     let session: URLSession

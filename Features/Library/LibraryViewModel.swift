@@ -26,9 +26,8 @@ final class LibraryViewModel {
         }
     }
 
-    /// The items matching the search. Stored rather than computed: views read
-    /// it several times per render, and filtering a large library on every
-    /// read made typing in search stutter.
+    /// The items matching the search, stored rather than computed: filtering a large library on
+    /// every read made typing stutter.
     private(set) var filtered: [MediaItem] = []
     /// `filtered`, grouped in first-seen order.
     private(set) var sections: [LibrarySection] = []
@@ -66,9 +65,8 @@ final class LibraryViewModel {
         }
     }
 
-    /// Toggles the favourite and returns the new value, or nil if it failed.
-    /// Updates the loaded items in place instead of reloading: the library
-    /// revision bump that follows already reloads every screen once.
+    /// Toggles the favourite and returns the new value (nil on failure), updating the loaded items
+    /// in place; the revision bump that follows reloads the other screens.
     func toggleFavorite(_ item: MediaItem) -> Bool? {
         guard let isFavorite = try? repository.toggleFavorite(item.id) else { return nil }
         if scope == .favorites, !isFavorite {

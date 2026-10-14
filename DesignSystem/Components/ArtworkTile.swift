@@ -1,12 +1,7 @@
 import SwiftUI
 
-/// 16:9 artwork for a channel or video: a frame from the video itself for
-/// videos on this iPhone, the channel logo when the playlist has one,
-/// otherwise a colour derived from the title with its initials.
-///
-/// The tile is always exactly 16:9 of the width it's given. Everything is
-/// drawn in overlays, which can't resize it, so a portrait iPhone video
-/// (whose poster fills and crops) gives the same rectangle as a landscape one.
+/// 16:9 artwork: a video's own frame, the channel logo, or a title-coloured tile with initials.
+/// Always exactly 16:9; everything is drawn in overlays, so a portrait video can't stretch it.
 struct ArtworkTile: View {
     let title: String
     let imageURL: URL?

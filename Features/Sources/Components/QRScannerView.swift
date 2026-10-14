@@ -59,9 +59,8 @@ struct QRScannerView: UIViewControllerRepresentable {
     }
 }
 
-/// Full-screen scanner: the live camera where available, plus "pick a photo"
-/// (top right) to read a QR code from a screenshot. The simulator and devices
-/// without a camera get the photo option alone.
+/// Full-screen scanner: the live camera where available, plus "pick a photo" (top right) to read
+/// a QR code from a screenshot; without a camera, only the photo option.
 struct QRScannerSheet: View {
     let onResult: (String?) -> Void
     @Environment(\.dismiss) private var dismiss

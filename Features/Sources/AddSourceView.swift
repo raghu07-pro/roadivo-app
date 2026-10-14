@@ -1,9 +1,8 @@
 import SwiftUI
 import UniformTypeIdentifiers
 
-/// "Add a Source": one box for a link or M3U text (pasted or scanned), an M3U
-/// file, or a media server. `Help` is the Help & FAQ screen, injected by the
-/// app so this feature doesn't depend on Settings.
+/// Add a Source: a link or M3U text (pasted or scanned), an M3U file, or a media server. `Help`
+/// is injected by the app, so this feature doesn't depend on Settings.
 struct AddSourceView<Help: View>: View {
     @State var viewModel: AddSourceViewModel
     let onFinished: () -> Void

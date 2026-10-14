@@ -1,9 +1,8 @@
 #if DEBUG
     import Foundation
 
-    /// Demo content for UI tests and screenshots (Debug builds only; never in
-    /// Release, so the shipping app carries no content of its own). The streams are
-    /// Apple's public HLS test streams; the names are fictional.
+    /// Debug-only demo content for UI tests and screenshots; Release ships none.
+    /// The streams are Apple's public HLS test streams, the names fictional.
     enum DemoLibrary {
         @MainActor
         static func seed(into environment: AppEnvironment) async {

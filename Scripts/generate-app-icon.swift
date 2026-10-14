@@ -1,9 +1,5 @@
-// Draws Roadivo's app icons, each in light, dark and tinted 1024 px variants:
-//   AppIcon            — the primary icon: a car driving toward the play-sun
-//   AppIcon-Classic    — the original: the empty road and the play-sun
-// The classic set ships as an alternate icon (UIApplication.setAlternateIconName),
-// so either can be used later. Run from apps/Roadivo:
-//   swift Scripts/generate-app-icon.swift
+// Draws AppIcon (a car driving toward the play-sun) and AppIcon-Classic (the empty road, an alternate),
+// each light, dark and tinted. Run from the app folder: swift Scripts/generate-app-icon.swift
 import AppKit
 import CoreGraphics
 

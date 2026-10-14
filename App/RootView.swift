@@ -1,9 +1,8 @@
 import StoreKit
 import SwiftUI
 
-/// First launch: onboarding → "Buy a plan" (closable) → the four tabs.
-/// Player surfaces, Add Source and the paywall sit on top. Cross-feature
-/// navigation and the Pro gates live only here.
+/// First launch: onboarding → "Buy a plan" (closable) → the four tabs. Player, Add Source and
+/// the paywall sit on top; cross-feature navigation and the Pro gates live only here.
 struct RootView: View {
     let environment: AppEnvironment
 
@@ -33,9 +32,8 @@ struct RootView: View {
         }
         .animation(.default, value: preferences.hasCompletedOnboarding)
         .animation(.default, value: preferences.hasSeenIntroPaywall)
-        // Settings › Theme: SwiftUI content follows these at once; the windows
-        // carry the same choice to alerts, sheets and the system pickers
-        // (and back to the iPhone's setting when "System" is picked).
+        // Settings › Theme applies at once; the windows carry it to alerts, sheets and system
+        // pickers (and back to the iPhone's setting for "System").
         .tint(.roadAccent)
         .preferredColorScheme(theme.appearance.colorScheme)
         .onChange(of: theme.appearance, initial: true) { theme.applyToWindows() }

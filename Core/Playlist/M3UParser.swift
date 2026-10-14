@@ -1,17 +1,10 @@
 import Foundation
 
-/// Parses M3U / M3U8 IPTV playlists (the "extended M3U" dialect IPTV providers use).
-///
-/// Tolerant by design: real-world playlists ship with a byte-order mark, CRLF
-/// line endings, a missing `#EXTM3U` header, unquoted attributes, relative URLs
-/// and stray directives. Anything that isn't a resolvable stream URL is skipped
-/// rather than failing the whole import.
+/// Parses extended M3U / M3U8 IPTV playlists, tolerating a BOM, CRLF, a missing header, unquoted
+/// attributes, relative URLs and stray directives; anything unresolvable is skipped, not fatal.
 enum M3UParser {
-    /// Parses `text` into entries in playlist order. Relative stream and logo
-    /// URLs resolve against `baseURL` (the playlist's own address), but only
-    /// once the text has shown it is an extended M3U (`#EXTM3U` or `#EXTINF`).
-    /// Otherwise any stray word in a login page or an "Account expired" reply
-    /// would resolve to a bogus channel on the provider's host.
+    /// Entries in playlist order. Relative URLs resolve against `baseURL` only once the text proves
+    /// it's an extended M3U, so words on a login page don't become bogus channels.
     static func parse(_ text: String, baseURL: URL? = nil) -> [PlaylistEntry] {
         var entries: [PlaylistEntry] = []
         var pending: ExtInf?
@@ -60,9 +53,8 @@ enum M3UParser {
             || text.contains("#EXT-X-MEDIA-SEQUENCE")
     }
 
-    /// True when downloaded text is a web page, XML or a JSON reply rather than
-    /// a playlist: what a hotel or café Wi-Fi sign-in page, a provider's login
-    /// page or an expired account sends back with a 200 status.
+    /// True when downloaded text is a web page, XML or JSON (a Wi-Fi sign-in page, a provider's
+    /// login page or an expired account answering with 200) rather than a playlist.
     static func looksLikeWebPage(_ text: String) -> Bool {
         let start = text.first { !$0.isWhitespace && $0 != "\u{FEFF}" }
         return start == "<" || start == "{" || start == "["
@@ -83,9 +75,8 @@ enum M3UParser {
         if let absolute = URL(string: trimmed), let scheme = absolute.scheme?.lowercased() {
             return playableSchemes.contains(scheme) && absolute.host() != nil ? absolute : nil
         }
-        // A relative reference must already be a valid URL as written. iOS 17's
-        // lenient parsing would otherwise percent-encode "<html>" or a sentence
-        // into a path.
+        // A relative reference must already be a valid URL: iOS 17's lenient parsing would
+        // percent-encode "<html>" or a sentence into a path.
         guard let baseURL,
               URL(string: trimmed, encodingInvalidCharacters: false) != nil,
               let relative = URL(string: trimmed, relativeTo: baseURL) else { return nil }

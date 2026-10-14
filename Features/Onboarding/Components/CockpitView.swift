@@ -1,8 +1,7 @@
 import SwiftUI
 
-/// The view from the driver's seat: the road through the windshield, the
-/// dashboard in the foreground and the car's centre screen showing the
-/// page's idea. Everything is drawn in code from the app's palette.
+/// The driver's-seat view: the road through the windshield, the dashboard and the car's centre
+/// screen showing the page's idea, all drawn in code.
 struct CockpitView: View {
     let time: RoadScene.TimeOfDay
     let content: DashScreenContent

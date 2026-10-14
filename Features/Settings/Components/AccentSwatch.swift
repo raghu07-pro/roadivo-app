@@ -1,8 +1,7 @@
 import SwiftUI
 
-/// One accent colour: its gradient in a circle, ringed and ticked when
-/// chosen, with the name beneath. Drawn in its own colours, whatever the
-/// current theme is.
+/// One accent: its gradient in a circle, ringed and ticked when chosen, with the name beneath.
+/// Drawn in its own colours, whatever the current theme.
 struct AccentSwatch: View {
     let accent: ThemeAccent
     let isSelected: Bool

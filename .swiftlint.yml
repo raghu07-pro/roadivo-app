@@ -87,10 +87,8 @@ custom_rules:
     message: "Use os.Logger with a subsystem + category, never print()."
     severity: error
     match_kinds: [identifier]
-  # NOTE: a rule flagging `Text("literal")` was tried here and removed — that
-  # form takes a `LocalizedStringKey` and IS localized by SwiftUI, so the rule
-  # fired on correct code. The real anti-pattern is `Text(verbatim:)`, which
-  # deliberately opts out of localization.
+  # `Text("literal")` is localized (LocalizedStringKey), so only `Text(verbatim:)`,
+  # which opts out of localization, is flagged.
   no_verbatim_display_text:
     name: "Localize display text"
     regex: 'Text\(verbatim:'

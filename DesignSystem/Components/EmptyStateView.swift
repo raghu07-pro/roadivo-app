@@ -1,8 +1,7 @@
 import SwiftUI
 
-/// An empty screen that still looks finished: the symbol on a brand tile
-/// inside soft rings, a title, one sentence and the next step. Scrolls
-/// (centred while it fits), so the largest text sizes never clip.
+/// An empty screen that still looks finished: a brand-tile symbol, title, one sentence and the next
+/// step. Scrolls (centred while it fits), so large text never clips.
 struct EmptyStateView<Actions: View>: View {
     let title: LocalizedStringKey
     let message: LocalizedStringKey

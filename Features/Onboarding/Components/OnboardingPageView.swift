@@ -1,8 +1,7 @@
 import SwiftUI
 
-/// One onboarding page: the view from the driver's seat, with the car's
-/// centre screen showing the page's idea, then the words. Portrait stacks them; landscape sits them
-/// side by side. Pages scroll, so large text never gets squeezed.
+/// One onboarding page: the driver's-seat scene, then the words (stacked in portrait, side by
+/// side in landscape). Pages scroll, so large text never gets squeezed.
 struct OnboardingPageView: View {
     let page: OnboardingPage
 

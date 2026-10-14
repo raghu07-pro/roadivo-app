@@ -3,9 +3,8 @@ import SwiftUI
 import XCTest
 @testable import Roadivo
 
-/// Visual regression for the key screens, light and dark. Reference images
-/// live in __Snapshots__; record new ones by deleting the old image and running
-/// the test once (it fails the recording run, then passes).
+/// Visual regression for the key screens, light and dark. To re-record, delete the reference image
+/// in __Snapshots__ and run once (the recording run fails, the next passes).
 @MainActor
 final class ScreenSnapshotTests: XCTestCase {
     /// Every snapshot is drawn in the default theme (System, Golden Hour), whatever
@@ -15,9 +14,8 @@ final class ScreenSnapshotTests: XCTestCase {
         AppTheme.shared.reset()
     }
 
-    /// Hosts `view` with Reduce Motion on, so the drawn road scenes hold still
-    /// (their lane dashes otherwise roll with the clock and no two captures match)
-    /// and appear-animations land on their final frame.
+    /// Hosts `view` with Reduce Motion on, so the road scenes hold still (their moving dashes made
+    /// every capture differ) and appear-animations end on their final frame.
     private func still(_ view: some View) -> UIHostingController<some View> {
         UIHostingController(rootView: view.environment(\._accessibilityReduceMotion, true))
     }

@@ -1,9 +1,8 @@
 import AVFoundation
 import Observation
 
-/// What the car can see right now: whether Roadivo is on the CarPlay screen,
-/// and where audio and video are going (an AirPlay display, the car's audio).
-/// The Cast to Car tab shows this instead of guessing.
+/// What the car sees right now: whether Roadivo is on CarPlay, and where audio and video go
+/// (an AirPlay display, the car's audio). The Cast to Car tab shows this.
 @Observable
 @MainActor
 final class CarConnection {

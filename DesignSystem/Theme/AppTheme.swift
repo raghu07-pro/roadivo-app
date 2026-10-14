@@ -3,12 +3,8 @@ import Observation
 import SwiftUI
 import UIKit
 
-/// The look the user picked in Settings › Theme: light, dark or the iPhone's
-/// setting, and an accent colour. Both apply at once, without a relaunch:
-/// - the colour tokens (`.roadAccent`, `.roadBrand`, …) read `shared`, so any
-///   view that draws with them is redrawn when the accent changes;
-/// - `RootView` applies the appearance and the accent to the windows, so
-///   sheets, alerts and the system pickers follow too.
+/// The look picked in Settings › Theme (appearance and accent), applied live: colour tokens read
+/// `shared`, so views redraw; `RootView` carries it to the windows for sheets, alerts and pickers.
 @Observable
 @MainActor
 final class AppTheme {
@@ -52,9 +48,8 @@ final class AppTheme {
         defaults.removeObject(forKey: Keys.accent)
     }
 
-    /// Light/dark and tint for UIKit: alerts, confirmation dialogs, the
-    /// Photos and Files pickers. CarPlay isn't a window scene, so the car's
-    /// own appearance is left alone.
+    /// Light/dark and tint for UIKit (alerts, the Photos and Files pickers). CarPlay isn't a
+    /// window scene, so the car keeps its own appearance.
     func applyToWindows() {
         let style = appearance.interfaceStyle
         let tint = accent.uiAccent

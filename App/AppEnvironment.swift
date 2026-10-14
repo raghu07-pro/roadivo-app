@@ -46,11 +46,8 @@ final class AppEnvironment {
         }
     }
 
-    /// Launch arguments used by UI tests and screenshot runs:
-    /// `-ui-testing` (in-memory everything and a fake App Store),
-    /// `-skip-onboarding` (also skips the intro paywall), `-pro` (the fake
-    /// store starts with Pro), and in Debug builds `-demo-library` (seeds the
-    /// demo playlist).
+    /// Launch arguments for UI tests and screenshots: `-ui-testing` (in-memory, fake App Store),
+    /// `-skip-onboarding` (and the intro paywall), `-pro`, and Debug-only `-demo-library`.
     static func live(arguments: [String]) -> AppEnvironment {
         let isUITesting = arguments.contains("-ui-testing")
         let logger = Logger(subsystem: "com.roadivo", category: "App")
@@ -65,9 +62,8 @@ final class AppEnvironment {
             store = memoryStore()
         }
 
-        // UI tests start in "Follow System" (or a language passed with
-        // -AppleLanguages) and the default theme, never a choice left behind
-        // by an earlier run.
+        // UI tests start in Follow System (or a language from -AppleLanguages) and the default
+        // theme, never a choice left by an earlier run.
         if isUITesting {
             AppLanguage.shared.set(nil)
             AppTheme.shared.reset()

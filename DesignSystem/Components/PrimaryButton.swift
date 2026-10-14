@@ -1,8 +1,7 @@
 import SwiftUI
 
-/// The one call to action on a screen: the theme's gradient with a soft glow
-/// beneath, and lettering at least 3:1 against both ends of the gradient
-/// (large, bold text).
+/// The screen's one call to action: the theme gradient with a soft glow; the label is at least
+/// 3:1 against both ends (large, bold text).
 struct PrimaryButton: View {
     let title: Text
     var systemImage: String?
@@ -102,9 +101,8 @@ struct BrandFill: View {
     }
 }
 
-/// For cards with a context menu: no press effect of its own. The system's
-/// long-press lift is the feedback, and a dim or shrink underneath it made
-/// the lift stutter (and was captured in the lifted snapshot).
+/// For cards with a context menu: no press effect, because a dim or shrink under the system's
+/// long-press lift made it stutter (and was captured in its snapshot).
 struct CardButtonStyle: ButtonStyle {
     func makeBody(configuration: Configuration) -> some View {
         configuration.label

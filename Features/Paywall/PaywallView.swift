@@ -127,9 +127,8 @@ struct PaywallView: View {
         }
     }
 
-    /// The three plans are always laid out, so the screen never collapses to
-    /// a bare error: shimmering while prices load, and shown without prices
-    /// (and not selectable) if the App Store can't be reached.
+    /// The three plans always show: shimmering while prices load, and without prices (not
+    /// selectable) if the App Store can't be reached.
     @ViewBuilder private var plans: some View {
         switch viewModel.phase {
         case .loading:

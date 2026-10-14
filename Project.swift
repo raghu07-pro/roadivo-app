@@ -1,8 +1,7 @@
 import ProjectDescription
 
-// Roadivo — IPTV / M3U and local video player for iPhone. See CLAUDE.md for the
-// brief and Docs/PRODUCT.md for the feature map.
-// Never hand-edit the generated .pbxproj; change this manifest and re-run `tuist generate`.
+// Roadivo, an IPTV / M3U and local video player for iPhone (brief: CLAUDE.md, features: Docs/PRODUCT.md).
+// Never hand-edit the generated .pbxproj: change this manifest and run `tuist generate`.
 
 // Placeholder bundle ID (DECISIONS 2): change before the first App Store Connect upload.
 private let bundleID = "com.example.roadivo"
@@ -65,9 +64,8 @@ let project = Project(
             settings: .settings(base: [
                 // Follows the CarPlay switch in Config/Shared.xcconfig.
                 "CODE_SIGN_ENTITLEMENTS": "$(ROADIVO_CARPLAY_ENTITLEMENTS_$(ROADIVO_CARPLAY))",
-                // Primary icon: AppIcon (the car on the road). The original
-                // icon ships too, as an alternate the app can switch to with
-                // UIApplication.setAlternateIconName("AppIcon-Classic").
+                // Primary icon: AppIcon (the car on the road); AppIcon-Classic ships as an alternate,
+                // set with UIApplication.setAlternateIconName("AppIcon-Classic").
                 "ASSETCATALOG_COMPILER_APPICON_NAME": "AppIcon",
                 "ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES": "AppIcon-Classic",
                 "ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS": "YES"

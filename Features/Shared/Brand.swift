@@ -22,9 +22,8 @@ enum LegalLinks {
 struct AppStoreLinks: Equatable {
     /// The listing, for sharing.
     let page: URL?
-    /// Apple's deep link straight to "Write a Review": the recommended target
-    /// for a permanent rating button (the system prompt is for natural
-    /// moments only, and iOS may not show it).
+    /// Apple's deep link to "Write a Review", recommended for a permanent rating button (the system
+    /// prompt is for natural moments, and iOS may not show it).
     let writeReview: URL?
 
     init(appStoreID: String?) {

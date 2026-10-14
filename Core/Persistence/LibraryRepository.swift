@@ -47,10 +47,8 @@ final class LibraryRepository {
         return (try? context.fetchCount(descriptor)) ?? 0
     }
 
-    /// Every channel in playlist order (sources in the order they were added,
-    /// channels in file order), optionally limited to one playlist. One sorted
-    /// fetch per source: sorting the whole library in memory by its playlist
-    /// took seconds for 30 000 channels, on every heart tap.
+    /// Every channel in playlist order, optionally for one playlist. One sorted fetch per source:
+    /// sorting 30 000 channels in memory took seconds on every heart tap.
     func items(in playlistID: UUID? = nil) throws -> [MediaItem] {
         let sources = try playlistID.map { [$0] } ?? playlists().map(\.id)
         return try sources.flatMap { id in
@@ -247,10 +245,8 @@ final class LibraryRepository {
         try context.save()
     }
 
-    /// Copies picked video files into the app and adds them to "On this iPhone".
-    /// `urls` come from the document picker and may be security-scoped. The
-    /// copies run off the main actor: a multi-GB video, or an iCloud file that
-    /// has to download first, can take minutes.
+    /// Copies picked (possibly security-scoped) videos into "On this iPhone", off the main actor:
+    /// a multi-GB file or an iCloud download can take minutes.
     @discardableResult
     func importVideos(_ urls: [URL]) async throws -> Int {
         let directory = MediaLocation.videosDirectory

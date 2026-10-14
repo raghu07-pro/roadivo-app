@@ -3,10 +3,8 @@ import MediaPlayer
 import Observation
 import OSLog
 
-/// The app's single player. Lives above every screen so playback continues
-/// while the user browses (mini player), in Car Mode, in Picture in Picture
-/// and in the background. Lock screen and steering-wheel buttons reach it
-/// through the remote command center.
+/// The app's single player, above every screen, so playback continues in the mini player, Car Mode,
+/// PiP and the background. Lock screen and steering-wheel buttons reach it via remote commands.
 @Observable
 @MainActor
 final class PlaybackController {

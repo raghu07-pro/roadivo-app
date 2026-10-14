@@ -1,9 +1,8 @@
 import AVFoundation
 import UIKit
 
-/// Poster frames for videos stored on this iPhone. A frame from about a
-/// tenth of the way in (past black intros), cached in memory and on disk
-/// (Caches/Thumbnails), so each video is decoded once.
+/// Poster frames for videos on this iPhone, taken a tenth of the way in (past black intros) and
+/// cached in memory and on disk, so each video is decoded once.
 actor VideoThumbnails {
     static let shared = VideoThumbnails()
 
@@ -16,8 +15,7 @@ actor VideoThumbnails {
         try? FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
     }
 
-    /// The poster if it's already in memory: lets a tile draw it on its first
-    /// frame (a long-press preview, a card scrolled back into view) instead of
+    /// The poster if it's already in memory, so a tile draws it on its first frame instead of
     /// flashing the placeholder.
     nonisolated func cachedImage(for video: URL) -> UIImage? {
         memory.cache.object(forKey: video as NSURL)

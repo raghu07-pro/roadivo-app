@@ -1,8 +1,5 @@
-// Logo exploration: the current logo (A) and the same scene with a car
-// driving toward the play-sun (B), plus a side-by-side sheet with both as
-// rounded icons. Output: Docs/LogoOptions/. Run from apps/Roadivo:
-//   swift Scripts/logo-options.swift
-// Does not touch the app icon.
+// Logo exploration (doesn't touch the app icon): the current logo and a car variant, plus a
+// side-by-side sheet, into Docs/LogoOptions/. Run from the app folder: swift Scripts/logo-options.swift
 import AppKit
 import CoreGraphics
 

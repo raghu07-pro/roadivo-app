@@ -1,9 +1,8 @@
 import Foundation
 import Testing
 
-/// Every string the app shows must be translated into every shipped language,
-/// with the same format specifiers as the English. Run Scripts/sync-strings.sh
-/// after changing UI text, translate the new keys, then this goes green.
+/// Every string must be translated into every shipped language with the English format specifiers.
+/// After changing UI text: run Scripts/sync-strings.sh and translate the new keys.
 @Suite("String catalog")
 struct StringCatalogTests {
     static let languages = ["es", "fr", "de", "it", "pt-BR", "ja", "ko", "zh-Hans", "zh-Hant", "hi"]

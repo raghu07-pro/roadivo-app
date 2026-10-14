@@ -1,6 +1,5 @@
-// Roadivo — settings shared by every build configuration.
-// Included by Debug.xcconfig and Release.xcconfig. Committed: nothing secret
-// belongs here. Secrets go in a gitignored Secrets.xcconfig or the Keychain.
+// Roadivo settings shared by Debug and Release. Committed, so nothing secret: secrets go in
+// a gitignored Secrets.xcconfig or the Keychain.
 
 // The Apple Developer Team ID (developer.apple.com → Membership). Empty until
 // the owner picks a team; simulator builds don't need one.
@@ -20,16 +19,12 @@ API_BASE_URL = $(API_SCHEME)$(API_HOST)
 TERMS_URL = $(WEB_SCHEME)www.apple.com/legal/internet-services/itunes/dev/stdeula/
 PRIVACY_URL = $(WEB_SCHEME)example.com/roadivo/privacy
 
-// The numeric Apple ID of the App Store listing (App Store Connect → App
-// Information → Apple ID), for Settings › Share Roadivo and Rate Roadivo.
-// Empty until the App Store Connect record exists (DECISIONS 64): sharing then
-// sends the message without a link, and rating shows the system review prompt.
+// The App Store listing's Apple ID (App Store Connect → App Information), for Rate and Share.
+// Empty until the record exists (DECISIONS 64): Share then omits the link, Rate shows the system prompt.
 APP_STORE_ID =
 
-// CarPlay (DECISIONS 25). Apple grants the CarPlay audio and video
-// entitlements on request (developer.apple.com/contact/carplay). Until they
-// are on the App ID, signing with them fails, so they stay off: set YES once
-// granted. The CarPlay scene code ships either way and is inert without them.
+// CarPlay entitlements are granted by Apple on request (DECISIONS 25); signing fails until they're
+// on the App ID, so set YES once granted. The CarPlay code is inert without them.
 ROADIVO_CARPLAY = NO
 ROADIVO_CARPLAY_ENTITLEMENTS_YES = Resources/Roadivo.entitlements
 ROADIVO_CARPLAY_ENTITLEMENTS_NO =
