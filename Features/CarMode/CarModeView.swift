@@ -17,6 +17,7 @@ struct CarModeView: View {
         layout {
             VideoSurface(player: playback.player)
                 .clipShape(RoundedRectangle(cornerRadius: Radius.lg, style: .continuous))
+                .overlay { status }
                 .overlay(alignment: .topLeading) {
                     if playback.isLive, playback.status == .playing {
                         LiveBadge().padding(Spacing.sm)
@@ -32,13 +33,43 @@ struct CarModeView: View {
         .padding(Spacing.md)
         .background(Color.black.ignoresSafeArea())
         .environment(\.colorScheme, .dark)
+        .persistentSystemOverlays(.hidden)
         .onAppear {
             UIApplication.shared.isIdleTimerDisabled = true
-            requestOrientation(.landscape)
+            OrientationLock.shared.hold(.landscape)
         }
         .onDisappear {
             UIApplication.shared.isIdleTimerDisabled = false
-            requestOrientation(.portrait)
+            OrientationLock.shared.reset()
+        }
+    }
+
+    /// Loading, a failed stream (with Try Again) or the screen the video went to, never a silent black box.
+    @ViewBuilder private var status: some View {
+        if case let .failed(message) = playback.status {
+            VStack(spacing: Spacing.sm) {
+                Image(systemName: "exclamationmark.triangle.fill").font(.title)
+                Text(message).font(Typography.secondary).multilineTextAlignment(.center)
+                Button("Try Again", action: playback.resume)
+                    .buttonStyle(.borderedProminent)
+                    .tint(.roadBrand)
+                    .foregroundStyle(.roadOnBrand)
+            }
+            .foregroundStyle(.white)
+            .padding(Spacing.md)
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .background(.black.opacity(0.75))
+        } else if let screen = playback.externalScreen {
+            VStack(spacing: Spacing.sm) {
+                Image(systemName: "airplayvideo").font(.largeTitle)
+                Text("Playing on \(screen)")
+                    .font(Typography.secondary.weight(.semibold))
+                    .multilineTextAlignment(.center)
+            }
+            .foregroundStyle(.white.opacity(0.85))
+            .accessibilityElement(children: .combine)
+        } else if playback.status == .loading {
+            ProgressView().controlSize(.large).tint(.white)
         }
     }
 
@@ -103,10 +134,5 @@ struct CarModeView: View {
                 }
             }
         }
-    }
-
-    private func requestOrientation(_ mask: UIInterfaceOrientationMask) {
-        let scene = UIApplication.shared.connectedScenes.compactMap { $0 as? UIWindowScene }.first
-        scene?.requestGeometryUpdate(.iOS(interfaceOrientations: mask)) { _ in }
     }
 }

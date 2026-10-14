@@ -7,7 +7,10 @@ struct LibraryView: View {
     let onPlay: (MediaItem, [MediaItem]) -> Void
     let onAddSource: () -> Void
     let onFavoriteChanged: (UUID, Bool) -> Void
+    let voiceSearch: VoiceSearchModel
     var onVideoDeleted: (UUID) -> Void = { _ in }
+
+    @Environment(\.openURL) private var openURL
 
     /// Carousels show this many before "See All".
     private let carouselLimit = 20
@@ -17,6 +20,18 @@ struct LibraryView: View {
         NavigationStack {
             content
                 .background(.roadCanvas)
+                .safeAreaInset(edge: .top, spacing: 0) {
+                    SearchField(
+                        text: $viewModel.query,
+                        prompt: "Search channels and titles",
+                        isListening: voiceSearch.isListening
+                    ) {
+                        voiceSearch.toggle { viewModel.query = $0 }
+                    }
+                    .padding(.horizontal, Spacing.md)
+                    .padding(.bottom, Spacing.xs)
+                    .background(.roadCanvas)
+                }
                 .navigationTitle("Home")
                 .navigationDestination(for: LibraryGroupRoute.self) { route in
                     GroupDetailView(
@@ -34,9 +49,22 @@ struct LibraryView: View {
                         .accessibilityIdentifier("library.addSource")
                     }
                 }
-                .searchable(text: $viewModel.query, prompt: Text("Search channels and titles"))
+                .alert("Allow Voice Search", isPresented: alertBinding(.denied)) {
+                    Button("Open Settings") {
+                        if let url = URL(string: UIApplication.openSettingsURLString) {
+                            openURL(url)
+                        }
+                    }
+                    Button("Cancel", role: .cancel) {}
+                } message: {
+                    Text("Turn on Microphone and Speech Recognition for Roadivo in Settings to search by voice.")
+                }
+                .alert("Voice search isn't available right now.", isPresented: alertBinding(.failed)) {
+                    Button("OK", role: .cancel) {}
+                }
         }
         .task(id: revision) { viewModel.load() }
+        .onDisappear { voiceSearch.cancel() }
     }
 
     @ViewBuilder private var content: some View {
@@ -104,6 +132,17 @@ struct LibraryView: View {
         }
     }
 
+    private func alertBinding(_ state: VoiceSearchModel.State) -> Binding<Bool> {
+        Binding(
+            get: { voiceSearch.state == state },
+            set: {
+                if !$0 {
+                    voiceSearch.dismissAlert()
+                }
+            }
+        )
+    }
+
     private func play(_ item: MediaItem, _ queue: [MediaItem]?) {
         onPlay(item, queue ?? viewModel.queue(for: item))
     }
@@ -127,13 +166,16 @@ private struct EmptyLibraryView: View {
     var body: some View {
         EmptyStateView(
             title: "Your library is empty",
-            message: "Add an M3U playlist link or file, or import videos from your iPhone.",
+            message: """
+            Add an M3U link or connect a media server, and your channels land here. Videos you import are in \
+            Favorites › On this iPhone.
+            """,
             systemImage: "play.square.stack"
         ) {
             VStack(spacing: Spacing.sm) {
                 PrimaryButton(title: "Add a Source", systemImage: "plus", isCompact: true, action: onAddSource)
                     .accessibilityIdentifier("library.empty.addSource")
-                Text("M3U · Jellyfin · Emby · Xtream")
+                Text("M3U · Jellyfin · Emby · Plex · Xtream")
                     .font(Typography.data)
                     .foregroundStyle(.secondary)
             }

@@ -58,7 +58,9 @@ let project = Project(
                 "Resources/Fonts/Overpass-Bold.ttf",
                 "Resources/Fonts/Overpass-ExtraBold.ttf",
                 "Resources/Fonts/Overpass-Black.ttf",
-                "Resources/Fonts/OverpassMono-SemiBold.ttf"
+                "Resources/Fonts/OverpassMono-SemiBold.ttf",
+                // The privacy page: the one file hosted for the App Store is also shown in the app.
+                "Docs/Website/roadivo.html"
             ],
             dependencies: [],
             settings: .settings(base: [

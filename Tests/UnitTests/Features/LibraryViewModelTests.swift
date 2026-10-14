@@ -20,6 +20,23 @@ struct LibraryViewModelTests {
         #expect(viewModel.phase == .empty)
     }
 
+    @Test("Home leaves out imported videos; they stay on the On this iPhone shelf")
+    func homeSkipsImportedVideos() async throws {
+        let (viewModel, library) = try await loaded()
+        let video = FileManager.default.temporaryDirectory.appending(path: "Beach Day \(UUID().uuidString).mp4")
+        try Data("not really a video".utf8).write(to: video)
+        defer { try? FileManager.default.removeItem(at: video) }
+        #expect(try await library.repository.importVideos([video]) == 1)
+        let local = try #require(try library.repository.localVideos().first)
+        library.repository.markPlayed(local.id)
+
+        viewModel.load()
+        #expect(!viewModel.items.contains { $0.isLocalFile })
+        #expect(!viewModel.recent.contains { $0.isLocalFile })
+        #expect(!viewModel.sections.map(\.title).contains("On this iPhone"))
+        #expect(try library.repository.localVideos().count == 1)
+    }
+
     @Test("Groups items into sections in playlist order, ungrouped as Other")
     func sections() async throws {
         let (viewModel, _) = try await loaded()

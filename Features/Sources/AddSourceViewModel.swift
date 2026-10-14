@@ -4,16 +4,17 @@ import Observation
 @Observable
 @MainActor
 final class AddSourceViewModel {
-    var name = ""
     /// A playlist link, or M3U text pasted or scanned from a QR code.
     var input = ""
     private(set) var isWorking = false
     var errorMessage: String?
 
     private let repository: LibraryRepository
+    private let plex: PlexLinking
 
-    init(repository: LibraryRepository) {
+    init(repository: LibraryRepository, plex: PlexLinking = ScriptedPlexLinking()) {
         self.repository = repository
+        self.plex = plex
     }
 
     var parsedInput: SourceInput {
@@ -37,14 +38,18 @@ final class AddSourceViewModel {
         ServerLoginViewModel(kind: kind, repository: repository)
     }
 
+    func makePlexLogin() -> PlexLoginViewModel {
+        PlexLoginViewModel(plex: plex, repository: repository)
+    }
+
     /// Returns true when the playlist was added.
     func submit() async -> Bool {
         switch parsedInput {
         case let .link(url):
-            return await perform { try await self.repository.addRemotePlaylist(name: self.name, url: url) }
+            // Named after its host; renamed in Manage Sources if wanted.
+            return await perform { try await self.repository.addRemotePlaylist(name: "", url: url) }
         case let .content(text):
-            let trimmed = name.trimmingCharacters(in: .whitespacesAndNewlines)
-            let title = trimmed.isEmpty ? String(appLocalized: "Pasted Playlist") : trimmed
+            let title = String(appLocalized: "Pasted Playlist")
             return await perform { try await self.repository.addFilePlaylist(name: title, text: text) }
         case .empty, .unusable:
             errorMessage = LibraryError.invalidURL.localizedDescription
@@ -66,9 +71,8 @@ final class AddSourceViewModel {
                     }
                 }
                 let text = try PlaylistText.decode(Data(contentsOf: url))
-                let fallback = url.deletingPathExtension().lastPathComponent
-                let trimmed = self.name.trimmingCharacters(in: .whitespacesAndNewlines)
-                try await self.repository.addFilePlaylist(name: trimmed.isEmpty ? fallback : trimmed, text: text)
+                let title = url.deletingPathExtension().lastPathComponent
+                try await self.repository.addFilePlaylist(name: title, text: text)
             }
         }
     }

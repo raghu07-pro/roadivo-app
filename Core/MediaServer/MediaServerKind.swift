@@ -1,10 +1,12 @@
 import Foundation
 
-/// The server types "Or connect a media server" offers.
+/// The server types "Or connect a media server" offers. Plex signs in with a code at plex.tv/link;
+/// the others take an address and a login.
 enum MediaServerKind: String, CaseIterable, Identifiable, Codable, Hashable, Sendable {
     case jellyfin
     case emby
     case xtream
+    case plex
 
     var id: String {
         rawValue
@@ -15,6 +17,16 @@ enum MediaServerKind: String, CaseIterable, Identifiable, Codable, Hashable, Sen
         case .jellyfin: "Jellyfin"
         case .emby: "Emby"
         case .xtream: "Xtream"
+        case .plex: "Plex"
+        }
+    }
+
+    /// What the card under "Or connect a media server" says.
+    var subtitle: LocalizedStringResource {
+        switch self {
+        case .jellyfin, .emby: "Your own server"
+        case .xtream: "IPTV provider login"
+        case .plex: "Sign in with a code"
         }
     }
 
@@ -23,14 +35,15 @@ enum MediaServerKind: String, CaseIterable, Identifiable, Codable, Hashable, Sen
         case .jellyfin: "triangle.fill"
         case .emby: "play.rectangle.fill"
         case .xtream: "play.tv.fill"
+        case .plex: "chevron.right"
         }
     }
 
     var addressPlaceholder: String {
         switch self {
-        case .jellyfin: "http://192.168.1.10:8096"
-        case .emby: "http://192.168.1.10:8096"
+        case .jellyfin, .emby: "http://192.168.1.10:8096"
         case .xtream: "http://provider.example.com:8080"
+        case .plex: ""
         }
     }
 }

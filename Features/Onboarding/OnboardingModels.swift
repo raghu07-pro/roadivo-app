@@ -46,7 +46,7 @@ struct OnboardingPage: Identifiable, Equatable {
             symbol: "list.and.film",
             secondarySymbol: "qrcode",
             title: "Bring your own playlists",
-            message: "Add an M3U link, file or QR code, or import videos from Photos and Files. Sorted automatically.",
+            message: "Add an M3U link or QR code, or import videos from Photos and Files. Sorted automatically.",
             time: .night,
             screen: .playlists
         )

@@ -21,12 +21,12 @@ struct FAQEntry: Identifiable {
         FAQEntry(
             id: 2,
             question: "What is a source? Does Roadivo come with channels?",
-            answer: "A source is a playlist link, an M3U file, or a media server you own or subscribe to. Roadivo is a player only: it doesn't provide, host or recommend any content."
+            answer: "A source is a playlist link or a media server you own or subscribe to. Roadivo is a player only: it doesn't provide, host or recommend any content."
         ),
         FAQEntry(
             id: 3,
             question: "Where do I find a source?",
-            answer: "From an IPTV service you subscribe to (they send an M3U link, a QR code or Xtream login details), or from your own Jellyfin or Emby server. Only add sources you have the right to watch."
+            answer: "From an IPTV service you subscribe to (they send an M3U link, a QR code or Xtream login details), or from your own Plex, Jellyfin or Emby server. Only add sources you have the right to watch."
         ),
         FAQEntry(
             id: 4,
@@ -41,7 +41,7 @@ struct FAQEntry: Identifiable {
         FAQEntry(
             id: 6,
             question: "What do I need to watch in the car?",
-            answer: "A car display or wireless adapter that accepts AirPlay video. Start a channel, tap AirPlay and pick it. No AirPlay? Mount your iPhone and use Car Mode. Never watch video while driving."
+            answer: "A car display or wireless adapter that accepts AirPlay video. Open Cast to Car, tap AirPlay and pick the display, then start a channel. No AirPlay? Mount your iPhone and use Car Mode. Never watch video while driving."
         ),
         FAQEntry(
             id: 7,
@@ -51,17 +51,17 @@ struct FAQEntry: Identifiable {
         FAQEntry(
             id: 8,
             question: "Why won't a channel play?",
-            answer: "Streams go offline, change address or use a format iPhone can't play. Jellyfin and Emby convert videos automatically; for IPTV, ask your provider for HLS (m3u8) links."
+            answer: "Streams go offline, change address or use a format iPhone can't play. Plex, Jellyfin and Emby convert videos automatically; for IPTV, ask your provider for HLS (m3u8) links."
         ),
         FAQEntry(
             id: 9,
             question: "Can I keep watching while I browse?",
-            answer: "Yes. Close the player and it keeps going in the mini player, or swipe home for Picture in Picture."
+            answer: "Yes. Tap the down arrow to minimize the player and it keeps going in the mini player, or swipe home for Picture in Picture."
         ),
         FAQEntry(
             id: 10,
             question: "Is my data private?",
-            answer: "Everything you add stays on this iPhone. Links and logins are kept in the Keychain. Roadivo has no account, no ads and no tracking."
+            answer: "Everything you add stays on this iPhone: logins in the Keychain, channel lists in the app's private storage. Roadivo has no account, no ads and no tracking."
         )
     ]
 }

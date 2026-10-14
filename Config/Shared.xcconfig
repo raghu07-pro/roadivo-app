@@ -14,10 +14,9 @@ API_SCHEME = $(WEB_SCHEME)
 API_HOST = api.example.com
 API_BASE_URL = $(API_SCHEME)$(API_HOST)
 
-// Legal links shown in Settings. Terms are Apple's standard EULA. The privacy
-// URL is a placeholder until the policy is published (DECISIONS 14).
+// Terms link shown in Settings and the paywall: Apple's standard EULA. The privacy policy
+// is the bundled Docs/Website/roadivo.html (DECISIONS 81), so it needs no URL here.
 TERMS_URL = $(WEB_SCHEME)www.apple.com/legal/internet-services/itunes/dev/stdeula/
-PRIVACY_URL = $(WEB_SCHEME)example.com/roadivo/privacy
 
 // The App Store listing's Apple ID (App Store Connect → App Information), for Rate and Share.
 // Empty until the record exists (DECISIONS 64): Share then omits the link, Rate shows the system prompt.

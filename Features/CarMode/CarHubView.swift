@@ -11,15 +11,19 @@ struct CarHubView: View {
     let onStartCarMode: (MediaItem?) -> Void
     let onUpgrade: () -> Void
     let onBrowse: () -> Void
+    /// Off until Apple grants the CarPlay entitlement, so the tab never promises it.
+    var showsCarPlay = CarPlayAvailability.isEnabled
 
     var body: some View {
         NavigationStack {
             ScrollView {
                 VStack(alignment: .leading, spacing: Spacing.lg) {
                     dashboard
-                    carPlayCard
-                    airPlayCard
+                    if showsCarPlay {
+                        carPlayCard
+                    }
                     carModeCard
+                    airPlayCard
                     Label(
                         "For passengers, or while parked. Never watch video while driving.",
                         systemImage: "exclamationmark.triangle.fill"
@@ -89,7 +93,9 @@ struct CarHubView: View {
         if connection.isCarAudio {
             return String(appLocalized: "Car audio connected")
         }
-        return String(appLocalized: "Connect CarPlay or AirPlay")
+        return showsCarPlay
+            ? String(appLocalized: "Connect CarPlay or AirPlay")
+            : String(appLocalized: "Connect AirPlay, or use Car Mode")
     }
 
     // MARK: Routes

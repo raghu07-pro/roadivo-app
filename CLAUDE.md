@@ -35,7 +35,8 @@ tabs: **Home · Favorites · Cast to Car · Settings**.
   driving, the car plays sound only.
 - The tab shows live CarPlay and AirPlay status (`CarConnection`).
 - CarPlay needs Apple's entitlements; it is switched off until they are
-  granted (`ROADIVO_CARPLAY` in `Config/Shared.xcconfig`, DECISIONS 25).
+  granted (`ROADIVO_CARPLAY` in `Config/Shared.xcconfig`, DECISIONS 25). While
+  it is off, the app hides every CarPlay promise (`CarPlayAvailability`, DECISIONS 84).
 
 ## Design
 
@@ -108,6 +109,8 @@ DECISIONS 33, 37 and 53–57.
 - **Continue Watching** shows the 12 most recently played items.
 - **Start Car Mode** on the Car tab resumes the last-played item when nothing is playing.
 - **Deleting "On this iPhone"** also deletes the copied video files.
+- **Media servers:** Jellyfin, Emby and Xtream sign in with an address and login; Plex with a code at plex.tv/link (`PlexClient`, `PlexLoginViewModel`, DECISIONS 72).
+- **Voice search:** the mic in Home's search bar (`SearchField`, `VoiceSearchModel`, `Core/Speech`) fills the search as you speak; on-device when the language allows (DECISIONS 68–69).
 
 ## Backend / API
 
@@ -120,14 +123,17 @@ None in v1 (DECISIONS 6). Everything is stored on the device.
 - **Device:** iPhone only, iOS 17+, portrait and landscape.
 - **CarPlay:** a CarPlay video and audio app, gated on Apple's entitlements (DECISIONS 25).
 - **Not in v1:**
-  - Plex
   - EPG
   - MKV, raw TS and AC3
   - screen mirroring
   - Arabic and other right-to-left languages
 - **ATS:** `NSAllowsArbitraryLoads` is on (DECISIONS 8). Justify it in the App Review notes.
 - **Privacy:** no tracking, no ATT prompt, no third-party SDKs.
-- **Before release:** set `APP_STORE_ID` in `Config/Shared.xcconfig` (Settings › Rate and Share Roadivo; DECISIONS 64).
+- **Legal page:** `Docs/Website/roadivo.html` is one self-contained file (privacy,
+  terms, support). It is hosted for App Store Connect, and the app shows the same
+  file at Settings › Privacy Policy. Edit it directly; it is English only (DECISIONS 81).
+- **Before release:** set `APP_STORE_ID` in `Config/Shared.xcconfig` (Settings › Rate and Share Roadivo; DECISIONS 64),
+  and host `Docs/Website/roadivo.html` for the App Store's Privacy Policy and Support URLs.
 
 ## Commands
 
@@ -151,3 +157,4 @@ UI tests launch the app with these arguments:
 - `-pro`: the fake store starts with Pro
 - `-skip-onboarding`
 - `-demo-library`
+- `-voice-phrase <text>`: what the scripted microphone hears (default "Football")

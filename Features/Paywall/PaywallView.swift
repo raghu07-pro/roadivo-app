@@ -17,12 +17,6 @@ struct PaywallView: View {
                     header
                     features
                     plans
-                    if let message = viewModel.message {
-                        Text(message)
-                            .font(Typography.secondary)
-                            .foregroundStyle(.orange)
-                            .accessibilityIdentifier("paywall.message")
-                    }
                 }
                 .padding(.horizontal, Spacing.md)
                 .padding(.top, 60)
@@ -36,6 +30,17 @@ struct PaywallView: View {
         .foregroundStyle(.white)
         .environment(\.colorScheme, .dark)
         .task { await viewModel.load() }
+        // Pro can arrive while this is open (Ask to Buy approved, or entitlements loading late).
+        .onChange(of: viewModel.isPro) { _, isPro in
+            if isPro {
+                onClose()
+            }
+        }
+        .onChange(of: viewModel.message) { _, message in
+            if let message {
+                AccessibilityNotification.Announcement(message).post()
+            }
+        }
         .sheet(isPresented: $isShowingPrivacy) {
             NavigationStack {
                 PrivacyPolicyView()
@@ -108,11 +113,14 @@ struct PaywallView: View {
                         .foregroundStyle(.roadAccent)
                         .frame(width: 24)
                         .accessibilityHidden(true)
-                    Text(app: feature.title)
-                        .font(Typography.cardTitle)
-                        .lineLimit(2)
-                        .minimumScaleFactor(0.85)
-                        .fixedSize(horizontal: false, vertical: true)
+                    VStack(alignment: .leading, spacing: 1) {
+                        Text(app: feature.title)
+                            .font(Typography.cardTitle)
+                        Text(app: feature.detail)
+                            .font(Typography.caption)
+                            .foregroundStyle(.white.opacity(0.7))
+                    }
+                    .fixedSize(horizontal: false, vertical: true)
                     Spacer(minLength: 0)
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
@@ -120,9 +128,7 @@ struct PaywallView: View {
                 .padding(.vertical, Spacing.xs)
                 .frame(minHeight: 48)
                 .background(Color(white: 0.14), in: RoundedRectangle(cornerRadius: Radius.md, style: .continuous))
-                .accessibilityElement(children: .ignore)
-                .accessibilityLabel(Text(app: feature.title))
-                .accessibilityValue(Text(app: feature.detail))
+                .accessibilityElement(children: .combine)
             }
         }
     }
@@ -154,15 +160,7 @@ struct PaywallView: View {
                 }
             }
         case .loaded:
-            VStack(spacing: Spacing.sm) {
-                planCards(viewModel.offers, selectable: true)
-                Text(viewModel.terms)
-                    .font(Typography.caption)
-                    .foregroundStyle(.white.opacity(0.65))
-                    .multilineTextAlignment(.center)
-                    .frame(maxWidth: .infinity)
-                    .padding(.top, Spacing.xxs)
-            }
+            planCards(viewModel.offers, selectable: true)
         }
     }
 
@@ -177,8 +175,25 @@ struct PaywallView: View {
         }
     }
 
+    /// The renewal terms and any message sit right above Buy, so they're never scrolled away.
     private var bottomBar: some View {
         VStack(spacing: Spacing.sm) {
+            if let message = viewModel.message {
+                Text(message)
+                    .font(Typography.secondary)
+                    .foregroundStyle(.orange)
+                    .multilineTextAlignment(.center)
+                    .fixedSize(horizontal: false, vertical: true)
+                    .accessibilityIdentifier("paywall.message")
+            }
+            if viewModel.phase == .loaded {
+                Text(viewModel.terms)
+                    .font(Typography.caption)
+                    .foregroundStyle(.white.opacity(0.8))
+                    .multilineTextAlignment(.center)
+                    .fixedSize(horizontal: false, vertical: true)
+                    .accessibilityIdentifier("paywall.terms")
+            }
             PrimaryButton(
                 text: Text(viewModel.buyTitle),
                 systemImage: "chevron.right.2",

@@ -98,13 +98,42 @@ final class ScreenSnapshotTests: XCTestCase {
         )
     }
 
+    /// No artwork shows the coloured cover; artwork still loading shows the skeleton, not the cover.
+    func testArtworkLoadingStates() throws {
+        let loading = try XCTUnwrap(URL(string: "https://logos.invalid/channel.png"))
+        let view = HStack(spacing: Spacing.sm) {
+            ArtworkTile(title: "Highway Stop", imageURL: nil)
+            ArtworkTile(title: "Coastal Echoes", imageURL: loading)
+        }
+        .padding()
+        .frame(width: 390)
+        .background(.roadCanvas)
+        for style in [UIUserInterfaceStyle.light, .dark] {
+            assertSnapshot(
+                of: still(view),
+                as: .image(
+                    precision: 0.98,
+                    perceptualPrecision: 0.98,
+                    size: CGSize(width: 390, height: 140),
+                    traits: UITraitCollection(userInterfaceStyle: style)
+                ),
+                named: "artwork-\(style == .dark ? "dark" : "light")"
+            )
+        }
+    }
+
     func testHome() async throws {
         let library = try TestLibrary()
         try await library.repository.addFilePlaylist(name: "TV", text: Fixtures.playlist)
         let viewModel = LibraryViewModel(repository: library.repository, scope: .all)
         viewModel.load()
         let view = LibraryView(
-            viewModel: viewModel, revision: 0, onPlay: { _, _ in }, onAddSource: {}, onFavoriteChanged: { _, _ in }
+            viewModel: viewModel,
+            revision: 0,
+            onPlay: { _, _ in },
+            onAddSource: {},
+            onFavoriteChanged: { _, _ in },
+            voiceSearch: VoiceSearchModel(speech: ScriptedSpeechTranscriber(phrase: ""))
         )
         assertScreen(view, named: "home")
     }
@@ -113,7 +142,12 @@ final class ScreenSnapshotTests: XCTestCase {
         let viewModel = try LibraryViewModel(repository: TestLibrary().repository, scope: .all)
         viewModel.load()
         let view = LibraryView(
-            viewModel: viewModel, revision: 0, onPlay: { _, _ in }, onAddSource: {}, onFavoriteChanged: { _, _ in }
+            viewModel: viewModel,
+            revision: 0,
+            onPlay: { _, _ in },
+            onAddSource: {},
+            onFavoriteChanged: { _, _ in },
+            voiceSearch: VoiceSearchModel(speech: ScriptedSpeechTranscriber(phrase: ""))
         )
         assertScreen(view, named: "home-empty")
     }

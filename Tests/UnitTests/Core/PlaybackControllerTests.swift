@@ -19,6 +19,24 @@ struct PlaybackControllerTests {
         }
     }
 
+    @Test("Seeking does nothing on a stream with no fixed length")
+    func seekingWithoutDuration() {
+        let controller = PlaybackController()
+        let queue = items(1)
+        controller.play(queue[0], queue: queue)
+        #expect(controller.duration == nil)
+        controller.seek(to: 30)
+        #expect(controller.elapsed == 0)
+    }
+
+    @Test("The player's clock reads m:ss, or h:mm:ss past an hour")
+    func clock() {
+        #expect(PlayerControls.clock(7) == "0:07")
+        #expect(PlayerControls.clock(760) == "12:40")
+        #expect(PlayerControls.clock(3725) == "1:02:05")
+        #expect(PlayerControls.clock(.nan) == "0:00")
+    }
+
     @Test("Next and previous step through the queue and stop at its ends")
     func queueNavigation() {
         let controller = PlaybackController()

@@ -23,7 +23,12 @@ def main(paths):
     catalog_path = Path("Resources/Localizable.xcstrings")
     catalog = json.loads(catalog_path.read_text())
     info = plistlib.loads(Path("Resources/Info.plist").read_bytes())
-    info_keys = ["NSCameraUsageDescription", "NSLocalNetworkUsageDescription"]
+    info_keys = [
+        "NSCameraUsageDescription",
+        "NSLocalNetworkUsageDescription",
+        "NSMicrophoneUsageDescription",
+        "NSSpeechRecognitionUsageDescription",
+    ]
     info_catalog = {"sourceLanguage": "en", "strings": {}, "version": "1.0"}
     for key in info_keys:
         info_catalog["strings"][key] = {"extractionState": "manual", "localizations": {"en": unit(info[key])}}

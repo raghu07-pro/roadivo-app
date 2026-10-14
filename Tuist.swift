@@ -1,5 +1,5 @@
 import ProjectDescription
 
-/// Marks apps/Roadivo as the Tuist root so the generator does not walk up into
-/// the shared workspace toolchain. Generation options stay at their defaults.
-let tuist = Tuist()
+/// Marks this folder as the Tuist root. No "Generate Project" scheme, so Xcode's scheme menu
+/// offers only Roadivo, the one wired to the local StoreKit prices.
+let tuist = Tuist(generationOptions: .options(includeGenerateScheme: false))

@@ -5,10 +5,13 @@ import SwiftUI
 /// subtitle/audio-track menus for free.
 struct SystemVideoPlayer: UIViewControllerRepresentable {
     let player: AVPlayer
+    /// Off when Roadivo draws its own controls on top.
+    var showsControls = true
 
     func makeUIViewController(context: Context) -> AVPlayerViewController {
         let controller = AVPlayerViewController()
         controller.player = player
+        controller.showsPlaybackControls = showsControls
         controller.allowsPictureInPicturePlayback = true
         controller.canStartPictureInPictureAutomaticallyFromInline = true
         controller.updatesNowPlayingInfoCenter = false

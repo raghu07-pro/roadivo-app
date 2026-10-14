@@ -124,13 +124,8 @@ final class ThemeUITests: XCTestCase {
         try audit(app)
     }
 
-    /// All audits but contrast (it can't name text under the glass bars; `ThemeTests` checks WCAG),
-    /// ignoring Dynamic Type findings just above the tab bar, where enlarged text slides under it.
+    /// All audits but contrast: it can't name text under the glass bars; `ThemeTests` checks WCAG.
     private func audit(_ app: XCUIApplication) throws {
-        let tabBar = app.tabBars.firstMatch.exists ? app.tabBars.firstMatch.frame : .null
-        try app.performAccessibilityAudit(for: XCUIAccessibilityAuditType.all.subtracting(.contrast)) { issue in
-            guard issue.auditType == .dynamicType, let element = issue.element, !tabBar.isNull else { return false }
-            return element.frame.maxY > tabBar.minY - 180
-        }
+        try auditIgnoringBottomEdge(app, for: XCUIAccessibilityAuditType.all.subtracting(.contrast))
     }
 }

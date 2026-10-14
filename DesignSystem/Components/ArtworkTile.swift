@@ -1,7 +1,7 @@
 import SwiftUI
 
-/// 16:9 artwork: a video's own frame, the channel logo, or a title-coloured tile with initials.
-/// Always exactly 16:9; everything is drawn in overlays, so a portrait video can't stretch it.
+/// Always-16:9 artwork: the video's frame or channel logo once loaded, a shimmering skeleton while
+/// loading, and the coloured cover with initials only when there's none (or it failed).
 struct ArtworkTile: View {
     let title: String
     let imageURL: URL?
@@ -11,6 +11,8 @@ struct ArtworkTile: View {
     var cornerRadius: CGFloat = Radius.md
 
     @State private var poster: UIImage?
+    /// The video's frame couldn't be read, so the cover stands in.
+    @State private var posterFailed = false
 
     init(title: String, imageURL: URL?, videoURL: URL? = nil, isLive: Bool = false, cornerRadius: CGFloat = Radius.md) {
         self.title = title
@@ -24,33 +26,7 @@ struct ArtworkTile: View {
     var body: some View {
         Color.clear
             .aspectRatio(16 / 9, contentMode: .fit)
-            .overlay {
-                ZStack {
-                    Palette.placeholderGradient(for: title)
-                    Text(title.initials)
-                        .font(Typography.screenTitle)
-                        .foregroundStyle(.white.opacity(0.9))
-                        .minimumScaleFactor(0.5)
-                        .padding(Spacing.xs)
-                }
-            }
-            .overlay {
-                if let poster {
-                    Image(uiImage: poster)
-                        .resizable()
-                        .scaledToFill()
-                        .transition(.opacity)
-                } else if let imageURL {
-                    AsyncImage(url: imageURL, transaction: Transaction(animation: .easeIn(duration: 0.2))) { phase in
-                        if let image = phase.image {
-                            ZStack {
-                                Color.black.opacity(0.35)
-                                image.resizable().scaledToFit().padding(Spacing.sm)
-                            }
-                        }
-                    }
-                }
-            }
+            .overlay { artwork }
             .overlay(alignment: .bottomTrailing) {
                 if poster != nil {
                     Image(systemName: "play.fill")
@@ -70,9 +46,54 @@ struct ArtworkTile: View {
             .task(id: videoURL) {
                 guard let videoURL, poster == nil else { return }
                 let image = await VideoThumbnails.shared.image(for: videoURL)
-                withAnimation(.easeIn(duration: 0.2)) { poster = image }
+                withAnimation(.easeIn(duration: 0.25)) {
+                    poster = image
+                    posterFailed = image == nil
+                }
             }
             .accessibilityHidden(true)
+    }
+
+    @ViewBuilder private var artwork: some View {
+        if let poster {
+            Image(uiImage: poster)
+                .resizable()
+                .scaledToFill()
+                .transition(.opacity)
+        } else if videoURL != nil, !posterFailed {
+            SkeletonView()
+        } else if let imageURL {
+            AsyncImage(url: imageURL, transaction: Transaction(animation: .easeIn(duration: 0.25))) { phase in
+                switch phase {
+                case let .success(image):
+                    // Logos are often transparent, so they sit on the cover without its initials.
+                    ZStack {
+                        Palette.placeholderGradient(for: title)
+                        Color.black.opacity(0.35)
+                        image.resizable().scaledToFit().padding(Spacing.sm)
+                    }
+                    .transition(.opacity)
+                case .empty:
+                    SkeletonView()
+                default:
+                    cover
+                }
+            }
+        } else {
+            cover
+        }
+    }
+
+    /// The stand-in when there's no artwork: the title's colours and its initials.
+    private var cover: some View {
+        ZStack {
+            Palette.placeholderGradient(for: title)
+            Text(title.initials)
+                .font(Typography.screenTitle)
+                .foregroundStyle(.white.opacity(0.9))
+                .minimumScaleFactor(0.5)
+                .padding(Spacing.xs)
+        }
     }
 }
 

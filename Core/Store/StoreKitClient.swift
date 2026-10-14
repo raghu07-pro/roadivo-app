@@ -9,8 +9,10 @@ struct StoreKitClient: StoreClient {
         for plan in ProPlan.allCases {
             guard let product = products.first(where: { $0.id == plan.productID }) else { continue }
             var intro: String?
+            // The paywall says "first week …", so only a paid one-week offer qualifies.
             if let subscription = product.subscription, let offer = subscription.introductoryOffer,
-               await subscription.isEligibleForIntroOffer {
+               offer.paymentMode != .freeTrial, offer.period.unit == .week, offer.period.value == 1,
+               offer.periodCount == 1, await subscription.isEligibleForIntroOffer {
                 intro = offer.displayPrice
             }
             offers.append(PlanOffer(
@@ -43,17 +45,19 @@ struct StoreKitClient: StoreClient {
     }
 
     func restore() async throws {
-        try await AppStore.sync()
+        do {
+            try await AppStore.sync()
+        } catch StoreKitError.userCancelled {
+            throw CancellationError()
+        }
     }
 
     func hasActiveEntitlement() async -> Bool {
         for await result in Transaction.currentEntitlements {
+            // Already excludes expired subscriptions, and keeps ones in a billing grace period.
             guard case let .verified(transaction) = result,
                   ProPlan.productIDs.contains(transaction.productID),
                   transaction.revocationDate == nil else { continue }
-            if let expiry = transaction.expirationDate, expiry < .now {
-                continue
-            }
             return true
         }
         return false

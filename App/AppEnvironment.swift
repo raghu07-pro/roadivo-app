@@ -13,6 +13,8 @@ final class AppEnvironment {
     let preferences: Preferences
     let router: AppRouter
     let proAccess: ProAccess
+    let speech: SpeechTranscribing
+    let plex: PlexLinking
     let carConnection = CarConnection()
 
     /// The running app's environment, for the CarPlay scene: it is created by
@@ -26,9 +28,13 @@ final class AppEnvironment {
         fetcher: PlaylistFetching,
         mediaServers: MediaServerConnecting,
         storeClient: StoreClient,
-        preferences: Preferences
+        preferences: Preferences,
+        speech: SpeechTranscribing = SpeechTranscriber(),
+        plex: PlexLinking = ScriptedPlexLinking()
     ) {
         self.apiClient = apiClient
+        self.speech = speech
+        self.plex = plex
         self.store = store
         self.preferences = preferences
         repository = LibraryRepository(
@@ -46,10 +52,17 @@ final class AppEnvironment {
         }
     }
 
-    /// Launch arguments for UI tests and screenshots: `-ui-testing` (in-memory, fake App Store),
+    /// Launch arguments for UI tests and screenshots: `-ui-testing` (in-memory, fake App Store, scripted mic),
     /// `-skip-onboarding` (and the intro paywall), `-pro`, and Debug-only `-demo-library`.
     static func live(arguments: [String]) -> AppEnvironment {
-        let isUITesting = arguments.contains("-ui-testing")
+        #if DEBUG
+            let isUITesting = arguments.contains("-ui-testing")
+            let skipsOnboarding = arguments.contains("-skip-onboarding")
+        #else
+            // Test switches never reach a shipped build: no fake App Store, no free Pro.
+            let isUITesting = false
+            let skipsOnboarding = false
+        #endif
         let logger = Logger(subsystem: "com.roadivo", category: "App")
 
         let store: SwiftDataStore
@@ -69,7 +82,7 @@ final class AppEnvironment {
             AppTheme.shared.reset()
         }
         let preferences = Preferences(defaults: isUITesting ? volatileDefaults() : .standard)
-        if arguments.contains("-skip-onboarding") {
+        if skipsOnboarding {
             preferences.hasCompletedOnboarding = true
             preferences.hasSeenIntroPaywall = true
         }
@@ -82,9 +95,16 @@ final class AppEnvironment {
             store: store,
             secureStore: isUITesting ? InMemorySecureStore() : KeychainStore(),
             fetcher: URLSessionPlaylistFetcher(),
-            mediaServers: EmbyCompatibleClient(deviceID: preferences.deviceID),
+            mediaServers: MediaServerRouter(
+                embyCompatible: EmbyCompatibleClient(deviceID: preferences.deviceID),
+                plex: PlexClient(clientID: preferences.deviceID)
+            ),
             storeClient: storeClient,
-            preferences: preferences
+            preferences: preferences,
+            speech: isUITesting && !arguments.contains("-live-voice")
+                ? ScriptedSpeechTranscriber(phrase: voicePhrase(in: arguments))
+                : SpeechTranscriber(),
+            plex: isUITesting ? ScriptedPlexLinking() : PlexClient(clientID: preferences.deviceID)
         )
         environment.router.asksForReviews = !isUITesting
         environment.proAccess.start()
@@ -96,6 +116,14 @@ final class AppEnvironment {
             }
         #endif
         return environment
+    }
+
+    /// What the scripted microphone "hears" in UI tests: `-voice-phrase <text>`, else "Football".
+    private static func voicePhrase(in arguments: [String]) -> String {
+        guard let index = arguments.firstIndex(of: "-voice-phrase"), arguments.indices.contains(index + 1) else {
+            return "Football"
+        }
+        return arguments[index + 1]
     }
 
     private static func memoryStore() -> SwiftDataStore {

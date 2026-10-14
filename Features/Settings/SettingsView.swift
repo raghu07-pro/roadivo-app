@@ -28,7 +28,7 @@ struct SettingsView<SourcesScreen: View>: View {
                         row(
                             symbol: "antenna.radiowaves.left.and.right",
                             title: "Manage Sources",
-                            detail: "M3U · Jellyfin · Emby · Xtream"
+                            detail: "M3U · Jellyfin · Emby · Plex · Xtream"
                         )
                     }
                     .accessibilityIdentifier("settings.sources")

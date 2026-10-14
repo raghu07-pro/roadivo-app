@@ -75,7 +75,7 @@
           "introductoryOffer" : {
             "internalID" : "9A4C2E10-7B3D-4E5F-8A61-B2C0DE000005",
             "numberOfPeriods" : 1,
-            "paymentMode" : "payUpFront",
+            "paymentMode" : "payAsYouGo",
             "subscriptionPeriod" : "P1W",
             "displayPrice" : "0.99"
           },

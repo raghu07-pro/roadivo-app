@@ -37,19 +37,21 @@ struct PaywallFeature: Identifiable {
             id: 1,
             symbol: "car.fill",
             title: "Car Mode",
-            detail: "On CarPlay, and on a mounted iPhone"
+            detail: CarPlayAvailability.isEnabled
+                ? "On CarPlay, and on a mounted iPhone"
+                : "Landscape controls on a mounted iPhone"
         ),
         PaywallFeature(
             id: 2,
             symbol: "server.rack",
-            title: "Media servers",
-            detail: "Jellyfin, Emby and Xtream, side by side"
+            title: "Servers side by side",
+            detail: "Plex, Jellyfin, Emby and Xtream together"
         ),
         PaywallFeature(
             id: 3,
-            symbol: "hand.raised.fill",
-            title: "No ads, ever",
-            detail: "No tracking either, free or Pro"
+            symbol: "heart.fill",
+            title: "Support Roadivo",
+            detail: "Free or Pro, no ads or tracking"
         )
     ]
 }

@@ -43,22 +43,24 @@ final class ScreenshotUITests: XCTestCase {
         XCTAssertTrue(app.buttons["channel.Football Tonight"].waitForExistence(timeout: 10))
         snapshot("11-Home", app: app)
 
-        let search = app.searchFields.firstMatch
+        let search = app.textFields["search.field"]
         search.tap()
         search.typeText("Foot")
         snapshot("12-Search", app: app)
-        app.buttons["Cancel"].firstMatch.tap()
+        app.buttons["search.clear"].tap()
 
         app.buttons["channel.Steel Horizon · 1080p"].tap()
         XCTAssertTrue(app.buttons["player.minimize"].waitForExistence(timeout: 5))
         snapshot("13-Player", app: app)
+        revealPlayerControls(app)
         app.buttons["player.minimize"].tap()
         XCTAssertTrue(app.buttons["miniPlayer.expand"].waitForExistence(timeout: 5))
         snapshot("14-MiniPlayer", app: app)
 
         app.tabBars.buttons["Favorites"].tap()
         snapshot("15-Favorites", app: app)
-        app.buttons["On this iPhone"].tap()
+        // The segment reads "On this iPhone · 3" once there are videos.
+        app.buttons.matching(NSPredicate(format: "label BEGINSWITH %@", "On this iPhone")).firstMatch.tap()
         snapshot("16-OnThisIPhone", app: app)
         app.buttons["local.importMenu"].firstMatch.tap()
         snapshot("17-ImportMenu", app: app)

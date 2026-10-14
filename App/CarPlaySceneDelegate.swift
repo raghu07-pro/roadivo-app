@@ -1,10 +1,14 @@
 import CarPlay
+import Observation
 import OSLog
 
 /// Roadivo on CarPlay: Favorites, Recent and Library lists, played through the shared player.
 /// Video goes over AirPlay only while parked in supported cars (sound only when driving); DECISIONS 25.
 final class CarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegate {
     private var interfaceController: CPInterfaceController?
+    /// Filled in place, so a list or Now Playing the driver has open stays put.
+    private var tabs: Tabs?
+    private var isWatching = false
     private let logger = Logger(subsystem: "com.roadivo", category: "CarPlay")
 
     func templateApplicationScene(
@@ -14,10 +18,9 @@ final class CarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegat
         MainActor.assumeIsolated {
             self.interfaceController = interfaceController
             AppEnvironment.current?.carConnection.isCarPlayConnected = true
-            interfaceController.setRootTemplate(rootTemplate(), animated: false) { [logger] _, error in
-                if let error {
-                    logger.error("Root template: \(error.localizedDescription, privacy: .public)")
-                }
+            showRoot()
+            if !isWatching {
+                watchLibrary()
             }
         }
     }
@@ -29,29 +32,77 @@ final class CarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegat
         MainActor.assumeIsolated {
             AppEnvironment.current?.carConnection.isCarPlayConnected = false
             self.interfaceController = nil
+            tabs = nil
         }
+    }
+
+    // MARK: Updates
+
+    /// Redraws after a purchase (Pro may still be loading at a cold start), a library change, or
+    /// a new video (for Recent).
+    @MainActor
+    private func watchLibrary() {
+        guard let environment = AppEnvironment.current else { return }
+        isWatching = true
+        withObservationTracking {
+            _ = environment.proAccess.isPro
+            _ = environment.router.libraryRevision
+            _ = environment.playback.current?.id
+        } onChange: { [weak self] in
+            Task { @MainActor [weak self] in self?.libraryChanged() }
+        }
+    }
+
+    @MainActor
+    private func libraryChanged() {
+        isWatching = false
+        guard interfaceController != nil else { return }
+        if (AppEnvironment.current?.proAccess.isPro ?? false) == (tabs != nil) {
+            fillTabs()
+        } else {
+            showRoot()
+        }
+        watchLibrary()
     }
 
     // MARK: Templates
 
     @MainActor
+    private func showRoot() {
+        interfaceController?.setRootTemplate(rootTemplate(), animated: false) { [logger] _, error in
+            if let error {
+                logger.error("Root template: \(error.localizedDescription, privacy: .public)")
+            }
+        }
+    }
+
+    @MainActor
     private func rootTemplate() -> CPTemplate {
+        tabs = nil
         guard let environment = AppEnvironment.current else {
-            return message("Open Roadivo on your iPhone to get started.")
+            return message(String(appLocalized: "Open Roadivo on your iPhone to get started."))
         }
         guard environment.proAccess.isPro else {
-            return message("Watching in the car is part of Roadivo Pro. Unlock it on your iPhone.")
+            return message(
+                String(appLocalized: "Watching in the car is part of Roadivo Pro. Unlock it on your iPhone.")
+            )
         }
-        let menu = CarPlayMenu.build(from: environment.repository)
-        let favorites = list(String(appLocalized: "Favorites"), items: menu.favorites, symbol: "heart.fill")
-        let recent = list(String(appLocalized: "Recent"), items: menu.recent, symbol: "clock.fill")
-        let library = CPListTemplate(
-            title: String(appLocalized: "Library"),
-            sections: [CPListSection(items: menu.groups.map(groupRow))]
-        )
-        library.tabImage = UIImage(systemName: "play.square.stack.fill")
+        let favorites = list(String(appLocalized: "Favorites"), items: [], symbol: "heart.fill")
+        let recent = list(String(appLocalized: "Recent"), items: [], symbol: "clock.fill")
+        let library = list(String(appLocalized: "Library"), items: [], symbol: "play.square.stack.fill")
         library.emptyViewTitleVariants = [String(appLocalized: "Add a source on your iPhone")]
+        tabs = Tabs(favorites: favorites, recent: recent, library: library)
+        fillTabs()
         return CPTabBarTemplate(templates: [favorites, recent, library])
+    }
+
+    @MainActor
+    private func fillTabs() {
+        guard let tabs, let environment = AppEnvironment.current else { return }
+        let menu = CarPlayMenu.build(from: environment.repository)
+        tabs.favorites.updateSections([CPListSection(items: menu.favorites.map { row($0, queue: menu.favorites) })])
+        tabs.recent.updateSections([CPListSection(items: menu.recent.map { row($0, queue: menu.recent) })])
+        tabs.library.updateSections([CPListSection(items: menu.groups.map(groupRow))])
     }
 
     @MainActor
@@ -102,5 +153,11 @@ final class CarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegat
         let template = CPListTemplate(title: "Roadivo", sections: [])
         template.emptyViewTitleVariants = [text]
         return template
+    }
+
+    private struct Tabs {
+        let favorites: CPListTemplate
+        let recent: CPListTemplate
+        let library: CPListTemplate
     }
 }

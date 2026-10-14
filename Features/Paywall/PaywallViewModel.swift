@@ -114,13 +114,15 @@ final class PaywallViewModel {
         defer { isPurchasing = false }
         do {
             try await access.client.restore()
+        } catch is CancellationError {
+            return false // The user closed the Apple Account sign-in.
         } catch {
             message = error.localizedDescription
             return false
         }
         await access.refresh()
         if !access.isPro {
-            message = String(appLocalized: "No previous purchase was found for this Apple Account.")
+            message = String(appLocalized: "No active Roadivo Pro purchase was found for this Apple Account.")
         }
         return access.isPro
     }

@@ -157,11 +157,19 @@ final class LibraryRepository {
             username: username,
             password: password
         )
+        return try await add(account, name: name)
+    }
+
+    /// Saves a signed-in server (Jellyfin, Emby or Plex) and its library: the account in the
+    /// Keychain, the items as channels. `defaultName` is used when `name` is empty.
+    @discardableResult
+    func add(_ account: MediaServerAccount, name: String, defaultName: String? = nil) async throws -> UUID {
         let entries = try await mediaServers.library(for: account)
         guard !entries.isEmpty else { throw MediaServerError.emptyLibrary }
         let trimmed = name.trimmingCharacters(in: .whitespacesAndNewlines)
-        let title = trimmed.isEmpty ? "\(kind.title) · \(baseURL.host() ?? "")" : trimmed
-        let playlist = Playlist(name: title, kind: .mediaServer, sourceHost: baseURL.host())
+        let fallback = defaultName ?? "\(account.kind.title) · \(account.baseURL.host() ?? "")"
+        let title = trimmed.isEmpty ? fallback : trimmed
+        let playlist = Playlist(name: title, kind: .mediaServer, sourceHost: account.baseURL.host())
         context.insert(playlist)
         try context.save()
         guard let encoded = try String(bytes: JSONEncoder().encode(account), encoding: .utf8) else {

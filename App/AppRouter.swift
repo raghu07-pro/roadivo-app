@@ -14,9 +14,6 @@ final class AppRouter {
     enum PlayerSurface: String, Identifiable {
         case player
         case carMode
-        /// "Car Mode is part of Pro", swapped in over the player. A sheet on
-        /// top of the full-screen player dismissed the player instead.
-        case carModePaywall
 
         var id: String {
             rawValue

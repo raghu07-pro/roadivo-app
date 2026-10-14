@@ -50,7 +50,7 @@ struct PlanCard: View {
             }
             .overlay(alignment: .topTrailing) {
                 if offer.plan == .lifetime {
-                    Text("Most popular")
+                    Text("Best value")
                         .font(Typography.badge)
                         .foregroundStyle(.roadOnBrand)
                         .padding(.horizontal, Spacing.xs)

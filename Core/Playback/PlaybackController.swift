@@ -23,6 +23,8 @@ final class PlaybackController {
     /// Seconds; `nil` for a live stream with no fixed length.
     private(set) var duration: Double?
     private(set) var elapsed: Double = 0
+    /// The AirPlay screen the video is on (a car display, an adapter, a TV); nil on this iPhone.
+    private(set) var externalScreen: String?
 
     var isActive: Bool {
         current != nil
@@ -48,9 +50,16 @@ final class PlaybackController {
     var onItemStarted: ((MediaItem) -> Void)?
 
     @ObservationIgnored private var playerObservation: NSKeyValueObservation?
+    @ObservationIgnored private var externalObservation: NSKeyValueObservation?
     @ObservationIgnored private var itemObservation: NSKeyValueObservation?
+    @ObservationIgnored private var itemObservers: [NSObjectProtocol] = []
+    @ObservationIgnored private var stallWatch: Task<Void, Never>?
+    @ObservationIgnored private var isInterrupted = false
     @ObservationIgnored private var timeObserver: Any?
+    @ObservationIgnored private var sessionObservers: [NSObjectProtocol] = []
     @ObservationIgnored private var commandsInstalled = false
+    /// Paused on purpose (the user, or the car unplugged), so the end of a call doesn't restart it.
+    @ObservationIgnored private var staysPaused = false
     @ObservationIgnored private let logger = Logger(subsystem: "com.roadivo", category: "Playback")
 
     private var index: Int? {
@@ -60,7 +69,12 @@ final class PlaybackController {
 
     init() {
         player.allowsExternalPlayback = true
+        // Video moves to a car screen or adapter by itself, and sound carries on with the iPhone locked.
+        player.usesExternalPlaybackWhileExternalScreenIsActive = true
+        player.audiovisualBackgroundPlaybackPolicy = .continuesIfPossible
+        configureAudioSession()
         observePlayer()
+        observeAudioSession()
     }
 
     // MARK: Intents
@@ -69,13 +83,13 @@ final class PlaybackController {
     func play(_ item: MediaItem, queue: [MediaItem]) {
         activateAudioSession()
         installRemoteCommands()
+        staysPaused = false
         self.queue = queue.contains(item) ? queue : [item]
         current = item
         duration = nil
         elapsed = 0
         status = .loading
         let playerItem = AVPlayerItem(url: item.streamURL)
-        playerItem.preferredForwardBufferDuration = 8
         observeItem(playerItem)
         player.replaceCurrentItem(with: playerItem)
         player.play()
@@ -86,13 +100,47 @@ final class PlaybackController {
     func togglePlayPause() {
         guard current != nil else { return }
         if player.timeControlStatus == .paused {
-            if case .failed = status, let current {
-                play(current, queue: queue)
-            } else {
-                player.play()
-            }
+            resume()
         } else {
-            player.pause()
+            pause()
+        }
+    }
+
+    /// Plays again; a stream that failed is reloaded, so the steering wheel's play button retries it.
+    func resume() {
+        guard let current else { return }
+        staysPaused = false
+        if case .failed = status {
+            play(current, queue: queue)
+        } else {
+            activateAudioSession()
+            // At the very end, Play starts the video again instead of doing nothing.
+            if let duration, elapsed >= duration - 0.5 {
+                player.seek(to: .zero)
+            }
+            player.play()
+        }
+    }
+
+    func pause() {
+        staysPaused = true
+        player.pause()
+    }
+
+    /// Pauses while voice search has the microphone; true when `resume()` should follow.
+    func pauseForMicrophone() -> Bool {
+        guard current != nil, player.timeControlStatus != .paused else { return false }
+        player.pause()
+        return true
+    }
+
+    /// Hands the audio back to the car's radio or other apps, when nothing here is playing.
+    func releaseAudio() {
+        guard player.timeControlStatus == .paused else { return }
+        do {
+            try AVAudioSession.sharedInstance().setActive(false, options: .notifyOthersOnDeactivation)
+        } catch {
+            logger.error("Audio release: \(error.localizedDescription, privacy: .public)")
         }
     }
 
@@ -107,9 +155,16 @@ final class PlaybackController {
     }
 
     func skip(by seconds: Double) {
-        guard duration != nil else { return }
-        let target = max(0, player.currentTime().seconds + seconds)
+        seek(to: player.currentTime().seconds + seconds)
+    }
+
+    /// Jumps to `seconds` into a video with a fixed length (live streams can't seek).
+    func seek(to seconds: Double) {
+        guard let duration else { return }
+        let target = min(max(0, seconds), duration)
+        elapsed = target
         player.seek(to: CMTime(seconds: target, preferredTimescale: 600))
+        updateNowPlaying()
     }
 
     func updateFavorite(_ isFavorite: Bool, for id: UUID) {
@@ -121,15 +176,29 @@ final class PlaybackController {
         }
     }
 
+    /// Drops deleted items from the queue, and stops if one of them is playing.
+    func forget(_ ids: Set<UUID>) {
+        if let current, ids.contains(current.id) {
+            stop()
+            return
+        }
+        queue.removeAll { ids.contains($0.id) }
+        updateCommands()
+    }
+
     func stop() {
         player.pause()
         player.replaceCurrentItem(with: nil)
+        stallWatch?.cancel()
+        itemObservers = []
         current = nil
         queue = []
         status = .idle
         duration = nil
         elapsed = 0
         MPNowPlayingInfoCenter.default().nowPlayingInfo = nil
+        updateCommands()
+        releaseAudio()
     }
 
     // MARK: Observation
@@ -139,6 +208,11 @@ final class PlaybackController {
         playerObservation = player.observe(\.timeControlStatus, options: [.new]) { @Sendable [weak self] player, _ in
             let value = player.timeControlStatus
             Task { @MainActor [weak self] in self?.apply(value) }
+        }
+        let external = \AVPlayer.isExternalPlaybackActive
+        externalObservation = player.observe(external, options: [.initial, .new]) { @Sendable [weak self] player, _ in
+            let isActive = player.isExternalPlaybackActive
+            Task { @MainActor [weak self] in self?.applyExternal(isActive) }
         }
         timeObserver = player.addPeriodicTimeObserver(
             forInterval: CMTime(seconds: 0.5, preferredTimescale: 600),
@@ -150,7 +224,28 @@ final class PlaybackController {
         }
     }
 
+    private func applyExternal(_ isActive: Bool) {
+        guard isActive else {
+            externalScreen = nil
+            return
+        }
+        let airPlay = AVAudioSession.sharedInstance().currentRoute.outputs.first { $0.portType == .airPlay }
+        externalScreen = airPlay?.portName ?? String(appLocalized: "another screen")
+    }
+
     private func observeItem(_ item: AVPlayerItem) {
+        // A stream that dies mid-play reports here, not through `status`; the end goes to the next video.
+        let center = NotificationCenter.default
+        let failed = AVPlayerItem.failedToPlayToEndTimeNotification
+        let ended = AVPlayerItem.didPlayToEndTimeNotification
+        itemObservers = [
+            center.addObserver(forName: failed, object: item, queue: .main) { [weak self] _ in
+                MainActor.assumeIsolated { self?.fail() }
+            },
+            center.addObserver(forName: ended, object: item, queue: .main) { [weak self] _ in
+                MainActor.assumeIsolated { self?.reachedEnd() }
+            }
+        ]
         itemObservation = item.observe(\.status, options: [.new]) { @Sendable [weak self] item, _ in
             let failed = item.status == .failed
             let message = item.error?.localizedDescription
@@ -160,7 +255,7 @@ final class PlaybackController {
                 guard let self, player.currentItem.map(ObjectIdentifier.init) == itemID else { return }
                 if failed {
                     logger.error("Item failed: \(message ?? "unknown", privacy: .public)")
-                    status = .failed(String(appLocalized: "This stream can't be played right now."))
+                    fail()
                 } else if seconds.isFinite, seconds > 0 {
                     duration = seconds
                     updateNowPlaying()
@@ -180,59 +275,98 @@ final class PlaybackController {
         case .paused: status = .paused
         @unknown default: break
         }
+        watchForStall()
         updateNowPlaying()
+    }
+
+    private func fail() {
+        guard current != nil else { return }
+        stallWatch?.cancel()
+        status = .failed(String(appLocalized: "This stream can't be played right now."))
+        updateNowPlaying()
+    }
+
+    /// A stream stuck loading for 30 s (a tunnel, a dead provider) becomes an error with Try Again.
+    private func watchForStall() {
+        stallWatch?.cancel()
+        guard status == .loading else { return }
+        let item = player.currentItem
+        stallWatch = Task { [weak self] in
+            try? await Task.sleep(for: .seconds(30)) // Cancelled as soon as the status moves on.
+            guard !Task.isCancelled, let self, status == .loading, player.currentItem === item else { return }
+            fail()
+        }
+    }
+
+    private func reachedEnd() {
+        if hasNext {
+            next()
+        }
     }
 
     // MARK: System integration
 
-    private func activateAudioSession() {
+    /// Set at launch too, so CarPlay and the lock screen treat Roadivo as a video player from the start.
+    private func configureAudioSession() {
         do {
             try AVAudioSession.sharedInstance().setCategory(.playback, mode: .moviePlayback, policy: .longFormVideo)
+        } catch {
+            logger.error("Audio category: \(error.localizedDescription, privacy: .public)")
+        }
+    }
+
+    private func activateAudioSession() {
+        configureAudioSession()
+        do {
             try AVAudioSession.sharedInstance().setActive(true)
         } catch {
             logger.error("Audio session: \(error.localizedDescription, privacy: .public)")
         }
     }
 
+    private func observeAudioSession() {
+        let center = NotificationCenter.default
+        let interruption = AVAudioSession.interruptionNotification
+        let routeChange = AVAudioSession.routeChangeNotification
+        sessionObservers = [
+            center.addObserver(forName: interruption, object: nil, queue: .main) { [weak self] note in
+                let type = note.userInfo?[AVAudioSessionInterruptionTypeKey] as? UInt
+                let options = note.userInfo?[AVAudioSessionInterruptionOptionKey] as? UInt
+                MainActor.assumeIsolated { self?.interruptionChanged(type: type, options: options) }
+            },
+            center.addObserver(forName: routeChange, object: nil, queue: .main) { [weak self] note in
+                let reason = note.userInfo?[AVAudioSessionRouteChangeReasonKey] as? UInt
+                MainActor.assumeIsolated { self?.routeChanged(reason: reason) }
+            }
+        ]
+    }
+
+    /// A call or Siri pauses the video; it carries on afterwards unless it was paused before.
+    private func interruptionChanged(type: UInt?, options: UInt?) {
+        isInterrupted = type == AVAudioSession.InterruptionType.began.rawValue
+        guard type == AVAudioSession.InterruptionType.ended.rawValue, let options,
+              AVAudioSession.InterruptionOptions(rawValue: options).contains(.shouldResume),
+              current != nil, !staysPaused else { return }
+        if case .failed = status {
+            return
+        }
+        resume()
+    }
+
+    /// Unplugging the car or headphones pauses, as iOS expects, and stays paused. Some car kits
+    /// drop out during a call; that isn't an unplug, so the call's end can still resume.
+    private func routeChanged(reason: UInt?) {
+        applyExternal(player.isExternalPlaybackActive) // The AirPlay screen may have changed.
+        guard reason == AVAudioSession.RouteChangeReason.oldDeviceUnavailable.rawValue, current != nil,
+              !isInterrupted else { return }
+        pause()
+    }
+
     private func installRemoteCommands() {
         guard !commandsInstalled else { return }
         commandsInstalled = true
-        let center = MPRemoteCommandCenter.shared()
-        center.togglePlayPauseCommand.addTarget { [weak self] _ in
-            MainActor.assumeIsolated { self?.togglePlayPause() }
-            return .success
+        RemoteCommands.install { @Sendable [weak self] command in
+            Task { @MainActor [weak self] in self?.perform(command) }
         }
-        center.playCommand.addTarget { [weak self] _ in
-            MainActor.assumeIsolated { self?.player.play() }
-            return .success
-        }
-        center.pauseCommand.addTarget { [weak self] _ in
-            MainActor.assumeIsolated { self?.player.pause() }
-            return .success
-        }
-        // Steering-wheel "next track" switches channel.
-        center.nextTrackCommand.addTarget { [weak self] _ in
-            MainActor.assumeIsolated { self?.next() }
-            return .success
-        }
-        center.previousTrackCommand.addTarget { [weak self] _ in
-            MainActor.assumeIsolated { self?.previous() }
-            return .success
-        }
-    }
-
-    private func updateNowPlaying() {
-        guard let current else { return }
-        var info: [String: Any] = [
-            MPMediaItemPropertyTitle: current.title,
-            MPMediaItemPropertyArtist: current.groupTitle,
-            MPNowPlayingInfoPropertyIsLiveStream: duration == nil,
-            MPNowPlayingInfoPropertyPlaybackRate: status == .playing ? 1.0 : 0.0,
-            MPNowPlayingInfoPropertyElapsedPlaybackTime: elapsed
-        ]
-        if let duration {
-            info[MPMediaItemPropertyPlaybackDuration] = duration
-        }
-        MPNowPlayingInfoCenter.default().nowPlayingInfo = info
     }
 }

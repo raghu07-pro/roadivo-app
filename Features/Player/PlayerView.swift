@@ -1,146 +1,178 @@
 import SwiftUI
 
-/// Full player: video on top, the rest of the group below so the user can
-/// switch while watching. Landscape is video-only.
+/// The player: the video with Roadivo's own controls on it, and the rest of the group below as a
+/// grid. Landscape (by turning the iPhone or the full-screen button) is the video alone.
 struct PlayerView: View {
     @State var viewModel: PlayerViewModel
     let onMinimize: () -> Void
-    let onCarMode: () -> Void
+    let onClose: () -> Void
     let onFavoriteChanged: () -> Void
 
     @Environment(\.verticalSizeClass) private var verticalSizeClass
+    @Environment(\.accessibilityVoiceOverEnabled) private var voiceOver
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @State private var controlsShown = true
+    @State private var hideTask: Task<Void, Never>?
+    private let orientation = OrientationLock.shared
+
+    private var isLandscape: Bool {
+        verticalSizeClass == .compact
+    }
 
     var body: some View {
         Group {
-            if verticalSizeClass == .compact {
-                landscape
+            if isLandscape {
+                stage
+                    .background(Color.black.ignoresSafeArea())
             } else {
-                portrait
-            }
-        }
-        .background(.roadCanvas)
-    }
-
-    private var landscape: some View {
-        ZStack(alignment: .topLeading) {
-            Color.black.ignoresSafeArea()
-            video.ignoresSafeArea()
-            minimizeButton.padding(Spacing.md)
-        }
-    }
-
-    private var portrait: some View {
-        VStack(spacing: 0) {
-            topBar
-            video
-                .aspectRatio(16 / 9, contentMode: .fit)
-                .background(.black)
-            ScrollView {
-                VStack(alignment: .leading, spacing: Spacing.md) {
-                    details
-                    if viewModel.upNext.count > 1 {
-                        upNext
-                    }
+                VStack(spacing: 0) {
+                    stage
+                        .aspectRatio(16 / 9, contentMode: .fit)
+                        .background(Color.black.ignoresSafeArea(edges: .top))
+                    grid
                 }
-                .padding(Spacing.md)
+                .background(.roadCanvas)
+            }
+        }
+        .statusBarHidden(isLandscape)
+        .persistentSystemOverlays(isLandscape ? .hidden : .automatic)
+        .onAppear(perform: showControls)
+        .onDisappear {
+            hideTask?.cancel()
+            orientation.reset()
+        }
+        // Paused, loading or failed keeps the controls up; once playing they hide after a moment.
+        .onChange(of: viewModel.playback.status) { _, status in
+            if status == .playing {
+                if controlsShown {
+                    scheduleHide()
+                }
+            } else {
+                showControls()
             }
         }
     }
 
-    private var video: some View {
+    /// The video, its loading and error states, and the controls on top.
+    private var stage: some View {
         ZStack {
-            SystemVideoPlayer(player: viewModel.playback.player)
-            if let message = viewModel.errorMessage {
+            // The video fills the screen edge to edge; the controls stay clear of the notch and corners.
+            ZStack {
+                Color.black
+                SystemVideoPlayer(player: viewModel.playback.player, showsControls: false)
+                // Catches taps over the video to show or hide the controls.
+                Color.clear
+                    .contentShape(Rectangle())
+                    .onTapGesture(perform: toggleControls)
+                    .accessibilityLabel(Text("Video"))
+                    .accessibilityAddTraits(.isButton)
+                    .accessibilityIdentifier("player.video")
+            }
+            .ignoresSafeArea(edges: isLandscape ? .all : [])
+            if let screen = viewModel.playback.externalScreen {
+                // The video is on the car's (or TV's) screen; say so instead of a black frame.
                 VStack(spacing: Spacing.sm) {
-                    Image(systemName: "exclamationmark.triangle.fill").font(.title)
-                    Text(message).font(Typography.secondary).multilineTextAlignment(.center)
-                    Button("Try Again", action: viewModel.retry)
-                        .buttonStyle(.borderedProminent)
-                        .tint(.roadBrand)
-                        .foregroundStyle(.roadOnBrand)
+                    Image(systemName: "airplayvideo").font(.largeTitle)
+                    Text("Playing on \(screen)")
+                        .font(Typography.secondary.weight(.semibold))
+                        .multilineTextAlignment(.center)
                 }
-                .foregroundStyle(.white)
+                .foregroundStyle(.white.opacity(0.85))
                 .padding(Spacing.md)
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
-                .background(.black.opacity(0.75))
+                .accessibilityElement(children: .combine)
+                .accessibilityIdentifier("player.external")
+            }
+            if let message = viewModel.errorMessage {
+                errorOverlay(message)
+            } else if viewModel.playback.status == .loading {
+                ProgressView()
+                    .controlSize(.large)
+                    .tint(.white)
+            }
+            if controlsShown {
+                PlayerControls(
+                    playback: viewModel.playback,
+                    title: viewModel.current?.title ?? "",
+                    isFavorite: viewModel.current?.isFavorite ?? false,
+                    isLandscape: isLandscape,
+                    isRotationLocked: orientation.isLocked,
+                    onMinimize: onMinimize,
+                    onFavorite: toggleFavorite,
+                    onClose: onClose,
+                    onRotationLock: { orientation.toggleLock(isLandscape: isLandscape) },
+                    onFullScreen: { orientation.rotate(to: isLandscape ? .portrait : .landscape) },
+                    onInteraction: showControls
+                )
+                .transition(.opacity)
             }
         }
     }
 
-    private var minimizeButton: some View {
-        Button(action: onMinimize) {
-            Image(systemName: "chevron.down")
-                .font(.body.weight(.bold))
-                .frame(width: 44, height: 44)
-                .background(.ultraThinMaterial, in: Circle())
+    private func errorOverlay(_ message: String) -> some View {
+        VStack(spacing: Spacing.sm) {
+            Image(systemName: "exclamationmark.triangle.fill").font(.title)
+            Text(message).font(Typography.secondary).multilineTextAlignment(.center)
+            Button("Try Again", action: viewModel.retry)
+                .buttonStyle(.borderedProminent)
+                .tint(.roadBrand)
+                .foregroundStyle(.roadOnBrand)
         }
-        .accessibilityLabel(Text("Minimize player"))
-        .accessibilityIdentifier("player.minimize")
+        .foregroundStyle(.white)
+        .padding(Spacing.md)
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .background(.black.opacity(0.75))
     }
 
-    private var topBar: some View {
-        HStack(spacing: Spacing.xs) {
-            minimizeButton
-            Spacer()
-            RoutePickerButton(tint: .label)
-                .frame(width: 44, height: 44)
-            Button(action: onCarMode) {
-                Label("Car Mode", systemImage: "car.fill")
-                    .font(Typography.secondary.weight(.semibold))
-                    .padding(.horizontal, Spacing.sm)
-                    .frame(minHeight: 44)
-                    .background(.roadSurfaceElevated, in: Capsule())
-            }
-            .accessibilityIdentifier("player.carMode")
-        }
-        .padding(.horizontal, Spacing.md)
-        .padding(.vertical, Spacing.xs)
-    }
-
-    private var details: some View {
-        HStack(alignment: .top, spacing: Spacing.sm) {
-            VStack(alignment: .leading, spacing: Spacing.xxs) {
-                if viewModel.playback.isLive, viewModel.errorMessage == nil, viewModel.playback.status == .playing {
-                    LiveBadge()
-                }
-                Text(viewModel.current?.title ?? "")
-                    .font(Typography.screenTitle)
-                    .accessibilityAddTraits(.isHeader)
-                Text(viewModel.current?.groupTitle ?? "")
-                    .font(Typography.secondary)
-                    .foregroundStyle(.secondary)
-            }
-            Spacer(minLength: 0)
-            let isFavorite = viewModel.current?.isFavorite ?? false
-            Button {
-                if viewModel.toggleFavorite() {
-                    onFavoriteChanged()
-                }
-            } label: {
-                Image(systemName: isFavorite ? "heart.fill" : "heart")
-                    .font(.title2)
-                    .foregroundStyle(isFavorite ? Color.roadLive : Color.primary)
-                    .frame(width: 48, height: 48)
-                    .background(.roadSurfaceElevated, in: Circle())
-                    .contentTransition(.symbolEffect(.replace))
-            }
-            .accessibilityLabel(isFavorite ? Text("Remove from Favorites") : Text("Add to Favorites"))
-            .accessibilityIdentifier("player.favorite")
-        }
-    }
-
-    private var upNext: some View {
-        VStack(alignment: .leading, spacing: Spacing.xs) {
-            Text("More in \(viewModel.current?.groupTitle ?? "")")
-                .font(Typography.sectionTitle)
-                .accessibilityAddTraits(.isHeader)
-            LazyVStack(spacing: Spacing.xxs) {
+    private var grid: some View {
+        ScrollView {
+            LazyVGrid(
+                columns: [GridItem(.adaptive(minimum: 150), spacing: Spacing.sm, alignment: .top)],
+                spacing: Spacing.md
+            ) {
                 ForEach(viewModel.upNext) { item in
-                    UpNextRow(item: item, isCurrent: item.id == viewModel.current?.id) {
+                    UpNextCard(item: item, isCurrent: item.id == viewModel.current?.id) {
                         viewModel.select(item)
                     }
                 }
             }
+            .padding(Spacing.md)
         }
+    }
+
+    // MARK: Controls
+
+    private func toggleFavorite() {
+        if viewModel.toggleFavorite() {
+            onFavoriteChanged()
+        }
+    }
+
+    private func toggleControls() {
+        if controlsShown {
+            hideTask?.cancel()
+            setControls(shown: false)
+        } else {
+            showControls()
+        }
+    }
+
+    /// Shows the controls, then hides them after 3 s of playback (never while VoiceOver is on).
+    private func showControls() {
+        setControls(shown: true)
+        scheduleHide()
+    }
+
+    private func scheduleHide() {
+        hideTask?.cancel()
+        guard !voiceOver else { return }
+        hideTask = Task {
+            try? await Task.sleep(for: .seconds(3)) // Cancelled by the next touch.
+            guard !Task.isCancelled, viewModel.playback.status == .playing else { return }
+            setControls(shown: false)
+        }
+    }
+
+    private func setControls(shown: Bool) {
+        withAnimation(reduceMotion ? nil : .easeInOut(duration: 0.2)) { controlsShown = shown }
     }
 }

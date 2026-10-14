@@ -225,6 +225,148 @@
           }
         }
       }
+    },
+    "NSMicrophoneUsageDescription" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Roadivo verwendet das Mikrofon nur, während du per Sprache suchst."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Roadivo uses the microphone only while you search by voice."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Roadivo usa el micrófono solo mientras buscas por voz."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Roadivo utilise le micro uniquement pendant que vous recherchez par la voix."
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Roadivo माइक्रोफ़ोन का इस्तेमाल सिर्फ़ तब करता है जब आप बोलकर खोजते हैं।"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Roadivo usa il microfono solo mentre cerchi con la voce."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Roadivo は、音声で検索している間だけマイクを使用します。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Roadivo는 음성으로 검색하는 동안에만 마이크를 사용합니다."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "O Roadivo usa o microfone apenas enquanto você busca por voz."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Roadivo 仅在你进行语音搜索时使用麦克风。"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Roadivo 僅在你進行語音搜尋時使用麥克風。"
+          }
+        }
+      }
+    },
+    "NSSpeechRecognitionUsageDescription" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Roadivo wandelt deine Worte in Suchtext um – auf deinem iPhone, wenn deine Sprache es erlaubt."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Roadivo turns what you say into search text, on your iPhone when your language allows it."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Roadivo convierte lo que dices en texto de búsqueda, en tu iPhone cuando tu idioma lo permite."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Roadivo transforme vos paroles en texte de recherche, sur votre iPhone quand votre langue le permet."
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Roadivo आपकी बोली को खोज के टेक्स्ट में बदलता है, जहाँ आपकी भाषा में संभव हो वहाँ आपके iPhone पर ही।"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Roadivo trasforma ciò che dici in testo di ricerca, sul tuo iPhone quando la tua lingua lo consente."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Roadivo は、話した内容を検索テキストに変換します。言語が対応していれば iPhone 上で処理します。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Roadivo는 말한 내용을 검색어로 변환하며, 언어가 지원되면 iPhone에서 처리합니다."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "O Roadivo transforma o que você fala em texto de busca, no seu iPhone quando seu idioma permite."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Roadivo 会把你说的话转换为搜索文字；在你的语言支持时，会在 iPhone 上完成。"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Roadivo 會把你說的話轉換為搜尋文字；在你的語言支援時，會在 iPhone 上完成。"
+          }
+        }
+      }
     }
   },
   "version" : "1.0"

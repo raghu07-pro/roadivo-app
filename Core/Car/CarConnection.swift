@@ -10,7 +10,7 @@ final class CarConnection {
     var isCarPlayConnected = false
     /// The AirPlay receiver video is going to ("Living Room TV", "Car Display").
     private(set) var airPlayDestination: String?
-    /// True when sound is going to the car (CarPlay or a USB/Bluetooth car kit).
+    /// True when sound goes to the car over CarPlay. iOS reports a Bluetooth car kit like headphones.
     private(set) var isCarAudio = false
 
     @ObservationIgnored private var routeObserver: NSObjectProtocol?

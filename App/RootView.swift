@@ -14,6 +14,8 @@ struct RootView: View {
         AppTheme.shared
     }
 
+    @Environment(\.scenePhase) private var scenePhase
+
     var body: some View {
         Group {
             if !preferences.hasCompletedOnboarding {
@@ -38,6 +40,18 @@ struct RootView: View {
         .preferredColorScheme(theme.appearance.colorScheme)
         .onChange(of: theme.appearance, initial: true) { theme.applyToWindows() }
         .onChange(of: theme.accent) { theme.applyToWindows() }
+        // Pro users never need the intro paywall, even if their plan lapses later.
+        .onChange(of: environment.proAccess.isPro) { _, isPro in
+            if isPro {
+                preferences.hasSeenIntroPaywall = true
+            }
+        }
+        // A subscription can lapse while the app sleeps, and no transaction announces it.
+        .onChange(of: scenePhase) { _, phase in
+            if phase == .active {
+                Task { await environment.proAccess.refresh() }
+            }
+        }
     }
 }
 
@@ -48,6 +62,9 @@ private struct MainTabView: View {
     @State private var localVideos: LocalVideosViewModel
     @State private var carHub: CarHubViewModel
     @State private var sources: SourcesViewModel
+    @State private var voiceSearch: VoiceSearchModel
+    /// What the user was doing when a purchase made them Pro, picked up once the paywall closes.
+    @State private var afterPurchase: PaywallReason?
 
     init(environment: AppEnvironment) {
         self.environment = environment
@@ -57,6 +74,7 @@ private struct MainTabView: View {
         _localVideos = State(initialValue: LocalVideosViewModel(repository: repository))
         _carHub = State(initialValue: CarHubViewModel(repository: repository))
         _sources = State(initialValue: SourcesViewModel(repository: repository))
+        _voiceSearch = State(initialValue: VoiceSearchModel(speech: environment.speech, playback: environment.playback))
     }
 
     @Environment(\.requestReview) private var requestReview
@@ -82,9 +100,10 @@ private struct MainTabView: View {
                 onPlay: play,
                 onAddSource: addSource,
                 onFavoriteChanged: favoriteChanged,
+                voiceSearch: voiceSearch,
                 onVideoDeleted: videoDeleted
             )
-            .miniPlayerInset(playback: playback, onExpand: expandPlayer)
+            .miniPlayerInset(playback: playback, isPlayerOpen: router.playerSurface != nil, onExpand: expandPlayer)
             .tabItem { Label("Home", systemImage: "house") }
             .tag(AppRouter.Tab.home)
 
@@ -98,7 +117,7 @@ private struct MainTabView: View {
                 onVideoDeleted: videoDeleted,
                 onBrowse: { router.selectedTab = .home }
             )
-            .miniPlayerInset(playback: playback, onExpand: expandPlayer)
+            .miniPlayerInset(playback: playback, isPlayerOpen: router.playerSurface != nil, onExpand: expandPlayer)
             .tabItem { Label("Favorites", systemImage: "heart") }
             .tag(AppRouter.Tab.favorites)
 
@@ -112,7 +131,7 @@ private struct MainTabView: View {
                 onUpgrade: { router.paywall = .carMode },
                 onBrowse: { router.selectedTab = .home }
             )
-            .miniPlayerInset(playback: playback, onExpand: expandPlayer)
+            .miniPlayerInset(playback: playback, isPlayerOpen: router.playerSurface != nil, onExpand: expandPlayer)
             .tabItem { Label("Cast to Car", systemImage: "car") }
             .tag(AppRouter.Tab.car)
 
@@ -128,7 +147,7 @@ private struct MainTabView: View {
                     )
                 }
             )
-            .miniPlayerInset(playback: playback, onExpand: expandPlayer)
+            .miniPlayerInset(playback: playback, isPlayerOpen: router.playerSurface != nil, onExpand: expandPlayer)
             .tabItem { Label("Settings", systemImage: "gearshape") }
             .tag(AppRouter.Tab.settings)
         }
@@ -141,7 +160,7 @@ private struct MainTabView: View {
         }
         .sheet(isPresented: $router.isAddingSource) {
             AddSourceView(
-                viewModel: AddSourceViewModel(repository: environment.repository),
+                viewModel: AddSourceViewModel(repository: environment.repository, plex: environment.plex),
                 onFinished: {
                     router.isAddingSource = false
                     router.libraryDidChange()
@@ -150,8 +169,13 @@ private struct MainTabView: View {
                 help: { HelpView() }
             )
         }
-        .sheet(item: $router.paywall) { reason in
-            paywall(reason) { router.paywall = nil }
+        .sheet(item: $router.paywall, onDismiss: continueAfterPurchase) { reason in
+            paywall(reason) {
+                if isPro {
+                    afterPurchase = reason
+                }
+                router.paywall = nil
+            }
         }
         .fullScreenCover(item: $router.playerSurface) { surface in
             switch surface {
@@ -159,16 +183,14 @@ private struct MainTabView: View {
                 PlayerView(
                     viewModel: PlayerViewModel(playback: playback, repository: environment.repository),
                     onMinimize: { router.playerSurface = nil },
-                    onCarMode: { router.playerSurface = isPro ? .carMode : .carModePaywall },
+                    onClose: {
+                        router.playerSurface = nil
+                        playback.stop()
+                    },
                     onFavoriteChanged: router.libraryDidChange
                 )
             case .carMode:
                 CarModeView(playback: playback) { router.playerSurface = .player }
-            case .carModePaywall:
-                // Buying goes straight on to Car Mode; closing returns to the player.
-                paywall(.carMode) {
-                    router.playerSurface = environment.proAccess.isPro ? .carMode : .player
-                }
             }
         }
     }
@@ -187,8 +209,8 @@ private struct MainTabView: View {
     }
 
     private func play(_ item: MediaItem, queue: [MediaItem]) {
-        playback.play(item, queue: queue)
         router.playerSurface = .player
+        playback.play(item, queue: queue)
     }
 
     private func startCarMode(resuming item: MediaItem?) {
@@ -197,9 +219,26 @@ private struct MainTabView: View {
             return
         }
         if let item {
-            playback.play(item, queue: [item])
+            // Next and previous (and the steering wheel) step through the item's own group.
+            playback.play(item, queue: item.isLocalFile ? localVideos.items : library.queue(for: item))
         }
         router.playerSurface = .carMode
+    }
+
+    private func continueAfterPurchase() {
+        guard let reason = afterPurchase else { return }
+        afterPurchase = nil
+        switch reason {
+        case .sources:
+            router.isAddingSource = true
+        case .carMode:
+            let item = playback.isActive ? nil : carHub.resumeItem
+            if playback.isActive || item != nil {
+                startCarMode(resuming: item)
+            }
+        case .intro, .settings:
+            break
+        }
     }
 
     private func expandPlayer() {
@@ -221,9 +260,15 @@ private struct MainTabView: View {
 }
 
 private extension View {
-    func miniPlayerInset(playback: PlaybackController, onExpand: @escaping () -> Void) -> some View {
+    /// The now-playing bar, only while the full player is closed: opening a video goes straight
+    /// to the player, and the bar appears once it's minimised.
+    func miniPlayerInset(
+        playback: PlaybackController,
+        isPlayerOpen: Bool,
+        onExpand: @escaping () -> Void
+    ) -> some View {
         safeAreaInset(edge: .bottom, spacing: 0) {
-            if playback.isActive {
+            if playback.isActive, !isPlayerOpen {
                 MiniPlayerBar(playback: playback, onExpand: onExpand)
                     .padding(.horizontal, Spacing.sm)
                     .padding(.bottom, Spacing.xs)

@@ -71,17 +71,17 @@ enum Palette {
     /// Deterministic sunset-range gradient for items without artwork, so a
     /// logo-less playlist reads like postcards from the road, not grey boxes.
     static func placeholderGradient(for title: String) -> LinearGradient {
+        LinearGradient(colors: placeholderColors(for: title), startPoint: .topLeading, endPoint: .bottomTrailing)
+    }
+
+    /// The gradient's two colours, deep enough that white initials read at 3:1 or more (large text)
+    /// even at the lightest corner.
+    static func placeholderColors(for title: String) -> [Color] {
         let hues: [(Double, Double)] = [(0.02, 0.92), (0.07, 0.98), (0.55, 0.62), (0.40, 0.47), (0.75, 0.85)]
         let pair = hues[Int(title.stableHue * Double(hues.count)) % hues.count]
-        return LinearGradient(
-            colors: [
-                // Deep enough that the white initials read at 3:1 or more
-                // (large text) even at the gradient's lightest corner.
-                Color(hue: pair.0, saturation: 0.70, brightness: 0.62),
-                Color(hue: pair.1, saturation: 0.75, brightness: 0.32)
-            ],
-            startPoint: .topLeading,
-            endPoint: .bottomTrailing
-        )
+        return [
+            Color(hue: pair.0, saturation: 0.70, brightness: 0.62),
+            Color(hue: pair.1, saturation: 0.75, brightness: 0.32)
+        ]
     }
 }

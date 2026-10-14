@@ -22,18 +22,17 @@ struct AddSourceViewModelTests {
         #expect(viewModel.canSubmit)
     }
 
-    @Test("A good link adds the playlist")
+    @Test("A good link adds the playlist, named after its host")
     func success() async throws {
         let library = try TestLibrary()
         library.fetcher.stub(Fixtures.playlistURL, with: Fixtures.playlist)
         let viewModel = AddSourceViewModel(repository: library.repository)
-        viewModel.name = "Home TV"
         viewModel.input = Fixtures.playlistURL.absoluteString
 
         #expect(await viewModel.submit())
         #expect(viewModel.errorMessage == nil)
         #expect(!viewModel.isWorking)
-        #expect(try library.repository.playlists().map(\.name) == ["Home TV"])
+        #expect(try library.repository.playlists().map(\.name) == ["iptv.example.com"])
     }
 
     @Test("Pasted M3U text is added as a playlist without any download")

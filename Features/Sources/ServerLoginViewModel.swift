@@ -1,7 +1,7 @@
 import Foundation
 import Observation
 
-/// Sign-in form for a Jellyfin, Emby or Xtream server.
+/// Sign-in form for a Jellyfin, Emby or Xtream server (Plex uses `PlexLoginViewModel`).
 @Observable
 @MainActor
 final class ServerLoginViewModel {
@@ -9,7 +9,6 @@ final class ServerLoginViewModel {
     var address = ""
     var username = ""
     var password = ""
-    var name = ""
     private(set) var isConnecting = false
     var errorMessage: String?
 
@@ -37,11 +36,14 @@ final class ServerLoginViewModel {
         do {
             switch kind {
             case .xtream:
-                try await repository.addXtream(name: name, server: address, username: user, password: password)
+                // Default names ("Xtream · host"); renamed in Manage Sources if wanted.
+                try await repository.addXtream(name: "", server: address, username: user, password: password)
             case .jellyfin, .emby:
                 try await repository.addMediaServer(
-                    kind: kind, name: name, address: address, username: user, password: password
+                    kind: kind, name: "", address: address, username: user, password: password
                 )
+            case .plex:
+                return false // Plex signs in with a code on its own screen.
             }
             return true
         } catch {

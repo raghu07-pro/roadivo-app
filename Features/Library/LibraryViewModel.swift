@@ -53,8 +53,9 @@ final class LibraryViewModel {
         do {
             switch scope {
             case .all:
-                items = try repository.items()
-                recent = try repository.recentlyPlayed()
+                // Home is the channel library; imported videos live in Favorites › On this iPhone.
+                items = try repository.items().filter { !$0.isLocalFile }
+                recent = try repository.recentlyPlayed().filter { !$0.isLocalFile }
             case .favorites:
                 items = try repository.favorites()
                 recent = []
