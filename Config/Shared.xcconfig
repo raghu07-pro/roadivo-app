@@ -20,6 +20,12 @@ API_BASE_URL = $(API_SCHEME)$(API_HOST)
 TERMS_URL = $(WEB_SCHEME)www.apple.com/legal/internet-services/itunes/dev/stdeula/
 PRIVACY_URL = $(WEB_SCHEME)example.com/roadivo/privacy
 
+// The numeric Apple ID of the App Store listing (App Store Connect → App
+// Information → Apple ID), for Settings › Share Roadivo and Rate Roadivo.
+// Empty until the App Store Connect record exists (DECISIONS 64): sharing then
+// sends the message without a link, and rating shows the system review prompt.
+APP_STORE_ID =
+
 // CarPlay (DECISIONS 25). Apple grants the CarPlay audio and video
 // entitlements on request (developer.apple.com/contact/carplay). Until they
 // are on the App ID, signing with them fails, so they stay off: set YES once

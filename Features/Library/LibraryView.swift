@@ -125,13 +125,18 @@ private struct EmptyLibraryView: View {
     let onAddSource: () -> Void
 
     var body: some View {
-        ContentUnavailableView {
-            Label("Your library is empty", systemImage: "play.square.stack")
-        } description: {
-            Text("Add an M3U playlist link or file, or import videos from your iPhone.")
-        } actions: {
-            PrimaryButton(title: "Add a Source", systemImage: "plus", isCompact: true, action: onAddSource)
-                .accessibilityIdentifier("library.empty.addSource")
+        EmptyStateView(
+            title: "Your library is empty",
+            message: "Add an M3U playlist link or file, or import videos from your iPhone.",
+            systemImage: "play.square.stack"
+        ) {
+            VStack(spacing: Spacing.sm) {
+                PrimaryButton(title: "Add a Source", systemImage: "plus", isCompact: true, action: onAddSource)
+                    .accessibilityIdentifier("library.empty.addSource")
+                Text("M3U · Jellyfin · Emby · Xtream")
+                    .font(Typography.data)
+                    .foregroundStyle(.secondary)
+            }
         }
     }
 }

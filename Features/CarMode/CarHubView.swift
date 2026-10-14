@@ -48,7 +48,7 @@ struct CarHubView: View {
                 VStack(spacing: Spacing.sm) {
                     Image(systemName: connection.isCarPlayConnected ? "car.side.fill" : "car.side")
                         .font(.largeTitle.weight(.semibold))
-                        .foregroundStyle(connection.isCarPlayConnected ? Color.roadLane : .white.opacity(0.75))
+                        .foregroundStyle(connection.isCarPlayConnected ? Color.roadAccent : .white.opacity(0.75))
                         .symbolEffect(.pulse, isActive: connection.isCarPlayConnected)
                     Text(statusTitle)
                         .font(Typography.sectionTitle)
@@ -57,12 +57,14 @@ struct CarHubView: View {
                     Text(statusDetail)
                         .font(Typography.data)
                         .textCase(.uppercase)
-                        .foregroundStyle(.roadLane)
+                        .foregroundStyle(.roadAccent)
                         .multilineTextAlignment(.center)
                 }
                 .padding(Spacing.lg)
                 .background(.black.opacity(0.55), in: RoundedRectangle(cornerRadius: Radius.md, style: .continuous))
                 .padding(Spacing.md)
+                // Always on the night scene: the accent's bright variant.
+                .environment(\.colorScheme, .dark)
             }
             .clipShape(RoundedRectangle(cornerRadius: Radius.lg, style: .continuous))
             .accessibilityElement(children: .combine)

@@ -25,13 +25,15 @@ struct HomeHero: View {
                     Text(summary)
                         .font(Typography.data)
                         .textCase(.uppercase)
-                        .foregroundStyle(.roadLane)
+                        .foregroundStyle(.roadAccent)
                 }
                 .padding(Spacing.md)
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .background(
                     LinearGradient(colors: [.clear, .black.opacity(0.55)], startPoint: .top, endPoint: .bottom)
                 )
+                // Always on the dark scene: the accent's bright variant.
+                .environment(\.colorScheme, .dark)
             }
             .clipShape(RoundedRectangle(cornerRadius: Radius.lg, style: .continuous))
             .accessibilityElement(children: .combine)

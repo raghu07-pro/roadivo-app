@@ -60,9 +60,9 @@ struct RoadScene: View {
         )
         canvas.fill(
             Path(ellipseIn: orb.insetBy(dx: -radius * 0.6, dy: -radius * 0.6)),
-            with: .color((sunIsPlayButton ? Color.roadLane : colors.orb).opacity(0.18))
+            with: .color((sunIsPlayButton ? Palette.laneYellow : colors.orb).opacity(0.18))
         )
-        canvas.fill(Path(ellipseIn: orb), with: .color(sunIsPlayButton ? Color.roadLane : colors.orb))
+        canvas.fill(Path(ellipseIn: orb), with: .color(sunIsPlayButton ? Palette.laneYellow : colors.orb))
         if sunIsPlayButton {
             drawPlayMark(in: &canvas, orb: orb)
         }
@@ -144,7 +144,7 @@ struct RoadScene: View {
             let width = max(1, size.width * 0.018 * near)
             canvas.fill(
                 Path(CGRect(x: vanish.x - width / 2, y: top, width: width, height: max(1, bottom - top))),
-                with: .color(Color.roadLane)
+                with: .color(Palette.laneYellow)
             )
             position += 1
         }

@@ -96,7 +96,7 @@ private struct CentreScreen: View {
                     .clipShape(RoundedRectangle(cornerRadius: 14, style: .continuous))
                 VStack(alignment: .leading, spacing: 2) {
                     Text("Roadivo").font(Typography.sectionTitle).foregroundStyle(.white)
-                    Text(app: Brand.tagline).font(Typography.data).foregroundStyle(.roadLane)
+                    Text(app: Brand.tagline).font(Typography.data).foregroundStyle(.roadAccent)
                 }
             }
         case .nowPlaying:
@@ -108,7 +108,7 @@ private struct CentreScreen: View {
                 .frame(width: 92)
                 .clipShape(RoundedRectangle(cornerRadius: 8, style: .continuous))
                 VStack(alignment: .leading, spacing: Spacing.xxs) {
-                    Text("NOW PLAYING").font(Typography.badge).foregroundStyle(.roadLane)
+                    Text("NOW PLAYING").font(Typography.badge).foregroundStyle(.roadAccent)
                     Text("Ocean Quest").font(Typography.sign).foregroundStyle(.white)
                     ProgressBar(fraction: 0.35)
                 }
@@ -116,13 +116,13 @@ private struct CentreScreen: View {
         case .charging:
             VStack(alignment: .leading, spacing: Spacing.xs) {
                 HStack {
-                    Image(systemName: "bolt.car.fill").foregroundStyle(.roadLane)
+                    Image(systemName: "bolt.car.fill").foregroundStyle(.roadAccent)
                     Text("Charging · 64%").font(Typography.sign).foregroundStyle(.white)
                 }
                 ProgressBar(fraction: 0.64)
                 Label("Resume at 42:10", systemImage: "play.circle.fill")
                     .font(Typography.data)
-                    .foregroundStyle(.roadLane)
+                    .foregroundStyle(.roadAccent)
             }
         case .playlists:
             VStack(alignment: .leading, spacing: 6) {
@@ -139,9 +139,9 @@ private struct CentreScreen: View {
             Spacer()
             Text("\(count)")
                 .font(Typography.badge)
-                .foregroundStyle(.roadAsphalt)
+                .foregroundStyle(.roadOnBrand)
                 .padding(.horizontal, 6)
-                .background(.roadLane, in: RoundedRectangle(cornerRadius: 4))
+                .background(.roadBrandGradient, in: RoundedRectangle(cornerRadius: 4))
         }
     }
 }
@@ -157,7 +157,9 @@ private struct ProgressBar: View {
         GeometryReader { proxy in
             ZStack(alignment: .leading) {
                 Capsule().fill(.white.opacity(0.2))
-                Capsule().fill(Color.roadLane).frame(width: proxy.size.width * (shown || reduceMotion ? fraction : 0))
+                Capsule()
+                    .fill(.roadBrandGradient)
+                    .frame(width: proxy.size.width * (shown || reduceMotion ? fraction : 0))
             }
         }
         .frame(height: 6)

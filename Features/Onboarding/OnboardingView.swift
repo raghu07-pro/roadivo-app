@@ -51,7 +51,7 @@ struct OnboardingView: View {
     }
 }
 
-/// Page dots as short lane dashes; the current one is long and yellow.
+/// Page dots as short lane dashes; the current one is long, in the theme's gradient.
 private struct PageDots: View {
     let count: Int
     let current: Int
@@ -60,7 +60,7 @@ private struct PageDots: View {
         HStack(spacing: Spacing.xs) {
             ForEach(0..<count, id: \.self) { index in
                 Capsule()
-                    .fill(index == current ? Color.roadLane : Color.secondary.opacity(0.35))
+                    .fill(index == current ? AnyShapeStyle(.roadBrandGradient) : AnyShapeStyle(.quaternary))
                     .frame(width: index == current ? 28 : 10, height: 6)
             }
         }

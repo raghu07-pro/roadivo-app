@@ -1,11 +1,10 @@
 import SwiftUI
 
-/// One brand, taken from the logo: the road at golden hour. Sun amber for
-/// actions and the centre line, asphalt for sign panels and dark surfaces,
-/// and the sunset sky in the scenes. Each token is an asset colour with light and dark
-/// variants, so screens never branch on the colour scheme themselves.
+/// Neutral surfaces from the asset catalog (light and dark variants), and
+/// the accent from the theme the user picked (Settings › Theme). Screens
+/// never branch on the colour scheme or the accent themselves.
 extension ShapeStyle where Self == Color {
-    /// Screen background: pale concrete by day, asphalt by night.
+    /// Screen background: soft grey by day, asphalt by night.
     static var roadCanvas: Color {
         Color("CanvasBackground")
     }
@@ -20,18 +19,34 @@ extension ShapeStyle where Self == Color {
         Color("SurfaceElevated")
     }
 
-    /// Tint for text-sized accents: burnt amber in light mode (4.5:1 on the
-    /// canvas), sun amber in dark mode.
-    static var roadAccent: Color {
-        Color("AccentColor")
+    /// Tint for text-sized accents, from the theme: at least 4.5:1 on the
+    /// canvas and surfaces in both appearances.
+    @MainActor static var roadAccent: Color {
+        AppTheme.shared.colors.accent
     }
 
-    /// Sun amber (#FFB627): primary buttons, selection, the centre line.
-    static var roadLane: Color {
-        Color("LaneYellow")
+    /// The theme's fill: buttons, selection, markers and icon tiles.
+    @MainActor static var roadBrand: Color {
+        AppTheme.shared.colors.brand
     }
 
-    /// Road surface; also the text colour on lane-yellow buttons.
+    /// The far end of the fill gradient.
+    @MainActor static var roadBrandDeep: Color {
+        AppTheme.shared.colors.brandDeep
+    }
+
+    /// Text and glyphs on a brand fill.
+    @MainActor static var roadOnBrand: Color {
+        AppTheme.shared.colors.onBrand
+    }
+
+    /// Quiet supporting text that still reaches 4.5:1 at caption sizes, on
+    /// the canvas and on cards (`.secondary` is about 3.5:1 there).
+    static var roadMuted: Color {
+        Color.primary.opacity(0.72)
+    }
+
+    /// Road surface: always-dark panels (the paywall).
     static var roadAsphalt: Color {
         Color("Asphalt")
     }
@@ -42,7 +57,18 @@ extension ShapeStyle where Self == Color {
     }
 }
 
+extension ShapeStyle where Self == LinearGradient {
+    /// The brand fill as a soft diagonal gradient, for buttons and tiles.
+    @MainActor static var roadBrandGradient: LinearGradient {
+        LinearGradient(colors: [.roadBrand, .roadBrandDeep], startPoint: .topLeading, endPoint: .bottomTrailing)
+    }
+}
+
 enum Palette {
+    /// The road's own colours in the drawn scenes: a yellow centre line and
+    /// the logo's play-button sun. Artwork, so it doesn't follow the theme.
+    static let laneYellow = Color("LaneYellow")
+
     /// Deterministic sunset-range gradient for items without artwork, so a
     /// logo-less playlist reads like postcards from the road, not grey boxes.
     static func placeholderGradient(for title: String) -> LinearGradient {
@@ -50,7 +76,9 @@ enum Palette {
         let pair = hues[Int(title.stableHue * Double(hues.count)) % hues.count]
         return LinearGradient(
             colors: [
-                Color(hue: pair.0, saturation: 0.70, brightness: 0.78),
+                // Deep enough that the white initials read at 3:1 or more
+                // (large text) even at the gradient's lightest corner.
+                Color(hue: pair.0, saturation: 0.70, brightness: 0.62),
                 Color(hue: pair.1, saturation: 0.75, brightness: 0.32)
             ],
             startPoint: .topLeading,

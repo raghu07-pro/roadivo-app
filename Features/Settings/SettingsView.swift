@@ -1,52 +1,27 @@
+import StoreKit
 import SwiftUI
 
 /// Settings: Pro, Media, Preferences, Legal, About — the reference's sections.
 struct SettingsView<SourcesScreen: View>: View {
     let isPro: Bool
     let onUpgrade: () -> Void
-    let onAddSource: () -> Void
     @ViewBuilder let sourcesScreen: () -> SourcesScreen
 
     @Environment(\.openURL) private var openURL
+    @Environment(\.requestReview) private var requestReview
     @State private var language = LanguageViewModel()
+    @State private var theme = ThemeViewModel()
 
     var body: some View {
         NavigationStack {
             List {
                 Section {
-                    if isPro {
-                        HStack(spacing: Spacing.sm) {
-                            proIcon
-                            VStack(alignment: .leading, spacing: 2) {
-                                Text("Roadivo Pro").font(Typography.button)
-                                Text("Active. Thanks for supporting Roadivo.")
-                                    .font(Typography.caption)
-                                    .foregroundStyle(.secondary)
-                            }
-                        }
-                        .padding(.vertical, Spacing.xxs)
-                        .accessibilityElement(children: .combine)
-                    } else {
-                        Button(action: onUpgrade) {
-                            HStack(spacing: Spacing.sm) {
-                                proIcon
-                                VStack(alignment: .leading, spacing: 2) {
-                                    Text("Roadivo Pro").font(Typography.button).foregroundStyle(Color.primary)
-                                    Text("Unlock all features").font(Typography.caption)
-                                        .foregroundStyle(Color.secondary)
-                                }
-                                Spacer()
-                                Image(systemName: "chevron.right")
-                                    .font(.footnote.weight(.semibold))
-                                    .foregroundStyle(.tertiary)
-                            }
-                            .padding(.vertical, Spacing.xxs)
-                        }
-                        .accessibilityIdentifier("settings.pro")
-                    }
+                    proBanner
                 }
+                .listRowInsets(EdgeInsets())
+                .listRowBackground(Color.clear)
 
-                Section("Media") {
+                Section {
                     NavigationLink {
                         sourcesScreen()
                     } label: {
@@ -57,49 +32,70 @@ struct SettingsView<SourcesScreen: View>: View {
                         )
                     }
                     .accessibilityIdentifier("settings.sources")
-                    Button(action: onAddSource) {
-                        row(symbol: "plus.circle", title: "Add a Source", detail: nil)
-                    }
-                    .accessibilityIdentifier("settings.addSource")
+                } header: {
+                    Text("Media").foregroundStyle(.roadMuted)
                 }
 
-                Section("Preferences") {
+                Section {
+                    NavigationLink {
+                        ThemeView(viewModel: theme)
+                    } label: {
+                        LabeledContent {
+                            Text(theme.summary).foregroundStyle(.roadMuted)
+                        } label: {
+                            row(symbol: "paintpalette.fill", title: "Theme", detail: nil)
+                        }
+                    }
+                    .accessibilityIdentifier("settings.theme")
                     NavigationLink {
                         LanguageView(viewModel: language)
                     } label: {
                         LabeledContent {
-                            Text(language.currentName)
+                            Text(language.currentName).foregroundStyle(.roadMuted)
                         } label: {
                             row(symbol: "globe", title: "Language", detail: nil)
                         }
                     }
                     .accessibilityIdentifier("settings.language")
-                }
-
-                Section("Legal") {
-                    NavigationLink {
-                        PrivacyPolicyView()
-                    } label: {
-                        row(symbol: "hand.raised", title: "Privacy Policy", detail: nil)
-                    }
-                    .accessibilityIdentifier("settings.privacy")
-                    if let url = LegalLinks.terms {
-                        Button { openURL(url) } label: {
-                            row(symbol: "doc.text", title: "Terms of Use (EULA)", detail: nil)
-                        }
-                    }
+                } header: {
+                    Text("Preferences").foregroundStyle(.roadMuted)
                 }
 
                 Section {
                     NavigationLink {
+                        PrivacyPolicyView()
+                    } label: {
+                        row(symbol: "hand.raised.fill", title: "Privacy Policy", detail: nil)
+                    }
+                    .accessibilityIdentifier("settings.privacy")
+                    if let url = LegalLinks.terms {
+                        Button { openURL(url) } label: {
+                            row(symbol: "doc.text.fill", title: "Terms of Use (EULA)", detail: nil)
+                        }
+                    }
+                } header: {
+                    Text("Legal").foregroundStyle(.roadMuted)
+                }
+
+                Section {
+                    Button(action: rate) {
+                        row(symbol: "star.fill", title: "Rate Roadivo", detail: nil)
+                    }
+                    .accessibilityIdentifier("settings.rate")
+                    shareRow
+                    NavigationLink {
                         HelpView()
                     } label: {
-                        row(symbol: "questionmark.circle", title: "Help & FAQ", detail: nil)
+                        row(symbol: "questionmark", title: "Help & FAQ", detail: nil)
                     }
                     .accessibilityIdentifier("settings.help")
-                    LabeledContent("Version", value: AppInfo.version)
+                    LabeledContent {
+                        Text(AppInfo.version).foregroundStyle(.roadMuted)
+                    } label: {
+                        row(symbol: "info", title: "Version", detail: nil)
+                    }
                 } header: {
-                    Text("About")
+                    Text("About").foregroundStyle(.roadMuted)
                 } footer: {
                     VStack(alignment: .leading, spacing: Spacing.xxs) {
                         Text(app: Brand.tagline).fontWeight(.semibold)
@@ -113,26 +109,110 @@ struct SettingsView<SourcesScreen: View>: View {
         }
     }
 
-    private var proIcon: some View {
-        Image(systemName: "crown.fill")
-            .font(.title3)
-            .foregroundStyle(.roadAccent)
-            .frame(width: 36, height: 36)
-            .background(.roadAccent.opacity(0.15), in: RoundedRectangle(cornerRadius: Radius.sm, style: .continuous))
-            .accessibilityHidden(true)
+    // MARK: Pro
+
+    /// The theme's gradient as a banner: an upsell for free users, a quiet
+    /// thank-you once Pro is active.
+    @ViewBuilder private var proBanner: some View {
+        if isPro {
+            bannerContent(
+                symbol: "checkmark.seal.fill",
+                subtitle: "Active. Thanks for supporting Roadivo.",
+                showsChevron: false
+            )
+            .accessibilityElement(children: .combine)
+        } else {
+            Button(action: onUpgrade) {
+                bannerContent(symbol: "crown.fill", subtitle: "Unlock all features", showsChevron: true)
+            }
+            .buttonStyle(PressableStyle())
+            .accessibilityIdentifier("settings.pro")
+        }
     }
+
+    private func bannerContent(symbol: String, subtitle: LocalizedStringKey, showsChevron: Bool) -> some View {
+        let shape = RoundedRectangle(cornerRadius: Radius.lg, style: .continuous)
+        return HStack(spacing: Spacing.sm) {
+            Image(systemName: symbol)
+                .font(.title3.weight(.semibold))
+                .frame(width: 44, height: 44)
+                .background(Color.roadOnBrand.opacity(0.18), in: Circle())
+                .accessibilityHidden(true)
+            VStack(alignment: .leading, spacing: 2) {
+                Text("Roadivo Pro").font(Typography.button)
+                Text(subtitle).font(Typography.caption)
+            }
+            .multilineTextAlignment(.leading)
+            Spacer(minLength: 0)
+            if showsChevron {
+                Image(systemName: "chevron.right")
+                    .font(.footnote.weight(.bold))
+                    .opacity(0.85)
+                    .accessibilityHidden(true)
+            }
+        }
+        .foregroundStyle(.roadOnBrand)
+        .padding(Spacing.md)
+        .background {
+            ZStack(alignment: .trailing) {
+                // Deep end behind the text, so even the small subtitle reads
+                // at 4.5:1 or more in every accent.
+                shape.fill(LinearGradient(
+                    colors: [.roadBrandDeep, .roadBrand],
+                    startPoint: .leading,
+                    endPoint: .trailing
+                ))
+                // A large, faint crown in the corner, cropped by the banner.
+                Image(systemName: "crown.fill")
+                    .font(.system(size: 96, weight: .bold))
+                    .foregroundStyle(Color.roadOnBrand.opacity(0.1))
+                    .rotationEffect(.degrees(-14))
+                    .offset(x: 18, y: 14)
+                    .accessibilityHidden(true)
+            }
+            .clipShape(shape)
+        }
+        .contentShape(shape)
+    }
+
+    // MARK: Rate and share
+
+    private var appStore: AppStoreLinks {
+        AppStoreLinks.current
+    }
+
+    /// The App Store's "Write a Review" page. Before the listing exists (no
+    /// `APP_STORE_ID`), the system review prompt instead.
+    private func rate() {
+        if let url = appStore.writeReview {
+            openURL(url)
+        } else {
+            requestReview()
+        }
+    }
+
+    @ViewBuilder private var shareRow: some View {
+        let message = Text(app: Brand.shareMessage)
+        let label = row(symbol: "square.and.arrow.up", title: "Share Roadivo", detail: nil)
+        Group {
+            if let page = appStore.page {
+                ShareLink(item: page, subject: Text("Roadivo"), message: message) { label }
+            } else {
+                ShareLink(item: String(appLocalized: Brand.shareMessage), subject: Text("Roadivo")) { label }
+            }
+        }
+        .accessibilityIdentifier("settings.share")
+    }
+
+    // MARK: Rows
 
     private func row(symbol: String, title: LocalizedStringKey, detail: LocalizedStringKey?) -> some View {
         HStack(spacing: Spacing.sm) {
-            Image(systemName: symbol)
-                .font(.body.weight(.semibold))
-                .foregroundStyle(.roadAccent)
-                .frame(width: 28)
-                .accessibilityHidden(true)
+            IconTile(systemImage: symbol)
             VStack(alignment: .leading, spacing: 2) {
                 Text(title).foregroundStyle(Color.primary)
                 if let detail {
-                    Text(detail).font(Typography.caption).foregroundStyle(Color.secondary)
+                    Text(detail).font(Typography.caption).foregroundStyle(.roadMuted)
                 }
             }
         }
@@ -141,10 +221,15 @@ struct SettingsView<SourcesScreen: View>: View {
 }
 
 #Preview("Free") {
-    SettingsView(isPro: false, onUpgrade: {}, onAddSource: {}, sourcesScreen: { EmptyView() })
+    SettingsView(isPro: false, onUpgrade: {}, sourcesScreen: { EmptyView() })
 }
 
 #Preview("Pro, dark") {
-    SettingsView(isPro: true, onUpgrade: {}, onAddSource: {}, sourcesScreen: { EmptyView() })
+    SettingsView(isPro: true, onUpgrade: {}, sourcesScreen: { EmptyView() })
         .preferredColorScheme(.dark)
+}
+
+#Preview("Largest text") {
+    SettingsView(isPro: false, onUpgrade: {}, sourcesScreen: { EmptyView() })
+        .environment(\.dynamicTypeSize, .accessibility3)
 }

@@ -11,6 +11,10 @@ struct RootView: View {
         environment.preferences
     }
 
+    private var theme: AppTheme {
+        AppTheme.shared
+    }
+
     var body: some View {
         Group {
             if !preferences.hasCompletedOnboarding {
@@ -29,6 +33,13 @@ struct RootView: View {
         }
         .animation(.default, value: preferences.hasCompletedOnboarding)
         .animation(.default, value: preferences.hasSeenIntroPaywall)
+        // Settings › Theme: SwiftUI content follows these at once; the windows
+        // carry the same choice to alerts, sheets and the system pickers
+        // (and back to the iPhone's setting when "System" is picked).
+        .tint(.roadAccent)
+        .preferredColorScheme(theme.appearance.colorScheme)
+        .onChange(of: theme.appearance, initial: true) { theme.applyToWindows() }
+        .onChange(of: theme.accent) { theme.applyToWindows() }
     }
 }
 
@@ -110,7 +121,6 @@ private struct MainTabView: View {
             SettingsView(
                 isPro: isPro,
                 onUpgrade: { router.paywall = .settings },
-                onAddSource: addSource,
                 sourcesScreen: {
                     SourcesView(
                         viewModel: sources,
@@ -124,7 +134,6 @@ private struct MainTabView: View {
             .tabItem { Label("Settings", systemImage: "gearshape") }
             .tag(AppRouter.Tab.settings)
         }
-        .tint(.roadAccent)
         .onChange(of: router.reviewRequests) {
             // Give the video a moment to start before asking.
             Task {

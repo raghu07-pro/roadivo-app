@@ -118,11 +118,11 @@ struct FavoritesView: View {
         case .loading:
             LoadingView()
         case .empty:
-            ContentUnavailableView {
-                Label("Nothing saved yet", systemImage: "heart")
-            } description: {
-                Text("Touch and hold any channel, or tap the heart in the player, to keep it here.")
-            } actions: {
+            EmptyStateView(
+                title: "Nothing saved yet",
+                message: "Touch and hold any channel, or tap the heart in the player, to keep it here.",
+                systemImage: "heart.fill"
+            ) {
                 PrimaryButton(title: "Browse Home", systemImage: "house.fill", isCompact: true, action: onBrowse)
                     .accessibilityIdentifier("favorites.browse")
             }
@@ -145,11 +145,11 @@ struct FavoritesView: View {
         if localVideos.isImporting {
             LoadingView(message: "Importing…")
         } else if localVideos.items.isEmpty {
-            ContentUnavailableView {
-                Label("No videos imported", systemImage: "film.stack")
-            } description: {
-                Text("Bring videos over from Photos or Files and play them on the road, no connection needed.")
-            } actions: {
+            EmptyStateView(
+                title: "No videos imported",
+                message: "Bring videos over from Photos or Files and play them on the road, no connection needed.",
+                systemImage: "film.stack"
+            ) {
                 Menu {
                     importOptions
                 } label: {

@@ -39,15 +39,25 @@ tabs: **Home · Favorites · Cast to Car · Settings**.
 
 ## Design
 
-One palette, taken from the logo (a golden-hour road whose sun is a play
-button):
-- sun amber for every action (`PrimaryButton`);
-- section titles with an amber lane marker and a quiet count (`SectionTitle`); card headers with an amber icon tile and a live status line (`CardHeader`);
-- code-drawn scenes (`RoadScene`, and `CockpitView` on onboarding);
+Themeable. Settings › Theme picks the **appearance** (System, Light, Dark) and
+an **accent** (Golden Hour is the default; also Sunset, Ocean, Twilight, Rose,
+Graphite). `AppTheme.shared` holds the choice and both apply live
+(DECISIONS 53–57).
+- Never hard-code a brand colour. Use the tokens in `DesignSystem/Theme/Colors.swift`:
+  `.roadAccent` (text-sized tint), `.roadBrand` / `.roadBrandGradient` (fills),
+  `.roadOnBrand` (text on fills), `.roadCanvas` / `.roadSurface` (neutrals).
+- Over an always-dark scene, set `.environment(\.colorScheme, .dark)` so
+  `.roadAccent` resolves to its bright variant.
+- A new accent goes in `ThemeAccent.palette`; `ThemeTests` enforces its WCAG
+  contrast.
+- Components: `PrimaryButton` (gradient + glow), `IconTile`, `EmptyStateView`,
+  `SectionTitle`, `CardHeader`, `cardStyle()`.
+- The code-drawn scenes (`RoadScene`, `CockpitView`) keep the road's yellow
+  centre line and the logo's golden sun (`Palette.laneYellow`).
 - Overpass type.
 
 The tagline is "Let the Journey Play." (`Brand.tagline`). No green. See
-DECISIONS 32, 33 and 37.
+DECISIONS 33, 37 and 53–57.
 
 ## Localization
 
@@ -113,6 +123,7 @@ None in v1 (DECISIONS 6). Everything is stored on the device.
   - Arabic and other right-to-left languages
 - **ATS:** `NSAllowsArbitraryLoads` is on (DECISIONS 8). Justify it in the App Review notes.
 - **Privacy:** no tracking, no ATT prompt, no third-party SDKs.
+- **Before release:** set `APP_STORE_ID` in `Config/Shared.xcconfig` (Settings › Rate and Share Roadivo; DECISIONS 64).
 
 ## Commands
 

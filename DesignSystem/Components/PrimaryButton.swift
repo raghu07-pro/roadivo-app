@@ -1,7 +1,8 @@
 import SwiftUI
 
-/// The one call to action on a screen: a lane-yellow road-sign panel with
-/// asphalt lettering (about 12:1 contrast in both appearances).
+/// The one call to action on a screen: the theme's gradient with a soft glow
+/// beneath, and lettering at least 3:1 against both ends of the gradient
+/// (large, bold text).
 struct PrimaryButton: View {
     let title: Text
     var systemImage: String?
@@ -45,7 +46,7 @@ struct PrimaryButton: View {
         Button(action: action) {
             HStack(spacing: Spacing.xs) {
                 if isLoading {
-                    ProgressView().tint(.roadAsphalt)
+                    ProgressView().tint(.roadOnBrand)
                 } else if let systemImage {
                     Image(systemName: systemImage)
                 }
@@ -57,8 +58,8 @@ struct PrimaryButton: View {
             .padding(.horizontal, Spacing.lg)
             .padding(.vertical, Spacing.sm)
             .frame(maxWidth: isCompact ? nil : .infinity, minHeight: 54)
-            .foregroundStyle(.roadAsphalt)
-            .background(.roadLane, in: RoundedRectangle(cornerRadius: Radius.md, style: .continuous))
+            .foregroundStyle(.roadOnBrand)
+            .background(BrandFill())
             .contentShape(RoundedRectangle(cornerRadius: Radius.md, style: .continuous))
         }
         .buttonStyle(PressableStyle())
@@ -77,8 +78,36 @@ struct BrandButtonLabel: View {
             .font(Typography.button)
             .padding(.horizontal, Spacing.lg)
             .frame(minHeight: 54)
-            .foregroundStyle(.roadAsphalt)
-            .background(.roadLane, in: RoundedRectangle(cornerRadius: Radius.md, style: .continuous))
+            .foregroundStyle(.roadOnBrand)
+            .background(BrandFill())
+    }
+}
+
+/// The primary button's surface: the brand gradient, a faint top highlight
+/// and a tinted shadow that lifts it off the page.
+struct BrandFill: View {
+    var cornerRadius: CGFloat = Radius.md
+
+    var body: some View {
+        let shape = RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
+        shape
+            .fill(.roadBrandGradient)
+            .overlay {
+                shape.strokeBorder(
+                    LinearGradient(colors: [.white.opacity(0.35), .clear], startPoint: .top, endPoint: .bottom),
+                    lineWidth: 1
+                )
+            }
+            .shadow(color: Color.roadBrandDeep.opacity(0.35), radius: 12, y: 6)
+    }
+}
+
+/// For cards with a context menu: no press effect of its own. The system's
+/// long-press lift is the feedback, and a dim or shrink underneath it made
+/// the lift stutter (and was captured in the lifted snapshot).
+struct CardButtonStyle: ButtonStyle {
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
     }
 }
 

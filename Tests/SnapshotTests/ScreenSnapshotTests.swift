@@ -8,6 +8,20 @@ import XCTest
 /// the test once (it fails the recording run, then passes).
 @MainActor
 final class ScreenSnapshotTests: XCTestCase {
+    /// Every snapshot is drawn in the default theme (System, Golden Hour), whatever
+    /// was last picked on this simulator.
+    override func setUp() async throws {
+        try await super.setUp()
+        AppTheme.shared.reset()
+    }
+
+    /// Hosts `view` with Reduce Motion on, so the drawn road scenes hold still
+    /// (their lane dashes otherwise roll with the clock and no two captures match)
+    /// and appear-animations land on their final frame.
+    private func still(_ view: some View) -> UIHostingController<some View> {
+        UIHostingController(rootView: view.environment(\._accessibilityReduceMotion, true))
+    }
+
     private func assertScreen(
         _ view: some View,
         named name: String,
@@ -16,7 +30,7 @@ final class ScreenSnapshotTests: XCTestCase {
     ) {
         for style in [UIUserInterfaceStyle.light, .dark] {
             assertSnapshot(
-                of: UIHostingController(rootView: view),
+                of: still(view),
                 as: .image(
                     on: .iPhone13,
                     precision: 0.98,
@@ -39,7 +53,7 @@ final class ScreenSnapshotTests: XCTestCase {
         let view = OnboardingView(viewModel: OnboardingViewModel {})
             .environment(\.dynamicTypeSize, .accessibility3)
         assertSnapshot(
-            of: UIHostingController(rootView: view),
+            of: still(view),
             as: .image(on: .iPhone13, precision: 0.98, perceptualPrecision: 0.98),
             named: "onboarding-ax3"
         )
@@ -49,7 +63,7 @@ final class ScreenSnapshotTests: XCTestCase {
         let viewModel = PaywallViewModel(access: ProAccess(client: FakeStoreClient()), reason: .intro)
         await viewModel.load()
         assertSnapshot(
-            of: UIHostingController(rootView: PaywallView(viewModel: viewModel, onClose: {})),
+            of: still(PaywallView(viewModel: viewModel, onClose: {})),
             as: .image(on: .iPhone13, precision: 0.98, perceptualPrecision: 0.98),
             named: "paywall"
         )
@@ -57,8 +71,32 @@ final class ScreenSnapshotTests: XCTestCase {
 
     func testSettings() {
         assertScreen(
-            SettingsView(isPro: false, onUpgrade: {}, onAddSource: {}, sourcesScreen: { EmptyView() }),
+            SettingsView(isPro: false, onUpgrade: {}, sourcesScreen: { EmptyView() }),
             named: "settings"
+        )
+    }
+
+    func testTheme() {
+        assertScreen(NavigationStack { ThemeView(viewModel: ThemeViewModel()) }, named: "theme")
+    }
+
+    func testThemeLargestText() {
+        let view = NavigationStack { ThemeView(viewModel: ThemeViewModel()) }
+            .environment(\.dynamicTypeSize, .accessibility3)
+        assertSnapshot(
+            of: still(view),
+            as: .image(on: .iPhone13, precision: 0.98, perceptualPrecision: 0.98),
+            named: "theme-ax3"
+        )
+    }
+
+    /// Another accent reaches the whole screen: icon tiles, banner and tint.
+    func testSettingsInOcean() {
+        AppTheme.shared.setAccent(.ocean)
+        defer { AppTheme.shared.reset() }
+        assertScreen(
+            SettingsView(isPro: false, onUpgrade: {}, sourcesScreen: { EmptyView() }),
+            named: "settings-ocean"
         )
     }
 

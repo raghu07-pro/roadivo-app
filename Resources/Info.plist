@@ -35,6 +35,8 @@
 	<string>Roadivo uses the camera only to scan a QR code that contains a playlist link.</string>
 	<key>NSLocalNetworkUsageDescription</key>
 	<string>Roadivo connects to playlists and video servers on your local network when you add one.</string>
+	<key>APP_STORE_ID</key>
+	<string>$(APP_STORE_ID)</string>
 	<key>PRIVACY_URL</key>
 	<string>$(PRIVACY_URL)</string>
 	<key>TERMS_URL</key>

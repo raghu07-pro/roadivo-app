@@ -7,7 +7,7 @@ import UIKit
 actor VideoThumbnails {
     static let shared = VideoThumbnails()
 
-    private let memory = NSCache<NSURL, UIImage>()
+    private let memory = PosterMemory()
     private let directory: URL
     private var inFlight: [URL: Task<UIImage?, Never>] = [:]
 
@@ -16,8 +16,15 @@ actor VideoThumbnails {
         try? FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
     }
 
+    /// The poster if it's already in memory: lets a tile draw it on its first
+    /// frame (a long-press preview, a card scrolled back into view) instead of
+    /// flashing the placeholder.
+    nonisolated func cachedImage(for video: URL) -> UIImage? {
+        memory.cache.object(forKey: video as NSURL)
+    }
+
     func image(for video: URL) async -> UIImage? {
-        if let cached = memory.object(forKey: video as NSURL) {
+        if let cached = memory.cache.object(forKey: video as NSURL) {
             return cached
         }
         if let running = inFlight[video] {
@@ -37,7 +44,7 @@ actor VideoThumbnails {
         let image = await task.value
         inFlight[video] = nil
         if let image {
-            memory.setObject(image, forKey: video as NSURL)
+            memory.cache.setObject(image, forKey: video as NSURL)
         }
         return image
     }
@@ -53,4 +60,10 @@ actor VideoThumbnails {
         else { return nil }
         return UIImage(cgImage: frame)
     }
+}
+
+/// The in-memory posters. NSCache is thread-safe, so the actor and the
+/// synchronous `cachedImage(for:)` peek can share it.
+private final class PosterMemory: @unchecked Sendable {
+    let cache = NSCache<NSURL, UIImage>()
 }

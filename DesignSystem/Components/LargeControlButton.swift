@@ -15,9 +15,9 @@ struct LargeControlButton: View {
             Image(systemName: systemImage)
                 .font(.title.weight(.bold))
                 .frame(width: size, height: size)
-                .foregroundStyle(isProminent ? Color.black : Color.white)
+                .foregroundStyle(isProminent ? Color.roadOnBrand : Color.white)
                 .background(
-                    isProminent ? AnyShapeStyle(.roadAccent) : AnyShapeStyle(.white.opacity(0.14)),
+                    isProminent ? AnyShapeStyle(.roadBrandGradient) : AnyShapeStyle(.white.opacity(0.14)),
                     in: Circle()
                 )
                 .contentShape(Circle())

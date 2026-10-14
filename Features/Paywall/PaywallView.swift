@@ -55,11 +55,11 @@ struct PaywallView: View {
     #endif
 
     /// "Unlock Roadivo Pro" as one translatable sentence, with the brand name
-    /// picked out in amber wherever the translation puts it.
+    /// picked out in the theme's accent wherever the translation puts it.
     private static var title: AttributedString {
         var title = AttributedString(appLocalized: "Unlock Roadivo Pro")
         if let range = title.range(of: "Roadivo") {
-            title[range].foregroundColor = Color.roadLane
+            title[range].foregroundColor = Color.roadAccent
         }
         return title
     }
@@ -105,7 +105,7 @@ struct PaywallView: View {
                 HStack(spacing: Spacing.xs) {
                     Image(systemName: feature.symbol)
                         .font(.body.weight(.semibold))
-                        .foregroundStyle(.roadLane)
+                        .foregroundStyle(.roadAccent)
                         .frame(width: 24)
                         .accessibilityHidden(true)
                     Text(app: feature.title)

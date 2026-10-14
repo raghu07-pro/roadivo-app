@@ -66,9 +66,11 @@ final class AppEnvironment {
         }
 
         // UI tests start in "Follow System" (or a language passed with
-        // -AppleLanguages), never a choice left behind by an earlier run.
+        // -AppleLanguages) and the default theme, never a choice left behind
+        // by an earlier run.
         if isUITesting {
             AppLanguage.shared.set(nil)
+            AppTheme.shared.reset()
         }
         let preferences = Preferences(defaults: isUITesting ? volatileDefaults() : .standard)
         if arguments.contains("-skip-onboarding") {

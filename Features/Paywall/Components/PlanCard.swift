@@ -10,7 +10,7 @@ struct PlanCard: View {
             HStack(spacing: Spacing.sm) {
                 Image(systemName: isSelected ? "checkmark.circle.fill" : "circle")
                     .font(.title2)
-                    .foregroundStyle(isSelected ? Color.roadLane : Color.white.opacity(0.5))
+                    .foregroundStyle(isSelected ? Color.roadAccent : Color.white.opacity(0.5))
                     .accessibilityHidden(true)
                 VStack(alignment: .leading, spacing: 2) {
                     Text(app: offer.plan.title).font(Typography.button)
@@ -25,7 +25,7 @@ struct PlanCard: View {
                     if let intro = offer.introPrice {
                         Text("First week \(intro)")
                             .font(Typography.caption)
-                            .foregroundStyle(.roadLane)
+                            .foregroundStyle(.roadAccent)
                     } else if let perWeek = offer.perWeekPrice {
                         Text("\(perWeek) / week")
                             .font(Typography.caption)
@@ -46,16 +46,16 @@ struct PlanCard: View {
             )
             .overlay {
                 RoundedRectangle(cornerRadius: Radius.lg, style: .continuous)
-                    .strokeBorder(isSelected ? Color.roadLane : .clear, lineWidth: 2)
+                    .strokeBorder(isSelected ? AnyShapeStyle(.roadBrandGradient) : AnyShapeStyle(.clear), lineWidth: 2)
             }
             .overlay(alignment: .topTrailing) {
                 if offer.plan == .lifetime {
                     Text("Most popular")
                         .font(Typography.badge)
-                        .foregroundStyle(.black)
+                        .foregroundStyle(.roadOnBrand)
                         .padding(.horizontal, Spacing.xs)
                         .padding(.vertical, 3)
-                        .background(.yellow, in: Capsule())
+                        .background(.roadBrandGradient, in: Capsule())
                         .offset(x: -Spacing.sm, y: -10)
                 }
             }

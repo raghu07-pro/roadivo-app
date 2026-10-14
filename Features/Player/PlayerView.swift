@@ -56,8 +56,8 @@ struct PlayerView: View {
                     Text(message).font(Typography.secondary).multilineTextAlignment(.center)
                     Button("Try Again", action: viewModel.retry)
                         .buttonStyle(.borderedProminent)
-                        .tint(.roadLane)
-                        .foregroundStyle(.roadAsphalt)
+                        .tint(.roadBrand)
+                        .foregroundStyle(.roadOnBrand)
                 }
                 .foregroundStyle(.white)
                 .padding(Spacing.md)

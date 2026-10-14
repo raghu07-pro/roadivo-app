@@ -6,12 +6,7 @@ struct SourceRow: View {
 
     var body: some View {
         HStack(spacing: Spacing.sm) {
-            Image(systemName: source.symbol)
-                .font(.title3.weight(.semibold))
-                .foregroundStyle(.roadAccent)
-                .frame(width: 44, height: 44)
-                .background(.roadSurfaceElevated, in: RoundedRectangle(cornerRadius: Radius.sm, style: .continuous))
-                .accessibilityHidden(true)
+            IconTile(systemImage: source.symbol, style: .soft, size: 44)
             VStack(alignment: .leading, spacing: 2) {
                 Text(source.name).font(Typography.cardTitle)
                 Text(detail).font(Typography.caption).foregroundStyle(.secondary)

@@ -10,12 +10,13 @@ struct RoutePickerButton: UIViewRepresentable {
         let picker = AVRoutePickerView()
         picker.prioritizesVideoDevices = true
         picker.tintColor = tint
-        picker.activeTintColor = UIColor(named: "AccentColor")
+        picker.activeTintColor = AppTheme.shared.accent.uiAccent
         picker.accessibilityLabel = String(appLocalized: "AirPlay")
         return picker
     }
 
     func updateUIView(_ picker: AVRoutePickerView, context: Context) {
         picker.tintColor = tint
+        picker.activeTintColor = AppTheme.shared.accent.uiAccent
     }
 }

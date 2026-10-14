@@ -44,13 +44,14 @@ struct SourcesView: View {
         .navigationBarTitleDisplayMode(.inline)
         .overlay {
             if viewModel.sources.isEmpty {
-                ContentUnavailableView {
-                    Label("No sources added", systemImage: "tray")
-                } description: {
-                    Text("Start with an M3U subscription, or link a Jellyfin or Emby server.")
-                } actions: {
+                EmptyStateView(
+                    title: "No sources added",
+                    message: "Start with an M3U subscription, or link a Jellyfin or Emby server.",
+                    systemImage: "antenna.radiowaves.left.and.right"
+                ) {
                     PrimaryButton(title: "Add a Source", systemImage: "plus", isCompact: true, action: onAddSource)
                 }
+                .background(.roadCanvas)
             }
         }
         .toolbar {
@@ -73,7 +74,8 @@ struct SourcesView: View {
             }
             Button("Cancel", role: .cancel) { renaming = nil }
         }
-        .confirmationDialog(
+        // A centred alert, like deleting a video (not a dialog beside the row).
+        .alert(
             Text("Delete \(deleting?.name ?? "")?"),
             isPresented: Binding(
                 get: { deleting != nil },
@@ -83,7 +85,6 @@ struct SourcesView: View {
                     }
                 }
             ),
-            titleVisibility: .visible,
             presenting: deleting
         ) { source in
             Button("Delete", role: .destructive) {
@@ -92,6 +93,7 @@ struct SourcesView: View {
                 }
             }
             .accessibilityIdentifier("sources.confirmDelete")
+            Button("Cancel", role: .cancel) {}
         } message: { source in
             if source.kind == .localVideos {
                 Text("All your imported videos are removed from Roadivo. The originals stay in Photos or Files.")
@@ -142,7 +144,7 @@ struct SourcesView: View {
         Button(role: .destructive) {
             deleting = source
         } label: {
-            Label("Delete", systemImage: "trash")
+            DestructiveLabel(title: "Delete", systemImage: "trash")
         }
     }
 }

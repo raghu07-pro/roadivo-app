@@ -44,12 +44,15 @@ struct ChannelGrid: View {
     let onToggleFavorite: (MediaItem) -> Void
     var onDelete: ((MediaItem) -> Void)?
 
-    @ScaledMetric(relativeTo: .subheadline) private var minimumWidth: CGFloat = 160
+    /// Two equal columns on every iPhone in portrait (the narrowest, at 375 pt,
+    /// fits two 150 pt cards), more in landscape. Not scaled with Dynamic
+    /// Type: larger text truncates in the card instead of dropping a column.
+    private let minimumWidth: CGFloat = 150
 
     var body: some View {
         LazyVGrid(
             // Equal columns, so every card has the same width and height.
-            columns: [GridItem(.adaptive(minimum: min(minimumWidth, 320)), spacing: Spacing.sm, alignment: .top)],
+            columns: [GridItem(.adaptive(minimum: minimumWidth), spacing: Spacing.sm, alignment: .top)],
             spacing: Spacing.md
         ) {
             ForEach(items) { item in
