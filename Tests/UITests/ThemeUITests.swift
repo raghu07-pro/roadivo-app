@@ -11,7 +11,9 @@ final class ThemeUITests: XCTestCase {
         let row = app.buttons["settings.theme"]
         XCTAssertTrue(row.waitForExistence(timeout: 5))
         row.tap()
-        XCTAssertTrue(app.buttons["theme.appearance.system"].waitForExistence(timeout: 5))
+        let system = app.buttons["theme.appearance.system"]
+        XCTAssertTrue(system.waitForExistence(timeout: 5))
+        waitUntilSettled(system, in: app) // An audit mid-push reports text "clipped" by the slide.
     }
 
     /// Each launch under -ui-testing starts from System + Golden Hour.

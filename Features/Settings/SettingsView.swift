@@ -139,7 +139,7 @@ struct SettingsView<SourcesScreen: View>: View {
             }
         }
         .buttonStyle(PressableStyle())
-        .accessibilityIdentifier("settings.pro")
+        .accessibilityIdentifier(isPro ? "settings.plan" : "settings.pro")
     }
 
     private var planSubtitle: Text {

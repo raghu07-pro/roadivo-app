@@ -12,8 +12,10 @@ trap 'rm -rf "$work"' EXIT
 xcodebuild -workspace Roadivo.xcworkspace -scheme Roadivo \
   -destination "platform=iOS Simulator,name=$device" \
   -derivedDataPath "$derived" -resultBundlePath "$work/run.xcresult" \
-  test -only-testing:RoadivoUITests > "$work/test.log" 2>&1 ||
-  echo "Some UI tests failed (see the run's log); exporting the screens that were captured."
+  test -only-testing:RoadivoUITests > "$work/test.log" 2>&1 || {
+  echo "Some UI tests failed; exporting the screens that were captured. Failures:"
+  grep -E "error: -\[" "$work/test.log" | sed 's|.*error: ||' | sort -u || true
+}
 
 xcrun xcresulttool export attachments --path "$work/run.xcresult" --output-path "$work/attachments" > /dev/null
 

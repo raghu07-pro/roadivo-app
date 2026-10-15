@@ -56,9 +56,21 @@ extension XCTestCase {
         XCTAssertTrue(app.buttons["player.minimize"].waitForExistence(timeout: 3))
     }
 
-    /// Attaches a named screenshot (and, under fastlane, is where `snapshot()` hooks in).
+    /// Attaches a named screenshot (and, under fastlane, is where `snapshot()` hooks in). It waits
+    /// for the screen to settle first, so a push or sheet is never caught halfway (up to ~3 s).
     func snapshot(_ name: String, app: XCUIApplication) {
-        let attachment = XCTAttachment(screenshot: app.screenshot())
+        var screenshot = app.screenshot()
+        for _ in 0..<12 {
+            let settled = expectation(description: "screen settles")
+            settled.isInverted = true
+            wait(for: [settled], timeout: 0.25)
+            let next = app.screenshot()
+            if next.pngRepresentation == screenshot.pngRepresentation {
+                break
+            }
+            screenshot = next
+        }
+        let attachment = XCTAttachment(screenshot: screenshot)
         attachment.name = name
         attachment.lifetime = .keepAlways
         add(attachment)

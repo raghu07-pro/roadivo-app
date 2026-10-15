@@ -33,6 +33,8 @@ final class OnboardingFlowUITests: XCTestCase {
         buy.tap()
         XCTAssertTrue(app.navigationBars["Home"].waitForExistence(timeout: 5))
         app.tabBars.buttons["Settings"].tap()
+        // The upgrade banner gives way to the active plan's.
+        XCTAssertTrue(app.buttons["settings.plan"].waitForExistence(timeout: 5))
         XCTAssertFalse(app.buttons["settings.pro"].exists)
     }
 

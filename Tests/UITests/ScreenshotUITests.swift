@@ -80,11 +80,17 @@ final class ScreenshotUITests: XCTestCase {
         snapshot("21-Language", app: app)
         app.navigationBars.buttons.element(boundBy: 0).tap()
         app.buttons["settings.privacy"].tap()
+        // The bundled policy page has loaded once its heading is readable.
+        XCTAssertTrue(app.webViews.staticTexts["Roadivo Privacy Policy"].waitForExistence(timeout: 10))
         snapshot("22-Privacy", app: app)
         app.navigationBars.buttons.element(boundBy: 0).tap()
-        app.buttons["settings.help"].tap()
+        app.swipeUp() // Help sits below the fold, and list rows only exist once on screen.
+        let help = app.buttons["settings.help"]
+        XCTAssertTrue(help.waitForExistence(timeout: 5))
+        help.tap()
         snapshot("23-Help", app: app)
         app.navigationBars.buttons.element(boundBy: 0).tap()
+        app.swipeDown()
         app.buttons["settings.pro"].tap()
         XCTAssertTrue(app.buttons["paywall.close"].waitForExistence(timeout: 5))
         snapshot("24-Paywall-Settings", app: app)
