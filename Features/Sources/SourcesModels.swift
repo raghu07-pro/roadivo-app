@@ -1,12 +1,19 @@
 import Foundation
 
-struct SourceSummary: Identifiable, Equatable {
+struct SourceSummary: Identifiable, Hashable {
     let id: UUID
     let name: String
     let kind: PlaylistKind
     let itemCount: Int
     let host: String?
     let refreshedAt: Date?
+    /// The server a media-server source signed in to.
+    var server: MediaServerKind?
+
+    /// A link or a media server, which can be downloaded again.
+    var isRefreshable: Bool {
+        kind == .remote || kind == .mediaServer
+    }
 
     var symbol: String {
         switch kind {

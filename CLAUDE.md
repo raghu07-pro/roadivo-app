@@ -33,7 +33,8 @@ tabs: **Home · Favorites · Cast to Car · Settings**.
   Recent and Library, then hands playback to the shared player.
 - Video plays over AirPlay, parked only, in cars with CarPlay video. While
   driving, the car plays sound only.
-- The tab shows live CarPlay and AirPlay status (`CarConnection`).
+- The tab shows live CarPlay and AirPlay status (`CarConnection`). Until a car is connected it only
+  explains how to connect; Car Mode and AirPlay appear once connected (DECISIONS 98).
 - CarPlay needs Apple's entitlements; it is switched off until they are
   granted (`ROADIVO_CARPLAY` in `Config/Shared.xcconfig`, DECISIONS 25). While
   it is off, the app hides every CarPlay promise (`CarPlayAvailability`, DECISIONS 84).
@@ -55,6 +56,8 @@ Graphite). `AppTheme.shared` holds the choice and both apply live
   `SectionTitle`, `CardHeader`, `cardStyle()`.
 - The code-drawn scenes (`RoadScene`, `CockpitView`) keep the road's yellow
   centre line and the logo's golden sun (`Palette.laneYellow`).
+- Every screen shown in a tab (and every screen pushed there) adds `.clearsBottomAccessory()`, so the
+  floating mini player never covers its content (DECISIONS 100).
 - Type: Overpass by default; Settings › Theme › Font Style also offers Standard, Rounded and Serif. Use `Typography` tokens, never a hard-coded font (DECISIONS 93).
 
 The tagline is "Let the Journey Play." (`Brand.tagline`). No green. See
@@ -110,6 +113,8 @@ DECISIONS 33, 37 and 53–57.
 - **Start Car Mode** on the Car tab resumes the last-played item when nothing is playing.
 - **Deleting "On this iPhone"** also deletes the copied video files.
 - **Media servers:** Jellyfin, Emby and Xtream sign in with an address and login; Plex with a code at plex.tv/link (`PlexClient`, `PlexLoginViewModel`, DECISIONS 72).
+- **Browsing:** group chips (one group at a time, no "All") in the player, on a group's screen and on a source's screen (Manage Sources › a source: Refresh, Rename, Copy Link, Delete). Home's one button is + until a source exists, then the source menu (DECISIONS 95–96).
+- **Server artwork:** media-server films are 2:3 posters with their year; episodes are 16:9 stills (`ArtworkStyle`, DECISIONS 97).
 - **Voice search:** the mic in Home's search bar (`SearchField`, `VoiceSearchModel`, `Core/Speech`) fills the search as you speak; on-device when the language allows (DECISIONS 68–69).
 
 ## Backend / API

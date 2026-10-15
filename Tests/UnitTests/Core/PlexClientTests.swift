@@ -172,7 +172,8 @@ struct PlexClientTests {
             case "/library/sections/1/all":
                 return (200, Data("""
                 {"MediaContainer":{"totalSize":2,"Metadata":[
-                {"ratingKey":"10","title":"Road Movie","type":"movie","thumb":"/library/metadata/10/thumb/1",
+                {"ratingKey":"10","title":"Road Movie","type":"movie","year":1999,
+                 "thumb":"/library/metadata/10/thumb/1",
                  "Media":[{"container":"mp4","Part":[{"key":"/library/parts/5/1/file.mp4","container":"mp4"}]}]},
                 {"ratingKey":"11","title":"Night Drive","type":"movie",
                  "Media":[{"container":"mkv","Part":[{"key":"/library/parts/6/1/file.mkv","container":"mkv"}]}]}]}}
@@ -204,5 +205,8 @@ struct PlexClientTests {
 
         let poster = try #require(entries.first?.logoURL)
         #expect(poster.path() == "/photo/:/transcode")
+        #expect(poster.query()?.contains("height=540") == true)
+        #expect(entries.map(\.artwork) == [.poster, .poster, .still])
+        #expect(entries.map(\.year) == [1999, nil, nil])
     }
 }

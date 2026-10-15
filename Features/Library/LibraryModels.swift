@@ -10,7 +10,7 @@ struct LibrarySection: Identifiable {
     }
 }
 
-/// "See All" for one group. Carries only the title so the screen reads the
+/// A group's own screen. Carries only the title so the screen reads the
 /// group's current items and shows favourite changes made there.
 struct LibraryGroupRoute: Hashable {
     let title: String
@@ -19,4 +19,11 @@ struct LibraryGroupRoute: Hashable {
 enum LibraryScope {
     case all
     case favorites
+}
+
+/// A source in Home's filter menu.
+struct SourceOption: Identifiable, Equatable {
+    let id: UUID
+    let name: String
+    let count: Int
 }

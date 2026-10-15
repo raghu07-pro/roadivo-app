@@ -58,7 +58,7 @@ final class AppEnvironment {
     }
 
     /// Launch arguments for UI tests and screenshots: `-ui-testing` (in-memory, fake App Store, scripted mic),
-    /// `-skip-onboarding` (and the intro paywall), `-pro`, and Debug-only `-demo-library`.
+    /// `-skip-onboarding` (and the intro paywall), `-pro`, `-car-connected`, and Debug-only `-demo-library`.
     static func live(arguments: [String]) -> AppEnvironment {
         let switches = TestSwitches(arguments: arguments)
         let isUITesting = switches.isUITesting
@@ -117,6 +117,7 @@ final class AppEnvironment {
         )
         environment.router.asksForReviews = !isUITesting
         environment.proAccess.start()
+        environment.carConnection.simulatedOutputs = switches.isCarConnected ? [(.carAudio, "CarPlay")] : nil
         environment.carConnection.start()
         current = environment
         #if DEBUG
@@ -180,14 +181,18 @@ final class AppEnvironment {
 private struct TestSwitches {
     let isUITesting: Bool
     let skipsOnboarding: Bool
+    /// `-car-connected`: the iPhone acts as if plugged into a car, for the Cast to Car tab.
+    let isCarConnected: Bool
 
     init(arguments: [String]) {
         #if DEBUG
             isUITesting = arguments.contains("-ui-testing")
             skipsOnboarding = arguments.contains("-skip-onboarding")
+            isCarConnected = isUITesting && arguments.contains("-car-connected")
         #else
             isUITesting = false
             skipsOnboarding = false
+            isCarConnected = false
         #endif
     }
 }

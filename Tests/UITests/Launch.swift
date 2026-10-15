@@ -4,11 +4,13 @@ extension XCUIApplication {
     /// Launches with in-memory storage and a fake App Store so every UI test
     /// starts clean. `skipOnboarding` also skips the intro paywall.
     /// `restorable`: a Yearly plan bought earlier, which only Restore brings back.
+    /// `carConnected`: the iPhone acts as if plugged into a car (CarPlay audio).
     static func roadivo(
         skipOnboarding: Bool = false,
         demoLibrary: Bool = false,
         pro: Bool = false,
-        restorable: Bool = false
+        restorable: Bool = false,
+        carConnected: Bool = false
     ) -> XCUIApplication {
         let app = XCUIApplication()
         app.launchArguments = ["-ui-testing"]
@@ -23,6 +25,9 @@ extension XCUIApplication {
         }
         if restorable {
             app.launchArguments.append("-restorable")
+        }
+        if carConnected {
+            app.launchArguments.append("-car-connected")
         }
         app.launch()
         return app

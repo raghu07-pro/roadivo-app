@@ -1,6 +1,76 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
+    "%@ (%lld)" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ (%2$lld)"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ (%2$lld)"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ (%2$lld)"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ (%2$lld)"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ (%2$lld)"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ (%2$lld)"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@（%2$lld）"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ (%2$lld)"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ (%2$lld)"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@（%2$lld）"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@（%2$lld）"
+          }
+        }
+      }
+    },
     "%@ / week" : {
       "localizations" : {
         "de" : {
@@ -861,706 +931,258 @@
         }
       }
     },
-    "Aa" : {
+    "Connect your iPhone to the car with CarPlay, or pick the car's screen for AirPlay in Control Center. Car Mode and AirPlay appear here once you're connected." : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Aa"
+            "value" : "Verbinde dein iPhone per CarPlay mit dem Auto oder wähle im Kontrollzentrum den Bildschirm des Autos für AirPlay. Sobald du verbunden bist, erscheinen hier Automodus und AirPlay."
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Aa"
+            "value" : "Conecta tu iPhone al coche con CarPlay o elige la pantalla del coche para AirPlay en el centro de control. El Modo Coche y AirPlay aparecerán aquí cuando estés conectado."
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Aa"
+            "value" : "Connectez votre iPhone à la voiture avec CarPlay, ou choisissez l’écran de la voiture pour AirPlay dans le centre de contrôle. Le Mode Voiture et AirPlay apparaissent ici une fois connecté."
           }
         },
         "hi" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Aa"
+            "value" : "अपने iPhone को CarPlay से कार से कनेक्ट करें, या कंट्रोल सेंटर में AirPlay के लिए कार की स्क्रीन चुनें। कनेक्ट होते ही कार मोड और AirPlay यहाँ दिखेंगे।"
           }
         },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Aa"
+            "value" : "Collega l’iPhone all’auto con CarPlay, oppure scegli lo schermo dell’auto per AirPlay in Centro di Controllo. Modalità Auto e AirPlay compaiono qui una volta connesso."
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Aa"
+            "value" : "CarPlayでiPhoneを車に接続するか、コントロールセンターでAirPlayの出力先に車の画面を選んでください。接続するとカーモードとAirPlayがここに表示されます。"
           }
         },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Aa"
+            "value" : "CarPlay로 iPhone을 차량에 연결하거나 제어 센터에서 AirPlay로 차량 화면을 선택하십시오. 연결되면 차량 모드와 AirPlay가 여기에 표시됩니다."
           }
         },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Aa"
+            "value" : "Conecte o iPhone ao carro com o CarPlay ou escolha a tela do carro para AirPlay na Central de Controle. O Modo Carro e o AirPlay aparecem aqui quando você estiver conectado."
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Aa"
+            "value" : "使用 CarPlay 将 iPhone 连接到汽车，或在控制中心选择汽车屏幕进行隔空播放。连接后，车载模式和隔空播放会显示在这里。"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Aa"
+            "value" : "使用 CarPlay 將 iPhone 連接到汽車，或在控制中心選擇汽車螢幕進行 AirPlay。連接後，車用模式和 AirPlay 會顯示在這裡。"
           }
         }
       }
     },
-    "Changes the lettering across the app. Text still follows your iPhone's text size." : {
+    "Connected to your car" : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Ändert die Schrift in der ganzen App. Die Textgröße folgt weiterhin deinem iPhone."
+            "value" : "Mit deinem Auto verbunden"
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Cambia la tipografía en toda la app. El texto sigue el tamaño configurado en tu iPhone."
+            "value" : "Conectado a tu coche"
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Change la typographie dans toute l’app. Le texte suit toujours la taille définie sur votre iPhone."
+            "value" : "Connecté à votre voiture"
           }
         },
         "hi" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "पूरे ऐप में अक्षरों का स्टाइल बदलता है। टेक्स्ट का साइज़ अब भी आपके iPhone की सेटिंग के अनुसार रहता है।"
+            "value" : "आपकी कार से कनेक्ट है"
           }
         },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Cambia i caratteri in tutta l’app. Il testo segue comunque la dimensione impostata sul tuo iPhone."
+            "value" : "Connesso alla tua auto"
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "App 全体の文字のスタイルを変更します。文字の大きさは引き続き iPhone の設定に従います。"
+            "value" : "車に接続済み"
           }
         },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "앱 전체의 글꼴을 바꿉니다. 글자 크기는 계속 iPhone 설정을 따릅니다."
+            "value" : "차량에 연결됨"
           }
         },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Muda as letras em todo o app. O texto continua seguindo o tamanho definido no seu iPhone."
+            "value" : "Conectado ao seu carro"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "更改整个 App 的字体。文字大小仍跟随 iPhone 的设置。"
+            "value" : "已连接到你的汽车"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "更改整個 App 的字體。文字大小仍跟隨 iPhone 的設定。"
+            "value" : "已連接到你的汽車"
           }
         }
       }
     },
-    "Choose an AirPlay Screen" : {
+    "Each group shows its first 20 channels in a row. Tap the group's name for all of them, or use search." : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "AirPlay-Display wählen"
+            "value" : "Jede Gruppe zeigt ihre ersten 20 Sender in einer Reihe. Tippe auf den Namen der Gruppe, um alle zu sehen, oder nutze die Suche."
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Elegir pantalla AirPlay"
+            "value" : "Cada grupo muestra sus primeros 20 canales en una fila. Toca el nombre del grupo para verlos todos o usa la búsqueda."
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Choisir un écran AirPlay"
+            "value" : "Chaque groupe affiche ses 20 premières chaînes sur une rangée. Touchez le nom du groupe pour toutes les voir, ou utilisez la recherche."
           }
         },
         "hi" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "AirPlay स्क्रीन चुनें"
+            "value" : "हर ग्रुप एक पंक्ति में अपने पहले 20 चैनल दिखाता है। सभी देखने के लिए ग्रुप के नाम पर टैप करें, या सर्च करें।"
           }
         },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Scegli uno schermo AirPlay"
+            "value" : "Ogni gruppo mostra i primi 20 canali in una riga. Tocca il nome del gruppo per vederli tutti, oppure usa la ricerca."
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "AirPlay の画面を選択"
+            "value" : "各グループの最初の20チャンネルが1列に表示されます。すべて見るにはグループ名をタップするか、検索を使用してください。"
           }
         },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "AirPlay 화면 선택"
+            "value" : "각 그룹의 처음 20개 채널이 한 줄에 표시됩니다. 모두 보려면 그룹 이름을 탭하거나 검색을 사용하세요."
           }
         },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Escolher tela AirPlay"
+            "value" : "Cada grupo mostra seus primeiros 20 canais em uma fileira. Toque no nome do grupo para ver todos ou use a busca."
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "选择 AirPlay 屏幕"
+            "value" : "每个分组在一行中显示前 20 个频道。轻点分组名称查看全部频道，或使用搜索。"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "選擇 AirPlay 螢幕"
+            "value" : "每個群組在一列中顯示前 20 個頻道。點一下群組名稱查看全部頻道，或使用搜尋。"
           }
         }
       }
     },
-    "Font Style" : {
+    "Shows the whole group" : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Schriftstil"
+            "value" : "Zeigt die ganze Gruppe"
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Estilo de letra"
+            "value" : "Muestra el grupo completo"
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Style de police"
+            "value" : "Affiche tout le groupe"
           }
         },
         "hi" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "फ़ॉन्ट स्टाइल"
+            "value" : "पूरा ग्रुप दिखाता है"
           }
         },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Stile del carattere"
+            "value" : "Mostra tutto il gruppo"
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "フォントスタイル"
+            "value" : "グループ全体を表示します"
           }
         },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "글꼴 스타일"
+            "value" : "그룹 전체를 표시합니다"
           }
         },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Estilo da fonte"
+            "value" : "Mostra o grupo inteiro"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "字体样式"
+            "value" : "显示整个分组"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "字體樣式"
-          }
-        }
-      }
-    },
-    "New Version Available" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Neue Version verfügbar"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Nueva versión disponible"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Nouvelle version disponible"
-          }
-        },
-        "hi" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "नया वर्शन उपलब्ध है"
-          }
-        },
-        "it" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Nuova versione disponibile"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "新しいバージョンがあります"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "새 버전 사용 가능"
-          }
-        },
-        "pt-BR" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Nova versão disponível"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "有新版本可用"
-          }
-        },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "有新版本可用"
-          }
-        }
-      }
-    },
-    "Road Sign" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Straßenschild"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Señal de tráfico"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Panneau routier"
-          }
-        },
-        "hi" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "रोड साइन"
-          }
-        },
-        "it" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Cartello stradale"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "道路標識"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "도로 표지판"
-          }
-        },
-        "pt-BR" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Placa de estrada"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "路牌"
-          }
-        },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "路牌"
-          }
-        }
-      }
-    },
-    "Roadivo %@ is now available." : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Roadivo %@ ist jetzt verfügbar."
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Roadivo %@ ya está disponible."
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Roadivo %@ est disponible."
-          }
-        },
-        "hi" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Roadivo %@ अब उपलब्ध है।"
-          }
-        },
-        "it" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Roadivo %@ è ora disponibile."
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Roadivo %@ が利用可能になりました。"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Roadivo %@ 버전을 사용할 수 있습니다."
-          }
-        },
-        "pt-BR" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "O Roadivo %@ já está disponível."
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Roadivo %@ 现已推出。"
-          }
-        },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Roadivo %@ 現已推出。"
-          }
-        }
-      }
-    },
-    "Rounded" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Abgerundet"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Redondeada"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Arrondie"
-          }
-        },
-        "hi" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "गोलाकार"
-          }
-        },
-        "it" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Arrotondato"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "丸ゴシック"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "둥근 글꼴"
-          }
-        },
-        "pt-BR" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Arredondada"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "圆体"
-          }
-        },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "圓體"
-          }
-        }
-      }
-    },
-    "Serif" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Serifen"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Serif"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Serif"
-          }
-        },
-        "hi" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "सेरिफ़"
-          }
-        },
-        "it" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Graziato"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "明朝"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "명조"
-          }
-        },
-        "pt-BR" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Serifada"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "衬线"
-          }
-        },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "襯線"
-          }
-        }
-      }
-    },
-    "Standard" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Standard"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Estándar"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Standard"
-          }
-        },
-        "hi" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "स्टैंडर्ड"
-          }
-        },
-        "it" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Standard"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "標準"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "기본"
-          }
-        },
-        "pt-BR" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Padrão"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "标准"
-          }
-        },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "標準"
-          }
-        }
-      }
-    },
-    "Update Now" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Jetzt aktualisieren"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Actualizar ahora"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Mettre à jour"
-          }
-        },
-        "hi" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "अभी अपडेट करें"
-          }
-        },
-        "it" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Aggiorna ora"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "今すぐアップデート"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "지금 업데이트"
-          }
-        },
-        "pt-BR" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Atualizar agora"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "立即更新"
-          }
-        },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "立即更新"
+            "value" : "顯示整個群組"
           }
         }
       }
@@ -1630,66 +1252,66 @@
         }
       }
     },
-    "A car display or wireless adapter that accepts AirPlay video. Open Cast to Car, tap AirPlay and pick the display, then start a channel. No AirPlay? Mount your iPhone and use Car Mode. Never watch video while driving." : {
+    "A car display or wireless adapter that accepts AirPlay video. Start a channel, then pick the display for AirPlay in Control Center. Once your iPhone is connected to the car, Cast to Car also offers Car Mode for a mounted iPhone. Never watch video while driving." : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Ein Autodisplay oder kabelloser Adapter, der AirPlay-Video unterstützt. Öffne „Ans Auto senden“, tippe auf AirPlay, wähle das Display und starte dann einen Sender. Kein AirPlay? Befestige dein iPhone und nutze den Automodus. Schau niemals Videos während der Fahrt."
+            "value" : "Ein Autodisplay oder kabelloser Adapter, der AirPlay-Video unterstützt. Starte einen Sender und wähle dann im Kontrollzentrum das Display für AirPlay. Sobald dein iPhone mit dem Auto verbunden ist, bietet „Ans Auto senden“ auch den Automodus für ein befestigtes iPhone. Schau niemals Videos während der Fahrt."
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Una pantalla del coche o un adaptador inalámbrico compatible con vídeo por AirPlay. Abre Enviar al coche, toca AirPlay y elige la pantalla; después inicia un canal. ¿No tienes AirPlay? Coloca tu iPhone en un soporte y usa el modo Coche. No veas nunca vídeos mientras conduces."
+            "value" : "Una pantalla del coche o un adaptador inalámbrico compatible con vídeo por AirPlay. Inicia un canal y elige la pantalla para AirPlay en el centro de control. Cuando tu iPhone esté conectado al coche, Enviar al coche también ofrece el Modo Coche para un iPhone en un soporte. No veas nunca vídeos mientras conduces."
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Un écran de voiture ou un adaptateur sans fil compatible avec la vidéo AirPlay. Ouvrez Diffuser en voiture, touchez AirPlay et choisissez l’écran, puis lancez une chaîne. Pas d’AirPlay ? Fixez votre iPhone sur un support et utilisez le mode Voiture. Ne regardez jamais de vidéo en conduisant."
+            "value" : "Un écran de voiture ou un adaptateur sans fil compatible avec la vidéo AirPlay. Lancez une chaîne, puis choisissez l’écran pour AirPlay dans le centre de contrôle. Une fois votre iPhone connecté à la voiture, Diffuser en voiture propose aussi le Mode Voiture pour un iPhone fixé sur un support. Ne regardez jamais de vidéo en conduisant."
           }
         },
         "hi" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "कार डिस्प्ले या वायरलेस अडैप्टर, जो AirPlay वीडियो सपोर्ट करता हो। कार पर कास्ट खोलें, AirPlay पर टैप करें और डिस्प्ले चुनें, फिर कोई चैनल शुरू करें। AirPlay नहीं है? अपना iPhone माउंट करें और कार मोड इस्तेमाल करें। गाड़ी चलाते समय कभी वीडियो न देखें।"
+            "value" : "कार डिस्प्ले या वायरलेस अडैप्टर, जो AirPlay वीडियो सपोर्ट करता हो। कोई चैनल शुरू करें, फिर कंट्रोल सेंटर में AirPlay के लिए डिस्प्ले चुनें। iPhone के कार से कनेक्ट होते ही कार पर कास्ट में माउंट किए iPhone के लिए कार मोड भी मिलता है। गाड़ी चलाते समय कभी वीडियो न देखें।"
           }
         },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Uno schermo per auto o un adattatore wireless compatibile con i video AirPlay. Apri Invia all’auto, tocca AirPlay e scegli lo schermo, poi avvia un canale. Niente AirPlay? Monta il tuo iPhone e usa la modalità Auto. Non guardare mai video mentre guidi."
+            "value" : "Uno schermo per auto o un adattatore wireless compatibile con i video AirPlay. Avvia un canale, poi scegli lo schermo per AirPlay in Centro di Controllo. Quando l’iPhone è collegato all’auto, Invia all’auto offre anche la modalità Auto per un iPhone montato su supporto. Non guardare mai video mentre guidi."
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "AirPlay ビデオに対応した車載ディスプレイまたはワイヤレスアダプタが必要です。「車にキャスト」を開き、AirPlay をタップしてディスプレイを選んでから、チャンネルを再生してください。AirPlay がない場合は、iPhone を固定してカーモードを使用してください。運転中は絶対にビデオを見ないでください。"
+            "value" : "AirPlay ビデオに対応した車載ディスプレイまたはワイヤレスアダプタが必要です。チャンネルを再生してから、コントロールセンターで AirPlay の出力先にディスプレイを選んでください。iPhone を車に接続すると、「車にキャスト」で固定した iPhone 用のカーモードも使えます。運転中は絶対にビデオを見ないでください。"
           }
         },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "AirPlay 비디오를 지원하는 차량 디스플레이 또는 무선 어댑터가 필요합니다. 차량으로 전송을 열고 AirPlay를 탭해 디스플레이를 선택한 다음 채널을 재생하세요. AirPlay가 없다면 iPhone을 거치하고 차량 모드를 사용하세요. 운전 중에는 절대 비디오를 시청하지 마세요."
+            "value" : "AirPlay 비디오를 지원하는 차량 디스플레이 또는 무선 어댑터가 필요합니다. 채널을 재생한 다음 제어 센터에서 AirPlay로 디스플레이를 선택하세요. iPhone이 차량에 연결되면 차량으로 전송에서 거치한 iPhone용 차량 모드도 사용할 수 있습니다. 운전 중에는 절대 비디오를 시청하지 마세요."
           }
         },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Uma tela de carro ou adaptador sem fio compatível com vídeo AirPlay. Abra Enviar ao Carro, toque em AirPlay e escolha a tela; depois inicie um canal. Sem AirPlay? Prenda o iPhone num suporte e use o Modo Carro. Nunca assista a vídeos enquanto dirige."
+            "value" : "Uma tela de carro ou adaptador sem fio compatível com vídeo AirPlay. Inicie um canal e escolha a tela para AirPlay na Central de Controle. Quando o iPhone estiver conectado ao carro, Enviar ao Carro também oferece o Modo Carro para um iPhone preso num suporte. Nunca assista a vídeos enquanto dirige."
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "支持 AirPlay 视频的车载显示屏或无线适配器。打开“投放到车机”，轻点 AirPlay 并选择显示屏，然后开始播放频道。没有 AirPlay？把 iPhone 固定在支架上，使用车载模式。切勿在驾驶时观看视频。"
+            "value" : "支持 AirPlay 视频的车载显示屏或无线适配器。开始播放频道，然后在控制中心选择该显示屏进行隔空播放。iPhone 连接到汽车后，“投放到车机”还会为固定在支架上的 iPhone 提供车载模式。切勿在驾驶时观看视频。"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "支援 AirPlay 影片的車用螢幕或無線轉接器。打開「投放到車機」，點一下 AirPlay 並選擇螢幕，然後開始播放頻道。沒有 AirPlay？將 iPhone 固定在支架上，使用車用模式。駕駛時切勿觀看影片。"
+            "value" : "支援 AirPlay 影片的車用螢幕或無線轉接器。開始播放頻道，然後在控制中心選擇該螢幕進行 AirPlay。iPhone 連接到汽車後，「投放到車機」也會為固定在支架上的 iPhone 提供車用模式。駕駛時切勿觀看影片。"
           }
         }
       }
@@ -1946,6 +1568,70 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "來源就是你的頻道的出處"
+          }
+        }
+      }
+    },
+    "Aa" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aa"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aa"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aa"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aa"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aa"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aa"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aa"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aa"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aa"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aa"
           }
         }
       }
@@ -2593,6 +2279,70 @@
         }
       }
     },
+    "Added %@" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hinzugefügt %@"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Añadida %@"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ajoutée %@"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ जोड़ा गया"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aggiunta %@"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@に追加"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ 추가됨"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Adicionada %@"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@添加"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@新增"
+          }
+        }
+      }
+    },
     "Adding %@…" : {
       "localizations" : {
         "de" : {
@@ -2910,6 +2660,134 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "所有語言"
+          }
+        }
+      }
+    },
+    "All Sources" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Alle Quellen"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Todas las fuentes"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Toutes les sources"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "सभी सोर्स"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tutte le sorgenti"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "すべてのソース"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "모든 소스"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Todas as fontes"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "所有来源"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "所有來源"
+          }
+        }
+      }
+    },
+    "All Sources (%lld)" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Alle Quellen (%lld)"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Todas las fuentes (%lld)"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Toutes les sources (%lld)"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "सभी सोर्स (%lld)"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tutte le sorgenti (%lld)"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "すべてのソース（%lld）"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "모든 소스 (%lld)"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Todas as fontes (%lld)"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "所有来源（%lld）"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "所有來源（%lld）"
           }
         }
       }
@@ -4460,6 +4338,70 @@
         }
       }
     },
+    "Changes the lettering across the app. Text still follows your iPhone's text size." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ändert die Schrift in der ganzen App. Die Textgröße folgt weiterhin deinem iPhone."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cambia la tipografía en toda la app. El texto sigue el tamaño configurado en tu iPhone."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Change la typographie dans toute l’app. Le texte suit toujours la taille définie sur votre iPhone."
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "पूरे ऐप में अक्षरों का स्टाइल बदलता है। टेक्स्ट का साइज़ अब भी आपके iPhone की सेटिंग के अनुसार रहता है।"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cambia i caratteri in tutta l’app. Il testo segue comunque la dimensione impostata sul tuo iPhone."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "App 全体の文字のスタイルを変更します。文字の大きさは引き続き iPhone の設定に従います。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "앱 전체의 글꼴을 바꿉니다. 글자 크기는 계속 iPhone 설정을 따릅니다."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Muda as letras em todo o app. O texto continua seguindo o tamanho definido no seu iPhone."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "更改整个 App 的字体。文字大小仍跟随 iPhone 的设置。"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "更改整個 App 的字體。文字大小仍跟隨 iPhone 的設定。"
+          }
+        }
+      }
+    },
     "Charging · 64%" : {
       "localizations" : {
         "de" : {
@@ -5361,70 +5303,6 @@
         }
       }
     },
-    "Connect the car's screen with AirPlay, then play a channel. No car screen? Mount your iPhone and use Car Mode." : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Verbinde das Autodisplay per AirPlay und starte dann einen Sender. Kein Autodisplay? Befestige dein iPhone und nutze den Automodus."
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Conecta la pantalla del coche con AirPlay y después pon un canal. ¿No tienes pantalla en el coche? Coloca tu iPhone en un soporte y usa el modo Coche."
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Connectez l’écran de la voiture avec AirPlay, puis lancez une chaîne. Pas d’écran ? Fixez votre iPhone sur un support et utilisez le mode Voiture."
-          }
-        },
-        "hi" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "AirPlay से कार की स्क्रीन कनेक्ट करें, फिर कोई चैनल चलाएँ। कार में स्क्रीन नहीं है? अपना iPhone माउंट करें और कार मोड इस्तेमाल करें।"
-          }
-        },
-        "it" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Collega lo schermo dell’auto con AirPlay, poi avvia un canale. Niente schermo? Monta il tuo iPhone e usa la modalità Auto."
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "AirPlay で車の画面に接続してから、チャンネルを再生してください。車に画面がない場合は、iPhone を固定してカーモードを使用してください。"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "AirPlay로 차량 화면을 연결한 다음 채널을 재생하세요. 차량 화면이 없나요? iPhone을 거치하고 차량 모드를 사용하세요."
-          }
-        },
-        "pt-BR" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Conecte a tela do carro com AirPlay e depois inicie um canal. Sem tela no carro? Prenda o iPhone num suporte e use o Modo Carro."
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "用 AirPlay 连接车机屏幕，然后播放频道。车上没有屏幕？把 iPhone 固定在支架上，使用车载模式。"
-          }
-        },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "用 AirPlay 連接車機螢幕，然後播放頻道。車上沒有螢幕？將 iPhone 固定在支架上，使用車用模式。"
-          }
-        }
-      }
-    },
     "Connect to %@" : {
       "localizations" : {
         "de" : {
@@ -5869,6 +5747,70 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "拷貝代碼"
+          }
+        }
+      }
+    },
+    "Copy Link" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Link kopieren"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Copiar enlace"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Copier le lien"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "लिंक कॉपी करें"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Copia link"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "リンクをコピー"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "링크 복사"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Copiar link"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "拷贝链接"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "拷貝連結"
           }
         }
       }
@@ -6513,6 +6455,70 @@
         }
       }
     },
+    "Delete Source" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Quelle löschen"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Eliminar fuente"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Supprimer la source"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "सोर्स डिलीट करें"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Elimina sorgente"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ソースを削除"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "소스 삭제"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Apagar fonte"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "删除来源"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "刪除來源"
+          }
+        }
+      }
+    },
     "Delete Video" : {
       "localizations" : {
         "de" : {
@@ -6701,70 +6707,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "完成"
-          }
-        }
-      }
-    },
-    "Each group shows its first 20 channels in a row. Tap See All for the rest, or use search." : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Jede Gruppe zeigt ihre ersten 20 Sender in einer Reihe. Tippe auf „Alle anzeigen“ für den Rest oder nutze die Suche."
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Cada grupo muestra sus primeros 20 canales en una fila. Toca Ver todo para ver el resto o usa la búsqueda."
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Chaque groupe affiche ses 20 premières chaînes sur une rangée. Touchez Tout afficher pour voir le reste, ou utilisez la recherche."
-          }
-        },
-        "hi" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "हर ग्रुप एक पंक्ति में अपने पहले 20 चैनल दिखाता है। बाकी के लिए सभी देखें पर टैप करें, या सर्च करें।"
-          }
-        },
-        "it" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Ogni gruppo mostra i primi 20 canali in una riga. Tocca “Mostra tutto” per gli altri, oppure usa la ricerca."
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "各グループの最初の20チャンネルが1列に表示されます。残りは「すべて表示」をタップするか、検索を使用してください。"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "각 그룹의 처음 20개 채널이 한 줄에 표시됩니다. 나머지는 모두 보기를 탭하거나 검색을 사용하세요."
-          }
-        },
-        "pt-BR" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Cada grupo mostra seus primeiros 20 canais em uma fileira. Toque em Ver Tudo para ver o restante ou use a busca."
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "每个分组在一行中显示前 20 个频道。轻点“查看全部”查看其余频道，或使用搜索。"
-          }
-        },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "每個群組在一列中顯示前 20 個頻道。點一下「顯示全部」查看其餘頻道，或使用搜尋。"
           }
         }
       }
@@ -7605,6 +7547,70 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "跟隨系統"
+          }
+        }
+      }
+    },
+    "Font Style" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Schriftstil"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Estilo de letra"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Style de police"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "फ़ॉन्ट स्टाइल"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Stile del carattere"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "フォントスタイル"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "글꼴 스타일"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Estilo da fonte"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "字体样式"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "字體樣式"
           }
         }
       }
@@ -9856,6 +9862,70 @@
         }
       }
     },
+    "Link copied" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Link kopiert"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enlace copiado"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lien copié"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "लिंक कॉपी हो गया"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Link copiato"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "リンクをコピーしました"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "링크를 복사함"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Link copiado"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "链接已拷贝"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "已拷貝連結"
+          }
+        }
+      }
+    },
     "Listening…" : {
       "localizations" : {
         "de" : {
@@ -10562,6 +10632,70 @@
         }
       }
     },
+    "More" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mehr"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Más"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Plus"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "और"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Altro"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "その他"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "더 보기"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mais"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "更多"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "更多"
+          }
+        }
+      }
+    },
     "Movies" : {
       "localizations" : {
         "de" : {
@@ -10750,6 +10884,70 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "名稱"
+          }
+        }
+      }
+    },
+    "New Version Available" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Neue Version verfügbar"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nueva versión disponible"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nouvelle version disponible"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "नया वर्शन उपलब्ध है"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nuova versione disponibile"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "新しいバージョンがあります"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "새 버전 사용 가능"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nova versão disponível"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "有新版本可用"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "有新版本可用"
           }
         }
       }
@@ -11012,66 +11210,66 @@
         }
       }
     },
-    "No Plex servers were found on this account." : {
+    "No channels" : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "In diesem Konto wurden keine Plex-Server gefunden."
+            "value" : "Keine Kanäle"
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "No se encontraron servidores Plex en esta cuenta."
+            "value" : "No hay canales"
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Aucun serveur Plex n'a été trouvé sur ce compte."
+            "value" : "Aucune chaîne"
           }
         },
         "hi" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "इस खाते में कोई Plex सर्वर नहीं मिला।"
+            "value" : "कोई चैनल नहीं"
           }
         },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Nessun server Plex trovato su questo account."
+            "value" : "Nessun canale"
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "このアカウントに Plex サーバが見つかりませんでした。"
+            "value" : "チャンネルがありません"
           }
         },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "이 계정에서 Plex 서버를 찾지 못했습니다."
+            "value" : "채널 없음"
           }
         },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Nenhum servidor Plex foi encontrado nesta conta."
+            "value" : "Nenhum canal"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "此账户中未找到 Plex 服务器。"
+            "value" : "没有频道"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "此帳號中找不到 Plex 伺服器。"
+            "value" : "沒有頻道"
           }
         }
       }
@@ -14677,6 +14875,134 @@
         }
       }
     },
+    "Refreshed %@" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aktualisiert %@"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Actualizada %@"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Actualisée %@"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ रीफ़्रेश किया गया"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aggiornata %@"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@に更新"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ 새로 고침됨"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Atualizada %@"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@更新"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@更新"
+          }
+        }
+      }
+    },
+    "Refreshing" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wird aktualisiert"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Actualizando"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Actualisation"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "रीफ़्रेश हो रहा है"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aggiornamento"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "更新中"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "새로 고치는 중"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Atualizando"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "正在更新"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "正在更新"
+          }
+        }
+      }
+    },
     "Remove from Favorites" : {
       "localizations" : {
         "de" : {
@@ -15125,6 +15451,70 @@
         }
       }
     },
+    "Road Sign" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Straßenschild"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Señal de tráfico"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Panneau routier"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "रोड साइन"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cartello stradale"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "道路標識"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "도로 표지판"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Placa de estrada"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "路牌"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "路牌"
+          }
+        }
+      }
+    },
     "Roadivo" : {
       "localizations" : {
         "de" : {
@@ -15185,6 +15575,70 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Roadivo"
+          }
+        }
+      }
+    },
+    "Roadivo %@ is now available." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Roadivo %@ ist jetzt verfügbar."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Roadivo %@ ya está disponible."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Roadivo %@ est disponible."
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Roadivo %@ अब उपलब्ध है।"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Roadivo %@ è ora disponibile."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Roadivo %@ が利用可能になりました。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Roadivo %@ 버전을 사용할 수 있습니다."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "O Roadivo %@ já está disponível."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Roadivo %@ 现已推出。"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Roadivo %@ 現已推出。"
           }
         }
       }
@@ -15765,6 +16219,70 @@
         }
       }
     },
+    "Rounded" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Abgerundet"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Redondeada"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Arrondie"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "गोलाकार"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Arrotondato"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "丸ゴシック"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "둥근 글꼴"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Arredondada"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "圆体"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "圓體"
+          }
+        }
+      }
+    },
     "Save" : {
       "localizations" : {
         "de" : {
@@ -16085,70 +16603,6 @@
         }
       }
     },
-    "See All" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Alle anzeigen"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Ver todo"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Tout afficher"
-          }
-        },
-        "hi" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "सभी देखें"
-          }
-        },
-        "it" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Mostra tutto"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "すべて表示"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "모두 보기"
-          }
-        },
-        "pt-BR" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Ver Tudo"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "查看全部"
-          }
-        },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "顯示全部"
-          }
-        }
-      }
-    },
     "Send video to an AirPlay car display, a wireless adapter or a TV." : {
       "localizations" : {
         "de" : {
@@ -16273,6 +16727,70 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "將影片傳送到支援 AirPlay 的車用螢幕，或將 iPhone 固定在支架上並開啟車用模式。"
+          }
+        }
+      }
+    },
+    "Serif" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Serifen"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Serif"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Serif"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "सेरिफ़"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Graziato"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "明朝"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "명조"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Serifada"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "衬线"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "襯線"
           }
         }
       }
@@ -16661,6 +17179,70 @@
         }
       }
     },
+    "Show Source" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Quelle anzeigen"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mostrar fuente"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Afficher la source"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "सोर्स दिखाएँ"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mostra sorgente"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ソースを表示"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "소스 보기"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mostrar fonte"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "显示来源"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "顯示來源"
+          }
+        }
+      }
+    },
     "Sign in to your own server to watch its movies and shows." : {
       "localizations" : {
         "de" : {
@@ -17045,6 +17627,70 @@
         }
       }
     },
+    "Sources" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Quellen"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fuentes"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sources"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "सोर्स"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sorgenti"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ソース"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "소스"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fontes"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "来源"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "來源"
+          }
+        }
+      }
+    },
     "Sports" : {
       "localizations" : {
         "de" : {
@@ -17105,6 +17751,70 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "體育"
+          }
+        }
+      }
+    },
+    "Standard" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Standard"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Estándar"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Standard"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "स्टैंडर्ड"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Standard"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "標準"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "기본"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Padrão"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "标准"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "標準"
           }
         }
       }
@@ -17685,70 +18395,6 @@
         }
       }
     },
-    "Swipe to delete. Touch and hold to refresh or rename." : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Zum Löschen streichen. Gedrückt halten zum Aktualisieren oder Umbenennen."
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Desliza para eliminar. Mantén pulsado para actualizar o renombrar."
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Balayez pour supprimer. Maintenez le doigt pour actualiser ou renommer."
-          }
-        },
-        "hi" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "डिलीट करने के लिए स्वाइप करें। रीफ़्रेश करने या नाम बदलने के लिए टच करके रखें।"
-          }
-        },
-        "it" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Scorri per eliminare. Tieni premuto per aggiornare o rinominare."
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "スワイプで削除。長押しで更新または名前を変更。"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "쓸어넘겨 삭제하세요. 길게 터치하여 새로 고치거나 이름을 변경하세요."
-          }
-        },
-        "pt-BR" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Deslize para apagar. Toque e mantenha pressionado para atualizar ou renomear."
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "轻扫可删除。按住可刷新或重新命名。"
-          }
-        },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "滑動即可刪除。按住即可重新整理或重新命名。"
-          }
-        }
-      }
-    },
     "System" : {
       "localizations" : {
         "de" : {
@@ -17873,6 +18519,70 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "「跟隨系統」會依照 iPhone 的淺色或深色模式設定顯示。"
+          }
+        }
+      }
+    },
+    "Tap a source to see its channels. Swipe to delete, or touch and hold to refresh or rename." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tippe auf eine Quelle, um ihre Kanäle zu sehen. Zum Löschen wischen, zum Aktualisieren oder Umbenennen gedrückt halten."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Toca una fuente para ver sus canales. Desliza para eliminarla, o mantén pulsado para actualizarla o renombrarla."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Touchez une source pour voir ses chaînes. Balayez pour la supprimer, ou maintenez le doigt pour l’actualiser ou la renommer."
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "किसी सोर्स के चैनल देखने के लिए उस पर टैप करें। डिलीट करने के लिए स्वाइप करें, या रीफ़्रेश या नाम बदलने के लिए दबाकर रखें।"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tocca una sorgente per vederne i canali. Scorri per eliminarla, o tieni premuto per aggiornarla o rinominarla."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ソースをタップするとチャンネルが表示されます。スワイプで削除、長押しで更新または名前変更できます。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "소스를 탭하면 채널을 볼 수 있습니다. 쓸어서 삭제하거나, 길게 눌러 새로 고치거나 이름을 변경하십시오."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Toque em uma fonte para ver os canais. Deslize para apagar, ou toque e segure para atualizar ou renomear."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "轻点来源可查看其频道。轻扫可删除，按住可更新或重新命名。"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "點一下來源可查看其頻道。滑動可刪除，按住可更新或重新命名。"
           }
         }
       }
@@ -19285,6 +19995,134 @@
         }
       }
     },
+    "This Plex account has no media server. Roadivo plays your own Plex Media Server (on a computer or NAS) or one shared with you, not Plex's free Movies & TV." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dieses Plex-Konto hat keinen Medienserver. Roadivo spielt deinen eigenen Plex Media Server (auf einem Computer oder NAS) oder einen mit dir geteilten ab, nicht die kostenlosen Filme & Serien von Plex."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Esta cuenta de Plex no tiene servidor multimedia. Roadivo reproduce tu propio Plex Media Server (en un ordenador o NAS) o uno compartido contigo, no las películas y series gratuitas de Plex."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ce compte Plex n’a aucun serveur multimédia. Roadivo lit votre propre Plex Media Server (sur un ordinateur ou un NAS) ou un serveur partagé avec vous, pas les films et séries gratuits de Plex."
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "इस Plex अकाउंट में कोई मीडिया सर्वर नहीं है। Roadivo आपका अपना Plex Media Server (कंप्यूटर या NAS पर) या आपके साथ शेयर किया गया सर्वर चलाता है, Plex की मुफ़्त फ़िल्में और शो नहीं।"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Questo account Plex non ha un media server. Roadivo riproduce il tuo Plex Media Server (su un computer o NAS) o uno condiviso con te, non i film e le serie gratuiti di Plex."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "この Plex アカウントにはメディアサーバがありません。Roadivo が再生するのは、ご自身の Plex Media Server（コンピュータや NAS 上）か共有されたサーバで、Plex の無料映画・番組は対象外です。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "이 Plex 계정에는 미디어 서버가 없습니다. Roadivo는 직접 운영하는 Plex Media Server(컴퓨터 또는 NAS) 또는 공유받은 서버를 재생하며, Plex의 무료 영화 및 TV는 재생하지 않습니다."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Esta conta do Plex não tem servidor de mídia. O Roadivo reproduz o seu próprio Plex Media Server (em um computador ou NAS) ou um compartilhado com você, não os filmes e séries gratuitos do Plex."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "此 Plex 账户没有媒体服务器。Roadivo 播放的是你自己的 Plex Media Server（在电脑或 NAS 上）或别人与你共享的服务器，而不是 Plex 的免费影视内容。"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "此 Plex 帳號沒有媒體伺服器。Roadivo 播放的是你自己的 Plex Media Server（在電腦或 NAS 上）或別人與你共享的伺服器，而不是 Plex 的免費影視內容。"
+          }
+        }
+      }
+    },
+    "This source's link isn't on this iPhone. Add the source again to copy it." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Der Link dieser Quelle ist nicht auf diesem iPhone. Füge die Quelle erneut hinzu, um ihn zu kopieren."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "El enlace de esta fuente no está en este iPhone. Vuelve a añadir la fuente para copiarlo."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Le lien de cette source n’est pas sur cet iPhone. Ajoutez de nouveau la source pour le copier."
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "इस सोर्स का लिंक इस iPhone पर नहीं है। उसे कॉपी करने के लिए सोर्स को फिर से जोड़ें।"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Il link di questa sorgente non è su questo iPhone. Aggiungi di nuovo la sorgente per copiarlo."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "このソースのリンクはこのiPhoneにありません。コピーするにはソースをもう一度追加してください。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "이 소스의 링크가 이 iPhone에 없습니다. 복사하려면 소스를 다시 추가하십시오."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "O link desta fonte não está neste iPhone. Adicione a fonte de novo para copiá-lo."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "此来源的链接不在这台 iPhone 上。请重新添加来源以拷贝链接。"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "此來源的連結不在這部 iPhone 上。請重新加入來源以拷貝連結。"
+          }
+        }
+      }
+    },
     "This stream can't be played right now." : {
       "localizations" : {
         "de" : {
@@ -20115,6 +20953,70 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "使用 Roadivo Pro 解鎖"
+          }
+        }
+      }
+    },
+    "Update Now" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Jetzt aktualisieren"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Actualizar ahora"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mettre à jour"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "अभी अपडेट करें"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aggiorna ora"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "今すぐアップデート"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "지금 업데이트"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Atualizar agora"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "立即更新"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "立即更新"
           }
         }
       }

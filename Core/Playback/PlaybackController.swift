@@ -60,7 +60,7 @@ final class PlaybackController {
     @ObservationIgnored private var commandsInstalled = false
     /// Paused on purpose (the user, or the car unplugged), so the end of a call doesn't restart it.
     @ObservationIgnored private var staysPaused = false
-    @ObservationIgnored private let logger = Logger(subsystem: "com.roadivo", category: "Playback")
+    @ObservationIgnored let logger = Logger(subsystem: "com.roadivo", category: "Playback")
 
     private var index: Int? {
         guard let current else { return nil }
@@ -127,23 +127,6 @@ final class PlaybackController {
         player.pause()
     }
 
-    /// Pauses while voice search has the microphone; true when `resume()` should follow.
-    func pauseForMicrophone() -> Bool {
-        guard current != nil, player.timeControlStatus != .paused else { return false }
-        player.pause()
-        return true
-    }
-
-    /// Hands the audio back to the car's radio or other apps, when nothing here is playing.
-    func releaseAudio() {
-        guard player.timeControlStatus == .paused else { return }
-        do {
-            try AVAudioSession.sharedInstance().setActive(false, options: .notifyOthersOnDeactivation)
-        } catch {
-            logger.error("Audio release: \(error.localizedDescription, privacy: .public)")
-        }
-    }
-
     func next() {
         guard let index, index + 1 < queue.count else { return }
         play(queue[index + 1], queue: queue)
@@ -152,10 +135,6 @@ final class PlaybackController {
     func previous() {
         guard let index, index > 0 else { return }
         play(queue[index - 1], queue: queue)
-    }
-
-    func skip(by seconds: Double) {
-        seek(to: player.currentTime().seconds + seconds)
     }
 
     /// Jumps to `seconds` into a video with a fixed length (live streams can't seek).
@@ -252,11 +231,13 @@ final class PlaybackController {
             let seconds = item.duration.seconds
             let itemID = ObjectIdentifier(item)
             Task { @MainActor [weak self] in
-                guard let self, player.currentItem.map(ObjectIdentifier.init) == itemID else { return }
+                guard let self, let current = player.currentItem, ObjectIdentifier(current) == itemID else { return }
                 if failed {
                     logger.error("Item failed: \(message ?? "unknown", privacy: .public)")
                     fail()
-                } else if seconds.isFinite, seconds > 0 {
+                    return
+                }
+                if seconds.isFinite, seconds > 0 {
                     duration = seconds
                     updateNowPlaying()
                 }

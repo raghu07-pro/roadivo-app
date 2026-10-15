@@ -23,12 +23,18 @@ final class SourcesViewModel {
                     kind: $0.kind,
                     itemCount: repository.channelCount(in: $0.id),
                     host: $0.sourceHost,
-                    refreshedAt: $0.refreshedAt
+                    refreshedAt: $0.refreshedAt,
+                    server: $0.kind == .mediaServer ? repository.serverKind(of: $0.id) : nil
                 )
             }
         } catch {
             errorMessage = error.localizedDescription
         }
+    }
+
+    /// The screen for one source's channels.
+    func detail(for source: SourceSummary) -> SourceDetailViewModel {
+        SourceDetailViewModel(source: source, repository: repository)
     }
 
     /// Returns true when the library changed.

@@ -1,7 +1,7 @@
 import SwiftUI
 
-/// The controls drawn on the video: minimise, title, favourite and close along the top; rotation
-/// lock on the left; play/pause, times, scrubber and full screen along the bottom.
+/// The controls drawn on the video: minimise, title, subtitles and audio, favourite and close along the
+/// top; rotation lock on the left; play/pause, times, scrubber and full screen along the bottom.
 struct PlayerControls: View {
     let playback: PlaybackController
     let title: String
@@ -13,6 +13,7 @@ struct PlayerControls: View {
     let onClose: () -> Void
     let onRotationLock: () -> Void
     let onFullScreen: () -> Void
+    /// Opens Subtitles and Audio; the button shows only when the stream offers a choice.
     /// Any touch on a control keeps the controls up a little longer.
     let onInteraction: () -> Void
 

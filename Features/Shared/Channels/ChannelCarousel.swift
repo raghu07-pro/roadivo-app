@@ -19,7 +19,8 @@ struct ChannelCarousel: View {
                         onToggleFavorite: { onToggleFavorite(item) },
                         onDelete: item.deleteAction(onDelete)
                     )
-                    .frame(width: min(cardWidth, 300))
+                    // Posters stand tall, as on a streaming shelf.
+                    .frame(width: item.artwork == .poster ? min(cardWidth * 0.86, 240) : min(cardWidth, 300))
                 }
             }
             .padding(.horizontal, Spacing.md)
@@ -37,16 +38,18 @@ extension MediaItem {
     }
 }
 
-/// An adaptive grid of cards, for "See All", Favorites and On this iPhone.
+/// An adaptive grid of cards, for a group's screen, Favorites, On this iPhone and a source's channels.
 struct ChannelGrid: View {
     let items: [MediaItem]
     let onPlay: (MediaItem) -> Void
     let onToggleFavorite: (MediaItem) -> Void
     var onDelete: ((MediaItem) -> Void)?
 
-    /// Two equal columns on every iPhone in portrait (375 pt fits two 150 pt cards), more in
-    /// landscape. Not scaled with Dynamic Type, so a column never drops.
-    private let minimumWidth: CGFloat = 150
+    /// Two equal columns on every iPhone in portrait (375 pt fits two 150 pt cards), three for
+    /// posters, more in landscape. Not scaled with Dynamic Type, so a column never drops.
+    private var minimumWidth: CGFloat {
+        items.first?.artwork == .poster ? 100 : 150
+    }
 
     var body: some View {
         LazyVGrid(

@@ -70,6 +70,8 @@ private struct MainTabView: View {
     @State private var updatePrompt: UpdatePromptModel
     /// Set by a purchase or restore, so Home opens once the paywall has closed.
     @State private var goesHomeAfterPaywall = false
+    /// The mini player's measured height, which every screen keeps clear.
+    @State private var miniPlayerHeight: CGFloat = 0
 
     init(environment: AppEnvironment) {
         self.environment = environment
@@ -110,7 +112,12 @@ private struct MainTabView: View {
                 voiceSearch: voiceSearch,
                 onVideoDeleted: videoDeleted
             )
-            .miniPlayerInset(playback: playback, isPlayerOpen: router.playerSurface != nil, onExpand: expandPlayer)
+            .miniPlayer(
+                playback: playback,
+                isPlayerOpen: router.playerSurface != nil,
+                height: $miniPlayerHeight,
+                onExpand: expandPlayer
+            )
             .tabItem { Label("Home", systemImage: "house") }
             .tag(AppRouter.Tab.home)
 
@@ -124,7 +131,12 @@ private struct MainTabView: View {
                 onVideoDeleted: videoDeleted,
                 onBrowse: { router.selectedTab = .home }
             )
-            .miniPlayerInset(playback: playback, isPlayerOpen: router.playerSurface != nil, onExpand: expandPlayer)
+            .miniPlayer(
+                playback: playback,
+                isPlayerOpen: router.playerSurface != nil,
+                height: $miniPlayerHeight,
+                onExpand: expandPlayer
+            )
             .tabItem { Label("Favorites", systemImage: "heart") }
             .tag(AppRouter.Tab.favorites)
 
@@ -138,7 +150,12 @@ private struct MainTabView: View {
                 onUpgrade: { router.paywall = .carMode },
                 onBrowse: { router.selectedTab = .home }
             )
-            .miniPlayerInset(playback: playback, isPlayerOpen: router.playerSurface != nil, onExpand: expandPlayer)
+            .miniPlayer(
+                playback: playback,
+                isPlayerOpen: router.playerSurface != nil,
+                height: $miniPlayerHeight,
+                onExpand: expandPlayer
+            )
             .tabItem { Label("Cast to Car", systemImage: "car") }
             .tag(AppRouter.Tab.car)
 
@@ -152,11 +169,18 @@ private struct MainTabView: View {
                         viewModel: sources,
                         revision: router.libraryRevision,
                         onAddSource: addSource,
-                        onLibraryChanged: sourcesChanged
+                        onLibraryChanged: sourcesChanged,
+                        onPlay: play,
+                        onFavoriteChanged: favoriteChanged
                     )
                 }
             )
-            .miniPlayerInset(playback: playback, isPlayerOpen: router.playerSurface != nil, onExpand: expandPlayer)
+            .miniPlayer(
+                playback: playback,
+                isPlayerOpen: router.playerSurface != nil,
+                height: $miniPlayerHeight,
+                onExpand: expandPlayer
+            )
             .tabItem { Label("Settings", systemImage: "gearshape") }
             .tag(AppRouter.Tab.settings)
         }
@@ -288,20 +312,24 @@ private struct MainTabView: View {
 }
 
 private extension View {
-    /// The now-playing bar, only while the full player is closed: opening a video goes straight
-    /// to the player, and the bar appears once it's minimised.
-    func miniPlayerInset(
+    /// The now-playing bar, floating just above the tab bar while the full player is closed (opening
+    /// a video goes straight to the player). Its height goes to every screen so content clears it.
+    func miniPlayer(
         playback: PlaybackController,
         isPlayerOpen: Bool,
+        height: Binding<CGFloat>,
         onExpand: @escaping () -> Void
     ) -> some View {
-        safeAreaInset(edge: .bottom, spacing: 0) {
-            if playback.isActive, !isPlayerOpen {
+        let isShown = playback.isActive && !isPlayerOpen
+        return overlay(alignment: .bottom) {
+            if isShown {
                 MiniPlayerBar(playback: playback, onExpand: onExpand)
+                    .onGeometryChange(for: CGFloat.self) { $0.size.height } action: { height.wrappedValue = $0 }
                     .padding(.horizontal, Spacing.sm)
                     .padding(.bottom, Spacing.xs)
                     .transition(.move(edge: .bottom).combined(with: .opacity))
             }
         }
+        .environment(\.bottomAccessoryHeight, isShown ? height.wrappedValue + Spacing.xs * 2 : 0)
     }
 }

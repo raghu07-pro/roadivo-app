@@ -115,7 +115,7 @@ enum Typography {
         }
         if let bar = view as? UINavigationBar {
             func restyled(_ appearance: UINavigationBarAppearance) -> UINavigationBarAppearance {
-                let copy = appearance.copy() as? UINavigationBarAppearance ?? appearance
+                let copy = appearance.copy()
                 copy.largeTitleTextAttributes = large
                 copy.titleTextAttributes = inline
                 return copy

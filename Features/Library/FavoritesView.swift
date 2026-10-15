@@ -64,6 +64,7 @@ struct FavoritesView: View {
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
             }
             .background(.roadCanvas)
+            .clearsBottomAccessory()
             .navigationTitle("Favorites")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {

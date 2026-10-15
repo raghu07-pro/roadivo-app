@@ -29,6 +29,14 @@ struct PlayerView: View {
                     stage
                         .aspectRatio(16 / 9, contentMode: .fit)
                         .background(Color.black.ignoresSafeArea(edges: .top))
+                    if viewModel.showsGroups {
+                        CategoryChips(
+                            chips: viewModel.groups.map { .init(id: $0, title: $0) },
+                            selection: $viewModel.group,
+                            identifier: "player.group"
+                        )
+                        .padding(.top, Spacing.xs)
+                    }
                     grid
                 }
                 .background(.roadCanvas)
@@ -37,6 +45,7 @@ struct PlayerView: View {
         .statusBarHidden(isLandscape)
         .persistentSystemOverlays(isLandscape ? .hidden : .automatic)
         .onAppear(perform: showControls)
+        .task { viewModel.loadSource() }
         .onDisappear {
             hideTask?.cancel()
             orientation.reset()
@@ -124,18 +133,27 @@ struct PlayerView: View {
     }
 
     private var grid: some View {
-        ScrollView {
-            LazyVGrid(
-                columns: [GridItem(.adaptive(minimum: 150), spacing: Spacing.sm, alignment: .top)],
-                spacing: Spacing.md
-            ) {
-                ForEach(viewModel.upNext) { item in
-                    UpNextCard(item: item, isCurrent: item.id == viewModel.current?.id) {
-                        viewModel.select(item)
+        ScrollViewReader { proxy in
+            ScrollView {
+                LazyVGrid(
+                    // Three posters across, or two 16:9 cards.
+                    columns: [GridItem(
+                        .adaptive(minimum: viewModel.gridItems.first?.artwork == .poster ? 100 : 150),
+                        spacing: Spacing.sm,
+                        alignment: .top
+                    )],
+                    spacing: Spacing.md
+                ) {
+                    ForEach(viewModel.gridItems) { item in
+                        UpNextCard(item: item, isCurrent: item.id == viewModel.current?.id) {
+                            viewModel.select(item)
+                        }
                     }
                 }
+                .padding(Spacing.md)
+                .id(viewModel.group)
             }
-            .padding(Spacing.md)
+            .onChange(of: viewModel.group) { proxy.scrollTo(viewModel.group, anchor: .top) }
         }
     }
 

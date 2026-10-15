@@ -7,6 +7,8 @@ struct MediaServerAccount: Codable, Equatable, Sendable {
     let baseURL: URL
     let userID: String
     let token: String
+    /// The server's own name ("Stable Demo"), for naming the source. Absent in older logins.
+    var serverName: String?
 }
 
 enum MediaServerError: LocalizedError, Equatable {
@@ -64,7 +66,22 @@ struct EmbyCompatibleClient: MediaServerConnecting {
         guard let response = try? JSONDecoder().decode(AuthResponse.self, from: data) else {
             throw MediaServerError.unexpectedResponse
         }
-        return MediaServerAccount(kind: kind, baseURL: baseURL, userID: response.user.id, token: response.accessToken)
+        return await MediaServerAccount(
+            kind: kind,
+            baseURL: baseURL,
+            userID: response.user.id,
+            token: response.accessToken,
+            serverName: serverName(at: baseURL)
+        )
+    }
+
+    /// The name the owner gave the server, from its public info. Only a label, so a failure is nil.
+    private func serverName(at baseURL: URL) async -> String? {
+        let request = URLRequest(url: baseURL.appending(path: "System/Info/Public"), timeoutInterval: 10)
+        guard let data = try? await send(request, unauthorizedIs: .badCredentials),
+              let info = try? JSONDecoder().decode(PublicInfo.self, from: data) else { return nil }
+        let name = info.serverName?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+        return name.isEmpty ? nil : name
     }
 
     /// Every movie and episode, a page at a time up to `maximumItems`, like Plex.
@@ -150,14 +167,26 @@ struct EmbyCompatibleClient: MediaServerConnecting {
             "AudioCodec": "aac",
             "TranscodingMaxAudioChannels": "2"
         ]) else { return nil }
-        let poster = url(account, path: "Items/\(item.id)/Images/Primary", query: ["maxWidth": "480"])
         let isEpisode = item.type == "Episode"
+        // A film's Primary image is its poster; an episode's is a 16:9 still.
+        let poster = url(
+            account,
+            path: "Items/\(item.id)/Images/Primary",
+            query: ["maxWidth": isEpisode ? "480" : "360"]
+        )
         var name = item.name
         if isEpisode, let season = item.season, let episode = item.episode {
             name = "S\(season) · E\(episode) — \(item.name)"
         }
         let group = isEpisode ? (item.seriesName ?? String(appLocalized: "TV")) : String(appLocalized: "Movies")
-        return PlaylistEntry(name: name, group: group, logoURL: poster, streamURL: stream)
+        return PlaylistEntry(
+            name: name,
+            group: group,
+            logoURL: poster,
+            streamURL: stream,
+            year: isEpisode ? nil : item.year,
+            artwork: isEpisode ? .still : .poster
+        )
     }
 
     private func url(_ account: MediaServerAccount, path: String, query: [String: String]) -> URL? {
@@ -171,6 +200,11 @@ struct EmbyCompatibleClient: MediaServerConnecting {
     private struct AuthUser: Decodable {
         let id: String
         enum CodingKeys: String, CodingKey { case id = "Id" }
+    }
+
+    private struct PublicInfo: Decodable {
+        let serverName: String?
+        enum CodingKeys: String, CodingKey { case serverName = "ServerName" }
     }
 
     private struct AuthResponse: Decodable {
@@ -198,6 +232,7 @@ struct EmbyCompatibleClient: MediaServerConnecting {
         let seriesName: String?
         let season: Int?
         let episode: Int?
+        let year: Int?
         enum CodingKeys: String, CodingKey {
             case id = "Id"
             case name = "Name"
@@ -205,6 +240,7 @@ struct EmbyCompatibleClient: MediaServerConnecting {
             case seriesName = "SeriesName"
             case season = "ParentIndexNumber"
             case episode = "IndexNumber"
+            case year = "ProductionYear"
         }
     }
 }

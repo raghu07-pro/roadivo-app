@@ -15,6 +15,7 @@ struct PrivacyPolicyView: View {
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(.roadCanvas)
+        .clearsBottomAccessory()
         .navigationTitle("Privacy Policy")
         .navigationBarTitleDisplayMode(.inline)
     }

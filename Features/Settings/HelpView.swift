@@ -35,6 +35,7 @@ struct HelpView: View {
             .frame(maxWidth: .infinity)
         }
         .background(.roadCanvas)
+        .clearsBottomAccessory()
         .navigationTitle("Help & FAQ")
         .navigationBarTitleDisplayMode(.inline)
     }

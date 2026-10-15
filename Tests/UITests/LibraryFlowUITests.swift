@@ -40,6 +40,97 @@ final class LibraryFlowUITests: XCTestCase {
         snapshot("13-Player-Dark", app: app)
     }
 
+    /// Chips under the video browse the source's other groups while one plays.
+    func testPlayerChipsBrowseOtherGroups() {
+        let app = XCUIApplication.roadivo(skipOnboarding: true, demoLibrary: true)
+        let channel = app.buttons["channel.Steel Horizon · 1080p"]
+        XCTAssertTrue(channel.waitForExistence(timeout: 10))
+        channel.tap()
+
+        let movies = app.buttons["player.group.Movies"]
+        XCTAssertTrue(movies.waitForExistence(timeout: 5))
+        XCTAssertTrue(movies.isSelected)
+        XCTAssertFalse(app.buttons["upNext.Football Tonight"].exists)
+
+        app.buttons["player.group.Sports"].tap()
+        let football = app.buttons["upNext.Football Tonight"]
+        XCTAssertTrue(football.waitForExistence(timeout: 5))
+        football.tap()
+        XCTAssertTrue(waitForSelection(football))
+        XCTAssertTrue(app.buttons["player.group.Sports"].isSelected)
+    }
+
+    /// Home's one button filters by source (with each source's count) and holds Add Source.
+    func testHomeFiltersBySource() {
+        let app = XCUIApplication.roadivo(skipOnboarding: true, demoLibrary: true)
+        XCTAssertTrue(app.buttons["channel.Football Tonight"].waitForExistence(timeout: 10))
+        let menu = app.buttons["library.sourceFilter"]
+        XCTAssertTrue(menu.exists)
+        menu.tap()
+
+        let roadTrip = app.buttons.matching(NSPredicate(format: "label BEGINSWITH 'Road Trip'")).firstMatch
+        XCTAssertTrue(roadTrip.waitForExistence(timeout: 5))
+        XCTAssertTrue(roadTrip.label.contains("13"))
+        XCTAssertTrue(app.buttons["library.menu.addSource"].exists)
+        snapshot("11b-SourceMenu", app: app)
+        roadTrip.tap()
+
+        XCTAssertEqual(menu.value as? String, "Road Trip")
+        XCTAssertTrue(app.buttons["channel.Football Tonight"].exists)
+    }
+
+    /// See All opens a group as a grid, with chips to move to another group.
+    func testSeeAllSwitchesGroups() throws {
+        let app = XCUIApplication.roadivo(skipOnboarding: true, demoLibrary: true)
+        let seeAll = app.buttons["library.seeAll.Movies"]
+        XCTAssertTrue(seeAll.waitForExistence(timeout: 10))
+        seeAll.tap()
+
+        let movies = app.buttons["group.Movies"]
+        XCTAssertTrue(movies.waitForExistence(timeout: 5))
+        XCTAssertTrue(movies.isSelected)
+        XCTAssertTrue(app.buttons["channel.Steel Horizon · 1080p"].exists)
+        snapshot("12b-SeeAll", app: app)
+
+        app.buttons["group.Travel"].tap()
+        XCTAssertTrue(app.buttons["channel.Coastal Echoes"].waitForExistence(timeout: 5))
+        XCTAssertFalse(app.buttons["channel.Steel Horizon · 1080p"].exists)
+        try auditIgnoringBottomEdge(app, for: [.dynamicType, .sufficientElementDescription, .hitRegion])
+    }
+
+    private func waitForSelection(_ element: XCUIElement) -> Bool {
+        let selected = XCTNSPredicateExpectation(predicate: NSPredicate(format: "isSelected == true"), object: element)
+        return XCTWaiter().wait(for: [selected], timeout: 5) == .completed
+    }
+
+    /// The mini player floats over every tab, so each screen keeps its content clear of it: the Car
+    /// tab's safety note, and the last Settings row once scrolled to the end.
+    func testMiniPlayerNeverCoversContent() {
+        let app = XCUIApplication.roadivo(skipOnboarding: true, demoLibrary: true)
+        let channel = app.buttons["channel.Football Tonight"]
+        XCTAssertTrue(channel.waitForExistence(timeout: 10))
+        channel.tap()
+        let minimize = app.buttons["player.minimize"]
+        XCTAssertTrue(minimize.waitForExistence(timeout: 5))
+        minimize.tap()
+        let miniPlayer = app.buttons["miniPlayer.expand"]
+        XCTAssertTrue(miniPlayer.waitForExistence(timeout: 5))
+
+        app.tabBars.buttons["Cast to Car"].tap()
+        let note = app.descendants(matching: .any)["cast.safety"]
+        XCTAssertTrue(note.waitForExistence(timeout: 5))
+        XCTAssertLessThanOrEqual(note.frame.maxY, miniPlayer.frame.minY)
+
+        app.tabBars.buttons["Settings"].tap()
+        let list = app.collectionViews.firstMatch
+        XCTAssertTrue(list.waitForExistence(timeout: 5))
+        for _ in 0..<4 {
+            list.swipeUp()
+        }
+        let lastRow = app.cells.allElementsBoundByIndex.last { $0.frame.height > 0 }
+        XCTAssertLessThanOrEqual(lastRow?.frame.maxY ?? .infinity, miniPlayer.frame.minY)
+    }
+
     /// Minimise keeps playing in the mini player; close stops it.
     func testPlayMinimizeAndClose() {
         let app = XCUIApplication.roadivo(skipOnboarding: true, demoLibrary: true)
@@ -130,22 +221,30 @@ final class LibraryFlowUITests: XCTestCase {
         XCTAssertTrue(app.staticTexts["No usable link found"].waitForExistence(timeout: 2))
     }
 
-    /// Connecting to a car's screen: Apple's AirPlay button covers the whole "Choose an AirPlay Screen"
-    /// button, so any tap opens the list of screens (the list itself needs a real iPhone).
-    func testAirPlayButtonIsTheSystemPicker() {
-        let app = XCUIApplication.roadivo(skipOnboarding: true)
+    /// Before a car is connected the tab only explains how to connect: no Car Mode or AirPlay buttons.
+    func testCarTabWaitsForACar() {
+        let app = XCUIApplication.roadivo(skipOnboarding: true, demoLibrary: true, pro: true)
+        XCTAssertTrue(app.buttons["channel.Highway Stop"].waitForExistence(timeout: 10))
         app.tabBars.buttons["Cast to Car"].tap()
-        let button = app.otherElements["cast.airplay"]
-        let picker = button.buttons["AirPlay"]
+        XCTAssertTrue(app.descendants(matching: .any)["cast.status"].waitForExistence(timeout: 5))
+        XCTAssertFalse(app.buttons["car.start"].exists)
+        XCTAssertFalse(app.buttons["car.browse"].exists)
+        XCTAssertFalse(app.descendants(matching: .any)["cast.airplay"].exists)
+    }
+
+    /// Connected, the AirPlay card holds Apple's own AirPlay button, which lists the screens (the list
+    /// itself needs a real iPhone).
+    func testAirPlayButtonIsTheSystemPicker() {
+        let app = XCUIApplication.roadivo(skipOnboarding: true, carConnected: true)
+        app.tabBars.buttons["Cast to Car"].tap()
+        let picker = app.descendants(matching: .any)["cast.airplay"]
         XCTAssertTrue(picker.waitForExistence(timeout: 5))
-        XCTAssertEqual(picker.frame.minX, button.frame.minX, accuracy: 0.5)
-        XCTAssertEqual(picker.frame.width, button.frame.width, accuracy: 0.5)
-        XCTAssertEqual(picker.frame.height, button.frame.height, accuracy: 0.5)
         XCTAssertTrue(picker.isHittable)
+        XCTAssertGreaterThanOrEqual(picker.frame.width, 44)
     }
 
     func testCarTabStartsCarModeForTheLastPlayed() {
-        let app = XCUIApplication.roadivo(skipOnboarding: true, demoLibrary: true, pro: true)
+        let app = XCUIApplication.roadivo(skipOnboarding: true, demoLibrary: true, pro: true, carConnected: true)
         let channel = app.buttons["channel.Highway Stop"]
         XCTAssertTrue(channel.waitForExistence(timeout: 10))
         channel.tap()
@@ -155,13 +254,14 @@ final class LibraryFlowUITests: XCTestCase {
         app.tabBars.buttons["Cast to Car"].tap()
         let start = app.buttons["car.start"]
         XCTAssertTrue(start.waitForExistence(timeout: 5))
+        snapshot("18b-Car-Connected", app: app)
         app.swipeUp() // On smaller iPhones the button starts behind the mini player.
         start.tap()
         XCTAssertTrue(app.buttons["carMode.exit"].waitForExistence(timeout: 5))
     }
 
     func testCarModeAsksFreeUsersForPro() {
-        let app = XCUIApplication.roadivo(skipOnboarding: true, demoLibrary: true)
+        let app = XCUIApplication.roadivo(skipOnboarding: true, demoLibrary: true, carConnected: true)
         let channel = app.buttons["channel.Football Tonight"]
         XCTAssertTrue(channel.waitForExistence(timeout: 10))
         channel.tap()
@@ -182,7 +282,12 @@ final class LibraryFlowUITests: XCTestCase {
     func testSecondSourceAsksFreeUsersForPro() {
         let app = XCUIApplication.roadivo(skipOnboarding: true, demoLibrary: true)
         XCTAssertTrue(app.buttons["channel.Football Tonight"].waitForExistence(timeout: 10))
-        app.buttons["library.addSource"].tap()
+        // With a source, Home's one button is the source menu, which holds Add Source.
+        XCTAssertFalse(app.buttons["library.addSource"].exists)
+        app.buttons["library.sourceFilter"].tap()
+        let add = app.buttons["library.menu.addSource"]
+        XCTAssertTrue(add.waitForExistence(timeout: 5))
+        add.tap()
         XCTAssertTrue(app.buttons["paywall.close"].waitForExistence(timeout: 5))
     }
 
@@ -226,7 +331,8 @@ final class LibraryFlowUITests: XCTestCase {
         XCTAssertEqual(code.label, "R D V O")
         XCTAssertTrue(app.buttons["plex.open"].exists)
         app.buttons["plex.copy"].tap()
-        XCTAssertEqual(UIPasteboard.general.string, "RDVO")
+        // iOS stops a test reading the clipboard, so check the button's own confirmation instead.
+        XCTAssertTrue(app.buttons["Copied"].waitForExistence(timeout: 2))
         snapshot("10b-PlexCode", app: app)
     }
 

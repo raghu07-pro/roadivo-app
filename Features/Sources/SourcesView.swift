@@ -1,11 +1,13 @@
 import SwiftUI
 
-/// "Manage Sources", pushed from Settings.
+/// "Manage Sources", pushed from Settings. A source opens its channels.
 struct SourcesView: View {
     let viewModel: SourcesViewModel
     let revision: Int
     let onAddSource: () -> Void
     let onLibraryChanged: () -> Void
+    let onPlay: (MediaItem, [MediaItem]) -> Void
+    let onFavoriteChanged: (UUID, Bool) -> Void
 
     @State private var renaming: SourceSummary?
     @State private var newName = ""
@@ -17,31 +19,43 @@ struct SourcesView: View {
         List {
             Section {
                 ForEach(viewModel.sources) { source in
-                    SourceRow(source: source, isRefreshing: viewModel.refreshing.contains(source.id))
-                        .accessibilityIdentifier("source.\(source.name)")
-                        .swipeActions(edge: .trailing) {
-                            // Not role: .destructive, which animates the row
-                            // away before the user has confirmed.
-                            Button {
-                                deleting = source
-                            } label: {
-                                Label("Delete", systemImage: "trash")
-                            }
-                            .tint(.red)
-                            .accessibilityIdentifier("source.delete")
+                    NavigationLink(value: source) {
+                        SourceRow(source: source, isRefreshing: viewModel.refreshing.contains(source.id))
+                    }
+                    .accessibilityIdentifier("source.\(source.name)")
+                    .swipeActions(edge: .trailing) {
+                        // Not role: .destructive, which animates the row
+                        // away before the user has confirmed.
+                        Button {
+                            deleting = source
+                        } label: {
+                            Label("Delete", systemImage: "trash")
                         }
-                        .contextMenu { menu(for: source) }
+                        .tint(.red)
+                        .accessibilityIdentifier("source.delete")
+                    }
+                    .contextMenu { menu(for: source) }
                 }
             } header: {
                 Text("Your Sources")
             } footer: {
-                Text("Swipe to delete. Touch and hold to refresh or rename.")
+                Text("Tap a source to see its channels. Swipe to delete, or touch and hold to refresh or rename.")
             }
         }
         .scrollContentBackground(.hidden)
         .background(.roadCanvas)
+        .clearsBottomAccessory()
         .navigationTitle("Manage Sources")
         .navigationBarTitleDisplayMode(.inline)
+        .navigationDestination(for: SourceSummary.self) { source in
+            SourceDetailView(
+                viewModel: viewModel.detail(for: source),
+                revision: revision,
+                onPlay: onPlay,
+                onFavoriteChanged: onFavoriteChanged,
+                onLibraryChanged: onLibraryChanged
+            )
+        }
         .overlay {
             if viewModel.sources.isEmpty {
                 EmptyStateView(

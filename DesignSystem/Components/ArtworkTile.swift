@@ -1,7 +1,7 @@
 import SwiftUI
 
-/// Always-16:9 artwork: the video's frame or channel logo once loaded, a shimmering skeleton while
-/// loading, and the coloured cover with initials only when there's none (or it failed).
+/// Artwork (16:9, or 2:3 for a poster): the video's frame or the image once loaded, a shimmering
+/// skeleton while loading, and the coloured cover with initials only when there's none (or it failed).
 struct ArtworkTile: View {
     let title: String
     let imageURL: URL?
@@ -9,6 +9,10 @@ struct ArtworkTile: View {
     var videoURL: URL?
     var isLive = false
     var cornerRadius: CGFloat = Radius.md
+    /// Width over height.
+    var aspectRatio: CGFloat = 16 / 9
+    /// A photo or poster fills the frame; a logo (often transparent) sits on the cover instead.
+    var fillsFrame = false
 
     @State private var poster: UIImage?
     /// The video's frame couldn't be read, so the cover stands in.
@@ -18,18 +22,28 @@ struct ArtworkTile: View {
 
     private static let logoPatience: Duration = .seconds(6)
 
-    init(title: String, imageURL: URL?, videoURL: URL? = nil, isLive: Bool = false, cornerRadius: CGFloat = Radius.md) {
+    init(
+        title: String,
+        imageURL: URL?,
+        videoURL: URL? = nil,
+        isLive: Bool = false,
+        cornerRadius: CGFloat = Radius.md,
+        aspectRatio: CGFloat = 16 / 9,
+        fillsFrame: Bool = false
+    ) {
         self.title = title
         self.imageURL = imageURL
         self.videoURL = videoURL
         self.isLive = isLive
         self.cornerRadius = cornerRadius
+        self.aspectRatio = aspectRatio
+        self.fillsFrame = fillsFrame
         _poster = State(initialValue: videoURL.flatMap(VideoThumbnails.shared.cachedImage(for:)))
     }
 
     var body: some View {
         Color.clear
-            .aspectRatio(16 / 9, contentMode: .fit)
+            .aspectRatio(aspectRatio, contentMode: .fit)
             .overlay { artwork }
             .overlay(alignment: .bottomTrailing) {
                 if poster != nil {
@@ -78,13 +92,17 @@ struct ArtworkTile: View {
             AsyncImage(url: imageURL, transaction: Transaction(animation: .easeIn(duration: 0.25))) { phase in
                 switch phase {
                 case let .success(image):
-                    // Logos are often transparent, so they sit on the cover without its initials.
-                    ZStack {
-                        Palette.placeholderGradient(for: title)
-                        Color.black.opacity(0.35)
-                        image.resizable().scaledToFit().padding(Spacing.sm)
+                    if fillsFrame {
+                        image.resizable().scaledToFill().transition(.opacity)
+                    } else {
+                        // Logos are often transparent, so they sit on the cover without its initials.
+                        ZStack {
+                            Palette.placeholderGradient(for: title)
+                            Color.black.opacity(0.35)
+                            image.resizable().scaledToFit().padding(Spacing.sm)
+                        }
+                        .transition(.opacity)
                     }
-                    .transition(.opacity)
                 case .empty:
                     if logoIsSlow {
                         cover

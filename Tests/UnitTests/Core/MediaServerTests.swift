@@ -93,6 +93,10 @@ struct MediaServerTests {
     @Test("Signs in with the MediaBrowser header and reads the token")
     func signIn() async throws {
         ServerMockURLProtocol.handler = { request in
+            // After signing in, the server's public info gives its name.
+            if request.url?.path == "/System/Info/Public" {
+                return (200, Data(#"{"ServerName":"Stable Demo","Version":"10.11.0"}"#.utf8))
+            }
             #expect(request.url?.path == "/Users/AuthenticateByName")
             #expect(request.httpMethod == "POST")
             #expect(request.value(forHTTPHeaderField: "Authorization")?.contains(#"DeviceId="dev-1""#) == true)
@@ -101,7 +105,31 @@ struct MediaServerTests {
         }
         let base = try #require(URL(string: "http://nas.local:8096"))
         let account = try await client().signIn(kind: .jellyfin, baseURL: base, username: "dad", password: "pw")
-        #expect(account == MediaServerAccount(kind: .jellyfin, baseURL: base, userID: "user-9", token: "abc"))
+        #expect(account == MediaServerAccount(
+            kind: .jellyfin, baseURL: base, userID: "user-9", token: "abc", serverName: "Stable Demo"
+        ))
+    }
+
+    @Test("A server that hides its name still signs in, unnamed")
+    func signInWithoutName() async throws {
+        ServerMockURLProtocol.handler = { request in
+            if request.url?.path == "/System/Info/Public" {
+                return (404, Data())
+            }
+            return (200, Data(#"{"User":{"Id":"user-9"},"AccessToken":"abc"}"#.utf8))
+        }
+        let base = try #require(URL(string: "http://nas.local:8096"))
+        let account = try await client().signIn(kind: .emby, baseURL: base, username: "dad", password: "pw")
+        #expect(account.token == "abc")
+        #expect(account.serverName == nil)
+    }
+
+    @Test("A login saved before server names were kept still reads")
+    func olderLogin() throws {
+        let json = #"{"kind":"jellyfin","baseURL":"http://nas.local:8096","userID":"u1","token":"tok"}"#
+        let account = try JSONDecoder().decode(MediaServerAccount.self, from: Data(json.utf8))
+        #expect(account.serverName == nil)
+        #expect(account.token == "tok")
     }
 
     @Test("A 401 at sign-in is a credentials error")
@@ -122,8 +150,9 @@ struct MediaServerTests {
             #expect(request.value(forHTTPHeaderField: "X-Emby-Authorization")?.contains(#"Token="abc""#) == true)
             let body = #"""
             {"Items":[
-              {"Id":"m1","Name":"Dune","Type":"Movie"},
-              {"Id":"e1","Name":"Pilot","Type":"Episode","SeriesName":"The Road","ParentIndexNumber":1,"IndexNumber":2}
+              {"Id":"m1","Name":"Dune","Type":"Movie","ProductionYear":2021},
+              {"Id":"e1","Name":"Pilot","Type":"Episode","SeriesName":"The Road","ParentIndexNumber":1,"IndexNumber":2,
+               "ProductionYear":2019}
             ]}
             """#
             return (200, Data(body.utf8))
@@ -139,6 +168,9 @@ struct MediaServerTests {
         #expect(stream.query()?.contains("MediaSourceId=m1") == true)
         #expect(stream.query()?.contains("api_key=abc") == true)
         #expect(entries.first?.logoURL?.path == "/Items/m1/Images/Primary")
+        // A film is a poster with its year; an episode is a still under its own title.
+        #expect(entries.map(\.artwork) == [.poster, .still])
+        #expect(entries.map(\.year) == [2021, nil])
     }
 
     @Test("Jellyfin gets the token as ApiKey and in the Authorization header, as 10.12 requires")
@@ -214,6 +246,16 @@ struct MediaServerRepositoryTests {
         #expect(try library.repository.items().map(\.title) == ["Dune", "S1 · E1 — Pilot"])
         let stored = try #require(try library.secureStore.string(for: "playlist.source.\(id.uuidString)"))
         #expect(stored.contains("\"token\":\"tok\""))
+    }
+
+    @Test("With no name typed, a source is named after the server")
+    func namedAfterServer() async throws {
+        let library = try TestLibrary()
+        library.mediaServer.serverName = "Stable Demo"
+        try await library.repository.addMediaServer(
+            kind: .jellyfin, name: "", address: "nas.local:8096", username: "dad", password: "pw"
+        )
+        #expect(try library.repository.playlists().first?.name == "Stable Demo")
     }
 
     @Test("Wrong password adds nothing")

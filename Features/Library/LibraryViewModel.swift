@@ -18,6 +18,10 @@ final class LibraryViewModel {
     }
 
     private(set) var recent: [MediaItem] = []
+    /// Home's sources, for its filter menu.
+    private(set) var sources: [SourceOption] = []
+    /// The one source Home shows, or nil for all of them.
+    private(set) var sourceFilter: UUID?
     var query = "" {
         didSet {
             if query != oldValue {
@@ -43,7 +47,7 @@ final class LibraryViewModel {
         !query.trimmingCharacters(in: .whitespaces).isEmpty
     }
 
-    /// The current items of one group, for "See All". Read live so a favourite
+    /// The current items of one group, for its own screen. Read live so a favourite
     /// changed on that screen shows at once.
     func items(inGroup title: String) -> [MediaItem] {
         sections.first { $0.title == title }?.items ?? []
@@ -53,10 +57,19 @@ final class LibraryViewModel {
         do {
             switch scope {
             case .all:
+                let known = Set(sources.map(\.id))
+                sources = try repository.playlists().filter { $0.kind != .localVideos }.map {
+                    try SourceOption(id: $0.id, name: $0.name, count: repository.channelCount(in: $0.id))
+                }
+                // A deleted choice goes back to all sources, and so does a new source, so it shows.
+                let isNewSource = !known.isEmpty && sources.contains { !known.contains($0.id) }
+                if let chosen = sourceFilter, isNewSource || !sources.contains(where: { $0.id == chosen }) {
+                    sourceFilter = nil
+                }
                 // Home is the channel library; imported videos live in Favorites › On this iPhone.
-                items = try repository.items().filter { !$0.isLocalFile }
+                items = try repository.items(in: sourceFilter).filter { !$0.isLocalFile }
                 // Filtered in the fetch: filtering after the limit let 12 played videos empty the row.
-                recent = try repository.recentlyPlayed(limit: 12, excludingLocal: true)
+                recent = try repository.recentlyPlayed(limit: 12, excludingLocal: true, in: sourceFilter)
             case .favorites:
                 items = try repository.favorites()
                 recent = []
@@ -65,6 +78,13 @@ final class LibraryViewModel {
         } catch {
             phase = .failed(error.localizedDescription)
         }
+    }
+
+    /// Shows one source on Home, or all of them for nil.
+    func showSource(_ id: UUID?) {
+        guard id != sourceFilter else { return }
+        sourceFilter = id
+        load()
     }
 
     /// Toggles the favourite and returns the new value (nil on failure), updating the loaded items

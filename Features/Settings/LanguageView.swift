@@ -27,6 +27,7 @@ struct LanguageView: View {
         }
         .scrollContentBackground(.hidden)
         .background(.roadCanvas)
+        .clearsBottomAccessory()
         .navigationTitle("Language")
         .navigationBarTitleDisplayMode(.inline)
         .searchable(text: $viewModel.query, prompt: Text("Find a language"))

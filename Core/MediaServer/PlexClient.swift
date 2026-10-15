@@ -1,4 +1,5 @@
 import Foundation
+import OSLog
 
 /// A sign-in code to type at plex.tv/link.
 struct PlexPin: Equatable, Sendable {
@@ -44,7 +45,11 @@ enum PlexError: LocalizedError, Equatable {
     var errorDescription: String? {
         switch self {
         case .codeExpired: String(appLocalized: "The code expired. Get a new one.")
-        case .noServers: String(appLocalized: "No Plex servers were found on this account.")
+        case .noServers:
+            String(appLocalized: """
+            This Plex account has no media server. Roadivo plays your own Plex Media Server (on a computer or \
+            NAS) or one shared with you, not Plex's free Movies & TV.
+            """)
         case .serverUnreachable: String(appLocalized: "Couldn't reach this Plex server. Check that it's on and online.")
         }
     }
@@ -96,6 +101,10 @@ struct PlexClient: PlexLinking {
         )
         request.setValue(token, forHTTPHeaderField: "X-Plex-Token")
         let resources: [Resource] = try await decode(request)
+        // Counts and kinds only (never names or tokens), to tell "no server" from a missed one.
+        let kinds = resources.map(\.provides).joined(separator: " | ")
+        Logger(subsystem: "com.roadivo", category: "Plex")
+            .info("Plex resources: \(resources.count, privacy: .public) [\(kinds, privacy: .public)]")
         let servers = resources.filter { $0.provides.split(separator: ",").contains("server") }.compactMap { resource in
             resource.accessToken.map { token in
                 PlexServer(
@@ -237,14 +246,23 @@ struct PlexClient: PlexLinking {
             name = "S\(season) · E\(episode) — \(item.title)"
         }
         let group = isEpisode ? (item.grandparentTitle ?? section.title) : section.title
+        // A film's thumb is its poster; an episode's is a 16:9 still.
+        let isFilm = item.type == "movie"
         let poster = (item.thumb ?? item.grandparentThumb).flatMap { thumb in
             url(
                 account,
                 path: "photo/:/transcode",
-                query: ["url": thumb, "width": "480", "height": "270", "minSize": "1"]
+                query: ["url": thumb, "width": isFilm ? "360" : "480", "height": isFilm ? "540" : "270", "minSize": "1"]
             )
         }
-        return PlaylistEntry(name: name, group: group, logoURL: poster, streamURL: stream)
+        return PlaylistEntry(
+            name: name,
+            group: group,
+            logoURL: poster,
+            streamURL: stream,
+            year: isFilm ? item.year : nil,
+            artwork: isFilm ? .poster : .still
+        )
     }
 
     /// AVPlayer plays MP4 and MOV as they are; the server transcodes the rest to HLS.
@@ -332,9 +350,10 @@ struct PlexClient: PlexLinking {
         let grandparentTitle: String?
         let parentIndex: Int?
         let index: Int?
+        let year: Int?
         let media: [Media]?
         enum CodingKeys: String, CodingKey {
-            case ratingKey, title, type, thumb, grandparentThumb, grandparentTitle, parentIndex, index
+            case ratingKey, title, type, thumb, grandparentThumb, grandparentTitle, parentIndex, index, year
             case media = "Media"
         }
     }

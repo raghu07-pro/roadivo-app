@@ -56,7 +56,7 @@ final class LibraryRepository {
                 predicate: #Predicate { $0.playlist?.id == id },
                 sortBy: [SortDescriptor(\.sortIndex)]
             )
-            return try context.fetch(descriptor).compactMap(\.mediaItem)
+            return try context.fetch(descriptor).compactMap { $0.mediaItem(sourceID: id) }
         }
     }
 
@@ -74,13 +74,22 @@ final class LibraryRepository {
         return playlist.channels.sorted { $0.sortIndex < $1.sortIndex }.compactMap(\.mediaItem)
     }
 
-    /// The most recently played items. `excludingLocal` filters imported videos inside the fetch,
-    /// so Home's Continue Watching still gets `limit` items.
-    func recentlyPlayed(limit: Int = 12, excludingLocal: Bool = false) throws -> [MediaItem] {
+    /// The most recently played items, optionally from one source. `excludingLocal` filters imported
+    /// videos inside the fetch, so Home's Continue Watching still gets `limit` items.
+    func recentlyPlayed(
+        limit: Int = 12,
+        excludingLocal: Bool = false,
+        in playlistID: UUID? = nil
+    ) throws -> [MediaItem] {
         let localPrefix = MediaLocation.localScheme
-        let predicate = excludingLocal
-            ? #Predicate<Channel> { $0.lastPlayedAt != nil && !$0.streamURLString.starts(with: localPrefix) }
-            : #Predicate<Channel> { $0.lastPlayedAt != nil }
+        let predicate: Predicate<Channel>
+        if let playlistID {
+            predicate = #Predicate { $0.lastPlayedAt != nil && $0.playlist?.id == playlistID }
+        } else if excludingLocal {
+            predicate = #Predicate { $0.lastPlayedAt != nil && !$0.streamURLString.starts(with: localPrefix) }
+        } else {
+            predicate = #Predicate { $0.lastPlayedAt != nil }
+        }
         var descriptor = FetchDescriptor<Channel>(
             predicate: predicate,
             sortBy: [SortDescriptor(\.lastPlayedAt, order: .reverse)]
@@ -92,6 +101,19 @@ final class LibraryRepository {
     /// How many items a source has, counted in the store: reading `channels` loaded every row.
     func channelCount(in playlistID: UUID) throws -> Int {
         try context.fetchCount(FetchDescriptor<Channel>(predicate: #Predicate { $0.playlist?.id == playlistID }))
+    }
+
+    /// Which kind of server a media-server source signed in to, read from its saved login.
+    func serverKind(of playlistID: UUID) -> MediaServerKind? {
+        guard let stored = try? secureStore.string(for: sourceKey(playlistID)) else { return nil }
+        // Only a media server's login is JSON; a link or an unreadable login has no server.
+        return (try? JSONDecoder().decode(MediaServerAccount.self, from: Data(stored.utf8)))?.kind
+    }
+
+    /// The link a source was added from, for "Copy Link". It often carries the provider's login.
+    func sourceLink(_ playlistID: UUID) throws -> URL? {
+        guard try playlist(playlistID).kind == .remote else { return nil }
+        return try secureStore.string(for: sourceKey(playlistID)).flatMap(URL.init(string:))
     }
 
     // MARK: Changing
@@ -168,13 +190,14 @@ final class LibraryRepository {
     }
 
     /// Saves a signed-in server (Jellyfin, Emby or Plex) and its library: the account in the
-    /// Keychain, the items as channels. `defaultName` is used when `name` is empty.
+    /// Keychain, the items as channels. With no `name`: `defaultName`, the server's own name, or
+    /// "Jellyfin · host".
     @discardableResult
     func add(_ account: MediaServerAccount, name: String, defaultName: String? = nil) async throws -> UUID {
         let entries = try await mediaServers.library(for: account)
         guard !entries.isEmpty else { throw MediaServerError.emptyLibrary }
         let trimmed = name.trimmingCharacters(in: .whitespacesAndNewlines)
-        let fallback = defaultName ?? "\(account.kind.title) · \(account.baseURL.host() ?? "")"
+        let fallback = defaultName ?? account.serverName ?? "\(account.kind.title) · \(account.baseURL.host() ?? "")"
         let title = trimmed.isEmpty ? fallback : trimmed
         guard let encoded = try String(bytes: JSONEncoder().encode(account), encoding: .utf8) else {
             throw LibraryError.unreadable

@@ -7,4 +7,7 @@ struct PlaylistEntry: Equatable, Sendable {
     var group: String
     var logoURL: URL?
     var streamURL: URL
+    /// A film's year, from a media server.
+    var year: Int?
+    var artwork: ArtworkStyle = .logo
 }

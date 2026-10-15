@@ -69,7 +69,7 @@ final class ScreenshotUITests: XCTestCase {
         app.tabBars.buttons["Cast to Car"].tap()
         snapshot("18-Car", app: app)
 
-        // Stop playback first: the mini player would cover the last Settings rows.
+        // Stop playback first, for a clean Settings screenshot.
         app.buttons["miniPlayer.close"].tap()
         app.tabBars.buttons["Settings"].tap()
         snapshot("19-Settings", app: app)

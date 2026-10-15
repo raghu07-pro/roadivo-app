@@ -5,10 +5,13 @@ import SwiftUI
 struct HomeHero: View {
     let channelCount: Int
     let groupCount: Int
+    /// The one source Home is showing, if the user picked one.
+    var sourceName: String?
 
-    /// "24 channels · 3 groups": two pluralised, already-localized parts.
+    /// "Road Trip · 24 channels · 3 groups": pluralised, already-localized parts.
     private var summary: String {
-        String(appLocalized: "\(channelCount) channels") + " · " + String(appLocalized: "\(groupCount) groups")
+        let counts = [String(appLocalized: "\(channelCount) channels"), String(appLocalized: "\(groupCount) groups")]
+        return ([sourceName].compactMap(\.self) + counts).joined(separator: " · ")
     }
 
     @ScaledMetric(relativeTo: .largeTitle) private var height: CGFloat = 190

@@ -24,6 +24,7 @@ struct CarHubView: View {
                 }
             }
             .background(.roadCanvas)
+            .clearsBottomAccessory()
             .navigationTitle("Cast to Car")
             .navigationBarTitleDisplayMode(.inline)
         }
@@ -47,61 +48,41 @@ struct CarHubView: View {
         }
     }
 
-    /// Simple and centred (the owner's reference), with the two ways to the car underneath, so
-    /// Car Mode, a Pro feature, stays one tap away.
+    /// Simple and centred (the owner's reference): how to connect, and nothing to tap until a car
+    /// is connected (the owner's call, 2026-10-15). Connected, Car Mode and AirPlay appear.
     private var notConnectedContent: some View {
-        GeometryReader { proxy in
-            ScrollView {
-                VStack(spacing: Spacing.lg) {
+        VStack(spacing: 0) {
+            GeometryReader { proxy in
+                ScrollView {
                     notConnected
-                    VStack(spacing: Spacing.sm) {
-                        carModeAction
-                        airPlayAction
-                    }
-                    safetyNote
+                        .padding(Spacing.md)
+                        .frame(maxWidth: 520)
+                        .frame(maxWidth: .infinity, minHeight: proxy.size.height)
                 }
-                .padding(Spacing.md)
+                .scrollBounceBehavior(.basedOnSize)
+            }
+            // The status in the middle, the safety note resting at the bottom (owner's layout).
+            safetyNote
                 .frame(maxWidth: 520)
-                .frame(maxWidth: .infinity, minHeight: proxy.size.height)
-            }
-            .scrollBounceBehavior(.basedOnSize)
+                .padding(.horizontal, Spacing.md)
+                .padding(.bottom, Spacing.sm)
         }
-    }
-
-    @ViewBuilder private var carModeAction: some View {
-        if playback.isActive || viewModel.resumeItem != nil {
-            PrimaryButton(title: "Start Car Mode", systemImage: "car.fill", isCompact: true) {
-                onStartCarMode(playback.isActive ? nil : viewModel.resumeItem)
-            }
-            .accessibilityIdentifier("car.start")
-        } else {
-            PrimaryButton(title: "Pick Something to Watch", systemImage: "play.square.stack", isCompact: true) {
-                onBrowse()
-            }
-            .accessibilityIdentifier("car.browse")
-        }
-    }
-
-    /// The system AirPlay picker laid over the whole button, so a tap anywhere lists the screens.
-    private var airPlayAction: some View {
-        Label("Choose an AirPlay Screen", systemImage: "airplayvideo")
-            .font(Typography.button)
-            .foregroundStyle(.roadAccent)
-            .padding(.horizontal, Spacing.lg)
-            .frame(minHeight: 50)
-            .overlay { Capsule().strokeBorder(.roadBrandGradient, lineWidth: 2) }
-            .accessibilityHidden(true)
-            .overlay { RoutePickerButton(tint: .clear) }
-            .accessibilityIdentifier("cast.airplay")
     }
 
     private var safetyNote: some View {
-        Label(
-            "For passengers, or while parked. Never watch video while driving.",
-            systemImage: "exclamationmark.triangle.fill"
-        )
+        Label {
+            Text("For passengers, or while parked. Never watch video while driving.")
+                .foregroundStyle(.secondary)
+        } icon: {
+            Image(systemName: "exclamationmark.triangle.fill").foregroundStyle(.roadAccent)
+        }
         .font(Typography.caption)
-        .foregroundStyle(.secondary)
+        .padding(.horizontal, Spacing.md)
+        .padding(.vertical, Spacing.sm)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background(.roadSurface, in: RoundedRectangle(cornerRadius: Radius.md, style: .continuous))
+        .accessibilityElement(children: .combine)
+        .accessibilityIdentifier("cast.safety")
     }
 
     // MARK: Dashboard
@@ -127,8 +108,8 @@ struct CarHubView: View {
                 .multilineTextAlignment(.center)
                 .accessibilityAddTraits(.isHeader)
             Text("""
-            Connect the car's screen with AirPlay, then play a channel. No car screen? Mount your iPhone \
-            and use Car Mode.
+            Connect your iPhone to the car with CarPlay, or pick the car's screen for AirPlay in Control \
+            Center. Car Mode and AirPlay appear here once you're connected.
             """)
             .font(Typography.body)
             .foregroundStyle(.roadMuted)
@@ -190,6 +171,9 @@ struct CarHubView: View {
         if connection.airPlayDestination != nil {
             return "Casting with AirPlay"
         }
+        if connection.isCarAudio {
+            return "Connected to your car"
+        }
         return "Not connected to a car"
     }
 
@@ -249,6 +233,7 @@ struct CarHubView: View {
                 RoutePickerButton(tint: .label)
                     .frame(width: 48, height: 48)
                     .background(.roadSurfaceElevated, in: Circle())
+                    .accessibilityIdentifier("cast.airplay")
             }
         }
     }

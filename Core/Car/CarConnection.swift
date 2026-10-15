@@ -14,6 +14,8 @@ final class CarConnection {
     private(set) var isCarAudio = false
 
     @ObservationIgnored private var routeObserver: NSObjectProtocol?
+    /// UI tests stand in for a car's audio route, which a simulator can't have.
+    @ObservationIgnored var simulatedOutputs: [(AVAudioSession.Port, String)]?
 
     func start() {
         guard routeObserver == nil else { return }
@@ -28,7 +30,8 @@ final class CarConnection {
     }
 
     func refreshRoute() {
-        apply(AVAudioSession.sharedInstance().currentRoute.outputs.map { ($0.portType, $0.portName) })
+        apply(simulatedOutputs ?? AVAudioSession.sharedInstance().currentRoute.outputs
+            .map { ($0.portType, $0.portName) })
     }
 
     /// Separated from `AVAudioSession` so tests can feed routes in.

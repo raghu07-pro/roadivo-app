@@ -1,5 +1,10 @@
 import Foundation
 
+/// The Settings screens reached by value, so screens they push stack in order.
+enum SettingsRoute: Hashable {
+    case sources
+}
+
 // FAQ answers are prose; wrapping them mid-sentence hurts more than it helps.
 // swiftlint:disable line_length
 struct FAQEntry: Identifiable {
@@ -36,12 +41,12 @@ struct FAQEntry: Identifiable {
         FAQEntry(
             id: 5,
             question: "My source was added, so why does Home show only some of the channels?",
-            answer: "Each group shows its first 20 channels in a row. Tap See All for the rest, or use search."
+            answer: "Each group shows its first 20 channels in a row. Tap the group's name for all of them, or use search."
         ),
         FAQEntry(
             id: 6,
             question: "What do I need to watch in the car?",
-            answer: "A car display or wireless adapter that accepts AirPlay video. Open Cast to Car, tap AirPlay and pick the display, then start a channel. No AirPlay? Mount your iPhone and use Car Mode. Never watch video while driving."
+            answer: "A car display or wireless adapter that accepts AirPlay video. Start a channel, then pick the display for AirPlay in Control Center. Once your iPhone is connected to the car, Cast to Car also offers Car Mode for a mounted iPhone. Never watch video while driving."
         ),
         FAQEntry(
             id: 7,

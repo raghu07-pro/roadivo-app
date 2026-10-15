@@ -30,6 +30,8 @@ final class StubMediaServer: MediaServerConnecting, @unchecked Sendable {
     private let lock = NSLock()
     private var entries: [PlaylistEntry]
     private(set) var libraryCalls = 0
+    /// What the server calls itself.
+    var serverName: String?
 
     init(entries: [PlaylistEntry] = Fixtures.serverEntries) {
         self.entries = entries
@@ -42,7 +44,7 @@ final class StubMediaServer: MediaServerConnecting, @unchecked Sendable {
     func signIn(kind: MediaServerKind, baseURL: URL, username: String, password: String) async throws
         -> MediaServerAccount {
         guard password == "pw" else { throw MediaServerError.badCredentials }
-        return MediaServerAccount(kind: kind, baseURL: baseURL, userID: "u1", token: "tok")
+        return MediaServerAccount(kind: kind, baseURL: baseURL, userID: "u1", token: "tok", serverName: serverName)
     }
 
     func library(for account: MediaServerAccount) async throws -> [PlaylistEntry] {

@@ -12,31 +12,34 @@ struct ChannelCard: View {
     var body: some View {
         Button(action: onPlay) {
             VStack(alignment: .leading, spacing: Spacing.xs) {
-                ArtworkTile(
-                    title: item.title,
-                    imageURL: item.artworkURL,
-                    videoURL: item.isLocalFile ? item.streamURL : nil
-                )
-                .overlay {
-                    RoundedRectangle(cornerRadius: Radius.md, style: .continuous)
-                        .strokeBorder(Color.primary.opacity(0.08), lineWidth: 1)
-                }
-                .overlay(alignment: .bottomLeading) {
-                    if item.isFavorite {
-                        Image(systemName: "heart.fill")
-                            .font(.caption.weight(.bold))
-                            .foregroundStyle(.white)
-                            .padding(6)
-                            .background(.black.opacity(0.45), in: Circle())
-                            .padding(Spacing.xs)
+                ArtworkTile(item: item)
+                    .overlay {
+                        RoundedRectangle(cornerRadius: Radius.md, style: .continuous)
+                            .strokeBorder(Color.primary.opacity(0.08), lineWidth: 1)
+                    }
+                    .overlay(alignment: .bottomLeading) {
+                        if item.isFavorite {
+                            Image(systemName: "heart.fill")
+                                .font(.caption.weight(.bold))
+                                .foregroundStyle(.white)
+                                .padding(6)
+                                .background(.black.opacity(0.45), in: Circle())
+                                .padding(Spacing.xs)
+                        }
+                    }
+                VStack(alignment: .leading, spacing: 0) {
+                    Text(item.title)
+                        .font(Typography.cardTitle)
+                        .foregroundStyle(.primary)
+                        .lineLimit(1)
+                        .truncationMode(.tail)
+                    if let year = item.year {
+                        Text(String(year))
+                            .font(Typography.caption)
+                            .foregroundStyle(.roadMuted)
                     }
                 }
-                Text(item.title)
-                    .font(Typography.cardTitle)
-                    .foregroundStyle(.primary)
-                    .lineLimit(1)
-                    .truncationMode(.tail)
-                    .frame(maxWidth: .infinity, alignment: .leading)
+                .frame(maxWidth: .infinity, alignment: .leading)
             }
             .contentShape(Rectangle())
         }
@@ -94,11 +97,7 @@ private struct ChannelPreview: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: Spacing.sm) {
-            ArtworkTile(
-                title: item.title,
-                imageURL: item.artworkURL,
-                videoURL: item.isLocalFile ? item.streamURL : nil
-            )
+            ArtworkTile(item: item)
             VStack(alignment: .leading, spacing: 2) {
                 Text(item.title)
                     .font(Typography.cardTitle)
@@ -112,7 +111,7 @@ private struct ChannelPreview: View {
             .padding(.horizontal, Spacing.xxs)
         }
         .padding(Spacing.sm)
-        .frame(width: 320)
+        .frame(width: item.artwork == .poster ? 240 : 320)
         .background(.roadSurface)
     }
 }

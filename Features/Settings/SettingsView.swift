@@ -34,9 +34,9 @@ struct SettingsView<SourcesScreen: View>: View {
                 }
 
                 Section {
-                    NavigationLink {
-                        sourcesScreen()
-                    } label: {
+                    // A value link, like the source pages it leads to: a view link here was pushed
+                    // again on top of a source page.
+                    NavigationLink(value: SettingsRoute.sources) {
                         row(
                             symbol: "antenna.radiowaves.left.and.right",
                             title: "Manage Sources",
@@ -117,6 +117,12 @@ struct SettingsView<SourcesScreen: View>: View {
             }
             .scrollContentBackground(.hidden)
             .background(.roadCanvas)
+            .clearsBottomAccessory()
+            .navigationDestination(for: SettingsRoute.self) { route in
+                switch route {
+                case .sources: sourcesScreen()
+                }
+            }
             .navigationTitle("Settings")
             .navigationBarTitleDisplayMode(.inline)
             .manageSubscriptionsSheet(isPresented: $isManagingSubscription)

@@ -12,18 +12,15 @@ struct UpNextCard: View {
     var body: some View {
         Button(action: action) {
             VStack(alignment: .leading, spacing: Spacing.xs) {
-                ArtworkTile(
-                    title: item.title,
-                    imageURL: item.artworkURL,
-                    videoURL: item.isLocalFile ? item.streamURL : nil
-                )
-                .overlay {
-                    RoundedRectangle(cornerRadius: Radius.md, style: .continuous)
-                        .strokeBorder(
-                            isCurrent ? AnyShapeStyle(.roadBrandGradient) : AnyShapeStyle(Color.primary.opacity(0.08)),
-                            lineWidth: isCurrent ? 2.5 : 1
-                        )
-                }
+                ArtworkTile(item: item)
+                    .overlay {
+                        RoundedRectangle(cornerRadius: Radius.md, style: .continuous)
+                            .strokeBorder(
+                                isCurrent ? AnyShapeStyle(.roadBrandGradient) :
+                                    AnyShapeStyle(Color.primary.opacity(0.08)),
+                                lineWidth: isCurrent ? 2.5 : 1
+                            )
+                    }
                 HStack(spacing: Spacing.xs) {
                     Text(item.title)
                         .font(Typography.cardTitle)

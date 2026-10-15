@@ -36,7 +36,9 @@ actor LibraryWriter {
                 streamURLString: url,
                 sortIndex: index,
                 isFavorite: kept[url]?.favorite ?? false,
-                lastPlayedAt: kept[url]?.played
+                lastPlayedAt: kept[url]?.played,
+                year: entry.year,
+                artwork: entry.artwork
             )
             modelContext.insert(channel)
             channel.playlist = playlist

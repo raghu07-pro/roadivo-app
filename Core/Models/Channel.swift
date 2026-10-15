@@ -14,6 +14,10 @@ final class Channel {
     var sortIndex: Int
     var isFavorite: Bool
     var lastPlayedAt: Date?
+    /// A film's year, from a media server.
+    var year: Int?
+    /// An `ArtworkStyle`; nil is a logo.
+    var artworkRaw: String?
     var playlist: Playlist?
 
     init(
@@ -24,7 +28,9 @@ final class Channel {
         streamURLString: String,
         sortIndex: Int,
         isFavorite: Bool = false,
-        lastPlayedAt: Date? = nil
+        lastPlayedAt: Date? = nil,
+        year: Int? = nil,
+        artwork: ArtworkStyle = .logo
     ) {
         self.id = id
         self.name = name
@@ -34,5 +40,7 @@ final class Channel {
         self.sortIndex = sortIndex
         self.isFavorite = isFavorite
         self.lastPlayedAt = lastPlayedAt
+        self.year = year
+        artworkRaw = artwork == .logo ? nil : artwork.rawValue
     }
 }

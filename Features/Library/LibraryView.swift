@@ -12,7 +12,7 @@ struct LibraryView: View {
 
     @Environment(\.openURL) private var openURL
 
-    /// Carousels show this many before "See All".
+    /// Carousels show this many; the group's header opens the rest.
     private let carouselLimit = 20
 
     var body: some View {
@@ -20,6 +20,7 @@ struct LibraryView: View {
         NavigationStack {
             content
                 .background(.roadCanvas)
+                .clearsBottomAccessory()
                 .safeAreaInset(edge: .top, spacing: 0) {
                     // Always shown, empty library or not (owner's choice, 2026-10-15).
                     SearchField(
@@ -44,11 +45,16 @@ struct LibraryView: View {
                     )
                 }
                 .toolbar {
+                    // One button: Add with no sources yet, then the source menu (which also adds).
                     ToolbarItem(placement: .primaryAction) {
-                        Button(action: onAddSource) {
-                            Label("Add Source", systemImage: "plus")
+                        if viewModel.sources.isEmpty {
+                            Button(action: onAddSource) {
+                                Label("Add Source", systemImage: "plus")
+                            }
+                            .accessibilityIdentifier("library.addSource")
+                        } else {
+                            sourceMenu
                         }
-                        .accessibilityIdentifier("library.addSource")
                     }
                 }
                 .alert("Allow Voice Search", isPresented: alertBinding(.denied)) {
@@ -90,18 +96,19 @@ struct LibraryView: View {
         ScrollView {
             LazyVStack(alignment: .leading, spacing: Spacing.lg) {
                 if !viewModel.isSearching {
-                    HomeHero(channelCount: viewModel.items.count, groupCount: viewModel.sections.count)
-                        .padding(.horizontal, Spacing.md)
+                    HomeHero(
+                        channelCount: viewModel.items.count,
+                        groupCount: viewModel.sections.count,
+                        sourceName: viewModel.sources.first { $0.id == viewModel.sourceFilter }?.name
+                    )
+                    .padding(.horizontal, Spacing.md)
                 }
                 if !viewModel.isSearching, !viewModel.recent.isEmpty {
                     VStack(alignment: .leading, spacing: Spacing.sm) {
-                        SectionHeader(
+                        ShelfHeader(
                             title: String(appLocalized: "Continue Watching"),
-                            count: viewModel.recent.count,
-                            systemImage: "clock.arrow.circlepath"
-                        ) {
-                            EmptyView()
-                        }
+                            detail: String(appLocalized: "\(viewModel.recent.count) channels")
+                        )
                         .padding(.horizontal, Spacing.md)
                         ChannelCarousel(
                             items: viewModel.recent,
@@ -113,16 +120,15 @@ struct LibraryView: View {
                 }
                 ForEach(viewModel.sections) { section in
                     VStack(alignment: .leading, spacing: Spacing.sm) {
-                        SectionHeader(title: section.title, count: section.items.count) {
-                            if section.items.count > carouselLimit {
-                                NavigationLink(value: LibraryGroupRoute(title: section.title)) {
-                                    Text("See All")
-                                        .font(Typography.secondary.weight(.semibold))
-                                        .frame(minHeight: 44)
-                                        .contentShape(Rectangle())
-                                }
-                            }
+                        // The whole header opens the group, with chips to move to the others.
+                        NavigationLink(value: LibraryGroupRoute(title: section.title)) {
+                            GroupHeader(section: section)
                         }
+                        .buttonStyle(.plain)
+                        .accessibilityElement(children: .combine)
+                        .accessibilityAddTraits(.isHeader)
+                        .accessibilityHint(Text("Shows the whole group"))
+                        .accessibilityIdentifier("library.seeAll.\(section.title)")
                         .padding(.horizontal, Spacing.md)
                         ChannelCarousel(
                             items: Array(section.items.prefix(carouselLimit)),
@@ -136,6 +142,41 @@ struct LibraryView: View {
             .padding(.vertical, Spacing.md)
         }
         .scrollDismissesKeyboard(.immediately)
+    }
+
+    private var shownSourceName: String {
+        viewModel.sources.first { $0.id == viewModel.sourceFilter }?.name ?? String(appLocalized: "All Sources")
+    }
+
+    /// Which source Home shows, with each source's channel count, and Add Source.
+    private var sourceMenu: some View {
+        Menu {
+            Picker(
+                selection: Binding(get: { viewModel.sourceFilter }, set: { viewModel.showSource($0) })
+            ) {
+                Text("All Sources (\(viewModel.sources.reduce(0) { $0 + $1.count }))")
+                    .tag(UUID?.none)
+                ForEach(viewModel.sources) { source in
+                    Text("\(source.name) (\(source.count))")
+                        .tag(UUID?.some(source.id))
+                }
+            } label: {
+                Text("Sources")
+            }
+            .pickerStyle(.inline)
+            Button(action: onAddSource) {
+                Label("Add Source", systemImage: "plus")
+            }
+            .accessibilityIdentifier("library.menu.addSource")
+        } label: {
+            Label(
+                "Show Source",
+                systemImage: viewModel.sourceFilter == nil
+                    ? "line.3.horizontal.decrease" : "line.3.horizontal.decrease.circle.fill"
+            )
+        }
+        .accessibilityValue(Text(shownSourceName))
+        .accessibilityIdentifier("library.sourceFilter")
     }
 
     private func alertBinding(_ state: VoiceSearchModel.State) -> Binding<Bool> {
@@ -191,20 +232,50 @@ private struct EmptyLibraryView: View {
     }
 }
 
+/// A group's own screen (from its header on Home): a grid, with chips to switch group.
 struct GroupDetailView: View {
     let viewModel: LibraryViewModel
-    let title: String
     let onPlay: (MediaItem, [MediaItem]?) -> Void
     let onToggleFavorite: (MediaItem) -> Void
+    @State private var group: String
+
+    init(
+        viewModel: LibraryViewModel,
+        title: String,
+        onPlay: @escaping (MediaItem, [MediaItem]?) -> Void,
+        onToggleFavorite: @escaping (MediaItem) -> Void
+    ) {
+        self.viewModel = viewModel
+        self.onPlay = onPlay
+        self.onToggleFavorite = onToggleFavorite
+        _group = State(initialValue: title)
+    }
 
     var body: some View {
-        let items = viewModel.items(inGroup: title)
-        ScrollView {
-            ChannelGrid(items: items, onPlay: { onPlay($0, items) }, onToggleFavorite: onToggleFavorite)
-                .padding(.vertical, Spacing.md)
+        // Read live, so a favourite changed here shows at once.
+        let items = viewModel.items(inGroup: group)
+        ScrollViewReader { proxy in
+            ScrollView {
+                ChannelGrid(items: items, onPlay: { onPlay($0, items) }, onToggleFavorite: onToggleFavorite)
+                    .padding(.vertical, Spacing.md)
+                    .id(group)
+            }
+            .onChange(of: group) { proxy.scrollTo(group, anchor: .top) }
+        }
+        .safeAreaInset(edge: .top, spacing: 0) {
+            if viewModel.sections.count > 1 {
+                CategoryChips(
+                    chips: viewModel.sections.map { .init(id: $0.title, title: $0.title) },
+                    selection: $group,
+                    identifier: "group"
+                )
+                .padding(.bottom, Spacing.xxs)
+                .background(.roadCanvas)
+            }
         }
         .background(.roadCanvas)
-        .navigationTitle(title)
+        .clearsBottomAccessory()
+        .navigationTitle(group)
         .navigationBarTitleDisplayMode(.inline)
     }
 }

@@ -30,6 +30,7 @@ struct ThemeView: View {
             .frame(maxWidth: .infinity)
         }
         .background(.roadCanvas)
+        .clearsBottomAccessory()
         .navigationTitle("Theme")
         .navigationBarTitleDisplayMode(.inline)
     }
