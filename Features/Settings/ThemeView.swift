@@ -1,6 +1,6 @@
 import SwiftUI
 
-/// Settings › Theme: Light / Dark / System and the accent colours. Every
+/// Settings › Theme: Light / Dark / System, the accent colours and the font style. Every
 /// choice applies to the whole app straight away, this screen included.
 struct ThemeView: View {
     let viewModel: ThemeViewModel
@@ -17,6 +17,12 @@ struct ThemeView: View {
                 }
                 section(title: "Accent Color", footer: nil) {
                     accentPicker
+                }
+                section(
+                    title: "Font Style",
+                    footer: "Changes the lettering across the app. Text still follows your iPhone's text size."
+                ) {
+                    fontPicker
                 }
             }
             .padding(Spacing.md)
@@ -61,6 +67,27 @@ struct ThemeView: View {
             }
         }
         .padding(Spacing.sm)
+        .background(.roadSurface, in: RoundedRectangle(cornerRadius: Radius.lg, style: .continuous))
+        .overlay {
+            RoundedRectangle(cornerRadius: Radius.lg, style: .continuous)
+                .strokeBorder(Color.primary.opacity(0.06), lineWidth: 1)
+        }
+    }
+
+    /// A list in one card, each row in its own lettering.
+    private var fontPicker: some View {
+        VStack(spacing: 0) {
+            ForEach(viewModel.fonts) { font in
+                if font != viewModel.fonts.first {
+                    Divider().padding(.leading, Spacing.md + 52 + Spacing.sm)
+                }
+                FontStyleRow(font: font, isSelected: viewModel.font == font) {
+                    withAnimation(reduceMotion ? nil : .easeInOut(duration: 0.25)) {
+                        viewModel.choose(font)
+                    }
+                }
+            }
+        }
         .background(.roadSurface, in: RoundedRectangle(cornerRadius: Radius.lg, style: .continuous))
         .overlay {
             RoundedRectangle(cornerRadius: Radius.lg, style: .continuous)

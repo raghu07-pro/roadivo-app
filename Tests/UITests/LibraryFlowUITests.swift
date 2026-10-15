@@ -130,6 +130,20 @@ final class LibraryFlowUITests: XCTestCase {
         XCTAssertTrue(app.staticTexts["No usable link found"].waitForExistence(timeout: 2))
     }
 
+    /// Connecting to a car's screen: Apple's AirPlay button covers the whole "Choose an AirPlay Screen"
+    /// button, so any tap opens the list of screens (the list itself needs a real iPhone).
+    func testAirPlayButtonIsTheSystemPicker() {
+        let app = XCUIApplication.roadivo(skipOnboarding: true)
+        app.tabBars.buttons["Cast to Car"].tap()
+        let button = app.otherElements["cast.airplay"]
+        let picker = button.buttons["AirPlay"]
+        XCTAssertTrue(picker.waitForExistence(timeout: 5))
+        XCTAssertEqual(picker.frame.minX, button.frame.minX, accuracy: 0.5)
+        XCTAssertEqual(picker.frame.width, button.frame.width, accuracy: 0.5)
+        XCTAssertEqual(picker.frame.height, button.frame.height, accuracy: 0.5)
+        XCTAssertTrue(picker.isHittable)
+    }
+
     func testCarTabStartsCarModeForTheLastPlayed() {
         let app = XCUIApplication.roadivo(skipOnboarding: true, demoLibrary: true, pro: true)
         let channel = app.buttons["channel.Highway Stop"]

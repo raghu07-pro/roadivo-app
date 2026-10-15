@@ -37,6 +37,28 @@ struct ThemeTests {
         #expect(AppTheme(defaults: store).accent == .golden)
     }
 
+    @Test("The font style starts as Road Sign, is remembered, and reset clears it")
+    func fontStyle() {
+        let store = defaults()
+        let theme = AppTheme(defaults: store)
+        #expect(theme.font == .roadSign)
+        ThemeViewModel(theme: theme).choose(ThemeFont.serif)
+        #expect(theme.font == .serif)
+        #expect(AppTheme(defaults: store).font == .serif) // Next launch.
+        theme.reset()
+        #expect(theme.font == .roadSign)
+        #expect(AppTheme(defaults: store).font == .roadSign)
+    }
+
+    @Test("Every font style keeps the system's text styles, so Dynamic Type still scales it")
+    func fontStylesHaveDesigns() {
+        #expect(ThemeFont.allCases.count == 4)
+        #expect(ThemeFont.rounded.design == .rounded)
+        #expect(ThemeFont.serif.design == .serif)
+        let title = ThemeFont.serif.uiFont(size: 17, weight: .heavy, overpass: "Overpass-ExtraBold")
+        #expect(title.fontDescriptor.symbolicTraits.contains(.traitBold))
+    }
+
     @Test("An unknown saved value falls back to the default")
     func unknownSavedValue() {
         let store = defaults()

@@ -8,7 +8,7 @@ struct RoadivoApp: App {
     @State private var language = AppLanguage.shared
 
     init() {
-        Typography.applyNavigationBarFonts()
+        Typography.applyUIKitFonts()
     }
 
     var body: some Scene {
@@ -22,7 +22,7 @@ struct RoadivoApp: App {
                 // follow Dynamic Type on its own; re-scale them when it changes.
                 .onReceive(NotificationCenter.default
                     .publisher(for: UIContentSizeCategory.didChangeNotification)) { _ in
-                        Typography.applyNavigationBarFonts()
+                        Typography.applyUIKitFonts()
                 }
         }
     }

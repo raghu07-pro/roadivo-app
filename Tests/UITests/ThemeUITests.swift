@@ -75,6 +75,28 @@ final class ThemeUITests: XCTestCase {
         snapshot("29-Theme-Ocean", app: app)
     }
 
+    func testChoosingEachFontStyleSelectsOnlyIt() {
+        let app = XCUIApplication.roadivo(skipOnboarding: true)
+        openTheme(app)
+        app.swipeUp() // Font Style sits below the accents.
+        let fonts = ["roadSign", "standard", "rounded", "serif"]
+        XCTAssertTrue(app.buttons["theme.font.roadSign"].waitForExistence(timeout: 5))
+        XCTAssertTrue(app.buttons["theme.font.roadSign"].isSelected)
+        for font in fonts {
+            let option = app.buttons["theme.font.\(font)"]
+            option.tap()
+            XCTAssertTrue(option.isSelected, font)
+            for other in fonts where other != font {
+                XCTAssertFalse(app.buttons["theme.font.\(other)"].isSelected, "\(other) still selected")
+            }
+        }
+        app.buttons["theme.font.rounded"].tap()
+        snapshot("36-Theme-Font-Rounded", app: app)
+        // The whole app follows: Home's text and the tab labels too.
+        app.tabBars.buttons.element(boundBy: 0).tap()
+        snapshot("37-Home-Font-Rounded", app: app)
+    }
+
     /// Samples the screen background in the left margin, beside the content.
     private func backgroundIsDark(_ app: XCUIApplication) throws -> Bool {
         let image = app.screenshot().image

@@ -30,14 +30,16 @@ final class SettingsUITests: XCTestCase {
     }
 
     /// UI tests run without an App Store ID, so there's no review page and Rate Roadivo is hidden.
-    func testRateIsHiddenWithoutAppStoreID() {
+    /// Rate is always offered (the system prompt until the App Store ID exists); not tapped, as the
+    /// prompt is the system's.
+    func testRateIsOffered() {
         let app = XCUIApplication.roadivo(skipOnboarding: true)
         app.tabBars.buttons.element(boundBy: 3).tap()
         XCTAssertTrue(app.buttons["settings.theme"].waitForExistence(timeout: 5))
         app.swipeUp()
-        // Share is in the same section, so once it's built Rate would be too.
-        XCTAssertTrue(app.descendants(matching: .any)["settings.share"].firstMatch.waitForExistence(timeout: 5))
-        XCTAssertFalse(app.buttons["settings.rate"].exists)
+        let rate = app.buttons["settings.rate"]
+        XCTAssertTrue(rate.waitForExistence(timeout: 5))
+        XCTAssertTrue(rate.isEnabled)
     }
 
     /// Pro users can reach their subscription; it isn't tapped, as the App Store sheet is the system's.

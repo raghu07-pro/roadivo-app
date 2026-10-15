@@ -1,13 +1,14 @@
 import Foundation
 import Observation
 
-/// Settings › Theme: Light, Dark or System, and the accent colour. A choice
+/// Settings › Theme: Light, Dark or System, the accent colour and the font style. A choice
 /// applies across the app at once (`AppTheme`) and is remembered.
 @Observable
 @MainActor
 final class ThemeViewModel {
     let appearances = ThemeAppearance.allCases
     let accents = ThemeAccent.allCases
+    let fonts = ThemeFont.allCases
 
     private let theme: AppTheme
 
@@ -23,6 +24,10 @@ final class ThemeViewModel {
         theme.accent
     }
 
+    var font: ThemeFont {
+        theme.font
+    }
+
     /// The Settings row's value, as in "Golden Hour · System".
     var summary: String {
         String(appLocalized: accent.title) + " · " + String(appLocalized: appearance.title)
@@ -34,5 +39,9 @@ final class ThemeViewModel {
 
     func choose(_ accent: ThemeAccent) {
         theme.setAccent(accent)
+    }
+
+    func choose(_ font: ThemeFont) {
+        theme.setFont(font)
     }
 }

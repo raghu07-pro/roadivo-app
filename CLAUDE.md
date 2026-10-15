@@ -55,7 +55,7 @@ Graphite). `AppTheme.shared` holds the choice and both apply live
   `SectionTitle`, `CardHeader`, `cardStyle()`.
 - The code-drawn scenes (`RoadScene`, `CockpitView`) keep the road's yellow
   centre line and the logo's golden sun (`Palette.laneYellow`).
-- Overpass type.
+- Type: Overpass by default; Settings › Theme › Font Style also offers Standard, Rounded and Serif. Use `Typography` tokens, never a hard-coded font (DECISIONS 93).
 
 The tagline is "Let the Journey Play." (`Brand.tagline`). No green. See
 DECISIONS 33, 37 and 53–57.

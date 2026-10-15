@@ -10,6 +10,7 @@ struct SettingsView<SourcesScreen: View>: View {
     @ViewBuilder let sourcesScreen: () -> SourcesScreen
 
     @Environment(\.openURL) private var openURL
+    @Environment(\.requestReview) private var requestReview
     @State private var language = LanguageViewModel()
     @State private var theme = ThemeViewModel()
     @State private var isManagingSubscription = false
@@ -89,13 +90,10 @@ struct SettingsView<SourcesScreen: View>: View {
                 }
 
                 Section {
-                    // Only with a listing: the system prompt it used to fall back on often shows nothing.
-                    if let review = appStore.writeReview {
-                        Button { openURL(review) } label: {
-                            row(symbol: "star.fill", title: "Rate Roadivo", detail: nil)
-                        }
-                        .accessibilityIdentifier("settings.rate")
+                    Button(action: rate) {
+                        row(symbol: "star.fill", title: "Rate Roadivo", detail: nil)
                     }
+                    .accessibilityIdentifier("settings.rate")
                     shareRow
                     NavigationLink {
                         HelpView()
@@ -196,6 +194,16 @@ struct SettingsView<SourcesScreen: View>: View {
 
     private var appStore: AppStoreLinks {
         AppStoreLinks.current
+    }
+
+    /// Apple's "Write a Review" page once `APP_STORE_ID` is set; until then the system rating prompt
+    /// (iOS may not show it in TestFlight or more than three times a year).
+    private func rate() {
+        if let review = appStore.writeReview {
+            openURL(review)
+        } else {
+            requestReview()
+        }
     }
 
     @ViewBuilder private var shareRow: some View {

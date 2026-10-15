@@ -37,9 +37,13 @@ struct RootView: View {
         // Settings › Theme applies at once; the windows carry it to alerts, sheets and system
         // pickers (and back to the iPhone's setting for "System").
         .tint(.roadAccent)
+        // Every system font below, sheets included, takes the chosen font style.
+        .fontDesign(theme.font.rootDesign)
         .preferredColorScheme(theme.appearance.colorScheme)
         .onChange(of: theme.appearance, initial: true) { theme.applyToWindows() }
         .onChange(of: theme.accent) { theme.applyToWindows() }
+        // SwiftUI text follows `Typography` by itself; UIKit's navigation titles need telling.
+        .onChange(of: theme.font) { Typography.applyUIKitFonts() }
         // Pro users never need the intro paywall, even if their plan lapses later.
         .onChange(of: environment.proAccess.isPro) { _, isPro in
             if isPro {
