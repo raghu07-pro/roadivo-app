@@ -67,6 +67,20 @@ final class OnboardingFlowUITests: XCTestCase {
         XCTAssertTrue(app.buttons["settings.plan"].waitForExistence(timeout: 5))
     }
 
+    /// A subscriber opening the plans sees theirs selected and can't buy it again.
+    func testPaywallOpensOnTheCurrentPlan() {
+        let app = XCUIApplication.roadivo(skipOnboarding: true, pro: true) // The fake Pro user has Yearly.
+        app.tabBars.buttons["Settings"].tap()
+        let plan = app.buttons["settings.plan"]
+        XCTAssertTrue(plan.waitForExistence(timeout: 5))
+        plan.tap()
+        let yearly = app.buttons["paywall.plan.yearly"]
+        XCTAssertTrue(yearly.waitForExistence(timeout: 5))
+        XCTAssertTrue(yearly.isSelected)
+        XCTAssertFalse(app.buttons["paywall.plan.lifetime"].isSelected)
+        XCTAssertFalse(app.buttons["paywall.buy"].isEnabled)
+    }
+
     /// Nothing to restore: the paywall stays and says so.
     func testRestoreWithNothingBoughtSaysSo() {
         let app = XCUIApplication.roadivo()

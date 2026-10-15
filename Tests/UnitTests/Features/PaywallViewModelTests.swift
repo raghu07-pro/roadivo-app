@@ -27,6 +27,7 @@ struct PaywallViewModelTests {
         await access.refresh()
         await viewModel.load()
         #expect(access.currentPlan == .yearly)
+        #expect(viewModel.selected == .yearly) // Opens on the plan they have, not Lifetime.
         #expect(viewModel.isCurrent(.yearly))
         #expect(!viewModel.isCurrent(.lifetime))
         viewModel.selected = .yearly

@@ -13,7 +13,7 @@ final class PaywallViewModel {
     let reason: PaywallReason
     private(set) var phase: Phase = .loading
     private(set) var offers: [PlanOffer] = []
-    /// Lifetime is preselected, as in the reference flow.
+    /// The plan the user already has, or Lifetime (as in the reference flow).
     var selected: ProPlan = .lifetime
     private(set) var isPurchasing = false
     var message: String?
@@ -80,7 +80,9 @@ final class PaywallViewModel {
         phase = .loading
         do {
             offers = try await access.client.offers()
-            if !offers.contains(where: { $0.plan == selected }), let first = offers.last {
+            if let current = access.currentPlan, offers.contains(where: { $0.plan == current }) {
+                selected = current
+            } else if !offers.contains(where: { $0.plan == selected }), let first = offers.last {
                 selected = first.plan
             }
             phase = offers.isEmpty
