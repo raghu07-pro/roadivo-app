@@ -29,16 +29,49 @@ final class SettingsUITests: XCTestCase {
         snapshot("30-Share", app: app)
     }
 
-    /// Rate Roadivo is offered and enabled; not tapped, because without an App Store ID it shows the
-    /// system review prompt, which the test can't reliably dismiss.
-    func testRateIsOffered() {
+    /// UI tests run without an App Store ID, so there's no review page and Rate Roadivo is hidden.
+    func testRateIsHiddenWithoutAppStoreID() {
         let app = XCUIApplication.roadivo(skipOnboarding: true)
         app.tabBars.buttons.element(boundBy: 3).tap()
         XCTAssertTrue(app.buttons["settings.theme"].waitForExistence(timeout: 5))
         app.swipeUp()
-        let rate = app.buttons["settings.rate"]
-        XCTAssertTrue(rate.waitForExistence(timeout: 5))
-        XCTAssertTrue(rate.isEnabled)
+        // Share is in the same section, so once it's built Rate would be too.
+        XCTAssertTrue(app.descendants(matching: .any)["settings.share"].firstMatch.waitForExistence(timeout: 5))
+        XCTAssertFalse(app.buttons["settings.rate"].exists)
+    }
+
+    /// Pro users can reach their subscription; it isn't tapped, as the App Store sheet is the system's.
+    func testProOffersManageSubscription() {
+        let app = XCUIApplication.roadivo(skipOnboarding: true, pro: true)
+        app.tabBars.buttons.element(boundBy: 3).tap()
+        let manage = app.buttons["settings.manageSubscription"]
+        XCTAssertTrue(manage.waitForExistence(timeout: 5))
+        XCTAssertTrue(manage.isEnabled)
+    }
+
+    /// Free users have nothing to manage; the Pro banner offers the upgrade instead.
+    func testFreeUsersHaveNoManageSubscription() {
+        let app = XCUIApplication.roadivo(skipOnboarding: true)
+        app.tabBars.buttons.element(boundBy: 3).tap()
+        XCTAssertTrue(app.buttons["settings.pro"].waitForExistence(timeout: 5))
+        XCTAssertFalse(app.buttons["settings.manageSubscription"].exists)
+    }
+
+    /// Help & FAQ ends with Contact Support; not tapped, as Mail opens outside the app.
+    func testHelpOffersContactSupport() {
+        let app = XCUIApplication.roadivo(skipOnboarding: true)
+        app.tabBars.buttons.element(boundBy: 3).tap()
+        XCTAssertTrue(app.buttons["settings.theme"].waitForExistence(timeout: 5))
+        app.swipeUp()
+        let help = app.buttons["settings.help"]
+        XCTAssertTrue(help.waitForExistence(timeout: 5))
+        help.tap()
+        let contact = app.buttons["help.contactSupport"]
+        for _ in 0..<4 where !(contact.exists && contact.isHittable) {
+            app.swipeUp()
+        }
+        XCTAssertTrue(contact.waitForExistence(timeout: 5))
+        XCTAssertTrue(contact.isHittable)
     }
 
     /// Touch and hold a card: the menu opens over a larger preview. The

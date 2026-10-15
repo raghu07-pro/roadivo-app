@@ -162,8 +162,10 @@ struct AddSourceView<Help: View>: View {
             }
             LazyVGrid(columns: serverColumns, spacing: Spacing.sm) {
                 ForEach(MediaServerKind.allCases) { kind in
+                    // Name only on screen (owner's choice); VoiceOver also hears what signing in takes.
                     NavigationLink(value: kind) { ServerCard(kind: kind) }
                         .buttonStyle(PressableStyle())
+                        .accessibilityHint(Text(app: kind.subtitle))
                         .accessibilityIdentifier("addSource.server.\(kind.rawValue)")
                 }
             }

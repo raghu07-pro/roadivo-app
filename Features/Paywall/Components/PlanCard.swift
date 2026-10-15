@@ -3,6 +3,7 @@ import SwiftUI
 struct PlanCard: View {
     let offer: PlanOffer
     let isSelected: Bool
+    var isCurrent = false
     let action: () -> Void
 
     var body: some View {
@@ -49,8 +50,8 @@ struct PlanCard: View {
                     .strokeBorder(isSelected ? AnyShapeStyle(.roadBrandGradient) : AnyShapeStyle(.clear), lineWidth: 2)
             }
             .overlay(alignment: .topTrailing) {
-                if offer.plan == .lifetime {
-                    Text("Best value")
+                if isCurrent || offer.plan == .lifetime {
+                    Text(isCurrent ? "Current plan" : "Best value")
                         .font(Typography.badge)
                         .foregroundStyle(.roadOnBrand)
                         .padding(.horizontal, Spacing.xs)

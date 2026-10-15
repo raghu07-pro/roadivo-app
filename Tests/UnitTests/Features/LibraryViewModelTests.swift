@@ -37,6 +37,35 @@ struct LibraryViewModelTests {
         #expect(try library.repository.localVideos().count == 1)
     }
 
+    @Test("Continue Watching keeps channels after more than 12 videos were played since")
+    func recentSkipsVideosBeforeTheLimit() async throws {
+        let (viewModel, library) = try await loaded()
+        let news = try #require(viewModel.items.first)
+        library.repository.markPlayed(news.id, at: Date(timeIntervalSince1970: 1))
+        let folder = FileManager.default.temporaryDirectory.appending(path: "recent-\(UUID().uuidString)")
+        try FileManager.default.createDirectory(at: folder, withIntermediateDirectories: true)
+        defer { try? FileManager.default.removeItem(at: folder) }
+        let files = try (0..<13).map { index in
+            let file = folder.appending(path: "Clip \(index).mp4")
+            try Data("x".utf8).write(to: file)
+            return file
+        }
+        try await library.repository.importVideos(files)
+        let videos = try library.repository.localVideos()
+        defer {
+            for video in videos {
+                try? library.repository.deleteVideo(video.id) // Also removes the copied file.
+            }
+        }
+        #expect(videos.count == 13)
+        for (offset, video) in videos.enumerated() {
+            library.repository.markPlayed(video.id, at: Date(timeIntervalSince1970: Double(10 + offset)))
+        }
+
+        viewModel.load()
+        #expect(viewModel.recent.map(\.id) == [news.id])
+    }
+
     @Test("Groups items into sections in playlist order, ungrouped as Other")
     func sections() async throws {
         let (viewModel, _) = try await loaded()

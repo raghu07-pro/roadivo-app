@@ -6,9 +6,23 @@ import Observation
 @Observable
 @MainActor
 final class ProAccess {
-    private(set) var isPro = false
+    private(set) var activePlans: Set<ProPlan> = []
     let client: StoreClient
     @ObservationIgnored private var listener: Task<Void, Never>?
+
+    var isPro: Bool {
+        !activePlans.isEmpty
+    }
+
+    /// The plan Settings shows: Lifetime over Yearly over Weekly when several are active.
+    var currentPlan: ProPlan? {
+        [ProPlan.lifetime, .yearly, .weekly].first { activePlans.contains($0) }
+    }
+
+    /// A renewing plan is active (so Settings offers Manage Subscription), even alongside Lifetime.
+    var hasSubscription: Bool {
+        activePlans.contains { $0.isSubscription }
+    }
 
     /// Sources a free user may add before the paywall appears.
     static let freeSourceLimit = 1
@@ -30,6 +44,6 @@ final class ProAccess {
     }
 
     func refresh() async {
-        isPro = await client.hasActiveEntitlement()
+        activePlans = await client.activePlans()
     }
 }

@@ -4,13 +4,15 @@ import SwiftUI
 /// Settings: Pro, Media, Preferences, Legal, About — the reference's sections.
 struct SettingsView<SourcesScreen: View>: View {
     let isPro: Bool
+    var currentPlan: ProPlan?
+    var hasSubscription = false
     let onUpgrade: () -> Void
     @ViewBuilder let sourcesScreen: () -> SourcesScreen
 
     @Environment(\.openURL) private var openURL
-    @Environment(\.requestReview) private var requestReview
     @State private var language = LanguageViewModel()
     @State private var theme = ThemeViewModel()
+    @State private var isManagingSubscription = false
 
     var body: some View {
         NavigationStack {
@@ -20,6 +22,15 @@ struct SettingsView<SourcesScreen: View>: View {
                 }
                 .listRowInsets(EdgeInsets())
                 .listRowBackground(Color.clear)
+
+                if hasSubscription {
+                    Section {
+                        Button { isManagingSubscription = true } label: {
+                            row(symbol: "creditcard.fill", title: "Manage Subscription", detail: nil)
+                        }
+                        .accessibilityIdentifier("settings.manageSubscription")
+                    }
+                }
 
                 Section {
                     NavigationLink {
@@ -78,10 +89,13 @@ struct SettingsView<SourcesScreen: View>: View {
                 }
 
                 Section {
-                    Button(action: rate) {
-                        row(symbol: "star.fill", title: "Rate Roadivo", detail: nil)
+                    // Only with a listing: the system prompt it used to fall back on often shows nothing.
+                    if let review = appStore.writeReview {
+                        Button { openURL(review) } label: {
+                            row(symbol: "star.fill", title: "Rate Roadivo", detail: nil)
+                        }
+                        .accessibilityIdentifier("settings.rate")
                     }
-                    .accessibilityIdentifier("settings.rate")
                     shareRow
                     NavigationLink {
                         HelpView()
@@ -106,6 +120,8 @@ struct SettingsView<SourcesScreen: View>: View {
             .scrollContentBackground(.hidden)
             .background(.roadCanvas)
             .navigationTitle("Settings")
+            .navigationBarTitleDisplayMode(.inline)
+            .manageSubscriptionsSheet(isPresented: $isManagingSubscription)
         }
     }
 
@@ -113,24 +129,25 @@ struct SettingsView<SourcesScreen: View>: View {
 
     /// The theme's gradient as a banner: an upsell for free users, a quiet
     /// thank-you once Pro is active.
-    @ViewBuilder private var proBanner: some View {
-        if isPro {
-            bannerContent(
-                symbol: "checkmark.seal.fill",
-                subtitle: "Active. Thanks for supporting Roadivo.",
-                showsChevron: false
-            )
-            .accessibilityElement(children: .combine)
-        } else {
-            Button(action: onUpgrade) {
-                bannerContent(symbol: "crown.fill", subtitle: "Unlock all features", showsChevron: true)
+    /// Free: the upgrade. Pro: the active plan by name; tapping shows the plans, to upgrade.
+    private var proBanner: some View {
+        Button(action: onUpgrade) {
+            if isPro {
+                bannerContent(symbol: "checkmark.seal.fill", subtitle: planSubtitle, showsChevron: true)
+            } else {
+                bannerContent(symbol: "crown.fill", subtitle: Text("Unlock all features"), showsChevron: true)
             }
-            .buttonStyle(PressableStyle())
-            .accessibilityIdentifier("settings.pro")
         }
+        .buttonStyle(PressableStyle())
+        .accessibilityIdentifier("settings.pro")
     }
 
-    private func bannerContent(symbol: String, subtitle: LocalizedStringKey, showsChevron: Bool) -> some View {
+    private var planSubtitle: Text {
+        guard let currentPlan else { return Text("Active. Thanks for supporting Roadivo.") }
+        return Text("\(String(appLocalized: currentPlan.title)) plan · Active")
+    }
+
+    private func bannerContent(symbol: String, subtitle: Text, showsChevron: Bool) -> some View {
         let shape = RoundedRectangle(cornerRadius: Radius.lg, style: .continuous)
         return HStack(spacing: Spacing.sm) {
             Image(systemName: symbol)
@@ -140,7 +157,7 @@ struct SettingsView<SourcesScreen: View>: View {
                 .accessibilityHidden(true)
             VStack(alignment: .leading, spacing: 2) {
                 Text("Roadivo Pro").font(Typography.button)
-                Text(subtitle).font(Typography.caption)
+                subtitle.font(Typography.caption)
             }
             .multilineTextAlignment(.leading)
             Spacer(minLength: 0)
@@ -179,16 +196,6 @@ struct SettingsView<SourcesScreen: View>: View {
 
     private var appStore: AppStoreLinks {
         AppStoreLinks.current
-    }
-
-    /// The App Store's "Write a Review" page. Before the listing exists (no
-    /// `APP_STORE_ID`), the system review prompt instead.
-    private func rate() {
-        if let url = appStore.writeReview {
-            openURL(url)
-        } else {
-            requestReview()
-        }
     }
 
     @ViewBuilder private var shareRow: some View {

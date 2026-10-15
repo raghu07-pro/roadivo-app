@@ -74,13 +74,24 @@ final class LibraryRepository {
         return playlist.channels.sorted { $0.sortIndex < $1.sortIndex }.compactMap(\.mediaItem)
     }
 
-    func recentlyPlayed(limit: Int = 12) throws -> [MediaItem] {
+    /// The most recently played items. `excludingLocal` filters imported videos inside the fetch,
+    /// so Home's Continue Watching still gets `limit` items.
+    func recentlyPlayed(limit: Int = 12, excludingLocal: Bool = false) throws -> [MediaItem] {
+        let localPrefix = MediaLocation.localScheme
+        let predicate = excludingLocal
+            ? #Predicate<Channel> { $0.lastPlayedAt != nil && !$0.streamURLString.starts(with: localPrefix) }
+            : #Predicate<Channel> { $0.lastPlayedAt != nil }
         var descriptor = FetchDescriptor<Channel>(
-            predicate: #Predicate { $0.lastPlayedAt != nil },
+            predicate: predicate,
             sortBy: [SortDescriptor(\.lastPlayedAt, order: .reverse)]
         )
         descriptor.fetchLimit = limit
         return try context.fetch(descriptor).compactMap(\.mediaItem)
+    }
+
+    /// How many items a source has, counted in the store: reading `channels` loaded every row.
+    func channelCount(in playlistID: UUID) throws -> Int {
+        try context.fetchCount(FetchDescriptor<Channel>(predicate: #Predicate { $0.playlist?.id == playlistID }))
     }
 
     // MARK: Changing
@@ -124,11 +135,7 @@ final class LibraryRepository {
         guard !entries.isEmpty else { throw LibraryError.emptyPlaylist }
 
         let playlist = Playlist(name: displayName(name, fallback: url), kind: .remote, sourceHost: url.host())
-        context.insert(playlist)
-        try context.save()
-        try secureStore.set(url.absoluteString, for: sourceKey(playlist.id))
-        try await writer.replaceChannels(of: playlist.id, with: entries)
-        return playlist.id
+        return try await insert(playlist, secret: url.absoluteString, entries: entries)
     }
 
     /// Builds an Xtream Codes M3U link and adds it like any other link.
@@ -169,15 +176,11 @@ final class LibraryRepository {
         let trimmed = name.trimmingCharacters(in: .whitespacesAndNewlines)
         let fallback = defaultName ?? "\(account.kind.title) · \(account.baseURL.host() ?? "")"
         let title = trimmed.isEmpty ? fallback : trimmed
-        let playlist = Playlist(name: title, kind: .mediaServer, sourceHost: account.baseURL.host())
-        context.insert(playlist)
-        try context.save()
         guard let encoded = try String(bytes: JSONEncoder().encode(account), encoding: .utf8) else {
             throw LibraryError.unreadable
         }
-        try secureStore.set(encoded, for: sourceKey(playlist.id))
-        try await writer.replaceChannels(of: playlist.id, with: entries)
-        return playlist.id
+        let playlist = Playlist(name: title, kind: .mediaServer, sourceHost: account.baseURL.host())
+        return try await insert(playlist, secret: encoded, entries: entries)
     }
 
     /// Adds a playlist from M3U text (an imported .m3u file or pasted content).
@@ -185,24 +188,25 @@ final class LibraryRepository {
     func addFilePlaylist(name: String, text: String) async throws -> UUID {
         let entries = await Task.detached(priority: .userInitiated) { M3UParser.parse(text) }.value
         guard !entries.isEmpty else { throw LibraryError.emptyPlaylist }
-        let playlist = Playlist(name: name, kind: .file)
-        context.insert(playlist)
-        try context.save()
-        try await writer.replaceChannels(of: playlist.id, with: entries)
-        return playlist.id
+        return try await insert(Playlist(name: name, kind: .file), secret: nil, entries: entries)
     }
 
     /// Re-downloads a remote playlist, keeping favourites for streams still present.
     func refresh(_ playlistID: UUID) async throws {
-        guard let stored = try secureStore.string(for: sourceKey(playlistID)) else { throw LibraryError.notFound }
-        if try playlist(playlistID).kind == .mediaServer {
-            let account = try JSONDecoder().decode(MediaServerAccount.self, from: Data(stored.utf8))
+        let kind = try playlist(playlistID).kind
+        // Secrets are kept "this device only", so a restored iPhone has the source but not its link.
+        guard let stored = try secureStore.string(for: sourceKey(playlistID)) else { throw SourceSecretError.missing }
+        if kind == .mediaServer {
+            // An unreadable login is as good as a missing one: the user has to sign in again.
+            guard let account = try? JSONDecoder().decode(MediaServerAccount.self, from: Data(stored.utf8)) else {
+                throw SourceSecretError.missing
+            }
             let entries = try await mediaServers.library(for: account)
             guard !entries.isEmpty else { throw MediaServerError.emptyLibrary }
             try await writer.replaceChannels(of: playlistID, with: entries)
             return
         }
-        guard let url = URL(string: stored) else { throw LibraryError.notFound }
+        guard let url = URL(string: stored) else { throw SourceSecretError.missing }
         let text = try await fetcher.fetchText(from: url)
         // A sign-in page in place of the playlist must never replace the
         // channels: favourites are matched by stream URL and would be lost.
@@ -226,63 +230,58 @@ final class LibraryRepository {
         try context.save()
     }
 
-    func delete(_ playlistID: UUID) throws {
+    /// Deletes a source, its channels and its secret. Big sources go off the main actor.
+    func delete(_ playlistID: UUID) async throws {
         let playlist = try playlist(playlistID)
-        if playlist.kind == .localVideos {
-            for channel in playlist.channels where channel.streamURLString.hasPrefix(MediaLocation.localScheme) {
-                if let url = MediaLocation.resolve(channel.streamURLString) {
-                    // The row is going away either way; a leftover file is only wasted space.
-                    try? fileManager.removeItem(at: url)
-                }
+        try secureStore.remove(sourceKey(playlistID))
+        guard playlist.kind == .localVideos else {
+            try await writer.deletePlaylist(playlistID)
+            return
+        }
+        for channel in playlist.channels where channel.streamURLString.hasPrefix(MediaLocation.localScheme) {
+            if let url = MediaLocation.resolve(channel.streamURLString) {
+                // The row is going away either way; a leftover file is only wasted space.
+                try? fileManager.removeItem(at: url)
             }
         }
-        try secureStore.remove(sourceKey(playlistID))
         context.delete(playlist)
         try context.save()
     }
 
-    /// Removes one video from "On this iPhone" and deletes its copied file.
-    func deleteVideo(_ id: UUID) throws {
-        let channel = try channel(id)
-        guard channel.streamURLString.hasPrefix(MediaLocation.localScheme) else { throw LibraryError.notFound }
-        if let url = MediaLocation.resolve(channel.streamURLString) {
-            // The row goes either way; a leftover file is only wasted space.
-            try? fileManager.removeItem(at: url)
-        }
-        context.delete(channel)
-        try context.save()
-    }
-
-    /// Copies picked (possibly security-scoped) videos into "On this iPhone", off the main actor:
-    /// a multi-GB file or an iCloud download can take minutes.
-    @discardableResult
-    func importVideos(_ urls: [URL]) async throws -> Int {
-        let directory = MediaLocation.videosDirectory
-        let logger = logger
-        let copied = try await Task.detached(priority: .userInitiated) {
-            try LibraryWork.copyVideos(urls, into: directory, logger: logger)
-        }.value
-        guard !copied.isEmpty else { throw LibraryError.unreadable }
-
-        let playlist = try localVideosPlaylist()
-        var nextIndex = (playlist.channels.map(\.sortIndex).max() ?? -1) + 1
-        for video in copied {
-            let channel = Channel(
-                name: video.title,
-                group: String(appLocalized: "On this iPhone"),
-                logoURLString: nil,
-                streamURLString: MediaLocation.localScheme + video.fileName,
-                sortIndex: nextIndex
-            )
-            context.insert(channel)
-            channel.playlist = playlist
-            nextIndex += 1
-        }
-        try context.save()
-        return copied.count
-    }
-
     // MARK: Helpers
+
+    /// Saves a new source's row, secret (link or login) and channels. If a step fails, what was
+    /// written is removed, so no half-added source is left behind.
+    private func insert(_ playlist: Playlist, secret: String?, entries: [PlaylistEntry]) async throws -> UUID {
+        let id = playlist.id
+        context.insert(playlist)
+        do {
+            try context.save()
+            if let secret {
+                try secureStore.set(secret, for: sourceKey(id))
+            }
+            try await writer.replaceChannels(of: id, with: entries)
+            return id
+        } catch {
+            discard(playlist)
+            throw error
+        }
+    }
+
+    private func discard(_ playlist: Playlist) {
+        let key = sourceKey(playlist.id)
+        context.delete(playlist)
+        do {
+            try context.save()
+        } catch {
+            logger.error("Removing a half-added source failed: \(error.localizedDescription, privacy: .public)")
+        }
+        do {
+            try secureStore.remove(key)
+        } catch {
+            logger.error("Removing a half-added secret failed: \(error.localizedDescription, privacy: .public)")
+        }
+    }
 
     private func channel(_ id: UUID) throws -> Channel {
         var descriptor = FetchDescriptor<Channel>(predicate: #Predicate { $0.id == id })
@@ -324,6 +323,51 @@ final class LibraryRepository {
     }
 }
 
+// MARK: - On this iPhone
+
+extension LibraryRepository {
+    /// Removes one video from "On this iPhone" and deletes its copied file.
+    func deleteVideo(_ id: UUID) throws {
+        let channel = try channel(id)
+        guard channel.streamURLString.hasPrefix(MediaLocation.localScheme) else { throw LibraryError.notFound }
+        if let url = MediaLocation.resolve(channel.streamURLString) {
+            // The row goes either way; a leftover file is only wasted space.
+            try? fileManager.removeItem(at: url)
+        }
+        context.delete(channel)
+        try context.save()
+    }
+
+    /// Copies picked (possibly security-scoped) videos into "On this iPhone", off the main actor. Returns
+    /// how many were imported, which can be fewer than `urls`; throws the first copy error when none were.
+    @discardableResult
+    func importVideos(_ urls: [URL]) async throws -> Int {
+        let directory = MediaLocation.videosDirectory
+        let logger = logger
+        let copied = try await Task.detached(priority: .userInitiated) {
+            try LibraryWork.copyVideos(urls, into: directory, logger: logger)
+        }.value
+        guard !copied.isEmpty else { throw LibraryError.unreadable }
+
+        let playlist = try localVideosPlaylist()
+        var nextIndex = (playlist.channels.map(\.sortIndex).max() ?? -1) + 1
+        for video in copied {
+            let channel = Channel(
+                name: video.title,
+                group: String(appLocalized: "On this iPhone"),
+                logoURLString: nil,
+                streamURLString: MediaLocation.localScheme + video.fileName,
+                sortIndex: nextIndex
+            )
+            context.insert(channel)
+            channel.playlist = playlist
+            nextIndex += 1
+        }
+        try context.save()
+        return copied.count
+    }
+}
+
 /// The repository's slow work, kept off the main actor: it runs inside
 /// detached tasks, so a big import never freezes the UI.
 private enum LibraryWork {
@@ -348,12 +392,13 @@ private enum LibraryWork {
         }.value
     }
 
-    /// Copies each file into `directory` under a unique name. A file that
-    /// fails is logged and skipped so the rest still import.
+    /// Copies each file into `directory` under a unique name. A file that fails is logged and skipped
+    /// so the rest still import; when none copy, the first error (such as a full iPhone) is thrown.
     static func copyVideos(_ urls: [URL], into directory: URL, logger: Logger) throws -> [CopiedVideo] {
         let fileManager = FileManager.default
         try fileManager.createDirectory(at: directory, withIntermediateDirectories: true)
         var copied: [CopiedVideo] = []
+        var firstError: (any Error)?
         for source in urls {
             let scoped = source.startAccessingSecurityScopedResource()
             defer {
@@ -366,10 +411,25 @@ private enum LibraryWork {
                 try fileManager.copyItem(at: source, to: directory.appending(path: fileName))
             } catch {
                 logger.error("Video copy failed: \(error.localizedDescription, privacy: .public)")
+                firstError = firstError ?? error
                 continue
             }
             copied.append(CopiedVideo(title: source.deletingPathExtension().lastPathComponent, fileName: fileName))
         }
+        if copied.isEmpty, let firstError {
+            throw firstError
+        }
         return copied
+    }
+}
+
+/// A source whose link or login is no longer in the Keychain, as after restoring to a new iPhone.
+enum SourceSecretError: LocalizedError, Equatable {
+    case missing
+
+    var errorDescription: String? {
+        String(
+            appLocalized: "This iPhone no longer has the link or login for this source. Delete it and add it again."
+        )
     }
 }

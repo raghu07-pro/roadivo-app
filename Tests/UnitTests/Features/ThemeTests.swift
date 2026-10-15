@@ -100,6 +100,25 @@ struct ThemeTests {
             #expect(Contrast.ratio(palette.onBrand.dark, fill) >= 3, "\(accent) label on dark fill")
         }
     }
+
+    /// The brief says no green; the covers' white initials are large text, so they need 3:1.
+    @Test("Placeholder covers avoid green and keep white initials readable")
+    func placeholderCovers() {
+        var pairs = Set<UInt32>()
+        for title in (0..<360).map({ "Channel \($0)" }) {
+            let colors = Palette.placeholderColors(for: title).map { UIColor($0) }
+            for color in colors {
+                var hue: CGFloat = 0, saturation: CGFloat = 0, brightness: CGFloat = 0, alpha: CGFloat = 0
+                color.getHue(&hue, saturation: &saturation, brightness: &brightness, alpha: &alpha)
+                #expect(!(0.2...0.45).contains(hue), "\(title) has a green cover")
+                #expect(Contrast.ratio(0xFFFFFF, color.hexValue) >= 3, "\(title) initials")
+            }
+            if let first = colors.first {
+                pairs.insert(first.hexValue)
+            }
+        }
+        #expect(pairs.count == 5, "Every hue pair was checked")
+    }
 }
 
 private enum Contrast {

@@ -21,6 +21,7 @@ struct LibraryView: View {
             content
                 .background(.roadCanvas)
                 .safeAreaInset(edge: .top, spacing: 0) {
+                    // Always shown, empty library or not (owner's choice, 2026-10-15).
                     SearchField(
                         text: $viewModel.query,
                         prompt: "Search channels and titles",
@@ -33,6 +34,7 @@ struct LibraryView: View {
                     .background(.roadCanvas)
                 }
                 .navigationTitle("Home")
+                .navigationBarTitleDisplayMode(.inline)
                 .navigationDestination(for: LibraryGroupRoute.self) { route in
                     GroupDetailView(
                         viewModel: viewModel,
@@ -114,7 +116,10 @@ struct LibraryView: View {
                         SectionHeader(title: section.title, count: section.items.count) {
                             if section.items.count > carouselLimit {
                                 NavigationLink(value: LibraryGroupRoute(title: section.title)) {
-                                    Text("See All").font(Typography.secondary.weight(.semibold))
+                                    Text("See All")
+                                        .font(Typography.secondary.weight(.semibold))
+                                        .frame(minHeight: 44)
+                                        .contentShape(Rectangle())
                                 }
                             }
                         }
@@ -130,6 +135,7 @@ struct LibraryView: View {
             }
             .padding(.vertical, Spacing.md)
         }
+        .scrollDismissesKeyboard(.immediately)
     }
 
     private func alertBinding(_ state: VoiceSearchModel.State) -> Binding<Bool> {
@@ -144,6 +150,8 @@ struct LibraryView: View {
     }
 
     private func play(_ item: MediaItem, _ queue: [MediaItem]?) {
+        // The keyboard would come back over the tab bar when the player closes.
+        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
         onPlay(item, queue ?? viewModel.queue(for: item))
     }
 

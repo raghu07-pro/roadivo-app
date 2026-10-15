@@ -92,7 +92,7 @@ struct PlexClientTests {
         await #expect(throws: PlexError.noServers) { try await client().servers(token: "user-token") }
     }
 
-    @Test("The first address that answers wins: local HTTPS before remote, relay last")
+    @Test("Remote HTTPS wins when it answers, so a server added at home works on the road")
     func connectionChoice() async throws {
         let relay = try PlexConnection(
             uri: #require(URL(string: "https://relay.plex.direct")),
@@ -114,19 +114,42 @@ struct PlexClientTests {
             name: "Den",
             isOwned: true,
             accessToken: "srv",
-            connections: [relay, remote, local]
+            connections: [relay, local, remote]
         )
-        // The local address is down, so the remote one should be chosen over the relay.
-        PlexMockURLProtocol.handler = { request in
-            request.url?.host() == "local.plex.direct" ? (0, Data()) : (200, Data("{}".utf8))
-        }
+        PlexMockURLProtocol.handler = { _ in (200, Data("{}".utf8)) }
         let account = try await client().account(for: server)
         #expect(account.baseURL.host() == "remote.plex.direct")
         #expect(account.kind == .plex)
         #expect(account.token == "srv")
 
+        // No remote answer (a router without loopback): local before the slow relay.
+        PlexMockURLProtocol.handler = { request in
+            request.url?.host() == "remote.plex.direct" ? (0, Data()) : (200, Data("{}".utf8))
+        }
+        #expect(try await client().account(for: server).baseURL.host() == "local.plex.direct")
+
+        PlexMockURLProtocol.handler = { request in
+            request.url?.host() == "relay.plex.direct" ? (200, Data("{}".utf8)) : (0, Data())
+        }
+        #expect(try await client().account(for: server).baseURL.host() == "relay.plex.direct")
+
         PlexMockURLProtocol.handler = { _ in (0, Data()) }
         await #expect(throws: PlexError.serverUnreachable) { try await client().account(for: server) }
+    }
+
+    @Test("Addresses rank remote HTTPS, local HTTPS, local HTTP, relay, then plain HTTP over the internet")
+    func connectionRank() throws {
+        func connection(_ uri: String, local: Bool, relay: Bool = false) throws -> PlexConnection {
+            try PlexConnection(uri: #require(URL(string: uri)), isLocal: local, isRelay: relay)
+        }
+        let best = try [
+            connection("https://remote.plex.direct:32400", local: false),
+            connection("https://local.plex.direct:32400", local: true),
+            connection("http://192.168.1.5:32400", local: true),
+            connection("https://relay.plex.direct:8443", local: false, relay: true),
+            connection("http://203.0.113.9:32400", local: false)
+        ]
+        #expect(best.reversed().sorted { $0.rank < $1.rank } == best)
     }
 
     @Test("Movies and episodes become channels: MP4 plays directly, the rest through HLS")

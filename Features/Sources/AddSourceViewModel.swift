@@ -5,7 +5,16 @@ import Observation
 @MainActor
 final class AddSourceViewModel {
     /// A playlist link, or M3U text pasted or scanned from a QR code.
-    var input = ""
+    var input = "" {
+        didSet {
+            if input != oldValue {
+                parsedInput = SourceInput(input)
+            }
+        }
+    }
+
+    /// `input`, classified once per change: the view reads it several times per redraw.
+    private(set) var parsedInput = SourceInput.empty
     private(set) var isWorking = false
     var errorMessage: String?
 
@@ -15,10 +24,6 @@ final class AddSourceViewModel {
     init(repository: LibraryRepository, plex: PlexLinking = ScriptedPlexLinking()) {
         self.repository = repository
         self.plex = plex
-    }
-
-    var parsedInput: SourceInput {
-        SourceInput(input)
     }
 
     var canSubmit: Bool {

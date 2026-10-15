@@ -48,14 +48,17 @@ struct EmbyCompatibleClient: MediaServerConnecting {
     var session: URLSession = .shared
     let deviceID: String
 
+    static let maximumItems = 20000
+    static let pageSize = 1000
+
     func signIn(kind: MediaServerKind, baseURL: URL, username: String, password: String) async throws
         -> MediaServerAccount {
         var request = URLRequest(url: baseURL.appending(path: "Users/AuthenticateByName"), timeoutInterval: 20)
         request.httpMethod = "POST"
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         // Jellyfin reads `Authorization`, Emby `X-Emby-Authorization`.
-        request.setValue(authorization, forHTTPHeaderField: "Authorization")
-        request.setValue(authorization, forHTTPHeaderField: "X-Emby-Authorization")
+        request.setValue(authorization(), forHTTPHeaderField: "Authorization")
+        request.setValue(authorization(), forHTTPHeaderField: "X-Emby-Authorization")
         request.httpBody = try JSONEncoder().encode(["Username": username, "Pw": password])
         let data = try await send(request, unauthorizedIs: .badCredentials)
         guard let response = try? JSONDecoder().decode(AuthResponse.self, from: data) else {
@@ -64,7 +67,25 @@ struct EmbyCompatibleClient: MediaServerConnecting {
         return MediaServerAccount(kind: kind, baseURL: baseURL, userID: response.user.id, token: response.accessToken)
     }
 
+    /// Every movie and episode, a page at a time up to `maximumItems`, like Plex.
     func library(for account: MediaServerAccount) async throws -> [PlaylistEntry] {
+        var entries: [PlaylistEntry] = []
+        var start = 0
+        while start < Self.maximumItems {
+            let page = try await itemsPage(account, start: start)
+            entries += page.items.compactMap { entry(for: $0, account: account) }
+            start += page.items.count
+            // A short page is the last; servers that omit the total stop there too.
+            if page.items.count < Self.pageSize || start >= (page.totalRecordCount ?? .max) {
+                break
+            }
+        }
+        return entries
+    }
+
+    // MARK: Helpers
+
+    private func itemsPage(_ account: MediaServerAccount, start: Int) async throws -> ItemsResponse {
         guard var components = URLComponents(
             url: account.baseURL.appending(path: "Users/\(account.userID)/Items"),
             resolvingAgainstBaseURL: false
@@ -74,21 +95,35 @@ struct EmbyCompatibleClient: MediaServerConnecting {
             URLQueryItem(name: "IncludeItemTypes", value: "Movie,Episode"),
             URLQueryItem(name: "Fields", value: "SeriesName"),
             URLQueryItem(name: "SortBy", value: "SeriesSortName,ParentIndexNumber,IndexNumber,SortName"),
-            URLQueryItem(name: "Limit", value: "5000"),
-            URLQueryItem(name: "api_key", value: account.token)
-        ]
+            URLQueryItem(name: "StartIndex", value: "\(start)"),
+            URLQueryItem(name: "Limit", value: "\(Self.pageSize)")
+        ] + tokenQuery(account)
         guard let url = components.url else { throw MediaServerError.invalidAddress }
-        let data = try await send(URLRequest(url: url, timeoutInterval: 30), unauthorizedIs: .badCredentials)
+        var request = URLRequest(url: url, timeoutInterval: 30)
+        let header = authorization(token: account.token)
+        request.setValue(header, forHTTPHeaderField: "Authorization")
+        request.setValue(header, forHTTPHeaderField: "X-Emby-Authorization")
+        let data = try await send(request, unauthorizedIs: .badCredentials)
         guard let response = try? JSONDecoder().decode(ItemsResponse.self, from: data) else {
             throw MediaServerError.unexpectedResponse
         }
-        return response.items.compactMap { entry(for: $0, account: account) }
+        return response
     }
 
-    // MARK: Helpers
+    /// Jellyfin 10.12 only accepts a token here or as `ApiKey`; Emby reads `X-Emby-Authorization`.
+    private func authorization(token: String? = nil) -> String {
+        let base = #"MediaBrowser Client="Roadivo", Device="iPhone", DeviceId="\#(deviceID)", Version="1.0.0""#
+        return token.map { base + #", Token="\#($0)""# } ?? base
+    }
 
-    private var authorization: String {
-        #"MediaBrowser Client="Roadivo", Device="iPhone", DeviceId="\#(deviceID)", Version="1.0.0""#
+    /// AVPlayer and image loading can't send headers, so the token rides in the query. Jellyfin 10.12
+    /// turned off the legacy `api_key`, so it also gets `ApiKey`; Emby only knows `api_key`.
+    private func tokenQuery(_ account: MediaServerAccount) -> [URLQueryItem] {
+        var items = [URLQueryItem(name: "api_key", value: account.token)]
+        if account.kind == .jellyfin {
+            items.append(URLQueryItem(name: "ApiKey", value: account.token))
+        }
+        return items
     }
 
     private func send(_ request: URLRequest, unauthorizedIs error: MediaServerError) async throws -> Data {
@@ -129,7 +164,7 @@ struct EmbyCompatibleClient: MediaServerConnecting {
         guard var components = URLComponents(url: account.baseURL.appending(path: path), resolvingAgainstBaseURL: false)
         else { return nil }
         components.queryItems = query.sorted { $0.key < $1.key }.map { URLQueryItem(name: $0.key, value: $0.value) }
-            + [URLQueryItem(name: "api_key", value: account.token)]
+            + tokenQuery(account)
         return components.url
     }
 
@@ -149,7 +184,11 @@ struct EmbyCompatibleClient: MediaServerConnecting {
 
     private struct ItemsResponse: Decodable {
         let items: [Item]
-        enum CodingKeys: String, CodingKey { case items = "Items" }
+        let totalRecordCount: Int?
+        enum CodingKeys: String, CodingKey {
+            case items = "Items"
+            case totalRecordCount = "TotalRecordCount"
+        }
     }
 
     private struct Item: Decodable {

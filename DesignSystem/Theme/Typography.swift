@@ -25,7 +25,8 @@ enum Typography {
         let inline = UIFontMetrics(forTextStyle: .headline)
             .scaledFont(for: UIFont(name: "Overpass-ExtraBold", size: 17) ?? .preferredFont(forTextStyle: .headline))
         let appearance = UINavigationBar.appearance()
-        appearance.largeTitleTextAttributes = [.font: large]
-        appearance.titleTextAttributes = [.font: inline]
+        // An explicit colour, so a title can't come out white on the light canvas.
+        appearance.largeTitleTextAttributes = [.font: large, .foregroundColor: UIColor.label]
+        appearance.titleTextAttributes = [.font: inline, .foregroundColor: UIColor.label]
     }
 }

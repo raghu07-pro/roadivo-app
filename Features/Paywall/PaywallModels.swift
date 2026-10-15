@@ -44,13 +44,13 @@ struct PaywallFeature: Identifiable {
         PaywallFeature(
             id: 2,
             symbol: "server.rack",
-            title: "Servers side by side",
+            title: "Media servers",
             detail: "Plex, Jellyfin, Emby and Xtream together"
         ),
         PaywallFeature(
             id: 3,
-            symbol: "heart.fill",
-            title: "Support Roadivo",
+            symbol: "hand.raised.fill",
+            title: "No ads, ever",
             detail: "Free or Pro, no ads or tracking"
         )
     ]

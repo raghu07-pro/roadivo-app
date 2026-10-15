@@ -321,6 +321,70 @@
         }
       }
     },
+    "%@ plan · Active" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Plan: %@ · aktiv"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Plan %@ · activo"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Formule %@ · active"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ प्लान · सक्रिय"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Piano %@ · attivo"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@プラン · 有効"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ 플랜 · 활성"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Plano %@ · ativo"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@方案 · 已生效"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@方案 · 已生效"
+          }
+        }
+      }
+    },
     "%lld" : {
       "localizations" : {
         "de" : {
@@ -733,1026 +797,322 @@
         }
       }
     },
-    "A car display or wireless adapter that accepts AirPlay video. Open Cast to Car, tap AirPlay and pick the display, then start a channel. No AirPlay? Mount your iPhone and use Car Mode. Never watch video while driving." : {
+    "%lld of %lld videos were imported." : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Ein Autodisplay oder kabelloser Adapter, der AirPlay-Video unterstützt. Öffne „Ans Auto senden“, tippe auf AirPlay, wähle das Display und starte dann einen Sender. Kein AirPlay? Befestige dein iPhone und nutze den Automodus. Schau niemals Videos während der Fahrt."
+            "value" : "%1$lld von %2$lld Videos wurden importiert."
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Una pantalla del coche o un adaptador inalámbrico compatible con vídeo por AirPlay. Abre Enviar al coche, toca AirPlay y elige la pantalla; después inicia un canal. ¿No tienes AirPlay? Coloca tu iPhone en un soporte y usa el modo Coche. No veas nunca vídeos mientras conduces."
+            "value" : "Se han importado %1$lld de %2$lld vídeos."
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Un écran de voiture ou un adaptateur sans fil compatible avec la vidéo AirPlay. Ouvrez Diffuser en voiture, touchez AirPlay et choisissez l’écran, puis lancez une chaîne. Pas d’AirPlay ? Fixez votre iPhone sur un support et utilisez le mode Voiture. Ne regardez jamais de vidéo en conduisant."
+            "value" : "%1$lld vidéos sur %2$lld ont été importées."
           }
         },
         "hi" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "कार डिस्प्ले या वायरलेस अडैप्टर, जो AirPlay वीडियो सपोर्ट करता हो। कार पर कास्ट खोलें, AirPlay पर टैप करें और डिस्प्ले चुनें, फिर कोई चैनल शुरू करें। AirPlay नहीं है? अपना iPhone माउंट करें और कार मोड इस्तेमाल करें। गाड़ी चलाते समय कभी वीडियो न देखें।"
+            "value" : "%2$lld में से %1$lld वीडियो इम्पोर्ट हुए।"
           }
         },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Uno schermo per auto o un adattatore wireless compatibile con i video AirPlay. Apri Invia all’auto, tocca AirPlay e scegli lo schermo, poi avvia un canale. Niente AirPlay? Monta il tuo iPhone e usa la modalità Auto. Non guardare mai video mentre guidi."
+            "value" : "Importati %1$lld video su %2$lld."
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "AirPlay ビデオに対応した車載ディスプレイまたはワイヤレスアダプタが必要です。「車にキャスト」を開き、AirPlay をタップしてディスプレイを選んでから、チャンネルを再生してください。AirPlay がない場合は、iPhone を固定してカーモードを使用してください。運転中は絶対にビデオを見ないでください。"
+            "value" : "%2$lld 本中 %1$lld 本のビデオを読み込みました。"
           }
         },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "AirPlay 비디오를 지원하는 차량 디스플레이 또는 무선 어댑터가 필요합니다. 차량으로 전송을 열고 AirPlay를 탭해 디스플레이를 선택한 다음 채널을 재생하세요. AirPlay가 없다면 iPhone을 거치하고 차량 모드를 사용하세요. 운전 중에는 절대 비디오를 시청하지 마세요."
+            "value" : "비디오 %2$lld개 중 %1$lld개를 가져왔습니다."
           }
         },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Uma tela de carro ou adaptador sem fio compatível com vídeo AirPlay. Abra Enviar ao Carro, toque em AirPlay e escolha a tela; depois inicie um canal. Sem AirPlay? Prenda o iPhone num suporte e use o Modo Carro. Nunca assista a vídeos enquanto dirige."
+            "value" : "%1$lld de %2$lld vídeos foram importados."
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "支持 AirPlay 视频的车载显示屏或无线适配器。打开“投放到车机”，轻点 AirPlay 并选择显示屏，然后开始播放频道。没有 AirPlay？把 iPhone 固定在支架上，使用车载模式。切勿在驾驶时观看视频。"
+            "value" : "已导入 %2$lld 个视频中的 %1$lld 个。"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "支援 AirPlay 影片的車用螢幕或無線轉接器。打開「投放到車機」，點一下 AirPlay 並選擇螢幕，然後開始播放頻道。沒有 AirPlay？將 iPhone 固定在支架上，使用車用模式。駕駛時切勿觀看影片。"
+            "value" : "已匯入 %2$lld 部影片中的 %1$lld 部。"
           }
         }
       }
     },
-    "A source is a playlist link or a media server you own or subscribe to. Roadivo is a player only: it doesn't provide, host or recommend any content." : {
+    "Choose an AirPlay Screen" : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Eine Quelle ist ein Playlist-Link oder ein Medienserver, den du besitzt oder abonniert hast. Roadivo ist nur ein Player: Es stellt keine Inhalte bereit, hostet oder empfiehlt sie nicht."
+            "value" : "AirPlay-Display wählen"
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Una fuente es un enlace de lista de reproducción o un servidor multimedia tuyo o al que estás suscrito. Roadivo es solo un reproductor: no ofrece, aloja ni recomienda ningún contenido."
+            "value" : "Elegir pantalla AirPlay"
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Une source est un lien de playlist ou un serveur multimédia qui vous appartient ou auquel vous êtes abonné. Roadivo est uniquement un lecteur : il ne fournit, n’héberge et ne recommande aucun contenu."
+            "value" : "Choisir un écran AirPlay"
           }
         },
         "hi" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "सोर्स एक प्लेलिस्ट लिंक या मीडिया सर्वर होता है, जो आपका अपना हो या जिसका आपने सब्सक्रिप्शन लिया हो। Roadivo सिर्फ़ एक प्लेयर है: यह कोई कंटेंट न देता है, न होस्ट करता है और न ही सुझाता है।"
+            "value" : "AirPlay स्क्रीन चुनें"
           }
         },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Una sorgente è un link a una playlist o un media server che possiedi o a cui sei abbonato. Roadivo è solo un player: non fornisce, ospita né consiglia alcun contenuto."
+            "value" : "Scegli uno schermo AirPlay"
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "ソースとは、お持ちの、または契約しているプレイリストのリンクやメディアサーバのことです。Roadivo はプレーヤーのみで、コンテンツの提供、ホスティング、推奨は一切行いません。"
+            "value" : "AirPlay の画面を選択"
           }
         },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "소스란 사용자가 소유하거나 구독하는 재생목록 링크 또는 미디어 서버를 말합니다. Roadivo는 플레이어일 뿐이며 어떠한 콘텐츠도 제공, 호스팅 또는 추천하지 않습니다."
+            "value" : "AirPlay 화면 선택"
           }
         },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Uma fonte é um link de playlist ou um servidor de mídia que você tem ou assina. O Roadivo é apenas um player: ele não fornece, hospeda nem recomenda nenhum conteúdo."
+            "value" : "Escolher tela AirPlay"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "来源可以是播放列表链接，或你拥有或订阅的媒体服务器。Roadivo 只是播放器：不提供、不托管也不推荐任何内容。"
+            "value" : "选择 AirPlay 屏幕"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "來源可以是播放列表連結，或你擁有或訂閱的媒體伺服器。Roadivo 只是播放器：不提供、不託管也不推薦任何內容。"
+            "value" : "選擇 AirPlay 螢幕"
           }
         }
       }
     },
-    "Add an M3U link or QR code, or import videos from Photos and Files. Sorted automatically." : {
+    "New Version Available" : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Füge einen M3U-Link oder QR-Code hinzu oder importiere Videos aus Fotos und Dateien. Wird automatisch sortiert."
+            "value" : "Neue Version verfügbar"
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Añade un enlace M3U o un código QR, o importa vídeos desde Fotos y Archivos. Se ordenan automáticamente."
+            "value" : "Nueva versión disponible"
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Ajoutez un lien M3U ou un code QR, ou importez des vidéos depuis Photos et Fichiers. Le tri est automatique."
+            "value" : "Nouvelle version disponible"
           }
         },
         "hi" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "M3U लिंक या QR कोड जोड़ें, या फ़ोटो और फ़ाइलें से वीडियो इम्पोर्ट करें। सब अपने आप व्यवस्थित हो जाता है।"
+            "value" : "नया वर्शन उपलब्ध है"
           }
         },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Aggiungi un link M3U o un codice QR, oppure importa video da Foto e File. Ordinati automaticamente."
+            "value" : "Nuova versione disponibile"
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "M3U リンクや QR コードを追加するか、写真やファイルからビデオを読み込みます。自動で整理されます。"
+            "value" : "新しいバージョンがあります"
           }
         },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "M3U 링크나 QR 코드를 추가하거나 사진 및 파일에서 비디오를 가져오세요. 자동으로 정리됩니다."
+            "value" : "새 버전 사용 가능"
           }
         },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Adicione um link M3U ou código QR, ou importe vídeos de Fotos e Arquivos. Tudo organizado automaticamente."
+            "value" : "Nova versão disponível"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "添加 M3U 链接或 QR 码，或从“照片”和“文件”导入视频。自动分类整理。"
+            "value" : "有新版本可用"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "加入 M3U 連結或 QR 碼，或從「照片」和「檔案」匯入影片。自動分類整理。"
+            "value" : "有新版本可用"
           }
         }
       }
     },
-    "Best value" : {
+    "Roadivo %@ is now available." : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Bester Preis"
+            "value" : "Roadivo %@ ist jetzt verfügbar."
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Mejor precio"
+            "value" : "Roadivo %@ ya está disponible."
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Meilleur prix"
+            "value" : "Roadivo %@ est disponible."
           }
         },
         "hi" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "सबसे किफ़ायती"
+            "value" : "Roadivo %@ अब उपलब्ध है।"
           }
         },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Più conveniente"
+            "value" : "Roadivo %@ è ora disponibile."
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "いちばんお得"
+            "value" : "Roadivo %@ が利用可能になりました。"
           }
         },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "가장 알뜰한"
+            "value" : "Roadivo %@ 버전을 사용할 수 있습니다."
           }
         },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Melhor custo-benefício"
+            "value" : "O Roadivo %@ já está disponível."
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "最划算"
+            "value" : "Roadivo %@ 现已推出。"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "最划算"
+            "value" : "Roadivo %@ 現已推出。"
           }
         }
       }
     },
-    "Everything you add stays on this iPhone: logins in the Keychain, channel lists in the app's private storage. Roadivo has no account, no ads and no tracking." : {
+    "Update Now" : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Alles, was du hinzufügst, bleibt auf diesem iPhone: Anmeldedaten im Schlüsselbund, Senderlisten im privaten Speicher der App. Roadivo hat keinen Account, keine Werbung und kein Tracking."
+            "value" : "Jetzt aktualisieren"
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Todo lo que añades se queda en este iPhone: los inicios de sesión en el Llavero y las listas de canales en el almacenamiento privado de la app. Roadivo no tiene cuentas, anuncios ni rastreo."
+            "value" : "Actualizar ahora"
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Tout ce que vous ajoutez reste sur cet iPhone : les identifiants dans le trousseau, les listes de chaînes dans le stockage privé de l’app. Roadivo n’a ni compte, ni publicité, ni suivi."
+            "value" : "Mettre à jour"
           }
         },
         "hi" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "आप जो भी जोड़ते हैं, वह इसी iPhone पर रहता है: लॉगिन कीचेन में, चैनल सूचियाँ ऐप के निजी स्टोरेज में। Roadivo में न कोई अकाउंट है, न विज्ञापन, न ट्रैकिंग।"
+            "value" : "अभी अपडेट करें"
           }
         },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Tutto ciò che aggiungi resta su questo iPhone: le credenziali nel Portachiavi, gli elenchi dei canali nello spazio privato dell’app. Roadivo non ha account, pubblicità né tracciamento."
+            "value" : "Aggiorna ora"
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "追加したものはすべてこの iPhone に保存されます。ログイン情報はキーチェーンに、チャンネルリストは App 専用の保存領域に保管されます。Roadivo にはアカウント、広告、トラッキングはありません。"
+            "value" : "今すぐアップデート"
           }
         },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "추가한 모든 항목은 이 iPhone에 보관됩니다. 로그인 정보는 키체인에, 채널 목록은 앱 전용 저장 공간에 저장됩니다. Roadivo에는 계정, 광고, 추적이 없습니다."
+            "value" : "지금 업데이트"
           }
         },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Tudo o que você adiciona fica neste iPhone: os logins nas Chaves e as listas de canais no armazenamento privado do app. O Roadivo não tem conta, anúncios nem rastreamento."
+            "value" : "Atualizar agora"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "你添加的所有内容都保留在此 iPhone 上：登录信息保存在钥匙串中，频道列表保存在 App 的私有存储中。Roadivo 没有账户、没有广告，也不跟踪你。"
+            "value" : "立即更新"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "你加入的所有內容都保留在此 iPhone 上：登入資訊儲存在鑰匙圈中，頻道列表儲存在 App 的私有儲存空間中。Roadivo 沒有帳號、沒有廣告，也不追蹤你。"
-          }
-        }
-      }
-    },
-    "Free or Pro, no ads or tracking" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Gratis oder Pro: keine Werbung, kein Tracking"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Gratis o Pro, sin anuncios ni rastreo"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Gratuit ou Pro, sans publicité ni suivi"
-          }
-        },
-        "hi" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "मुफ़्त हो या Pro, न विज्ञापन न ट्रैकिंग"
-          }
-        },
-        "it" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Gratis o Pro, senza pubblicità né tracciamento"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "無料でも Pro でも、広告もトラッキングもなし"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "무료든 Pro든 광고와 추적 없음"
-          }
-        },
-        "pt-BR" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Grátis ou Pro, sem anúncios nem rastreamento"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "免费版或 Pro 版，都无广告、无跟踪"
-          }
-        },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "免費版或 Pro 版，都無廣告、無追蹤"
-          }
-        }
-      }
-    },
-    "From an IPTV service you subscribe to (they send an M3U link, a QR code or Xtream login details), or from your own Plex, Jellyfin or Emby server. Only add sources you have the right to watch." : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Von einem IPTV-Dienst, den du abonniert hast (er schickt dir einen M3U-Link, einen QR-Code oder Xtream-Anmeldedaten), oder von deinem eigenen Plex-, Jellyfin- oder Emby-Server. Füge nur Quellen hinzu, die du ansehen darfst."
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "De un servicio de IPTV al que estés suscrito (te envían un enlace M3U, un código QR o datos de acceso de Xtream) o de tu propio servidor Plex, Jellyfin o Emby. Añade solo fuentes que tengas derecho a ver."
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "D’un service IPTV auquel vous êtes abonné (il vous envoie un lien M3U, un code QR ou des identifiants Xtream), ou de votre propre serveur Plex, Jellyfin ou Emby. N’ajoutez que des sources que vous avez le droit de regarder."
-          }
-        },
-        "hi" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "किसी IPTV सर्विस से, जिसका आपने सब्सक्रिप्शन लिया है (वे M3U लिंक, QR कोड या Xtream लॉगिन जानकारी भेजते हैं), या अपने खुद के Plex, Jellyfin या Emby सर्वर से। सिर्फ़ वही सोर्स जोड़ें जिन्हें देखने का आपको अधिकार है।"
-          }
-        },
-        "it" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Da un servizio IPTV a cui sei abbonato (ti invia un link M3U, un codice QR o le credenziali Xtream) oppure dal tuo server Plex, Jellyfin o Emby. Aggiungi solo sorgenti che hai il diritto di guardare."
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "契約している IPTV サービス（M3U リンク、QR コード、Xtream のログイン情報が送られてきます）、またはご自身の Plex、Jellyfin、Emby サーバから追加できます。視聴する権利のあるソースのみを追加してください。"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "구독 중인 IPTV 서비스(M3U 링크, QR 코드 또는 Xtream 로그인 정보를 제공함) 또는 직접 운영하는 Plex, Jellyfin, Emby 서버에서 추가할 수 있습니다. 시청 권한이 있는 소스만 추가하세요."
-          }
-        },
-        "pt-BR" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "De um serviço de IPTV que você assina (ele envia um link M3U, um código QR ou dados de login Xtream) ou do seu próprio servidor Plex, Jellyfin ou Emby. Adicione apenas fontes que você tem direito de assistir."
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "来自你订阅的 IPTV 服务（他们会提供 M3U 链接、QR 码或 Xtream 登录信息），或来自你自己的 Plex、Jellyfin 或 Emby 服务器。只添加你有权观看的来源。"
-          }
-        },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "來自你訂閱的 IPTV 服務（他們會提供 M3U 連結、QR 碼或 Xtream 登入資訊），或來自你自己的 Plex、Jellyfin 或 Emby 伺服器。只加入你有權觀看的來源。"
-          }
-        }
-      }
-    },
-    "No active Roadivo Pro purchase was found for this Apple Account." : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Für diesen Apple Account wurde kein aktiver Roadivo Pro-Kauf gefunden."
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "No se ha encontrado ninguna compra activa de Roadivo Pro para esta cuenta de Apple."
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Aucun achat Roadivo Pro actif n’a été trouvé pour ce compte Apple."
-          }
-        },
-        "hi" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "इस Apple अकाउंट के लिए Roadivo Pro की कोई सक्रिय खरीदारी नहीं मिली।"
-          }
-        },
-        "it" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Nessun acquisto attivo di Roadivo Pro trovato per questo Account Apple."
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "この Apple アカウントで有効な Roadivo Pro の購入が見つかりませんでした。"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "이 Apple 계정에서 활성 상태인 Roadivo Pro 구입 항목을 찾을 수 없습니다."
-          }
-        },
-        "pt-BR" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Nenhuma compra ativa do Roadivo Pro foi encontrada para esta Conta Apple."
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "未找到此 Apple 账户的有效 Roadivo Pro 购买项目。"
-          }
-        },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "找不到此 Apple 帳號的有效 Roadivo Pro 購買項目。"
-          }
-        }
-      }
-    },
-    "Open Roadivo on your iPhone to get started." : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Öffne Roadivo auf deinem iPhone, um loszulegen."
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Abre Roadivo en tu iPhone para empezar."
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Ouvrez Roadivo sur votre iPhone pour commencer."
-          }
-        },
-        "hi" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "शुरू करने के लिए अपने iPhone पर Roadivo खोलें।"
-          }
-        },
-        "it" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Apri Roadivo sul tuo iPhone per iniziare."
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "はじめるには iPhone で Roadivo を開いてください。"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "시작하려면 iPhone에서 Roadivo를 여세요."
-          }
-        },
-        "pt-BR" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Abra o Roadivo no seu iPhone para começar."
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "在 iPhone 上打开 Roadivo 即可开始。"
-          }
-        },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "在 iPhone 上打開 Roadivo 即可開始。"
-          }
-        }
-      }
-    },
-    "Plex, Jellyfin, Emby and Xtream together" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Plex, Jellyfin, Emby und Xtream zusammen"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Plex, Jellyfin, Emby y Xtream juntos"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Plex, Jellyfin, Emby et Xtream ensemble"
-          }
-        },
-        "hi" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Plex, Jellyfin, Emby और Xtream एक साथ"
-          }
-        },
-        "it" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Plex, Jellyfin, Emby e Xtream insieme"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Plex、Jellyfin、Emby、Xtream をまとめて"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Plex, Jellyfin, Emby, Xtream을 한 번에"
-          }
-        },
-        "pt-BR" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Plex, Jellyfin, Emby e Xtream juntos"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Plex、Jellyfin、Emby 和 Xtream 一起用"
-          }
-        },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Plex、Jellyfin、Emby 和 Xtream 一起用"
-          }
-        }
-      }
-    },
-    "Servers side by side" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Server nebeneinander"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Servidores a la vez"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Serveurs côte à côte"
-          }
-        },
-        "hi" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "सर्वर एक साथ"
-          }
-        },
-        "it" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Server affiancati"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "サーバを同時に"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "여러 서버 함께"
-          }
-        },
-        "pt-BR" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Servidores lado a lado"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "多个服务器并用"
-          }
-        },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "多個伺服器並用"
-          }
-        }
-      }
-    },
-    "Streams go offline, change address or use a format iPhone can't play. Plex, Jellyfin and Emby convert videos automatically; for IPTV, ask your provider for HLS (m3u8) links." : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Streams gehen offline, ändern ihre Adresse oder nutzen ein Format, das das iPhone nicht abspielen kann. Plex, Jellyfin und Emby wandeln Videos automatisch um; bei IPTV frag deinen Anbieter nach HLS-Links (m3u8)."
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Las emisiones pueden dejar de funcionar, cambiar de dirección o usar un formato que el iPhone no puede reproducir. Plex, Jellyfin y Emby convierten los vídeos automáticamente; para IPTV, pide a tu proveedor enlaces HLS (m3u8)."
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Les flux peuvent être hors ligne, changer d’adresse ou utiliser un format que l’iPhone ne peut pas lire. Plex, Jellyfin et Emby convertissent les vidéos automatiquement ; pour l’IPTV, demandez à votre fournisseur des liens HLS (m3u8)."
-          }
-        },
-        "hi" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "स्ट्रीम ऑफ़लाइन हो सकती हैं, उनका पता बदल सकता है, या वे ऐसे फ़ॉर्मेट में हो सकती हैं जो iPhone नहीं चला सकता। Plex, Jellyfin और Emby वीडियो अपने आप कन्वर्ट करते हैं; IPTV के लिए अपने प्रोवाइडर से HLS (m3u8) लिंक माँगें।"
-          }
-        },
-        "it" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Gli stream possono andare offline, cambiare indirizzo o usare un formato che iPhone non riproduce. Plex, Jellyfin ed Emby convertono i video automaticamente; per l’IPTV, chiedi al tuo provider link HLS (m3u8)."
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "ストリームはオフラインになったり、アドレスが変わったり、iPhone で再生できない形式が使われていたりすることがあります。Plex、Jellyfin、Emby はビデオを自動的に変換します。IPTV の場合は、プロバイダに HLS（m3u8）リンクを依頼してください。"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "스트림은 오프라인이 되거나, 주소가 바뀌거나, iPhone에서 재생할 수 없는 형식을 사용할 수 있습니다. Plex, Jellyfin, Emby는 비디오를 자동으로 변환합니다. IPTV의 경우 제공업체에 HLS(m3u8) 링크를 요청하세요."
-          }
-        },
-        "pt-BR" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Transmissões podem sair do ar, mudar de endereço ou usar um formato que o iPhone não reproduz. O Plex, o Jellyfin e o Emby convertem vídeos automaticamente; para IPTV, peça ao seu provedor links HLS (m3u8)."
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "视频流可能会离线、更改地址，或使用 iPhone 无法播放的格式。Plex、Jellyfin 和 Emby 会自动转换视频；对于 IPTV，请向提供商索取 HLS（m3u8）链接。"
-          }
-        },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "串流可能會離線、變更位址，或使用 iPhone 無法播放的格式。Plex、Jellyfin 和 Emby 會自動轉換影片；若是 IPTV，請向供應商索取 HLS（m3u8）連結。"
-          }
-        }
-      }
-    },
-    "Support Roadivo" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Roadivo unterstützen"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Apoya a Roadivo"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Soutenez Roadivo"
-          }
-        },
-        "hi" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Roadivo का साथ दें"
-          }
-        },
-        "it" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Sostieni Roadivo"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Roadivo を応援"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Roadivo 응원하기"
-          }
-        },
-        "pt-BR" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Apoie o Roadivo"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "支持 Roadivo"
-          }
-        },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "支持 Roadivo"
-          }
-        }
-      }
-    },
-    "Supports M3U/M3U8 links and pasted M3U content." : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Unterstützt M3U/M3U8-Links und eingefügte M3U-Inhalte."
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Admite enlaces M3U/M3U8 y contenido M3U pegado."
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Prend en charge les liens M3U/M3U8 et le contenu M3U collé."
-          }
-        },
-        "hi" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "M3U/M3U8 लिंक और पेस्ट किया गया M3U कंटेंट सपोर्ट करता है।"
-          }
-        },
-        "it" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Supporta link M3U/M3U8 e contenuti M3U incollati."
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "M3U/M3U8 リンクと貼り付けた M3U の内容に対応しています。"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "M3U/M3U8 링크와 붙여넣은 M3U 내용을 지원합니다."
-          }
-        },
-        "pt-BR" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Compatível com links M3U/M3U8 e conteúdo M3U colado."
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "支持 M3U/M3U8 链接和粘贴的 M3U 内容。"
-          }
-        },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "支援 M3U/M3U8 連結和貼上的 M3U 內容。"
-          }
-        }
-      }
-    },
-    "Watching in the car is part of Roadivo Pro. Unlock it on your iPhone." : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Im Auto schauen ist Teil von Roadivo Pro. Schalte es auf deinem iPhone frei."
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Ver en el coche forma parte de Roadivo Pro. Desbloquéalo en tu iPhone."
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Regarder dans la voiture fait partie de Roadivo Pro. Débloquez-le sur votre iPhone."
-          }
-        },
-        "hi" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "कार में देखना Roadivo Pro का हिस्सा है। इसे अपने iPhone पर अनलॉक करें।"
-          }
-        },
-        "it" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Guardare in auto fa parte di Roadivo Pro. Sbloccalo sul tuo iPhone."
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "車での視聴は Roadivo Pro の機能です。iPhone でロックを解除してください。"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "차량에서 시청하기는 Roadivo Pro 기능입니다. iPhone에서 잠금 해제하세요."
-          }
-        },
-        "pt-BR" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Assistir no carro faz parte do Roadivo Pro. Desbloqueie no seu iPhone."
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "在车上观看属于 Roadivo Pro 功能。请在 iPhone 上解锁。"
-          }
-        },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "在車上觀看屬於 Roadivo Pro 功能。請在 iPhone 上解鎖。"
-          }
-        }
-      }
-    },
-    "Yes. Tap the down arrow to minimize the player and it keeps going in the mini player, or swipe home for Picture in Picture." : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Ja. Tippe auf den Pfeil nach unten, um den Player zu verkleinern – die Wiedergabe läuft im Mini-Player weiter. Oder streiche nach oben zum Home-Bildschirm für Bild-in-Bild."
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Sí. Toca la flecha hacia abajo para minimizar el reproductor y seguirá en el minirreproductor, o desliza hacia la pantalla de inicio para usar Imagen dentro de imagen."
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Oui. Touchez la flèche vers le bas pour réduire le lecteur : la lecture continue dans le mini-lecteur. Ou revenez à l’écran d’accueil pour passer en Image dans l’image."
-          }
-        },
-        "hi" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "हाँ। प्लेयर छोटा करने के लिए नीचे वाले तीर पर टैप करें, यह मिनी प्लेयर में चलता रहेगा, या पिक्चर इन पिक्चर के लिए होम पर स्वाइप करें।"
-          }
-        },
-        "it" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Sì. Tocca la freccia in giù per ridurre il player e la riproduzione continua nel mini player, oppure scorri verso la schermata Home per Picture in Picture."
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "はい。下向き矢印をタップしてプレーヤーを最小化すると、ミニプレーヤーで再生が続きます。ホームへスワイプするとピクチャ・イン・ピクチャで再生されます。"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "네. 아래쪽 화살표를 탭해 플레이어를 최소화하면 미니 플레이어에서 계속 재생되며, 홈으로 쓸어올리면 PIP로 재생됩니다."
-          }
-        },
-        "pt-BR" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Sim. Toque na seta para baixo para minimizar o player e ele continua no miniplayer, ou deslize para a tela de Início para usar PiP (Imagem em Imagem)."
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "可以。轻点向下箭头将播放器最小化，即可在迷你播放器中继续播放；或者轻扫回到主屏幕以使用画中画。"
-          }
-        },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "可以。點一下向下箭頭將播放器縮到最小，即可在迷你播放器中繼續播放；或者滑動回到主畫面以使用子母畫面。"
+            "value" : "立即更新"
           }
         }
       }
@@ -1818,6 +1178,70 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "•"
+          }
+        }
+      }
+    },
+    "A car display or wireless adapter that accepts AirPlay video. Open Cast to Car, tap AirPlay and pick the display, then start a channel. No AirPlay? Mount your iPhone and use Car Mode. Never watch video while driving." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ein Autodisplay oder kabelloser Adapter, der AirPlay-Video unterstützt. Öffne „Ans Auto senden“, tippe auf AirPlay, wähle das Display und starte dann einen Sender. Kein AirPlay? Befestige dein iPhone und nutze den Automodus. Schau niemals Videos während der Fahrt."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Una pantalla del coche o un adaptador inalámbrico compatible con vídeo por AirPlay. Abre Enviar al coche, toca AirPlay y elige la pantalla; después inicia un canal. ¿No tienes AirPlay? Coloca tu iPhone en un soporte y usa el modo Coche. No veas nunca vídeos mientras conduces."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Un écran de voiture ou un adaptateur sans fil compatible avec la vidéo AirPlay. Ouvrez Diffuser en voiture, touchez AirPlay et choisissez l’écran, puis lancez une chaîne. Pas d’AirPlay ? Fixez votre iPhone sur un support et utilisez le mode Voiture. Ne regardez jamais de vidéo en conduisant."
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "कार डिस्प्ले या वायरलेस अडैप्टर, जो AirPlay वीडियो सपोर्ट करता हो। कार पर कास्ट खोलें, AirPlay पर टैप करें और डिस्प्ले चुनें, फिर कोई चैनल शुरू करें। AirPlay नहीं है? अपना iPhone माउंट करें और कार मोड इस्तेमाल करें। गाड़ी चलाते समय कभी वीडियो न देखें।"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Uno schermo per auto o un adattatore wireless compatibile con i video AirPlay. Apri Invia all’auto, tocca AirPlay e scegli lo schermo, poi avvia un canale. Niente AirPlay? Monta il tuo iPhone e usa la modalità Auto. Non guardare mai video mentre guidi."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AirPlay ビデオに対応した車載ディスプレイまたはワイヤレスアダプタが必要です。「車にキャスト」を開き、AirPlay をタップしてディスプレイを選んでから、チャンネルを再生してください。AirPlay がない場合は、iPhone を固定してカーモードを使用してください。運転中は絶対にビデオを見ないでください。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AirPlay 비디오를 지원하는 차량 디스플레이 또는 무선 어댑터가 필요합니다. 차량으로 전송을 열고 AirPlay를 탭해 디스플레이를 선택한 다음 채널을 재생하세요. AirPlay가 없다면 iPhone을 거치하고 차량 모드를 사용하세요. 운전 중에는 절대 비디오를 시청하지 마세요."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Uma tela de carro ou adaptador sem fio compatível com vídeo AirPlay. Abra Enviar ao Carro, toque em AirPlay e escolha a tela; depois inicie um canal. Sem AirPlay? Prenda o iPhone num suporte e use o Modo Carro. Nunca assista a vídeos enquanto dirige."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "支持 AirPlay 视频的车载显示屏或无线适配器。打开“投放到车机”，轻点 AirPlay 并选择显示屏，然后开始播放频道。没有 AirPlay？把 iPhone 固定在支架上，使用车载模式。切勿在驾驶时观看视频。"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "支援 AirPlay 影片的車用螢幕或無線轉接器。打開「投放到車機」，點一下 AirPlay 並選擇螢幕，然後開始播放頻道。沒有 AirPlay？將 iPhone 固定在支架上，使用車用模式。駕駛時切勿觀看影片。"
           }
         }
       }
@@ -1946,6 +1370,70 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "你擁有帳號的 Jellyfin 或 Emby 媒體伺服器"
+          }
+        }
+      }
+    },
+    "A source is a playlist link or a media server you own or subscribe to. Roadivo is a player only: it doesn't provide, host or recommend any content." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Eine Quelle ist ein Playlist-Link oder ein Medienserver, den du besitzt oder abonniert hast. Roadivo ist nur ein Player: Es stellt keine Inhalte bereit, hostet oder empfiehlt sie nicht."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Una fuente es un enlace de lista de reproducción o un servidor multimedia tuyo o al que estás suscrito. Roadivo es solo un reproductor: no ofrece, aloja ni recomienda ningún contenido."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Une source est un lien de playlist ou un serveur multimédia qui vous appartient ou auquel vous êtes abonné. Roadivo est uniquement un lecteur : il ne fournit, n’héberge et ne recommande aucun contenu."
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "सोर्स एक प्लेलिस्ट लिंक या मीडिया सर्वर होता है, जो आपका अपना हो या जिसका आपने सब्सक्रिप्शन लिया हो। Roadivo सिर्फ़ एक प्लेयर है: यह कोई कंटेंट न देता है, न होस्ट करता है और न ही सुझाता है।"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Una sorgente è un link a una playlist o un media server che possiedi o a cui sei abbonato. Roadivo è solo un player: non fornisce, ospita né consiglia alcun contenuto."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ソースとは、お持ちの、または契約しているプレイリストのリンクやメディアサーバのことです。Roadivo はプレーヤーのみで、コンテンツの提供、ホスティング、推奨は一切行いません。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "소스란 사용자가 소유하거나 구독하는 재생목록 링크 또는 미디어 서버를 말합니다. Roadivo는 플레이어일 뿐이며 어떠한 콘텐츠도 제공, 호스팅 또는 추천하지 않습니다."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Uma fonte é um link de playlist ou um servidor de mídia que você tem ou assina. O Roadivo é apenas um player: ele não fornece, hospeda nem recomenda nenhum conteúdo."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "来源可以是播放列表链接，或你拥有或订阅的媒体服务器。Roadivo 只是播放器：不提供、不托管也不推荐任何内容。"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "來源可以是播放列表連結，或你擁有或訂閱的媒體伺服器。Roadivo 只是播放器：不提供、不託管也不推薦任何內容。"
           }
         }
       }
@@ -2396,6 +1884,70 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "加入 M3U 連結或連線媒體伺服器後，你的頻道會顯示在這裡。匯入的影片在「收藏 › 在此 iPhone 上」中。"
+          }
+        }
+      }
+    },
+    "Add an M3U link or QR code, or import videos from Photos and Files. Sorted automatically." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Füge einen M3U-Link oder QR-Code hinzu oder importiere Videos aus Fotos und Dateien. Wird automatisch sortiert."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Añade un enlace M3U o un código QR, o importa vídeos desde Fotos y Archivos. Se ordenan automáticamente."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ajoutez un lien M3U ou un code QR, ou importez des vidéos depuis Photos et Fichiers. Le tri est automatique."
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "M3U लिंक या QR कोड जोड़ें, या फ़ोटो और फ़ाइलें से वीडियो इम्पोर्ट करें। सब अपने आप व्यवस्थित हो जाता है।"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aggiungi un link M3U o un codice QR, oppure importa video da Foto e File. Ordinati automaticamente."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "M3U リンクや QR コードを追加するか、写真やファイルからビデオを読み込みます。自動で整理されます。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "M3U 링크나 QR 코드를 추가하거나 사진 및 파일에서 비디오를 가져오세요. 자동으로 정리됩니다."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Adicione um link M3U ou código QR, ou importe vídeos de Fotos e Arquivos. Tudo organizado automaticamente."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "添加 M3U 链接或 QR 码，或从“照片”和“文件”导入视频。自动分类整理。"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "加入 M3U 連結或 QR 碼，或從「照片」和「檔案」匯入影片。自動分類整理。"
           }
         }
       }
@@ -2978,6 +2530,70 @@
         }
       }
     },
+    "Allow Camera in Settings" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kamera in den Einstellungen erlauben"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Permitir la cámara en Ajustes"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Autoriser l’appareil photo dans Réglages"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "सेटिंग्ज़ में कैमरा की अनुमति दें"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Consenti la fotocamera in Impostazioni"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "「設定」でカメラを許可"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "설정에서 카메라 허용"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Permitir a Câmera em Ajustes"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "在“设置”中允许相机"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "在「設定」中允許相機"
+          }
+        }
+      }
+    },
     "Allow Voice Search" : {
       "localizations" : {
         "de" : {
@@ -3298,6 +2914,70 @@
         }
       }
     },
+    "Best value" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bester Preis"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mejor precio"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Meilleur prix"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "सबसे किफ़ायती"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Più conveniente"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "いちばんお得"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "가장 알뜰한"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Melhor custo-benefício"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "最划算"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "最划算"
+          }
+        }
+      }
+    },
     "Billed once a year, cancel anytime" : {
       "localizations" : {
         "de" : {
@@ -3550,6 +3230,70 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "瀏覽首頁"
+          }
+        }
+      }
+    },
+    "Camera access is off" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kamerazugriff ist aus"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "El acceso a la cámara está desactivado"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "L’accès à l’appareil photo est désactivé"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "कैमरा एक्सेस बंद है"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "L’accesso alla fotocamera è disattivato"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "カメラへのアクセスがオフです"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "카메라 접근이 꺼져 있음"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "O acesso à câmera está desativado"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "相机访问已关闭"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "相機取用已關閉"
           }
         }
       }
@@ -3936,6 +3680,70 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "車用模式是 Roadivo Pro 的功能。"
+          }
+        }
+      }
+    },
+    "Car screen" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Autodisplay"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pantalla del coche"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Écran de la voiture"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "कार स्क्रीन"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Schermo dell’auto"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "車の画面"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "차량 화면"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tela do carro"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "车机屏幕"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "車機螢幕"
           }
         }
       }
@@ -4716,66 +4524,66 @@
         }
       }
     },
-    "Close Roadivo from the app switcher and open it again. If a channel still won't play, refresh its source in Settings › Manage Sources. Still stuck? Contact us through Roadivo's App Store page." : {
+    "Close Roadivo from the app switcher and open it again. If a channel still won't play, refresh its source in Settings › Manage Sources. Still stuck? Tap Contact Support at the end of Help & FAQ." : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Schließe Roadivo im App-Umschalter und öffne die App erneut. Wenn ein Sender immer noch nicht abspielt, aktualisiere seine Quelle unter „Einstellungen“ › „Quellen verwalten“. Klappt es immer noch nicht? Kontaktiere uns über die App Store-Seite von Roadivo."
+            "value" : "Schließe Roadivo im App-Umschalter und öffne die App erneut. Wenn ein Sender immer noch nicht abspielt, aktualisiere seine Quelle unter „Einstellungen“ › „Quellen verwalten“. Klappt es immer noch nicht? Tippe am Ende von „Hilfe & FAQ“ auf „Support kontaktieren“."
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Cierra Roadivo desde el selector de apps y vuelve a abrirlo. Si un canal sigue sin reproducirse, actualiza su fuente en Ajustes › Gestionar fuentes. ¿Sigue sin funcionar? Contacta con nosotros desde la página de Roadivo en el App Store."
+            "value" : "Cierra Roadivo desde el selector de apps y vuelve a abrirlo. Si un canal sigue sin reproducirse, actualiza su fuente en Ajustes › Gestionar fuentes. ¿Sigue sin funcionar? Toca Contactar con soporte al final de Ayuda y preguntas frecuentes."
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Fermez Roadivo depuis le sélecteur d’apps, puis rouvrez-le. Si une chaîne ne se lit toujours pas, actualisez sa source dans Réglages › Gérer les sources. Toujours bloqué ? Contactez-nous via la page de Roadivo sur l’App Store."
+            "value" : "Fermez Roadivo depuis le sélecteur d’apps, puis rouvrez-le. Si une chaîne ne se lit toujours pas, actualisez sa source dans Réglages › Gérer les sources. Toujours bloqué ? Touchez Contacter l’assistance à la fin d’Aide et FAQ."
           }
         },
         "hi" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "ऐप स्विचर से Roadivo बंद करें और फिर से खोलें। अगर कोई चैनल अब भी नहीं चलता, तो सेटिंग्ज़ › सोर्स प्रबंधित करें में उसका सोर्स रीफ़्रेश करें। फिर भी दिक्कत है? App Store पर Roadivo के पेज से हमसे संपर्क करें।"
+            "value" : "ऐप स्विचर से Roadivo बंद करें और फिर से खोलें। अगर कोई चैनल अब भी नहीं चलता, तो सेटिंग्ज़ › सोर्स प्रबंधित करें में उसका सोर्स रीफ़्रेश करें। फिर भी दिक्कत है? मदद और FAQ के आख़िर में सपोर्ट से संपर्क करें पर टैप करें।"
           }
         },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Chiudi Roadivo dal selettore app e riaprilo. Se un canale continua a non funzionare, aggiorna la sua sorgente in Impostazioni › Gestisci sorgenti. Ancora problemi? Contattaci tramite la pagina di Roadivo sull’App Store."
+            "value" : "Chiudi Roadivo dal selettore app e riaprilo. Se un canale continua a non funzionare, aggiorna la sua sorgente in Impostazioni › Gestisci sorgenti. Ancora problemi? Tocca Contatta l’assistenza alla fine di Aiuto e FAQ."
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "App スイッチャーから Roadivo を閉じて、もう一度開いてください。それでもチャンネルが再生されない場合は、「設定」›「ソースを管理」でソースを更新してください。解決しない場合は、App Store の Roadivo のページからお問い合わせください。"
+            "value" : "App スイッチャーから Roadivo を閉じて、もう一度開いてください。それでもチャンネルが再生されない場合は、「設定」›「ソースを管理」でソースを更新してください。解決しない場合は、「ヘルプとよくある質問」の最後にある「サポートに連絡」をタップしてください。"
           }
         },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "앱 전환기에서 Roadivo를 닫았다가 다시 여세요. 채널이 여전히 재생되지 않으면 설정 › 소스 관리에서 해당 소스를 새로 고치세요. 그래도 해결되지 않으면 App Store의 Roadivo 페이지를 통해 문의하세요."
+            "value" : "앱 전환기에서 Roadivo를 닫았다가 다시 여세요. 채널이 여전히 재생되지 않으면 설정 › 소스 관리에서 해당 소스를 새로 고치세요. 그래도 해결되지 않으면 도움말 및 FAQ 맨 아래의 지원 문의를 탭하세요."
           }
         },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Feche o Roadivo no seletor de apps e abra novamente. Se um canal ainda não reproduzir, atualize a fonte dele em Ajustes › Gerenciar Fontes. Ainda com problemas? Fale conosco pela página do Roadivo na App Store."
+            "value" : "Feche o Roadivo no seletor de apps e abra novamente. Se um canal ainda não reproduzir, atualize a fonte dele em Ajustes › Gerenciar Fontes. Ainda com problemas? Toque em Falar com o Suporte no fim de Ajuda e Perguntas Frequentes."
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "从 App 切换器中关闭 Roadivo，然后重新打开。如果频道仍无法播放，请在“设置” › “管理来源”中刷新其来源。仍有问题？请通过 Roadivo 的 App Store 页面联系我们。"
+            "value" : "从 App 切换器中关闭 Roadivo，然后重新打开。如果频道仍无法播放，请在“设置” › “管理来源”中刷新其来源。仍有问题？请轻点“帮助与常见问题”末尾的“联系支持”。"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "從 App 切換器中關閉 Roadivo，然後重新打開。如果頻道仍無法播放，請在「設定」›「管理來源」中重新整理其來源。仍有問題？請透過 Roadivo 的 App Store 頁面與我們聯絡。"
+            "value" : "從 App 切換器中關閉 Roadivo，然後重新打開。如果頻道仍無法播放，請在「設定」›「管理來源」中重新整理其來源。仍有問題？請點一下「協助與常見問題」最後的「聯絡支援」。"
           }
         }
       }
@@ -5105,6 +4913,70 @@
         }
       }
     },
+    "Connect the car's screen with AirPlay, then play a channel. No car screen? Mount your iPhone and use Car Mode." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verbinde das Autodisplay per AirPlay und starte dann einen Sender. Kein Autodisplay? Befestige dein iPhone und nutze den Automodus."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Conecta la pantalla del coche con AirPlay y después pon un canal. ¿No tienes pantalla en el coche? Coloca tu iPhone en un soporte y usa el modo Coche."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Connectez l’écran de la voiture avec AirPlay, puis lancez une chaîne. Pas d’écran ? Fixez votre iPhone sur un support et utilisez le mode Voiture."
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AirPlay से कार की स्क्रीन कनेक्ट करें, फिर कोई चैनल चलाएँ। कार में स्क्रीन नहीं है? अपना iPhone माउंट करें और कार मोड इस्तेमाल करें।"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Collega lo schermo dell’auto con AirPlay, poi avvia un canale. Niente schermo? Monta il tuo iPhone e usa la modalità Auto."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AirPlay で車の画面に接続してから、チャンネルを再生してください。車に画面がない場合は、iPhone を固定してカーモードを使用してください。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AirPlay로 차량 화면을 연결한 다음 채널을 재생하세요. 차량 화면이 없나요? iPhone을 거치하고 차량 모드를 사용하세요."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Conecte a tela do carro com AirPlay e depois inicie um canal. Sem tela no carro? Prenda o iPhone num suporte e use o Modo Carro."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "用 AirPlay 连接车机屏幕，然后播放频道。车上没有屏幕？把 iPhone 固定在支架上，使用车载模式。"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "用 AirPlay 連接車機螢幕，然後播放頻道。車上沒有螢幕？將 iPhone 固定在支架上，使用車用模式。"
+          }
+        }
+      }
+    },
     "Connect to %@" : {
       "localizations" : {
         "de" : {
@@ -5229,6 +5101,70 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "已連線"
+          }
+        }
+      }
+    },
+    "Contact Support" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Support kontaktieren"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Contactar con soporte"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Contacter l’assistance"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "सपोर्ट से संपर्क करें"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Contatta l’assistenza"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "サポートに連絡"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "지원 문의"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Falar com o Suporte"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "联系支持"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "聯絡支援"
           }
         }
       }
@@ -5489,6 +5425,70 @@
         }
       }
     },
+    "Couldn't delete the video" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Das Video konnte nicht gelöscht werden"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No se ha podido eliminar el vídeo"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Impossible de supprimer la vidéo"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "वीडियो डिलीट नहीं हो सका"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Impossibile eliminare il video"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ビデオを削除できませんでした"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "비디오를 삭제할 수 없음"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Não foi possível apagar o vídeo"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无法删除视频"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "無法刪除影片"
+          }
+        }
+      }
+    },
     "Couldn't import" : {
       "localizations" : {
         "de" : {
@@ -5549,6 +5549,70 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "無法匯入"
+          }
+        }
+      }
+    },
+    "Couldn't load your videos" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Deine Videos konnten nicht geladen werden"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No se han podido cargar tus vídeos"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Impossible de charger vos vidéos"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "आपके वीडियो लोड नहीं हो सके"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Impossibile caricare i tuoi video"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ビデオを読み込めませんでした"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "비디오를 불러올 수 없음"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Não foi possível carregar seus vídeos"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无法载入你的视频"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "無法載入你的影片"
           }
         }
       }
@@ -5741,6 +5805,70 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "無法更新來源"
+          }
+        }
+      }
+    },
+    "Current plan" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aktueller Plan"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Plan actual"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Formule actuelle"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "मौजूदा प्लान"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Piano attuale"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "現在のプラン"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "현재 플랜"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Plano atual"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "当前方案"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "目前方案"
           }
         }
       }
@@ -6383,6 +6511,70 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "你的所有播放列表和媒體伺服器"
+          }
+        }
+      }
+    },
+    "Everything you add stays on this iPhone: logins in the Keychain, channel lists in the app's private storage. Roadivo has no account, no ads and no tracking." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Alles, was du hinzufügst, bleibt auf diesem iPhone: Anmeldedaten im Schlüsselbund, Senderlisten im privaten Speicher der App. Roadivo hat keinen Account, keine Werbung und kein Tracking."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Todo lo que añades se queda en este iPhone: los inicios de sesión en el Llavero y las listas de canales en el almacenamiento privado de la app. Roadivo no tiene cuentas, anuncios ni rastreo."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tout ce que vous ajoutez reste sur cet iPhone : les identifiants dans le trousseau, les listes de chaînes dans le stockage privé de l’app. Roadivo n’a ni compte, ni publicité, ni suivi."
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "आप जो भी जोड़ते हैं, वह इसी iPhone पर रहता है: लॉगिन कीचेन में, चैनल सूचियाँ ऐप के निजी स्टोरेज में। Roadivo में न कोई अकाउंट है, न विज्ञापन, न ट्रैकिंग।"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tutto ciò che aggiungi resta su questo iPhone: le credenziali nel Portachiavi, gli elenchi dei canali nello spazio privato dell’app. Roadivo non ha account, pubblicità né tracciamento."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "追加したものはすべてこの iPhone に保存されます。ログイン情報はキーチェーンに、チャンネルリストは App 専用の保存領域に保管されます。Roadivo にはアカウント、広告、トラッキングはありません。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "추가한 모든 항목은 이 iPhone에 보관됩니다. 로그인 정보는 키체인에, 채널 목록은 앱 전용 저장 공간에 저장됩니다. Roadivo에는 계정, 광고, 추적이 없습니다."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tudo o que você adiciona fica neste iPhone: os logins nas Chaves e as listas de canais no armazenamento privado do app. O Roadivo não tem conta, anúncios nem rastreamento."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "你添加的所有内容都保留在此 iPhone 上：登录信息保存在钥匙串中，频道列表保存在 App 的私有存储中。Roadivo 没有账户、没有广告，也不跟踪你。"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "你加入的所有內容都保留在此 iPhone 上：登入資訊儲存在鑰匙圈中，頻道列表儲存在 App 的私有儲存空間中。Roadivo 沒有帳號、沒有廣告，也不追蹤你。"
           }
         }
       }
@@ -7093,6 +7285,134 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "快轉 15 秒"
+          }
+        }
+      }
+    },
+    "Free or Pro, no ads or tracking" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gratis oder Pro: keine Werbung, kein Tracking"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gratis o Pro, sin anuncios ni rastreo"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gratuit ou Pro, sans publicité ni suivi"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "मुफ़्त हो या Pro, न विज्ञापन न ट्रैकिंग"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gratis o Pro, senza pubblicità né tracciamento"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "無料でも Pro でも、広告もトラッキングもなし"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "무료든 Pro든 광고와 추적 없음"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Grátis ou Pro, sem anúncios nem rastreamento"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "免费版或 Pro 版，都无广告、无跟踪"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "免費版或 Pro 版，都無廣告、無追蹤"
+          }
+        }
+      }
+    },
+    "From an IPTV service you subscribe to (they send an M3U link, a QR code or Xtream login details), or from your own Plex, Jellyfin or Emby server. Only add sources you have the right to watch." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Von einem IPTV-Dienst, den du abonniert hast (er schickt dir einen M3U-Link, einen QR-Code oder Xtream-Anmeldedaten), oder von deinem eigenen Plex-, Jellyfin- oder Emby-Server. Füge nur Quellen hinzu, die du ansehen darfst."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "De un servicio de IPTV al que estés suscrito (te envían un enlace M3U, un código QR o datos de acceso de Xtream) o de tu propio servidor Plex, Jellyfin o Emby. Añade solo fuentes que tengas derecho a ver."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "D’un service IPTV auquel vous êtes abonné (il vous envoie un lien M3U, un code QR ou des identifiants Xtream), ou de votre propre serveur Plex, Jellyfin ou Emby. N’ajoutez que des sources que vous avez le droit de regarder."
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "किसी IPTV सर्विस से, जिसका आपने सब्सक्रिप्शन लिया है (वे M3U लिंक, QR कोड या Xtream लॉगिन जानकारी भेजते हैं), या अपने खुद के Plex, Jellyfin या Emby सर्वर से। सिर्फ़ वही सोर्स जोड़ें जिन्हें देखने का आपको अधिकार है।"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Da un servizio IPTV a cui sei abbonato (ti invia un link M3U, un codice QR o le credenziali Xtream) oppure dal tuo server Plex, Jellyfin o Emby. Aggiungi solo sorgenti che hai il diritto di guardare."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "契約している IPTV サービス（M3U リンク、QR コード、Xtream のログイン情報が送られてきます）、またはご自身の Plex、Jellyfin、Emby サーバから追加できます。視聴する権利のあるソースのみを追加してください。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "구독 중인 IPTV 서비스(M3U 링크, QR 코드 또는 Xtream 로그인 정보를 제공함) 또는 직접 운영하는 Plex, Jellyfin, Emby 서버에서 추가할 수 있습니다. 시청 권한이 있는 소스만 추가하세요."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "De um serviço de IPTV que você assina (ele envia um link M3U, um código QR ou dados de login Xtream) ou do seu próprio servidor Plex, Jellyfin ou Emby. Adicione apenas fontes que você tem direito de assistir."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "来自你订阅的 IPTV 服务（他们会提供 M3U 链接、QR 码或 Xtream 登录信息），或来自你自己的 Plex、Jellyfin 或 Emby 服务器。只添加你有权观看的来源。"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "來自你訂閱的 IPTV 服務（他們會提供 M3U 連結、QR 碼或 Xtream 登入資訊），或來自你自己的 Plex、Jellyfin 或 Emby 伺服器。只加入你有權觀看的來源。"
           }
         }
       }
@@ -9472,6 +9792,70 @@
         }
       }
     },
+    "Manage Subscription" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Abo verwalten"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gestionar suscripción"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gérer l’abonnement"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "सब्सक्रिप्शन प्रबंधित करें"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gestisci abbonamento"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "サブスクリプションを管理"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "구독 관리"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gerenciar Assinatura"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "管理订阅"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "管理訂閱"
+          }
+        }
+      }
+    },
     "Media" : {
       "localizations" : {
         "de" : {
@@ -9982,6 +10366,134 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "下一個頻道"
+          }
+        }
+      }
+    },
+    "No active Roadivo Pro purchase was found for this Apple Account." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Für diesen Apple Account wurde kein aktiver Roadivo Pro-Kauf gefunden."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No se ha encontrado ninguna compra activa de Roadivo Pro para esta cuenta de Apple."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aucun achat Roadivo Pro actif n’a été trouvé pour ce compte Apple."
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "इस Apple अकाउंट के लिए Roadivo Pro की कोई सक्रिय खरीदारी नहीं मिली।"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nessun acquisto attivo di Roadivo Pro trovato per questo Account Apple."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "この Apple アカウントで有効な Roadivo Pro の購入が見つかりませんでした。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "이 Apple 계정에서 활성 상태인 Roadivo Pro 구입 항목을 찾을 수 없습니다."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nenhuma compra ativa do Roadivo Pro foi encontrada para esta Conta Apple."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "未找到此 Apple 账户的有效 Roadivo Pro 购买项目。"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "找不到此 Apple 帳號的有效 Roadivo Pro 購買項目。"
+          }
+        }
+      }
+    },
+    "No ads, ever" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Niemals Werbung"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sin anuncios, nunca"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Jamais de publicité"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "कभी कोई विज्ञापन नहीं"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mai pubblicità"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "広告は一切なし"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "광고 없음"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sem anúncios, nunca"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "永无广告"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "永無廣告"
           }
         }
       }
@@ -11334,6 +11846,70 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "打開 plex.tv/link"
+          }
+        }
+      }
+    },
+    "Open Roadivo on your iPhone to get started." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Öffne Roadivo auf deinem iPhone, um loszulegen."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Abre Roadivo en tu iPhone para empezar."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ouvrez Roadivo sur votre iPhone pour commencer."
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "शुरू करने के लिए अपने iPhone पर Roadivo खोलें।"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Apri Roadivo sul tuo iPhone per iniziare."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "はじめるには iPhone で Roadivo を開いてください。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "시작하려면 iPhone에서 Roadivo를 여세요."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Abra o Roadivo no seu iPhone para começar."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "在 iPhone 上打开 Roadivo 即可开始。"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "在 iPhone 上打開 Roadivo 即可開始。"
           }
         }
       }
@@ -12943,6 +13519,70 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "播放此頻道"
+          }
+        }
+      }
+    },
+    "Plex, Jellyfin, Emby and Xtream together" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Plex, Jellyfin, Emby und Xtream zusammen"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Plex, Jellyfin, Emby y Xtream juntos"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Plex, Jellyfin, Emby et Xtream ensemble"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Plex, Jellyfin, Emby और Xtream एक साथ"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Plex, Jellyfin, Emby e Xtream insieme"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Plex、Jellyfin、Emby、Xtream をまとめて"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Plex, Jellyfin, Emby, Xtream을 한 번에"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Plex, Jellyfin, Emby e Xtream juntos"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Plex、Jellyfin、Emby 和 Xtream 一起用"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Plex、Jellyfin、Emby 和 Xtream 一起用"
           }
         }
       }
@@ -16341,6 +16981,70 @@
         }
       }
     },
+    "Streams go offline, change address or use a format iPhone can't play. Plex, Jellyfin and Emby convert videos automatically; for IPTV, ask your provider for HLS (m3u8) links." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Streams gehen offline, ändern ihre Adresse oder nutzen ein Format, das das iPhone nicht abspielen kann. Plex, Jellyfin und Emby wandeln Videos automatisch um; bei IPTV frag deinen Anbieter nach HLS-Links (m3u8)."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Las emisiones pueden dejar de funcionar, cambiar de dirección o usar un formato que el iPhone no puede reproducir. Plex, Jellyfin y Emby convierten los vídeos automáticamente; para IPTV, pide a tu proveedor enlaces HLS (m3u8)."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Les flux peuvent être hors ligne, changer d’adresse ou utiliser un format que l’iPhone ne peut pas lire. Plex, Jellyfin et Emby convertissent les vidéos automatiquement ; pour l’IPTV, demandez à votre fournisseur des liens HLS (m3u8)."
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "स्ट्रीम ऑफ़लाइन हो सकती हैं, उनका पता बदल सकता है, या वे ऐसे फ़ॉर्मेट में हो सकती हैं जो iPhone नहीं चला सकता। Plex, Jellyfin और Emby वीडियो अपने आप कन्वर्ट करते हैं; IPTV के लिए अपने प्रोवाइडर से HLS (m3u8) लिंक माँगें।"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gli stream possono andare offline, cambiare indirizzo o usare un formato che iPhone non riproduce. Plex, Jellyfin ed Emby convertono i video automaticamente; per l’IPTV, chiedi al tuo provider link HLS (m3u8)."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ストリームはオフラインになったり、アドレスが変わったり、iPhone で再生できない形式が使われていたりすることがあります。Plex、Jellyfin、Emby はビデオを自動的に変換します。IPTV の場合は、プロバイダに HLS（m3u8）リンクを依頼してください。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "스트림은 오프라인이 되거나, 주소가 바뀌거나, iPhone에서 재생할 수 없는 형식을 사용할 수 있습니다. Plex, Jellyfin, Emby는 비디오를 자동으로 변환합니다. IPTV의 경우 제공업체에 HLS(m3u8) 링크를 요청하세요."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Transmissões podem sair do ar, mudar de endereço ou usar um formato que o iPhone não reproduz. O Plex, o Jellyfin e o Emby convertem vídeos automaticamente; para IPTV, peça ao seu provedor links HLS (m3u8)."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "视频流可能会离线、更改地址，或使用 iPhone 无法播放的格式。Plex、Jellyfin 和 Emby 会自动转换视频；对于 IPTV，请向提供商索取 HLS（m3u8）链接。"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "串流可能會離線、變更位址，或使用 iPhone 無法播放的格式。Plex、Jellyfin 和 Emby 會自動轉換影片；若是 IPTV，請向供應商索取 HLS（m3u8）連結。"
+          }
+        }
+      }
+    },
     "Subscribe for %@" : {
       "localizations" : {
         "de" : {
@@ -16465,6 +17169,70 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "日落"
+          }
+        }
+      }
+    },
+    "Supports M3U/M3U8 links and pasted M3U content." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unterstützt M3U/M3U8-Links und eingefügte M3U-Inhalte."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Admite enlaces M3U/M3U8 y contenido M3U pegado."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Prend en charge les liens M3U/M3U8 et le contenu M3U collé."
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "M3U/M3U8 लिंक और पेस्ट किया गया M3U कंटेंट सपोर्ट करता है।"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Supporta link M3U/M3U8 e contenuti M3U incollati."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "M3U/M3U8 リンクと貼り付けた M3U の内容に対応しています。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "M3U/M3U8 링크와 붙여넣은 M3U 내용을 지원합니다."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Compatível com links M3U/M3U8 e conteúdo M3U colado."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "支持 M3U/M3U8 链接和粘贴的 M3U 内容。"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "支援 M3U/M3U8 連結和貼上的 M3U 內容。"
           }
         }
       }
@@ -18005,6 +18773,70 @@
         }
       }
     },
+    "This iPhone no longer has the link or login for this source. Delete it and add it again." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dieses iPhone hat den Link oder die Anmeldedaten für diese Quelle nicht mehr. Lösche sie und füge sie erneut hinzu."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Este iPhone ya no tiene el enlace ni los datos de acceso de esta fuente. Elimínala y vuelve a añadirla."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cet iPhone n’a plus le lien ou les identifiants de cette source. Supprimez-la et ajoutez-la à nouveau."
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "इस iPhone में अब इस सोर्स का लिंक या लॉगिन नहीं है। इसे डिलीट करें और फिर से जोड़ें।"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Questo iPhone non ha più il link o le credenziali di questa sorgente. Eliminala e aggiungila di nuovo."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "この iPhone には、このソースのリンクまたはログイン情報が残っていません。削除してから、もう一度追加してください。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "이 iPhone에 더 이상 이 소스의 링크나 로그인 정보가 없습니다. 삭제한 다음 다시 추가하세요."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Este iPhone não tem mais o link ou o login desta fonte. Apague-a e adicione novamente."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "此 iPhone 上已没有该来源的链接或登录信息。请删除后重新添加。"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "此 iPhone 上已沒有該來源的連結或登入資訊。請刪除後重新加入。"
+          }
+        }
+      }
+    },
     "This stream can't be played right now." : {
       "localizations" : {
         "de" : {
@@ -18065,6 +18897,70 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "此串流目前無法播放。"
+          }
+        }
+      }
+    },
+    "To scan a QR code, allow camera access in Settings. Or pick a photo or screenshot of it." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Erlaube in den Einstellungen den Kamerazugriff, um einen QR-Code zu scannen. Oder wähle ein Foto oder einen Screenshot davon aus."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Para escanear un código QR, permite el acceso a la cámara en Ajustes. O elige una foto o una captura de pantalla del código."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pour scanner un code QR, autorisez l’accès à l’appareil photo dans Réglages. Ou choisissez une photo ou une capture d’écran du code."
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "QR कोड स्कैन करने के लिए सेटिंग्ज़ में कैमरा एक्सेस की अनुमति दें। या उसकी कोई फ़ोटो या स्क्रीनशॉट चुनें।"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Per scansionare un codice QR, consenti l’accesso alla fotocamera in Impostazioni. Oppure scegli una foto o uno screenshot del codice."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "QR コードを読み取るには、「設定」でカメラへのアクセスを許可してください。または、QR コードの写真やスクリーンショットを選んでください。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "QR 코드를 스캔하려면 설정에서 카메라 접근을 허용하세요. 또는 QR 코드의 사진이나 스크린샷을 선택하세요."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Para ler um código QR, permita o acesso à câmera em Ajustes. Ou escolha uma foto ou captura de tela do código."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "要扫描 QR 码，请在“设置”中允许访问相机。也可以选择它的照片或截屏。"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "若要掃描 QR 碼，請在「設定」中允許取用相機。也可以選擇它的照片或截圖。"
           }
         }
       }
@@ -19161,6 +20057,70 @@
         }
       }
     },
+    "Watching in the car is part of Roadivo Pro. Unlock it on your iPhone." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Im Auto schauen ist Teil von Roadivo Pro. Schalte es auf deinem iPhone frei."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ver en el coche forma parte de Roadivo Pro. Desbloquéalo en tu iPhone."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Regarder dans la voiture fait partie de Roadivo Pro. Débloquez-le sur votre iPhone."
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "कार में देखना Roadivo Pro का हिस्सा है। इसे अपने iPhone पर अनलॉक करें।"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Guardare in auto fa parte di Roadivo Pro. Sbloccalo sul tuo iPhone."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "車での視聴は Roadivo Pro の機能です。iPhone でロックを解除してください。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "차량에서 시청하기는 Roadivo Pro 기능입니다. iPhone에서 잠금 해제하세요."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Assistir no carro faz parte do Roadivo Pro. Desbloqueie no seu iPhone."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "在车上观看属于 Roadivo Pro 功能。请在 iPhone 上解锁。"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "在車上觀看屬於 Roadivo Pro 功能。請在 iPhone 上解鎖。"
+          }
+        }
+      }
+    },
     "We couldn't find any channels or videos in that playlist." : {
       "localizations" : {
         "de" : {
@@ -19861,6 +20821,134 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "每年"
+          }
+        }
+      }
+    },
+    "Yes. Tap the down arrow to minimize the player and it keeps going in the mini player, or swipe home for Picture in Picture." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ja. Tippe auf den Pfeil nach unten, um den Player zu verkleinern – die Wiedergabe läuft im Mini-Player weiter. Oder streiche nach oben zum Home-Bildschirm für Bild-in-Bild."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sí. Toca la flecha hacia abajo para minimizar el reproductor y seguirá en el minirreproductor, o desliza hacia la pantalla de inicio para usar Imagen dentro de imagen."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Oui. Touchez la flèche vers le bas pour réduire le lecteur : la lecture continue dans le mini-lecteur. Ou revenez à l’écran d’accueil pour passer en Image dans l’image."
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "हाँ। प्लेयर छोटा करने के लिए नीचे वाले तीर पर टैप करें, यह मिनी प्लेयर में चलता रहेगा, या पिक्चर इन पिक्चर के लिए होम पर स्वाइप करें।"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sì. Tocca la freccia in giù per ridurre il player e la riproduzione continua nel mini player, oppure scorri verso la schermata Home per Picture in Picture."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "はい。下向き矢印をタップしてプレーヤーを最小化すると、ミニプレーヤーで再生が続きます。ホームへスワイプするとピクチャ・イン・ピクチャで再生されます。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "네. 아래쪽 화살표를 탭해 플레이어를 최소화하면 미니 플레이어에서 계속 재생되며, 홈으로 쓸어올리면 PIP로 재생됩니다."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sim. Toque na seta para baixo para minimizar o player e ele continua no miniplayer, ou deslize para a tela de Início para usar PiP (Imagem em Imagem)."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "可以。轻点向下箭头将播放器最小化，即可在迷你播放器中继续播放；或者轻扫回到主屏幕以使用画中画。"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "可以。點一下向下箭頭將播放器縮到最小，即可在迷你播放器中繼續播放；或者滑動回到主畫面以使用子母畫面。"
+          }
+        }
+      }
+    },
+    "Your current plan" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dein aktueller Plan"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tu plan actual"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Votre formule actuelle"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "आपका मौजूदा प्लान"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Il tuo piano attuale"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ご利用中のプラン"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "현재 이용 중인 플랜"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Seu plano atual"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "你的当前方案"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "你的目前方案"
           }
         }
       }

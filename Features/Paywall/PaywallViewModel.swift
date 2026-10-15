@@ -33,8 +33,20 @@ final class PaywallViewModel {
         access.isPro
     }
 
+    /// Plans this Apple Account already has, marked "Current plan" and not for sale again.
+    func isCurrent(_ plan: ProPlan) -> Bool {
+        access.activePlans.contains(plan)
+    }
+
+    var isSelectedCurrent: Bool {
+        isCurrent(selected)
+    }
+
     var buyTitle: String {
         guard let offer = selectedOffer else { return String(appLocalized: "Continue") }
+        if isSelectedCurrent {
+            return String(appLocalized: "Your current plan")
+        }
         if offer.plan.isSubscription, let intro = offer.introPrice {
             return String(appLocalized: "Start for \(intro)")
         }

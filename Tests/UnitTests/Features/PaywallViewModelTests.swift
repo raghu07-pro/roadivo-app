@@ -21,6 +21,22 @@ struct PaywallViewModelTests {
         #expect(viewModel.terms.contains("No subscription"))
     }
 
+    @Test("A subscriber sees their plan as current, can't buy it again, and can still upgrade")
+    func currentPlan() async {
+        let (viewModel, access) = make(FakeStoreClient(isPro: true)) // The fake Pro user has Yearly.
+        await access.refresh()
+        await viewModel.load()
+        #expect(access.currentPlan == .yearly)
+        #expect(viewModel.isCurrent(.yearly))
+        #expect(!viewModel.isCurrent(.lifetime))
+        viewModel.selected = .yearly
+        #expect(viewModel.isSelectedCurrent)
+        #expect(viewModel.buyTitle == String(appLocalized: "Your current plan"))
+        viewModel.selected = .lifetime
+        #expect(!viewModel.isSelectedCurrent)
+        #expect(viewModel.buyTitle == "$21.49 Buy now")
+    }
+
     @Test("Subscriptions show their renewal terms and intro price")
     func subscriptionCopy() async {
         let (viewModel, _) = make()

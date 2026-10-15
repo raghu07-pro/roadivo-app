@@ -7,6 +7,8 @@ protocol SecureStore: Sendable {
     func set(_ value: String, for key: String) throws
     func string(for key: String) throws -> String?
     func remove(_ key: String) throws
+    /// Deletes every secret the app stored. iOS keeps Keychain items after the app is deleted.
+    func removeAll() throws
 }
 
 struct KeychainError: Error, Equatable {
@@ -50,6 +52,15 @@ struct KeychainStore: SecureStore {
         guard status == errSecSuccess || status == errSecItemNotFound else { throw KeychainError(status: status) }
     }
 
+    func removeAll() throws {
+        let query: [String: Any] = [
+            kSecClass as String: kSecClassGenericPassword,
+            kSecAttrService as String: service
+        ]
+        let status = SecItemDelete(query as CFDictionary)
+        guard status == errSecSuccess || status == errSecItemNotFound else { throw KeychainError(status: status) }
+    }
+
     private func baseQuery(_ key: String) -> [String: Any] {
         [
             kSecClass as String: kSecClassGenericPassword,
@@ -74,5 +85,9 @@ final class InMemorySecureStore: SecureStore, @unchecked Sendable {
 
     func remove(_ key: String) throws {
         _ = lock.withLock { values.removeValue(forKey: key) }
+    }
+
+    func removeAll() throws {
+        lock.withLock { values.removeAll() }
     }
 }

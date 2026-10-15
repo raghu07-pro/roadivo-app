@@ -150,6 +150,7 @@ xcodebuild -workspace Roadivo.xcworkspace -scheme Roadivo \
   -derivedDataPath .build/DerivedData test
 swiftlint --strict && swiftformat .
 swift Scripts/generate-app-icon.swift   # redraws AppIcon (car) and AppIcon-Classic, light/dark/tinted
+Scripts/export-review-screenshots.sh "iPhone 16e"   # re-runs the UI tests and refreshes Screenshots/review
 ```
 
 UI tests launch the app with these arguments:

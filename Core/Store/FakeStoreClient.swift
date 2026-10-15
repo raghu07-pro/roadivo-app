@@ -4,7 +4,7 @@ import Foundation
 /// (`-ui-testing`). Prices mirror the local StoreKit configuration.
 final class FakeStoreClient: StoreClient, @unchecked Sendable {
     private let lock = NSLock()
-    private var isPro: Bool
+    private var plans: Set<ProPlan>
     private let outcome: PurchaseOutcome
     private let failure: StoreError?
     private(set) var purchased: [ProPlan] = []
@@ -16,7 +16,7 @@ final class FakeStoreClient: StoreClient, @unchecked Sendable {
     ]
 
     init(isPro: Bool = false, outcome: PurchaseOutcome = .purchased, failure: StoreError? = nil) {
-        self.isPro = isPro
+        plans = isPro ? [.yearly] : [] // A subscriber, so Settings offers Manage Subscription.
         self.outcome = outcome
         self.failure = failure
     }
@@ -35,7 +35,7 @@ final class FakeStoreClient: StoreClient, @unchecked Sendable {
         lock.withLock {
             purchased.append(plan)
             if outcome == .purchased {
-                isPro = true
+                plans.insert(plan)
             }
         }
         return outcome
@@ -47,8 +47,8 @@ final class FakeStoreClient: StoreClient, @unchecked Sendable {
         }
     }
 
-    func hasActiveEntitlement() async -> Bool {
-        lock.withLock { isPro }
+    func activePlans() async -> Set<ProPlan> {
+        lock.withLock { plans }
     }
 
     func entitlementUpdates() -> AsyncStream<Void> {

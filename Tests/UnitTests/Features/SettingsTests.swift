@@ -40,6 +40,31 @@ struct SettingsTests {
         #expect(store.string(forKey: AppLocale.overrideKey) == nil)
     }
 
+    /// After a relaunch with German chosen, `Locale.current` speaks German, so it can't answer
+    /// "what is the iPhone's language" once Follow System is picked.
+    @Test("Follow System resolves the iPhone's language, not one chosen before launch")
+    func followSystemAfterRelaunch() {
+        let shipped = ["Base", "en", "de", "fr", "pt-BR", "zh-Hans"]
+        let germanOverride = Locale(identifier: "de_FR")
+        let french = AppLocale.resolveSystemLocale(
+            preferences: ["fr-FR", "en"], localizations: shipped, current: germanOverride
+        )
+        #expect(french == Locale(identifier: "fr"))
+        let brazilian = AppLocale.resolveSystemLocale(
+            preferences: ["pt-BR"], localizations: shipped, current: germanOverride
+        )
+        #expect(brazilian == Locale(identifier: "pt-BR"))
+    }
+
+    @Test("Follow System keeps the current locale, region included, when it already matches")
+    func followSystemKeepsMatchingLocale() {
+        let canadian = Locale(identifier: "fr_CA")
+        let resolved = AppLocale.resolveSystemLocale(
+            preferences: ["fr-CA", "en"], localizations: ["Base", "en", "fr"], current: canadian
+        )
+        #expect(resolved == canadian)
+    }
+
     @Test("Language names and flags come from the locale")
     func languageOption() {
         let german = LanguageOption(code: "de")

@@ -195,6 +195,7 @@ final class LibraryFlowUITests: XCTestCase {
         XCTAssertTrue(app.buttons["whatIsSource.search"].waitForExistence(timeout: 5))
         snapshot("07b-WhatIsASource", app: app)
         app.navigationBars.buttons.element(boundBy: 0).tap()
+        app.swipeUp() // On shorter iPhones the server cards start at the bottom edge, where text can't grow.
         try auditIgnoringBottomEdge(app, for: [.dynamicType, .sufficientElementDescription, .hitRegion])
 
         app.buttons["addSource.server.jellyfin"].tap()

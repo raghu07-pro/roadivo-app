@@ -5,6 +5,8 @@ import SwiftUI
 struct PaywallView: View {
     @State var viewModel: PaywallViewModel
     let onClose: () -> Void
+    /// After a purchase or restore; the closing ✕ uses `onClose`. Defaults to `onClose`.
+    var onUnlocked: (() -> Void)?
 
     @Environment(\.openURL) private var openURL
     @State private var isShowingPrivacy = false
@@ -33,7 +35,7 @@ struct PaywallView: View {
         // Pro can arrive while this is open (Ask to Buy approved, or entitlements loading late).
         .onChange(of: viewModel.isPro) { _, isPro in
             if isPro {
-                onClose()
+                unlocked()
             }
         }
         .onChange(of: viewModel.message) { _, message in
@@ -113,14 +115,11 @@ struct PaywallView: View {
                         .foregroundStyle(.roadAccent)
                         .frame(width: 24)
                         .accessibilityHidden(true)
-                    VStack(alignment: .leading, spacing: 1) {
-                        Text(app: feature.title)
-                            .font(Typography.cardTitle)
-                        Text(app: feature.detail)
-                            .font(Typography.caption)
-                            .foregroundStyle(.white.opacity(0.7))
-                    }
-                    .fixedSize(horizontal: false, vertical: true)
+                    Text(app: feature.title)
+                        .font(Typography.cardTitle)
+                        .lineLimit(2)
+                        .minimumScaleFactor(0.85)
+                        .fixedSize(horizontal: false, vertical: true)
                     Spacer(minLength: 0)
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
@@ -128,7 +127,10 @@ struct PaywallView: View {
                 .padding(.vertical, Spacing.xs)
                 .frame(minHeight: 48)
                 .background(Color(white: 0.14), in: RoundedRectangle(cornerRadius: Radius.md, style: .continuous))
-                .accessibilityElement(children: .combine)
+                // The title only on screen (owner's choice); VoiceOver also reads the detail.
+                .accessibilityElement(children: .ignore)
+                .accessibilityLabel(Text(app: feature.title))
+                .accessibilityValue(Text(app: feature.detail))
             }
         }
     }
@@ -167,12 +169,20 @@ struct PaywallView: View {
     private func planCards(_ offers: [PlanOffer], selectable: Bool) -> some View {
         VStack(spacing: Spacing.sm) {
             ForEach(offers) { offer in
-                PlanCard(offer: offer, isSelected: viewModel.selected == offer.plan) {
+                PlanCard(
+                    offer: offer,
+                    isSelected: viewModel.selected == offer.plan,
+                    isCurrent: selectable && viewModel.isCurrent(offer.plan)
+                ) {
                     viewModel.selected = offer.plan
                 }
                 .disabled(!selectable)
             }
         }
+    }
+
+    private func unlocked() {
+        (onUnlocked ?? onClose)()
     }
 
     /// The renewal terms and any message sit right above Buy, so they're never scrolled away.
@@ -201,11 +211,11 @@ struct PaywallView: View {
             ) {
                 Task {
                     if await viewModel.buy() {
-                        onClose()
+                        unlocked()
                     }
                 }
             }
-            .disabled(viewModel.selectedOffer == nil)
+            .disabled(viewModel.selectedOffer == nil || viewModel.isSelectedCurrent)
             .accessibilityIdentifier("paywall.buy")
             HStack(spacing: Spacing.md) {
                 Button("Terms") {
@@ -219,7 +229,7 @@ struct PaywallView: View {
                 Button("Restore") {
                     Task {
                         if await viewModel.restore() {
-                            onClose()
+                            unlocked()
                         }
                     }
                 }

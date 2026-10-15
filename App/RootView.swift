@@ -63,8 +63,9 @@ private struct MainTabView: View {
     @State private var carHub: CarHubViewModel
     @State private var sources: SourcesViewModel
     @State private var voiceSearch: VoiceSearchModel
-    /// What the user was doing when a purchase made them Pro, picked up once the paywall closes.
-    @State private var afterPurchase: PaywallReason?
+    @State private var updatePrompt: UpdatePromptModel
+    /// Set by a purchase or restore, so Home opens once the paywall has closed.
+    @State private var goesHomeAfterPaywall = false
 
     init(environment: AppEnvironment) {
         self.environment = environment
@@ -75,9 +76,11 @@ private struct MainTabView: View {
         _carHub = State(initialValue: CarHubViewModel(repository: repository))
         _sources = State(initialValue: SourcesViewModel(repository: repository))
         _voiceSearch = State(initialValue: VoiceSearchModel(speech: environment.speech, playback: environment.playback))
+        _updatePrompt = State(initialValue: UpdatePromptModel(checker: environment.updateChecker))
     }
 
     @Environment(\.requestReview) private var requestReview
+    @Environment(\.openURL) private var openURL
 
     private var router: AppRouter {
         environment.router
@@ -137,13 +140,15 @@ private struct MainTabView: View {
 
             SettingsView(
                 isPro: isPro,
+                currentPlan: environment.proAccess.currentPlan,
+                hasSubscription: environment.proAccess.hasSubscription,
                 onUpgrade: { router.paywall = .settings },
                 sourcesScreen: {
                     SourcesView(
                         viewModel: sources,
                         revision: router.libraryRevision,
                         onAddSource: addSource,
-                        onLibraryChanged: router.libraryDidChange
+                        onLibraryChanged: sourcesChanged
                     )
                 }
             )
@@ -151,6 +156,23 @@ private struct MainTabView: View {
             .tabItem { Label("Settings", systemImage: "gearshape") }
             .tag(AppRouter.Tab.settings)
         }
+        // "New Version Available", over everything in the tabs.
+        .overlay {
+            if let release = updatePrompt.release {
+                UpdatePromptView(
+                    release: release,
+                    onUpdate: {
+                        if let url = updatePrompt.openStore() {
+                            openURL(url)
+                        }
+                    },
+                    onClose: { updatePrompt.close() }
+                )
+                .transition(.opacity)
+            }
+        }
+        .animation(.easeOut(duration: 0.2), value: updatePrompt.release)
+        .task { await updatePrompt.check() }
         .onChange(of: router.reviewRequests) {
             // Give the video a moment to start before asking.
             Task {
@@ -169,13 +191,15 @@ private struct MainTabView: View {
                 help: { HelpView() }
             )
         }
-        .sheet(item: $router.paywall, onDismiss: continueAfterPurchase) { reason in
-            paywall(reason) {
-                if isPro {
-                    afterPurchase = reason
+        .sheet(item: $router.paywall, onDismiss: goHomeAfterPurchase) { reason in
+            PaywallView(
+                viewModel: PaywallViewModel(access: environment.proAccess, reason: reason),
+                onClose: { router.paywall = nil },
+                onUnlocked: {
+                    goesHomeAfterPaywall = true
+                    router.paywall = nil
                 }
-                router.paywall = nil
-            }
+            )
         }
         .fullScreenCover(item: $router.playerSurface) { surface in
             switch surface {
@@ -193,10 +217,6 @@ private struct MainTabView: View {
                 CarModeView(playback: playback) { router.playerSurface = .player }
             }
         }
-    }
-
-    private func paywall(_ reason: PaywallReason, onClose: @escaping () -> Void) -> some View {
-        PaywallView(viewModel: PaywallViewModel(access: environment.proAccess, reason: reason), onClose: onClose)
     }
 
     /// Free users get one source; the next one asks for Pro.
@@ -225,32 +245,36 @@ private struct MainTabView: View {
         router.playerSurface = .carMode
     }
 
-    private func continueAfterPurchase() {
-        guard let reason = afterPurchase else { return }
-        afterPurchase = nil
-        switch reason {
-        case .sources:
-            router.isAddingSource = true
-        case .carMode:
-            let item = playback.isActive ? nil : carHub.resumeItem
-            if playback.isActive || item != nil {
-                startCarMode(resuming: item)
-            }
-        case .intro, .settings:
-            break
-        }
+    /// After buying or restoring, the paywall closes onto Home (the owner's flow).
+    private func goHomeAfterPurchase() {
+        guard goesHomeAfterPaywall else { return }
+        goesHomeAfterPaywall = false
+        router.selectedTab = .home
     }
 
     private func expandPlayer() {
         router.playerSurface = .player
     }
 
-    /// A deleted video can't keep playing.
+    /// A deleted video leaves the queue, and stops if it's the one playing.
     private func videoDeleted(_ id: UUID) {
-        if playback.current?.id == id {
+        playback.forget([id])
+        router.libraryDidChange()
+    }
+
+    /// Manage Sources deleted, refreshed or renamed a source. A refresh gives every channel a new id,
+    /// so whatever plays stops once its id is gone.
+    private func sourcesChanged() {
+        if let current = playback.current, !libraryContains(current.id) {
             playback.stop()
         }
         router.libraryDidChange()
+    }
+
+    /// Reads the whole library, so it runs only while something plays; a failed read keeps playing.
+    private func libraryContains(_ id: UUID) -> Bool {
+        guard let items = try? environment.repository.items() else { return true }
+        return items.contains { $0.id == id }
     }
 
     private func favoriteChanged(_ id: UUID, _ isFavorite: Bool) {

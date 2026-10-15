@@ -53,19 +53,29 @@ struct PlexLoginView: View {
         case let .waiting(pin):
             codeCard(pin.code)
         case let .choosing(servers):
-            serverList(servers)
+            VStack(alignment: .leading, spacing: Spacing.md) {
+                if let message = viewModel.errorMessage {
+                    errorLabel(message)
+                }
+                serverList(servers)
+            }
         case let .adding(name):
             status("Adding \(name)…")
         case let .failed(message):
             VStack(alignment: .leading, spacing: Spacing.md) {
-                Label(message, systemImage: "exclamationmark.triangle.fill")
-                    .font(Typography.secondary)
-                    .foregroundStyle(.roadLive)
-                    .accessibilityIdentifier("plex.error")
+                errorLabel(message)
                 PrimaryButton(title: "Get a New Code", systemImage: "arrow.clockwise") { attempt += 1 }
                     .accessibilityIdentifier("plex.retry")
             }
         }
+    }
+
+    private func errorLabel(_ message: String) -> some View {
+        Label(message, systemImage: "exclamationmark.triangle.fill")
+            .font(Typography.secondary)
+            .foregroundStyle(.roadLive)
+            .fixedSize(horizontal: false, vertical: true)
+            .accessibilityIdentifier("plex.error")
     }
 
     private func codeCard(_ code: String) -> some View {

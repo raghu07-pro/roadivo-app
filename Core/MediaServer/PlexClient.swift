@@ -22,9 +22,17 @@ struct PlexConnection: Equatable, Sendable {
     let isLocal: Bool
     let isRelay: Bool
 
-    /// Local before remote, HTTPS before HTTP, relays last (they're slow).
+    /// Remote HTTPS first, so a server added on home Wi-Fi keeps working on the road; then local,
+    /// then relays (slow). Plain HTTP over the internet is last: it would expose the token.
     var rank: Int {
-        (isRelay ? 4 : 0) + (isLocal ? 0 : 2) + (uri.scheme == "https" ? 0 : 1)
+        let isSecure = uri.scheme?.lowercased() == "https"
+        if isRelay {
+            return isSecure ? 4 : 5
+        }
+        if isLocal {
+            return isSecure ? 1 : 2
+        }
+        return isSecure ? 0 : 6
     }
 }
 
@@ -48,7 +56,7 @@ protocol PlexLinking: Sendable {
     /// The account token once the code has been entered at plex.tv/link; nil while waiting.
     func token(for pin: PlexPin) async throws -> String?
     func servers(token: String) async throws -> [PlexServer]
-    /// Signs in to `server` over its first address that answers.
+    /// Signs in to `server` over its best address that answers (see `PlexConnection.rank`).
     func account(for server: PlexServer) async throws -> MediaServerAccount
 }
 

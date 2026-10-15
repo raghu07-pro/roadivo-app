@@ -78,6 +78,12 @@ struct ChannelCard: View {
         .accessibilityAction(named: item.isFavorite ? Text("Remove from Favorites") : Text("Add to Favorites")) {
             onToggleFavorite()
         }
+        // The context menu isn't reachable on the merged element, so VoiceOver gets Delete as an action.
+        .accessibilityActions {
+            if onDelete != nil {
+                Button("Delete") { isConfirmingDelete = true }
+            }
+        }
         .accessibilityIdentifier("channel.\(item.title)")
     }
 }

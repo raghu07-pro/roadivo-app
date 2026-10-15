@@ -33,7 +33,7 @@ struct ServerBadge: View {
     }
 }
 
-/// One server type under "Or connect a media server": its badge, name and what signing in takes.
+/// One server type under "Or connect a media server": its badge and name.
 struct ServerCard: View {
     let kind: MediaServerKind
 
@@ -41,16 +41,10 @@ struct ServerCard: View {
         let shape = RoundedRectangle(cornerRadius: Radius.md, style: .continuous)
         HStack(spacing: Spacing.sm) {
             ServerBadge(kind: kind)
-            VStack(alignment: .leading, spacing: 2) {
-                Text(kind.title)
-                    .font(Typography.cardTitle)
-                    .foregroundStyle(.primary)
-                    .fixedSize(horizontal: false, vertical: true)
-                Text(app: kind.subtitle)
-                    .font(Typography.caption)
-                    .foregroundStyle(.roadMuted)
-                    .fixedSize(horizontal: false, vertical: true)
-            }
+            Text(kind.title)
+                .font(Typography.cardTitle)
+                .foregroundStyle(.primary)
+                .fixedSize(horizontal: false, vertical: true)
             Spacer(minLength: 0)
         }
         .padding(Spacing.sm)

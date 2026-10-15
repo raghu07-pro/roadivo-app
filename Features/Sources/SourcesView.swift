@@ -88,8 +88,10 @@ struct SourcesView: View {
             presenting: deleting
         ) { source in
             Button("Delete", role: .destructive) {
-                if viewModel.delete(source.id) {
-                    onLibraryChanged()
+                Task {
+                    if await viewModel.delete(source.id) {
+                        onLibraryChanged()
+                    }
                 }
             }
             .accessibilityIdentifier("sources.confirmDelete")

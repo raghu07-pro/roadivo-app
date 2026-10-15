@@ -61,6 +61,55 @@ struct ReviewAndDeleteTests {
         #expect(!FileManager.default.fileExists(atPath: copy))
     }
 
+    @Test("A failed delete is reported as a delete problem, not an import")
+    func failedDeleteIsADeleteProblem() async throws {
+        let library = try TestLibrary()
+        try await library.repository.addFilePlaylist(name: "TV", text: Fixtures.playlist)
+        let channel = try #require(try library.repository.items().first)
+        let viewModel = LocalVideosViewModel(repository: library.repository)
+
+        #expect(!viewModel.delete(channel))
+        #expect(viewModel.problem?.kind == .delete)
+    }
+
+    @Test("Photos picks that failed are reported after the rest are imported")
+    func partialPhotosImportReportsAfterwards() async throws {
+        let library = try TestLibrary()
+        let source = FileManager.default.temporaryDirectory.appending(path: "Pier \(UUID().uuidString).mp4")
+        try Data("x".utf8).write(to: source)
+        let viewModel = LocalVideosViewModel(repository: library.repository)
+
+        let added = await viewModel.importFiles([source], skipped: 1, removingSourcesAfterwards: true)
+        defer {
+            for video in viewModel.items {
+                _ = viewModel.delete(video) // Removes the copied file.
+            }
+        }
+
+        #expect(added)
+        #expect(viewModel.items.count == 1)
+        #expect(!viewModel.isImporting)
+        #expect(viewModel.problem?.kind == .importing)
+        #expect(viewModel.problem?.message == String(appLocalized: "\(1) of \(2) videos were imported."))
+        #expect(!FileManager.default.fileExists(atPath: source.path(percentEncoded: false)))
+    }
+
+    @Test("When every Photos pick failed, nothing imports and the problem is reported")
+    func allPhotosPicksFailed() async throws {
+        let viewModel = try LocalVideosViewModel(repository: TestLibrary().repository)
+        let added = await viewModel.importFiles([], skipped: 2)
+        #expect(!added)
+        #expect(viewModel.problem?.kind == .importing)
+    }
+
+    @Test("Nothing picked: no import and no alert")
+    func nothingPickedHasNoProblem() async throws {
+        let viewModel = try LocalVideosViewModel(repository: TestLibrary().repository)
+        let added = await viewModel.importFiles([])
+        #expect(!added)
+        #expect(viewModel.problem == nil)
+    }
+
     @Test("Streams can't be deleted one by one")
     func streamsNotDeletable() async throws {
         let library = try TestLibrary()

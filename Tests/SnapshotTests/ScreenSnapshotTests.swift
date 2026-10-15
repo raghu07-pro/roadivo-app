@@ -16,10 +16,19 @@ final class ScreenSnapshotTests: XCTestCase {
 
     /// Hosts `view` with Reduce Motion on, so the road scenes hold still (their moving dashes made
     /// every capture differ) and appear-animations end on their final frame.
-    private func still(_ view: some View) -> UIHostingController<some View> {
-        UIHostingController(rootView: view.environment(\._accessibilityReduceMotion, true))
+    private func still(
+        _ view: some View,
+        style: UIUserInterfaceStyle = .unspecified
+    ) -> UIHostingController<some View> {
+        // The app's accent tint, as RootView applies it, so buttons are coloured as on a phone.
+        let host = UIHostingController(rootView: view.tint(.roadAccent).environment(\._accessibilityReduceMotion, true))
+        // The navigation bar follows this, not the snapshot traits: without it, titles drew white on light.
+        host.overrideUserInterfaceStyle = style
+        return host
     }
 
+    /// Screens draw through the real window (`drawHierarchyInKeyWindow`): iOS 26's glass navigation
+    /// bar otherwise renders its title white on a light screen, unlike the app.
     private func assertScreen(
         _ view: some View,
         named name: String,
@@ -28,9 +37,10 @@ final class ScreenSnapshotTests: XCTestCase {
     ) {
         for style in [UIUserInterfaceStyle.light, .dark] {
             assertSnapshot(
-                of: still(view),
+                of: still(view, style: style),
                 as: .image(
                     on: .iPhone13,
+                    drawHierarchyInKeyWindow: true,
                     precision: 0.98,
                     perceptualPrecision: 0.98,
                     traits: UITraitCollection(userInterfaceStyle: style)
@@ -52,7 +62,7 @@ final class ScreenSnapshotTests: XCTestCase {
             .environment(\.dynamicTypeSize, .accessibility3)
         assertSnapshot(
             of: still(view),
-            as: .image(on: .iPhone13, precision: 0.98, perceptualPrecision: 0.98),
+            as: .image(on: .iPhone13, drawHierarchyInKeyWindow: true, precision: 0.98, perceptualPrecision: 0.98),
             named: "onboarding-ax3"
         )
     }
@@ -62,7 +72,7 @@ final class ScreenSnapshotTests: XCTestCase {
         await viewModel.load()
         assertSnapshot(
             of: still(PaywallView(viewModel: viewModel, onClose: {})),
-            as: .image(on: .iPhone13, precision: 0.98, perceptualPrecision: 0.98),
+            as: .image(on: .iPhone13, drawHierarchyInKeyWindow: true, precision: 0.98, perceptualPrecision: 0.98),
             named: "paywall"
         )
     }
@@ -83,7 +93,7 @@ final class ScreenSnapshotTests: XCTestCase {
             .environment(\.dynamicTypeSize, .accessibility3)
         assertSnapshot(
             of: still(view),
-            as: .image(on: .iPhone13, precision: 0.98, perceptualPrecision: 0.98),
+            as: .image(on: .iPhone13, drawHierarchyInKeyWindow: true, precision: 0.98, perceptualPrecision: 0.98),
             named: "theme-ax3"
         )
     }

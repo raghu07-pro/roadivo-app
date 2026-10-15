@@ -38,12 +38,41 @@ struct MediaServerTests {
         return EmbyCompatibleClient(session: URLSession(configuration: configuration), deviceID: "dev-1")
     }
 
-    @Test("Server addresses gain http:// and lose trailing slashes")
+    @Test("Server addresses lose trailing slashes; an address typed without a scheme gets https")
     func normalize() {
-        #expect(ServerAddress.normalize("192.168.1.10:8096")?.absoluteString == "http://192.168.1.10:8096")
         #expect(ServerAddress.normalize(" https://tv.example.com/ ")?.absoluteString == "https://tv.example.com")
+        #expect(ServerAddress.normalize("tv.example.com")?.absoluteString == "https://tv.example.com")
+        #expect(ServerAddress.normalize("tv.example.com:8920")?.absoluteString == "https://tv.example.com:8920")
+        // Xtream panels keep http, as nearly all of them serve no https.
+        #expect(
+            XtreamLink.playlistURL(server: "panel.example.com:8080", username: "u", password: "p")?.scheme == "http"
+        )
+        #expect(ServerAddress.normalize("http://tv.example.com")?.absoluteString == "http://tv.example.com")
         #expect(ServerAddress.normalize("") == nil)
         #expect(ServerAddress.normalize("not a server") == nil)
+    }
+
+    @Test("IP addresses, localhost, .local and single-label names keep http")
+    func localAddresses() {
+        #expect(ServerAddress.normalize("192.168.1.10:8096")?.absoluteString == "http://192.168.1.10:8096")
+        #expect(ServerAddress.normalize("localhost:8096")?.absoluteString == "http://localhost:8096")
+        #expect(ServerAddress.normalize("nas.local:8096")?.absoluteString == "http://nas.local:8096")
+        #expect(ServerAddress.normalize("nas:8096")?.absoluteString == "http://nas:8096")
+        #expect(ServerAddress.normalize("[fd00::5]:8096")?.scheme == "http")
+    }
+
+    @Test("A link pasted from Jellyfin's web app becomes the server address")
+    func pastedWebLink() {
+        #expect(
+            ServerAddress.normalize("https://jf.example.com/web/index.html#!/home.html")?.absoluteString
+                == "https://jf.example.com"
+        )
+        #expect(
+            ServerAddress.normalize("https://example.com/jellyfin/web/#/details?id=1")?.absoluteString
+                == "https://example.com/jellyfin"
+        )
+        #expect(ServerAddress.normalize("192.168.1.10:8096/web/")?.absoluteString == "http://192.168.1.10:8096")
+        #expect(ServerAddress.normalize("tv.example.com/#/home")?.absoluteString == "https://tv.example.com")
     }
 
     @Test("Xtream logins become an HLS M3U link")
@@ -89,6 +118,8 @@ struct MediaServerTests {
         ServerMockURLProtocol.handler = { request in
             #expect(request.url?.path == "/Users/user-9/Items")
             #expect(request.url?.query()?.contains("api_key=abc") == true)
+            #expect(request.url?.query()?.contains("ApiKey") == false)
+            #expect(request.value(forHTTPHeaderField: "X-Emby-Authorization")?.contains(#"Token="abc""#) == true)
             let body = #"""
             {"Items":[
               {"Id":"m1","Name":"Dune","Type":"Movie"},
@@ -108,6 +139,63 @@ struct MediaServerTests {
         #expect(stream.query()?.contains("MediaSourceId=m1") == true)
         #expect(stream.query()?.contains("api_key=abc") == true)
         #expect(entries.first?.logoURL?.path == "/Items/m1/Images/Primary")
+    }
+
+    @Test("Jellyfin gets the token as ApiKey and in the Authorization header, as 10.12 requires")
+    func jellyfinToken() async throws {
+        ServerMockURLProtocol.handler = { request in
+            let query = request.url?.query() ?? ""
+            #expect(query.contains("ApiKey=abc"))
+            #expect(query.contains("api_key=abc"))
+            #expect(request.value(forHTTPHeaderField: "Authorization")?.contains(#"Token="abc""#) == true)
+            return (200, Data(#"{"Items":[{"Id":"m1","Name":"Dune","Type":"Movie"}],"TotalRecordCount":1}"#.utf8))
+        }
+        let base = try #require(URL(string: "http://nas.local:8096"))
+        let account = MediaServerAccount(kind: .jellyfin, baseURL: base, userID: "user-9", token: "abc")
+        let entries = try await client().library(for: account)
+
+        let stream = try #require(entries.first?.streamURL.query())
+        #expect(stream.contains("ApiKey=abc"))
+        #expect(stream.contains("api_key=abc"))
+        #expect(entries.first?.logoURL?.query()?.contains("ApiKey=abc") == true)
+    }
+
+    @Test("A big library is read a page at a time up to the server's total")
+    func paging() async throws {
+        let total = EmbyCompatibleClient.pageSize + 3
+        ServerMockURLProtocol.handler = Self.pagedLibrary(total: total)
+        let base = try #require(URL(string: "http://nas.local:8096"))
+        let account = MediaServerAccount(kind: .jellyfin, baseURL: base, userID: "user-9", token: "abc")
+
+        let entries = try await client().library(for: account)
+
+        #expect(entries.count == total)
+        #expect(entries.first?.name == "Film 0")
+        #expect(entries.last?.name == "Film \(total - 1)")
+    }
+
+    @Test("Paging stops at 20 000 items, like Plex")
+    func pagingCap() async throws {
+        ServerMockURLProtocol.handler = Self.pagedLibrary(total: EmbyCompatibleClient.maximumItems + 2500)
+        let base = try #require(URL(string: "http://nas.local:8096"))
+        let account = MediaServerAccount(kind: .emby, baseURL: base, userID: "user-9", token: "abc")
+
+        let entries = try await client().library(for: account)
+
+        #expect(entries.count == EmbyCompatibleClient.maximumItems)
+    }
+
+    /// Serves `total` movies, honouring StartIndex and Limit like a real server.
+    private static func pagedLibrary(total: Int) -> @Sendable (URLRequest) -> (Int, Data) {
+        { request in
+            let query = request.url.flatMap { URLComponents(url: $0, resolvingAgainstBaseURL: false) }?.queryItems
+            let start = query?.first { $0.name == "StartIndex" }?.value.flatMap(Int.init) ?? 0
+            let limit = query?.first { $0.name == "Limit" }?.value.flatMap(Int.init) ?? total
+            let end = max(start, min(start + limit, total))
+            let items = (start..<end).map { #"{"Id":"m\#($0)","Name":"Film \#($0)","Type":"Movie"}"# }
+            let body = #"{"Items":[\#(items.joined(separator: ","))],"TotalRecordCount":\#(total)}"#
+            return (200, Data(body.utf8))
+        }
     }
 }
 

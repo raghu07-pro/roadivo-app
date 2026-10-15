@@ -52,15 +52,15 @@ struct StoreKitClient: StoreClient {
         }
     }
 
-    func hasActiveEntitlement() async -> Bool {
+    func activePlans() async -> Set<ProPlan> {
+        var plans: Set<ProPlan> = []
         for await result in Transaction.currentEntitlements {
             // Already excludes expired subscriptions, and keeps ones in a billing grace period.
-            guard case let .verified(transaction) = result,
-                  ProPlan.productIDs.contains(transaction.productID),
-                  transaction.revocationDate == nil else { continue }
-            return true
+            guard case let .verified(transaction) = result, transaction.revocationDate == nil,
+                  let plan = ProPlan.allCases.first(where: { $0.productID == transaction.productID }) else { continue }
+            plans.insert(plan)
         }
-        return false
+        return plans
     }
 
     func entitlementUpdates() -> AsyncStream<Void> {

@@ -75,9 +75,9 @@ enum Palette {
     }
 
     /// The gradient's two colours, deep enough that white initials read at 3:1 or more (large text)
-    /// even at the lightest corner.
+    /// even at the lightest corner. Reds, oranges, blues, indigos and violets: the brief says no green.
     static func placeholderColors(for title: String) -> [Color] {
-        let hues: [(Double, Double)] = [(0.02, 0.92), (0.07, 0.98), (0.55, 0.62), (0.40, 0.47), (0.75, 0.85)]
+        let hues: [(Double, Double)] = [(0.02, 0.92), (0.07, 0.98), (0.55, 0.62), (0.66, 0.71), (0.75, 0.85)]
         let pair = hues[Int(title.stableHue * Double(hues.count)) % hues.count]
         return [
             Color(hue: pair.0, saturation: 0.70, brightness: 0.62),

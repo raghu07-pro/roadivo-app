@@ -19,7 +19,7 @@ final class AppLanguage {
 
     /// The locale screens use: the chosen language, or the system's.
     var locale: Locale {
-        code.map(Locale.init(identifier:)) ?? .autoupdatingCurrent
+        code.map(Locale.init(identifier:)) ?? AppLocale.systemLocale ?? .autoupdatingCurrent
     }
 
     func set(_ newCode: String?, defaults: UserDefaults = .standard) {
@@ -29,6 +29,9 @@ final class AppLanguage {
         } else {
             defaults.removeObject(forKey: AppLocale.overrideKey)
             defaults.removeObject(forKey: "AppleLanguages")
+            // With the override gone, this reads the iPhone's own list (or a -AppleLanguages argument).
+            let preferred = defaults.stringArray(forKey: "AppleLanguages") ?? Locale.preferredLanguages
+            AppLocale.followSystem(preferring: preferred)
         }
         AppLocale.setOverride(newCode)
         code = newCode
@@ -40,7 +43,9 @@ final class AppLanguage {
 enum AppLocale {
     static let overrideKey = "roadivo.languageOverride"
 
-    private static let storage = OverrideStorage(UserDefaults.standard.string(forKey: overrideKey))
+    private static let storage = LockedValue<String?>(UserDefaults.standard.string(forKey: overrideKey))
+    /// Set by Follow System; until then `Locale.current` is already the iPhone's language.
+    private static let system = LockedValue<Locale?>(nil)
 
     static var overrideCode: String? {
         storage.value
@@ -50,9 +55,35 @@ enum AppLocale {
         storage.value = code
     }
 
+    /// The iPhone's language as Follow System last resolved it, if it has.
+    static var systemLocale: Locale? {
+        system.value
+    }
+
+    /// `Locale.current` keeps a language chosen before launch until the next one, so Follow System
+    /// resolves the iPhone's language itself.
+    static func followSystem(preferring languages: [String], bundle: Bundle = .main) {
+        system.value = resolveSystemLocale(preferences: languages, localizations: bundle.localizations)
+    }
+
+    /// The shipped language that `preferences` pick. `current` (with its region) when it already
+    /// speaks that language; otherwise the language alone.
+    static func resolveSystemLocale(
+        preferences: [String],
+        localizations: [String],
+        current: Locale = .current
+    ) -> Locale {
+        let shipped = localizations.filter { $0 != "Base" }
+        func match(_ languages: [String]) -> String? {
+            Bundle.preferredLocalizations(from: shipped, forPreferences: languages).first
+        }
+        guard let language = match(preferences) else { return current }
+        return match([current.language.maximalIdentifier]) == language ? current : Locale(identifier: language)
+    }
+
     /// The locale lookups resolve in.
     static var current: Locale {
-        overrideCode.map(Locale.init(identifier:)) ?? .current
+        overrideCode.map(Locale.init(identifier:)) ?? system.value ?? .current
     }
 }
 
@@ -82,16 +113,16 @@ extension Text {
     }
 }
 
-/// A lock-guarded box, so the override can be read from any thread.
-private final class OverrideStorage: @unchecked Sendable {
+/// A lock-guarded box, so the language can be read from any thread.
+private final class LockedValue<Value: Sendable>: @unchecked Sendable {
     private let lock = NSLock()
-    private var stored: String?
+    private var stored: Value
 
-    init(_ value: String?) {
+    init(_ value: Value) {
         stored = value
     }
 
-    var value: String? {
+    var value: Value {
         get { lock.withLock { stored } }
         set { lock.withLock { stored = newValue } }
     }

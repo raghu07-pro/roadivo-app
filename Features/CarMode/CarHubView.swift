@@ -16,32 +16,142 @@ struct CarHubView: View {
 
     var body: some View {
         NavigationStack {
-            ScrollView {
-                VStack(alignment: .leading, spacing: Spacing.lg) {
-                    dashboard
-                    if showsCarPlay {
-                        carPlayCard
-                    }
-                    carModeCard
-                    airPlayCard
-                    Label(
-                        "For passengers, or while parked. Never watch video while driving.",
-                        systemImage: "exclamationmark.triangle.fill"
-                    )
-                    .font(Typography.caption)
-                    .foregroundStyle(.secondary)
+            Group {
+                if isConnected {
+                    connectedContent
+                } else {
+                    notConnectedContent
                 }
-                .padding(Spacing.md)
-                .frame(maxWidth: 640)
-                .frame(maxWidth: .infinity)
             }
             .background(.roadCanvas)
             .navigationTitle("Cast to Car")
+            .navigationBarTitleDisplayMode(.inline)
         }
         .task(id: revision) { viewModel.load() }
     }
 
+    private var connectedContent: some View {
+        ScrollView {
+            VStack(alignment: .leading, spacing: Spacing.lg) {
+                dashboard
+                if showsCarPlay {
+                    carPlayCard
+                }
+                carModeCard
+                airPlayCard
+                safetyNote
+            }
+            .padding(Spacing.md)
+            .frame(maxWidth: 640)
+            .frame(maxWidth: .infinity)
+        }
+    }
+
+    /// Simple and centred (the owner's reference), with the two ways to the car underneath, so
+    /// Car Mode, a Pro feature, stays one tap away.
+    private var notConnectedContent: some View {
+        GeometryReader { proxy in
+            ScrollView {
+                VStack(spacing: Spacing.lg) {
+                    notConnected
+                    VStack(spacing: Spacing.sm) {
+                        carModeAction
+                        airPlayAction
+                    }
+                    safetyNote
+                }
+                .padding(Spacing.md)
+                .frame(maxWidth: 520)
+                .frame(maxWidth: .infinity, minHeight: proxy.size.height)
+            }
+            .scrollBounceBehavior(.basedOnSize)
+        }
+    }
+
+    @ViewBuilder private var carModeAction: some View {
+        if playback.isActive || viewModel.resumeItem != nil {
+            PrimaryButton(title: "Start Car Mode", systemImage: "car.fill", isCompact: true) {
+                onStartCarMode(playback.isActive ? nil : viewModel.resumeItem)
+            }
+            .accessibilityIdentifier("car.start")
+        } else {
+            PrimaryButton(title: "Pick Something to Watch", systemImage: "play.square.stack", isCompact: true) {
+                onBrowse()
+            }
+            .accessibilityIdentifier("car.browse")
+        }
+    }
+
+    /// The system AirPlay picker laid over the whole button, so a tap anywhere lists the screens.
+    private var airPlayAction: some View {
+        Label("Choose an AirPlay Screen", systemImage: "airplayvideo")
+            .font(Typography.button)
+            .foregroundStyle(.roadAccent)
+            .padding(.horizontal, Spacing.lg)
+            .frame(minHeight: 50)
+            .overlay { Capsule().strokeBorder(.roadBrandGradient, lineWidth: 2) }
+            .accessibilityHidden(true)
+            .overlay { RoutePickerButton(tint: .clear) }
+            .accessibilityIdentifier("cast.airplay")
+    }
+
+    private var safetyNote: some View {
+        Label(
+            "For passengers, or while parked. Never watch video while driving.",
+            systemImage: "exclamationmark.triangle.fill"
+        )
+        .font(Typography.caption)
+        .foregroundStyle(.secondary)
+    }
+
     // MARK: Dashboard
+
+    private var isConnected: Bool {
+        connection.isCarPlayConnected || connection.airPlayDestination != nil || connection.isCarAudio
+    }
+
+    /// Before a car is connected: Roadivo → the car's screen, and how to get there. Deliberately no
+    /// "any app" promise: Roadivo shows its own video only (App Review 2.3.1).
+    private var notConnected: some View {
+        VStack(spacing: Spacing.md) {
+            HStack(spacing: Spacing.lg) {
+                endpoint(symbol: "play.rectangle.fill", label: Text("Roadivo"), isActive: true)
+                Image(systemName: "arrow.right")
+                    .font(.title2.weight(.semibold))
+                    .foregroundStyle(.tertiary)
+                    .accessibilityHidden(true)
+                endpoint(symbol: "car.fill", label: Text("Car screen"), isActive: false)
+            }
+            Text("Not connected to a car")
+                .font(Typography.screenTitle)
+                .multilineTextAlignment(.center)
+                .accessibilityAddTraits(.isHeader)
+            Text("""
+            Connect the car's screen with AirPlay, then play a channel. No car screen? Mount your iPhone \
+            and use Car Mode.
+            """)
+            .font(Typography.body)
+            .foregroundStyle(.roadMuted)
+            .multilineTextAlignment(.center)
+            .fixedSize(horizontal: false, vertical: true)
+        }
+        .frame(maxWidth: .infinity)
+        .accessibilityElement(children: .combine)
+        .accessibilityIdentifier("cast.status")
+    }
+
+    private func endpoint(symbol: String, label: Text, isActive: Bool) -> some View {
+        VStack(spacing: Spacing.xs) {
+            Image(systemName: symbol)
+                .font(.largeTitle)
+                .foregroundStyle(isActive ? AnyShapeStyle(.roadAccent) : AnyShapeStyle(.tertiary))
+                .frame(width: 88, height: 88)
+                .background(.roadSurface, in: RoundedRectangle(cornerRadius: Radius.lg, style: .continuous))
+            label
+                .font(Typography.secondary)
+                .foregroundStyle(isActive ? AnyShapeStyle(.roadMuted) : AnyShapeStyle(.tertiary))
+        }
+    }
 
     private var dashboard: some View {
         RoadScene(time: .night, horizon: 0.42)

@@ -48,20 +48,45 @@ enum MediaServerKind: String, CaseIterable, Identifiable, Codable, Hashable, Sen
     }
 }
 
-/// Turns what a user types ("192.168.1.10:8096", "https://tv.example.com/")
-/// into a base URL: http assumed when no scheme is given, trailing "/" dropped.
+/// Turns what a user types ("192.168.1.10:8096", "tv.example.com/web/#/home") into a base URL.
+/// No scheme means https for media servers (no cleartext password), http on a LAN or for Xtream.
 enum ServerAddress {
-    static func normalize(_ raw: String) -> URL? {
+    /// Xtream panels are nearly all plain http, and their login travels in the link either way.
+    static func normalize(_ raw: String, preferringHTTPS: Bool = true) -> URL? {
         var text = raw.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !text.isEmpty, !text.contains(" ") else { return nil }
-        if !text.lowercased().hasPrefix("http://"), !text.lowercased().hasPrefix("https://") {
-            text = "http://" + text
+        if let fragment = text.firstIndex(of: "#") {
+            text = String(text[..<fragment])
         }
-        while text.hasSuffix("/") {
-            text.removeLast()
+        let lowercased = text.lowercased()
+        if !lowercased.hasPrefix("http://"), !lowercased.hasPrefix("https://") {
+            text = (preferringHTTPS && !isOnLocalNetwork(text) ? "https://" : "http://") + text
         }
-        guard let url = URL(string: text), url.host() != nil else { return nil }
+        guard var components = URLComponents(string: text), components.host?.isEmpty == false else { return nil }
+        // A link copied from Jellyfin's or Emby's web app: the server is everything before /web.
+        let segments = components.path.split(separator: "/")
+        if let web = segments.firstIndex(where: { $0.lowercased() == "web" }) {
+            components.path = segments[..<web].map { "/" + $0 }.joined()
+            components.query = nil
+        }
+        guard var normalized = components.string else { return nil }
+        while normalized.hasSuffix("/") {
+            normalized.removeLast()
+        }
+        guard let url = URL(string: normalized), url.host() != nil else { return nil }
         return url
+    }
+
+    /// IP addresses, localhost, .local and single-label names (a NAS on home Wi-Fi) rarely have a
+    /// certificate, so they keep http.
+    private static func isOnLocalNetwork(_ address: String) -> Bool {
+        guard let host = URLComponents(string: "http://" + address)?.host?.lowercased(), !host.isEmpty else {
+            return false
+        }
+        let octets = host.split(separator: ".", omittingEmptySubsequences: false)
+        let isIPv4 = octets.count == 4 && octets.allSatisfy { UInt8($0) != nil }
+        let isIPv6 = host.contains(":")
+        return isIPv4 || isIPv6 || host == "localhost" || host.hasSuffix(".local") || !host.contains(".")
     }
 }
 
@@ -69,7 +94,7 @@ enum ServerAddress {
 /// `output=m3u8` asks for HLS stream URLs, which AVPlayer can play.
 enum XtreamLink {
     static func playlistURL(server: String, username: String, password: String) -> URL? {
-        guard let base = ServerAddress.normalize(server), !username.isEmpty, !password.isEmpty,
+        guard let base = ServerAddress.normalize(server, preferringHTTPS: false), !username.isEmpty, !password.isEmpty,
               var components = URLComponents(url: base.appending(path: "get.php"), resolvingAgainstBaseURL: false)
         else { return nil }
         components.queryItems = [

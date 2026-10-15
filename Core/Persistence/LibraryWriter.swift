@@ -19,9 +19,12 @@ actor LibraryWriter {
         descriptor.fetchLimit = 1
         guard let playlist = try modelContext.fetch(descriptor).first else { throw LibraryError.notFound }
 
+        // A stream listed twice keeps the favourite if either copy had it, and the latest play.
         var kept: [String: (favorite: Bool, played: Date?)] = [:]
         for channel in playlist.channels {
-            kept[channel.streamURLString] = (channel.isFavorite, channel.lastPlayedAt)
+            let earlier = kept[channel.streamURLString]
+            let played = [earlier?.played, channel.lastPlayedAt].compactMap(\.self).max()
+            kept[channel.streamURLString] = ((earlier?.favorite ?? false) || channel.isFavorite, played)
             modelContext.delete(channel)
         }
         for (index, entry) in entries.enumerated() {
@@ -41,5 +44,16 @@ actor LibraryWriter {
         playlist.refreshedAt = .now
         try modelContext.save()
         return entries.count
+    }
+
+    /// Deletes a playlist and, by cascade, its channels off the main actor, so a 30 000-channel
+    /// source doesn't freeze the screen. (A store-level batch delete is refused for this relationship.)
+    func deletePlaylist(_ playlistID: UUID) throws {
+        let modelContext = ModelContext(modelContainer)
+        var descriptor = FetchDescriptor<Playlist>(predicate: #Predicate { $0.id == playlistID })
+        descriptor.fetchLimit = 1
+        guard let playlist = try modelContext.fetch(descriptor).first else { throw LibraryError.notFound }
+        modelContext.delete(playlist)
+        try modelContext.save()
     }
 }

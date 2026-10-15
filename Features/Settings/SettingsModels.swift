@@ -11,7 +11,7 @@ struct FAQEntry: Identifiable {
         FAQEntry(
             id: 0,
             question: "What should I do if something goes wrong while using the app?",
-            answer: "Close Roadivo from the app switcher and open it again. If a channel still won't play, refresh its source in Settings › Manage Sources. Still stuck? Contact us through Roadivo's App Store page."
+            answer: "Close Roadivo from the app switcher and open it again. If a channel still won't play, refresh its source in Settings › Manage Sources. Still stuck? Tap Contact Support at the end of Help & FAQ."
         ),
         FAQEntry(
             id: 1,

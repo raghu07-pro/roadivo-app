@@ -65,6 +65,7 @@ struct FavoritesView: View {
             }
             .background(.roadCanvas)
             .navigationTitle("Favorites")
+            .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 if shelf == .local {
                     ToolbarItem(placement: .primaryAction) { importMenu }
@@ -92,19 +93,19 @@ struct FavoritesView: View {
             .photosPicker(isPresented: $isPickingPhotos, selection: $photoSelection, matching: .videos)
             .onChange(of: photoSelection) { _, picked in importPhotos(picked) }
             .alert(
-                "Couldn't import",
+                title(for: localVideos.problem?.kind),
                 isPresented: Binding(
-                    get: { localVideos.errorMessage != nil },
+                    get: { localVideos.problem != nil },
                     set: {
                         if !$0 {
-                            localVideos.errorMessage = nil
+                            localVideos.problem = nil
                         }
                     }
                 )
             ) {
                 Button("OK", role: .cancel) {}
             } message: {
-                Text(localVideos.errorMessage ?? "")
+                Text(localVideos.problem?.message ?? "")
             }
         }
         .task(id: revision) {
@@ -201,6 +202,14 @@ struct FavoritesView: View {
         .accessibilityIdentifier("local.importMenu")
     }
 
+    private func title(for kind: LocalVideosViewModel.Problem.Kind?) -> Text {
+        switch kind {
+        case .load: Text("Couldn't load your videos")
+        case .delete: Text("Couldn't delete the video")
+        case .importing, nil: Text("Couldn't import")
+        }
+    }
+
     private func toggle(_ item: MediaItem) {
         if let isFavorite = viewModel.toggleFavorite(item) {
             onFavoriteChanged(item.id, isFavorite)
@@ -225,10 +234,9 @@ struct FavoritesView: View {
             }
             photoSelection = []
             localVideos.endImport()
-            if urls.count < picked.count {
-                localVideos.errorMessage = String(appLocalized: "Some videos couldn't be copied from Photos.")
-            }
-            if await localVideos.importFiles(urls, removingSourcesAfterwards: true) {
+            // Picks that failed to export are reported once the rest have been imported.
+            let skipped = picked.count - urls.count
+            if await localVideos.importFiles(urls, skipped: skipped, removingSourcesAfterwards: true) {
                 onLibraryChanged()
             }
         }

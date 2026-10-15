@@ -55,7 +55,8 @@ final class LibraryViewModel {
             case .all:
                 // Home is the channel library; imported videos live in Favorites › On this iPhone.
                 items = try repository.items().filter { !$0.isLocalFile }
-                recent = try repository.recentlyPlayed().filter { !$0.isLocalFile }
+                // Filtered in the fetch: filtering after the limit let 12 played videos empty the row.
+                recent = try repository.recentlyPlayed(limit: 12, excludingLocal: true)
             case .favorites:
                 items = try repository.favorites()
                 recent = []

@@ -1,6 +1,7 @@
 import Foundation
 import Observation
 import OSLog
+import SwiftData
 
 /// The composition root: builds every service once and hands them to features.
 @Observable
@@ -15,6 +16,8 @@ final class AppEnvironment {
     let proAccess: ProAccess
     let speech: SpeechTranscribing
     let plex: PlexLinking
+    /// The App Store's newest version, for "New Version Available"; nil in UI tests.
+    let updateChecker: AppUpdateChecking?
     let carConnection = CarConnection()
 
     /// The running app's environment, for the CarPlay scene: it is created by
@@ -30,11 +33,13 @@ final class AppEnvironment {
         storeClient: StoreClient,
         preferences: Preferences,
         speech: SpeechTranscribing = SpeechTranscriber(),
-        plex: PlexLinking = ScriptedPlexLinking()
+        plex: PlexLinking = ScriptedPlexLinking(),
+        updateChecker: AppUpdateChecking? = nil
     ) {
         self.apiClient = apiClient
         self.speech = speech
         self.plex = plex
+        self.updateChecker = updateChecker
         self.store = store
         self.preferences = preferences
         repository = LibraryRepository(
@@ -74,6 +79,8 @@ final class AppEnvironment {
             logger.fault("Store failed to open: \(error.localizedDescription, privacy: .public)")
             store = memoryStore()
         }
+        let secureStore: SecureStore = isUITesting ? InMemorySecureStore() : KeychainStore()
+        clearSecretsFromEarlierInstall(secureStore, library: store, logger: logger)
 
         // UI tests start in Follow System (or a language from -AppleLanguages) and the default
         // theme, never a choice left by an earlier run.
@@ -93,7 +100,7 @@ final class AppEnvironment {
         let environment = AppEnvironment(
             apiClient: (try? AppInfo.apiBaseURL()).map { APIClient(baseURL: $0) },
             store: store,
-            secureStore: isUITesting ? InMemorySecureStore() : KeychainStore(),
+            secureStore: secureStore,
             fetcher: URLSessionPlaylistFetcher(),
             mediaServers: MediaServerRouter(
                 embyCompatible: EmbyCompatibleClient(deviceID: preferences.deviceID),
@@ -104,7 +111,11 @@ final class AppEnvironment {
             speech: isUITesting && !arguments.contains("-live-voice")
                 ? ScriptedSpeechTranscriber(phrase: voicePhrase(in: arguments))
                 : SpeechTranscriber(),
-            plex: isUITesting ? ScriptedPlexLinking() : PlexClient(clientID: preferences.deviceID)
+            plex: isUITesting ? ScriptedPlexLinking() : PlexClient(clientID: preferences.deviceID),
+            updateChecker: isUITesting ? nil : AppStoreUpdateChecker(
+                bundleID: Bundle.main.bundleIdentifier ?? "",
+                country: Locale.current.region?.identifier ?? "US"
+            )
         )
         environment.router.asksForReviews = !isUITesting
         environment.proAccess.start()
@@ -116,6 +127,31 @@ final class AppEnvironment {
             }
         #endif
         return environment
+    }
+
+    /// iOS keeps Keychain items after the app is deleted, so a reinstall would inherit old logins. Cleared
+    /// once per install; never when the library has sources (an update) or is memory-only (UI tests).
+    private static func clearSecretsFromEarlierInstall(
+        _ secureStore: SecureStore,
+        library: SwiftDataStore,
+        logger: Logger
+    ) {
+        let defaults = UserDefaults.standard
+        let flag = "roadivo.keychainInitialized"
+        let isOnDisk = library.container.configurations.allSatisfy { !$0.isStoredInMemoryOnly }
+        guard isOnDisk, !defaults.bool(forKey: flag) else { return }
+        // A failed count keeps the secrets: wiping a live library's logins is worse than a stale item.
+        let sourceCount = (try? library.mainContext.fetchCount(FetchDescriptor<Playlist>())) ?? 1
+        if sourceCount == 0 {
+            do {
+                try secureStore.removeAll()
+            } catch {
+                // The flag stays unset, so this is tried again next launch.
+                logger.error("Keychain cleanup failed: \(error.localizedDescription, privacy: .public)")
+                return
+            }
+        }
+        defaults.set(true, forKey: flag)
     }
 
     /// What the scripted microphone "hears" in UI tests: `-voice-phrase <text>`, else "Football".

@@ -17,11 +17,11 @@ final class SourcesViewModel {
     func load() {
         do {
             sources = try repository.playlists().map {
-                SourceSummary(
+                try SourceSummary(
                     id: $0.id,
                     name: $0.name,
                     kind: $0.kind,
-                    itemCount: $0.channels.count,
+                    itemCount: repository.channelCount(in: $0.id),
                     host: $0.sourceHost,
                     refreshedAt: $0.refreshedAt
                 )
@@ -45,13 +45,16 @@ final class SourcesViewModel {
         }
     }
 
-    func delete(_ id: UUID) -> Bool {
+    /// Returns true when the source was deleted. The row goes at once; a big source takes a moment.
+    func delete(_ id: UUID) async -> Bool {
+        sources.removeAll { $0.id == id }
         do {
-            try repository.delete(id)
+            try await repository.delete(id)
             load()
             return true
         } catch {
             errorMessage = error.localizedDescription
+            load()
             return false
         }
     }

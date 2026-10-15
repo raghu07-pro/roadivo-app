@@ -2,6 +2,10 @@ import SwiftUI
 
 struct HelpView: View {
     @State private var expanded: Set<Int> = []
+    @Environment(\.openURL) private var openURL
+
+    /// Opens the user's mail app addressed to support, with the subject filled in.
+    private static let supportMail = URL(string: "mailto:dhavalbhanderi880@gmail.com?subject=Roadivo%20support")
 
     var body: some View {
         ScrollView {
@@ -22,6 +26,9 @@ struct HelpView: View {
                     .tint(.secondary)
                     .cardStyle()
                 }
+                if let mail = Self.supportMail {
+                    contactSupport(mail)
+                }
             }
             .padding(Spacing.md)
             .frame(maxWidth: 640)
@@ -30,6 +37,30 @@ struct HelpView: View {
         .background(.roadCanvas)
         .navigationTitle("Help & FAQ")
         .navigationBarTitleDisplayMode(.inline)
+    }
+
+    private func contactSupport(_ mail: URL) -> some View {
+        Button { openURL(mail) } label: {
+            HStack(spacing: Spacing.sm) {
+                IconTile(systemImage: "envelope.fill")
+                Text("Contact Support")
+                    .font(Typography.cardTitle)
+                    .foregroundStyle(.primary)
+                    .multilineTextAlignment(.leading)
+                Spacer(minLength: 0)
+                // Mail opens outside Roadivo.
+                Image(systemName: "arrow.up.forward")
+                    .font(.footnote.weight(.semibold))
+                    .foregroundStyle(.roadMuted)
+                    .accessibilityHidden(true)
+            }
+            .frame(minHeight: 44)
+            .contentShape(Rectangle())
+            .cardStyle()
+        }
+        .buttonStyle(PressableStyle())
+        .padding(.top, Spacing.xs)
+        .accessibilityIdentifier("help.contactSupport")
     }
 
     private func binding(for id: Int) -> Binding<Bool> {
@@ -48,4 +79,10 @@ struct HelpView: View {
 
 #Preview {
     NavigationStack { HelpView() }
+}
+
+#Preview("Dark, largest text") {
+    NavigationStack { HelpView() }
+        .preferredColorScheme(.dark)
+        .environment(\.dynamicTypeSize, .accessibility3)
 }

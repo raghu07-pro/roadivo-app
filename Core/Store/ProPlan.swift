@@ -90,8 +90,15 @@ protocol StoreClient: Sendable {
     func offers() async throws -> [PlanOffer]
     func purchase(_ plan: ProPlan) async throws -> PurchaseOutcome
     func restore() async throws
-    func hasActiveEntitlement() async -> Bool
+    /// Every plan this Apple Account owns right now: a subscription, Lifetime, or both.
+    func activePlans() async -> Set<ProPlan>
     /// Fires whenever a transaction arrives from outside the app (renewal,
     /// refund, Ask to Buy approval, another device).
     func entitlementUpdates() -> AsyncStream<Void>
+}
+
+extension StoreClient {
+    func hasActiveEntitlement() async -> Bool {
+        await !activePlans().isEmpty
+    }
 }

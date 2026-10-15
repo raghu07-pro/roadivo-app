@@ -13,6 +13,10 @@ struct ArtworkTile: View {
     @State private var poster: UIImage?
     /// The video's frame couldn't be read, so the cover stands in.
     @State private var posterFailed = false
+    /// The logo is taking too long (a dead host makes AsyncImage wait a minute), so the cover stands in.
+    @State private var logoIsSlow = false
+
+    private static let logoPatience: Duration = .seconds(6)
 
     init(title: String, imageURL: URL?, videoURL: URL? = nil, isLive: Bool = false, cornerRadius: CGFloat = Radius.md) {
         self.title = title
@@ -51,6 +55,14 @@ struct ArtworkTile: View {
                     posterFailed = image == nil
                 }
             }
+            .task(id: imageURL) {
+                logoIsSlow = false
+                guard imageURL != nil else { return }
+                // Cancelled with the tile or a new logo; a logo that arrives later still replaces the cover.
+                try? await Task.sleep(for: Self.logoPatience)
+                guard !Task.isCancelled else { return }
+                withAnimation(.easeIn(duration: 0.25)) { logoIsSlow = true }
+            }
             .accessibilityHidden(true)
     }
 
@@ -74,7 +86,11 @@ struct ArtworkTile: View {
                     }
                     .transition(.opacity)
                 case .empty:
-                    SkeletonView()
+                    if logoIsSlow {
+                        cover
+                    } else {
+                        SkeletonView()
+                    }
                 default:
                     cover
                 }

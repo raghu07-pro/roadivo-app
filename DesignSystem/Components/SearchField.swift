@@ -30,7 +30,8 @@ struct SearchField: View {
                 } label: {
                     Image(systemName: "xmark.circle.fill")
                         .foregroundStyle(.tertiary)
-                        .frame(width: 32, height: 44)
+                        .frame(width: 44, height: 44)
+                        .contentShape(Rectangle())
                 }
                 .accessibilityLabel(Text("Clear search"))
                 .accessibilityIdentifier("search.clear")

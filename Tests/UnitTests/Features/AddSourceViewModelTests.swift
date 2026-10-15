@@ -22,6 +22,32 @@ struct AddSourceViewModelTests {
         #expect(viewModel.canSubmit)
     }
 
+    @Test("M3U text counts only with a playable link; a header and junk alone is flagged")
+    func m3uDetection() throws {
+        let viewModel = try AddSourceViewModel(repository: TestLibrary().repository)
+        viewModel.input = "#EXTM3U\n#EXTINF:-1,No link\nnot a url\nlive/relative.m3u8"
+        #expect(viewModel.parsedInput == .unusable)
+        #expect(viewModel.showsUnusableWarning)
+
+        let lowercase = "#extm3u\r\n#extinf:-1,Late link\r\nnot a url\r\nrtmp://cdn.example.com/live/2"
+        viewModel.input = lowercase
+        #expect(viewModel.parsedInput == .content(lowercase))
+        #expect(viewModel.canSubmit)
+
+        viewModel.input = "Just some notes\nhttps://e.com/a.m3u8"
+        #expect(viewModel.parsedInput == .unusable)
+        viewModel.input = ""
+        #expect(viewModel.parsedInput == .empty)
+    }
+
+    @Test("A 100 000-line paste is recognised from its first link")
+    func bigPaste() throws {
+        let viewModel = try AddSourceViewModel(repository: TestLibrary().repository)
+        let text = bigPlaylist(100_000)
+        viewModel.input = text
+        #expect(viewModel.parsedInput == .content(text))
+    }
+
     @Test("A good link adds the playlist, named after its host")
     func success() async throws {
         let library = try TestLibrary()
