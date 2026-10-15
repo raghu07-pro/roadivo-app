@@ -27,8 +27,23 @@ struct CarHubView: View {
             .clearsBottomAccessory()
             .navigationTitle("Cast to Car")
             .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .primaryAction) {
+                    NavigationLink(value: Route.guide) {
+                        Label("How to Connect", systemImage: "questionmark.circle")
+                    }
+                    .accessibilityIdentifier("cast.guide")
+                }
+            }
+            .navigationDestination(for: Route.self) { _ in
+                ConnectGuideView(guide: ConnectGuide(hasCarPlay: showsCarPlay), isPro: isPro)
+            }
         }
         .task(id: revision) { viewModel.load() }
+    }
+
+    private enum Route: Hashable {
+        case guide
     }
 
     private var connectedContent: some View {
@@ -54,10 +69,20 @@ struct CarHubView: View {
         VStack(spacing: 0) {
             GeometryReader { proxy in
                 ScrollView {
-                    notConnected
-                        .padding(Spacing.md)
-                        .frame(maxWidth: 520)
-                        .frame(maxWidth: .infinity, minHeight: proxy.size.height)
+                    VStack(spacing: Spacing.md) {
+                        notConnected
+                        NavigationLink(value: Route.guide) {
+                            Label("How to Connect", systemImage: "questionmark.circle")
+                                .font(Typography.cardTitle)
+                                .foregroundStyle(.roadAccent)
+                                .frame(minHeight: 44)
+                                .contentShape(Rectangle())
+                        }
+                        .accessibilityIdentifier("cast.guide.link")
+                    }
+                    .padding(Spacing.md)
+                    .frame(maxWidth: 520)
+                    .frame(maxWidth: .infinity, minHeight: proxy.size.height)
                 }
                 .scrollBounceBehavior(.basedOnSize)
             }

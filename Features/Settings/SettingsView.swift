@@ -44,6 +44,17 @@ struct SettingsView<SourcesScreen: View>: View {
                         )
                     }
                     .accessibilityIdentifier("settings.sources")
+                    // Also on Cast to Car; here so it's easy to find again to help someone.
+                    NavigationLink(value: SettingsRoute.connectGuide) {
+                        row(
+                            symbol: "car.fill",
+                            title: "How to Connect",
+                            detail: CarPlayAvailability.isEnabled
+                                ? "CarPlay · AirPlay · Car Mode"
+                                : "AirPlay · Car Mode"
+                        )
+                    }
+                    .accessibilityIdentifier("settings.connectGuide")
                 } header: {
                     Text("Media").foregroundStyle(.roadMuted)
                 }
@@ -121,6 +132,8 @@ struct SettingsView<SourcesScreen: View>: View {
             .navigationDestination(for: SettingsRoute.self) { route in
                 switch route {
                 case .sources: sourcesScreen()
+                case .connectGuide:
+                    ConnectGuideView(guide: ConnectGuide(hasCarPlay: CarPlayAvailability.isEnabled), isPro: isPro)
                 }
             }
             .navigationTitle("Settings")

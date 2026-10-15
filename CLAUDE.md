@@ -35,6 +35,8 @@ tabs: **Home · Favorites · Cast to Car · Settings**.
   driving, the car plays sound only.
 - The tab shows live CarPlay and AirPlay status (`CarConnection`). Until a car is connected it only
   explains how to connect; Car Mode and AirPlay appear once connected (DECISIONS 98).
+- How to Connect (`Features/Shared/ConnectGuide*`, in Cast to Car and Settings › Media) gives the user's steps; its CarPlay steps show
+  only once CarPlay is switched on (DECISIONS 101).
 - CarPlay needs Apple's entitlements; it is switched off until they are
   granted (`ROADIVO_CARPLAY` in `Config/Shared.xcconfig`, DECISIONS 25). While
   it is off, the app hides every CarPlay promise (`CarPlayAvailability`, DECISIONS 84).

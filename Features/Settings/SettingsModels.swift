@@ -3,6 +3,7 @@ import Foundation
 /// The Settings screens reached by value, so screens they push stack in order.
 enum SettingsRoute: Hashable {
     case sources
+    case connectGuide
 }
 
 // FAQ answers are prose; wrapping them mid-sentence hurts more than it helps.
