@@ -5,7 +5,7 @@
   ],
   "products" : [
     {
-      "displayPrice" : "21.49",
+      "displayPrice" : "439.00",
       "familyShareable" : false,
       "internalID" : "9A4C2E10-7B3D-4E5F-8A61-B2C0DE000004",
       "localizations" : [
@@ -22,8 +22,8 @@
   ],
   "settings" : {
     "_failTransactionsEnabled" : false,
-    "_locale" : "en_US",
-    "_storefront" : "USA",
+    "_locale" : "en_IN",
+    "_storefront" : "IND",
     "_storeKitErrors" : [
 
     ]
@@ -43,7 +43,7 @@
           "codeOffers" : [
 
           ],
-          "displayPrice" : "45.99",
+          "displayPrice" : "939.00",
           "familyShareable" : false,
           "groupNumber" : 1,
           "internalID" : "9A4C2E10-7B3D-4E5F-8A61-B2C0DE000003",
@@ -68,7 +68,7 @@
           "codeOffers" : [
 
           ],
-          "displayPrice" : "3.99",
+          "displayPrice" : "80.00",
           "familyShareable" : false,
           "groupNumber" : 2,
           "internalID" : "9A4C2E10-7B3D-4E5F-8A61-B2C0DE000002",
@@ -77,7 +77,7 @@
             "numberOfPeriods" : 1,
             "paymentMode" : "payAsYouGo",
             "subscriptionPeriod" : "P1W",
-            "displayPrice" : "0.99"
+            "displayPrice" : "20.00"
           },
           "localizations" : [
             {

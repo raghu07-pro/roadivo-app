@@ -3,7 +3,13 @@ import XCTest
 extension XCUIApplication {
     /// Launches with in-memory storage and a fake App Store so every UI test
     /// starts clean. `skipOnboarding` also skips the intro paywall.
-    static func roadivo(skipOnboarding: Bool = false, demoLibrary: Bool = false, pro: Bool = false) -> XCUIApplication {
+    /// `restorable`: a Yearly plan bought earlier, which only Restore brings back.
+    static func roadivo(
+        skipOnboarding: Bool = false,
+        demoLibrary: Bool = false,
+        pro: Bool = false,
+        restorable: Bool = false
+    ) -> XCUIApplication {
         let app = XCUIApplication()
         app.launchArguments = ["-ui-testing"]
         if skipOnboarding {
@@ -14,6 +20,9 @@ extension XCUIApplication {
         }
         if pro {
             app.launchArguments.append("-pro")
+        }
+        if restorable {
+            app.launchArguments.append("-restorable")
         }
         app.launch()
         return app

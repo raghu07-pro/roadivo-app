@@ -76,6 +76,23 @@ final class SettingsUITests: XCTestCase {
 
     /// Touch and hold a card: the menu opens over a larger preview. The
     /// screenshot is for checking the lift; Delete (red) is in Sources' menu.
+    /// Favorites only lists favourites: its menu removes from Favorites, and has no Delete.
+    func testFavoritesMenuHasNoDelete() {
+        let app = XCUIApplication.roadivo(skipOnboarding: true, demoLibrary: true)
+        let card = app.buttons["channel.Football Tonight"]
+        XCTAssertTrue(card.waitForExistence(timeout: 10))
+        card.press(forDuration: 1.2)
+        let add = app.buttons["Add to Favorites"]
+        XCTAssertTrue(add.waitForExistence(timeout: 5))
+        add.tap()
+        app.tabBars.buttons.element(boundBy: 1).tap()
+        let favorite = app.buttons["channel.Football Tonight"]
+        XCTAssertTrue(favorite.waitForExistence(timeout: 5))
+        favorite.press(forDuration: 1.2)
+        XCTAssertTrue(app.buttons["Remove from Favorites"].waitForExistence(timeout: 5))
+        XCTAssertFalse(app.buttons["Delete"].exists)
+    }
+
     func testLongPressShowsPreviewAndMenu() {
         let app = XCUIApplication.roadivo(skipOnboarding: true, demoLibrary: true)
         let card = app.buttons["channel.Football Tonight"]

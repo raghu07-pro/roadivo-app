@@ -38,6 +38,47 @@ final class OnboardingFlowUITests: XCTestCase {
         XCTAssertFalse(app.buttons["settings.pro"].exists)
     }
 
+    /// First launch: Restore brings back an earlier purchase, closes the paywall onto Home, and
+    /// Settings then names the plan.
+    func testRestoreOnTheIntroPaywallUnlocksPro() {
+        let app = XCUIApplication.roadivo(restorable: true)
+        XCTAssertTrue(app.buttons["onboarding.skip"].waitForExistence(timeout: 5))
+        app.buttons["onboarding.skip"].tap()
+        let restore = app.buttons["paywall.restore"]
+        XCTAssertTrue(restore.waitForExistence(timeout: 5))
+        restore.tap()
+        XCTAssertTrue(app.navigationBars["Home"].waitForExistence(timeout: 5))
+        app.tabBars.buttons["Settings"].tap()
+        XCTAssertTrue(app.buttons["settings.plan"].waitForExistence(timeout: 5))
+    }
+
+    /// From Settings: Restore closes the paywall onto Home, with the plan active.
+    func testRestoreFromSettingsGoesHome() {
+        let app = XCUIApplication.roadivo(skipOnboarding: true, restorable: true)
+        app.tabBars.buttons["Settings"].tap()
+        let upgrade = app.buttons["settings.pro"]
+        XCTAssertTrue(upgrade.waitForExistence(timeout: 5))
+        upgrade.tap()
+        let restore = app.buttons["paywall.restore"]
+        XCTAssertTrue(restore.waitForExistence(timeout: 5))
+        restore.tap()
+        XCTAssertTrue(app.navigationBars["Home"].waitForExistence(timeout: 5))
+        app.tabBars.buttons["Settings"].tap()
+        XCTAssertTrue(app.buttons["settings.plan"].waitForExistence(timeout: 5))
+    }
+
+    /// Nothing to restore: the paywall stays and says so.
+    func testRestoreWithNothingBoughtSaysSo() {
+        let app = XCUIApplication.roadivo()
+        XCTAssertTrue(app.buttons["onboarding.skip"].waitForExistence(timeout: 5))
+        app.buttons["onboarding.skip"].tap()
+        let restore = app.buttons["paywall.restore"]
+        XCTAssertTrue(restore.waitForExistence(timeout: 5))
+        restore.tap()
+        XCTAssertTrue(app.staticTexts["paywall.message"].waitForExistence(timeout: 5))
+        XCTAssertTrue(app.buttons["paywall.close"].exists)
+    }
+
     func testSkipGoesToThePaywall() {
         let app = XCUIApplication.roadivo()
         let skip = app.buttons["onboarding.skip"]

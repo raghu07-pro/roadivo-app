@@ -103,8 +103,10 @@ final class PaywallViewModel {
         do {
             switch try await access.client.purchase(selected) {
             case .purchased:
+                // Verified by StoreKit: Pro now, whether or not the entitlement list has caught up.
+                access.recordPurchase(selected)
                 await access.refresh()
-                return access.isPro
+                return true
             case .pending:
                 message =
                     String(appLocalized: "Your purchase is waiting for approval. Pro unlocks as soon as it's approved.")

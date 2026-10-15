@@ -131,11 +131,11 @@ struct FavoritesView: View {
             ErrorView(message: message) { viewModel.load() }
         case .loaded:
             ScrollView {
+                // No Delete here: unfavouriting already takes a video off this shelf (owner's choice).
                 ChannelGrid(
                     items: viewModel.items,
                     onPlay: { onPlay($0, viewModel.items) },
-                    onToggleFavorite: toggle,
-                    onDelete: deleteVideo
+                    onToggleFavorite: toggle
                 )
                 .padding(.vertical, Spacing.md)
             }

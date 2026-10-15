@@ -60,14 +60,9 @@ final class AppEnvironment {
     /// Launch arguments for UI tests and screenshots: `-ui-testing` (in-memory, fake App Store, scripted mic),
     /// `-skip-onboarding` (and the intro paywall), `-pro`, and Debug-only `-demo-library`.
     static func live(arguments: [String]) -> AppEnvironment {
-        #if DEBUG
-            let isUITesting = arguments.contains("-ui-testing")
-            let skipsOnboarding = arguments.contains("-skip-onboarding")
-        #else
-            // Test switches never reach a shipped build: no fake App Store, no free Pro.
-            let isUITesting = false
-            let skipsOnboarding = false
-        #endif
+        let switches = TestSwitches(arguments: arguments)
+        let isUITesting = switches.isUITesting
+        let skipsOnboarding = switches.skipsOnboarding
         let logger = Logger(subsystem: "com.roadivo", category: "App")
 
         let store: SwiftDataStore
@@ -94,7 +89,10 @@ final class AppEnvironment {
             preferences.hasSeenIntroPaywall = true
         }
         let storeClient: StoreClient = isUITesting
-            ? FakeStoreClient(isPro: arguments.contains("-pro"))
+            ? FakeStoreClient(
+                isPro: arguments.contains("-pro"),
+                restorable: arguments.contains("-restorable") ? [.yearly] : []
+            )
             : StoreKitClient()
 
         let environment = AppEnvironment(
@@ -174,5 +172,22 @@ final class AppEnvironment {
         let name = "roadivo.uitests"
         UserDefaults().removePersistentDomain(forName: name)
         return UserDefaults(suiteName: name) ?? .standard
+    }
+}
+
+/// UI-test launch switches, honoured only in Debug: a shipped build never gets the fake App Store
+/// or free Pro. A struct, so Release doesn't flag the test-only branches as dead code.
+private struct TestSwitches {
+    let isUITesting: Bool
+    let skipsOnboarding: Bool
+
+    init(arguments: [String]) {
+        #if DEBUG
+            isUITesting = arguments.contains("-ui-testing")
+            skipsOnboarding = arguments.contains("-skip-onboarding")
+        #else
+            isUITesting = false
+            skipsOnboarding = false
+        #endif
     }
 }

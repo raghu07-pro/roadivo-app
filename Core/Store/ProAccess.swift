@@ -6,7 +6,14 @@ import Observation
 @Observable
 @MainActor
 final class ProAccess {
-    private(set) var activePlans: Set<ProPlan> = []
+    /// What the App Store lists, plus a plan just bought here that it may not list yet.
+    var activePlans: Set<ProPlan> {
+        storePlans.union(justBought)
+    }
+
+    private var storePlans: Set<ProPlan> = []
+    /// A verified purchase counts at once; right after buying, the App Store's list can lag behind.
+    private var justBought: Set<ProPlan> = []
     let client: StoreClient
     @ObservationIgnored private var listener: Task<Void, Never>?
 
@@ -44,6 +51,12 @@ final class ProAccess {
     }
 
     func refresh() async {
-        activePlans = await client.activePlans()
+        storePlans = await client.activePlans()
+        justBought.subtract(storePlans) // Listed now, so refunds and expiry are the App Store's to report.
+    }
+
+    /// Called after a purchase StoreKit has verified.
+    func recordPurchase(_ plan: ProPlan) {
+        justBought.insert(plan)
     }
 }

@@ -17,7 +17,7 @@ struct PaywallViewModelTests {
         #expect(viewModel.phase == .loaded)
         #expect(viewModel.offers.map(\.plan) == [.weekly, .yearly, .lifetime])
         #expect(viewModel.selected == .lifetime)
-        #expect(viewModel.buyTitle == "$21.49 Buy now")
+        #expect(viewModel.buyTitle == "₹439 Buy now")
         #expect(viewModel.terms.contains("No subscription"))
     }
 
@@ -34,7 +34,7 @@ struct PaywallViewModelTests {
         #expect(viewModel.buyTitle == String(appLocalized: "Your current plan"))
         viewModel.selected = .lifetime
         #expect(!viewModel.isSelectedCurrent)
-        #expect(viewModel.buyTitle == "$21.49 Buy now")
+        #expect(viewModel.buyTitle == "₹439 Buy now")
     }
 
     @Test("Subscriptions show their renewal terms and intro price")
@@ -42,7 +42,7 @@ struct PaywallViewModelTests {
         let (viewModel, _) = make()
         await viewModel.load()
         viewModel.selected = .weekly
-        #expect(viewModel.buyTitle == "Start for $0.99")
+        #expect(viewModel.buyTitle == "Start for ₹20")
         #expect(viewModel.terms.contains("Renews automatically"))
     }
 
@@ -92,6 +92,24 @@ struct PaywallViewModelTests {
         let (owned, access) = make(FakeStoreClient(isPro: true))
         #expect(await owned.restore())
         #expect(access.isPro)
+    }
+
+    @Test("Restore brings back a purchase made earlier, and names its plan")
+    func restoreBringsBackEarlierPurchase() async {
+        let (viewModel, access) = make(FakeStoreClient(restorable: [.yearly]))
+        await access.refresh()
+        #expect(!access.isPro)
+        #expect(await viewModel.restore())
+        #expect(access.currentPlan == .yearly)
+        #expect(viewModel.message == nil)
+    }
+
+    @Test("Closing the Apple Account sign-in during Restore shows nothing")
+    func restoreCancelled() async {
+        let (viewModel, access) = make(FakeStoreClient(restoreCancels: true))
+        #expect(await !viewModel.restore())
+        #expect(viewModel.message == nil)
+        #expect(!access.isPro)
     }
 
     @Test("A store failure shows a retryable error")

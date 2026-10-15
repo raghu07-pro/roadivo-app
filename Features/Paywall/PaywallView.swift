@@ -233,6 +233,7 @@ struct PaywallView: View {
                         }
                     }
                 }
+                .disabled(viewModel.isPurchasing)
                 .accessibilityIdentifier("paywall.restore")
             }
             .font(Typography.secondary)
