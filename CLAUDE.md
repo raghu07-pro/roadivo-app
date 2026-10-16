@@ -34,7 +34,8 @@ tabs: **Home · Favorites · Cast to Car · Settings**.
 - Video plays over AirPlay, parked only, in cars with CarPlay video. While
   driving, the car plays sound only.
 - The tab shows live CarPlay and AirPlay status (`CarConnection`). Until a car is connected it only
-  explains how to connect; Car Mode and AirPlay appear once connected (DECISIONS 98).
+  explains how to connect; Car Mode and AirPlay appear once connected (DECISIONS 98). Car Mode is
+  always one tap away from the player's car button (DECISIONS 102).
 - How to Connect (`Features/Shared/ConnectGuide*`, in Cast to Car and Settings › Media) gives the user's steps; its CarPlay steps show
   only once CarPlay is switched on (DECISIONS 101).
 - CarPlay needs Apple's entitlements; it is switched off until they are

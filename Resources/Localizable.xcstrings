@@ -2211,6 +2211,70 @@
         }
       }
     },
+    "Start a channel and tap the car button at the top of the player." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Starte einen Sender und tippe oben im Player auf die Auto-Taste."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Inicia un canal y toca el botón del coche en la parte superior del reproductor."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lancez une chaîne et touchez le bouton voiture en haut du lecteur."
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "कोई चैनल शुरू करें और प्लेयर के ऊपर कार बटन पर टैप करें।"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Avvia un canale e tocca il pulsante dell’auto in alto nel player."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "チャンネルを再生し、プレーヤー上部の車のボタンをタップします。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "채널을 재생하고 플레이어 상단의 차량 버튼을 탭하십시오."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Inicie um canal e toque no botão do carro no topo do player."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "开始播放频道，然后轻点播放器顶部的汽车按钮。"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "開始播放頻道，然後點一下播放器頂端的汽車按鈕。"
+          }
+        }
+      }
+    },
     "Start a channel in Roadivo." : {
       "localizations" : {
         "de" : {

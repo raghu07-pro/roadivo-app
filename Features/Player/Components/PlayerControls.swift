@@ -1,7 +1,7 @@
 import SwiftUI
 
-/// The controls drawn on the video: minimise, title, subtitles and audio, favourite and close along the
-/// top; rotation lock on the left; play/pause, times, scrubber and full screen along the bottom.
+/// The controls drawn on the video: minimise, title, Car Mode, favourite and close along the top;
+/// rotation lock on the left; play/pause, times, scrubber and full screen along the bottom.
 struct PlayerControls: View {
     let playback: PlaybackController
     let title: String
@@ -13,7 +13,8 @@ struct PlayerControls: View {
     let onClose: () -> Void
     let onRotationLock: () -> Void
     let onFullScreen: () -> Void
-    /// Opens Subtitles and Audio; the button shows only when the stream offers a choice.
+    /// Car Mode, reachable without a car connected (the Car tab shows it only once connected).
+    let onCarMode: () -> Void
     /// Any touch on a control keeps the controls up a little longer.
     let onInteraction: () -> Void
 
@@ -59,6 +60,7 @@ struct PlayerControls: View {
                 .lineLimit(1)
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .accessibilityAddTraits(.isHeader)
+            button("car.fill", label: "Car Mode", identifier: "player.carMode", action: onCarMode)
             Button {
                 onFavorite()
                 onInteraction()

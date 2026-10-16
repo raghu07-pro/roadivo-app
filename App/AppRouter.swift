@@ -27,6 +27,8 @@ final class AppRouter {
     private(set) var reviewRequests = 0
     /// The paywall over the tabs (Settings, the source limit, the Car tab).
     var paywall: PaywallReason?
+    /// The paywall over the full player (its Car Mode button, for free users).
+    var playerPaywall: PaywallReason?
     /// Bumped whenever the library changes, so every screen reloads.
     private(set) var libraryRevision = 0
 

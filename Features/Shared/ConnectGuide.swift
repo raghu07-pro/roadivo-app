@@ -60,6 +60,7 @@ struct ConnectGuide {
     private var carMode: Section {
         Section(id: "carmode", title: "Car Mode", systemImage: "iphone.landscape", steps: [
             "Mount your iPhone on the dashboard.",
+            "Start a channel and tap the car button at the top of the player.",
             "Once your iPhone is connected to the car, open Cast to Car and tap Start Car Mode."
         ])
     }

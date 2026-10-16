@@ -18,11 +18,11 @@ final class LibraryFlowUITests: XCTestCase {
             "player.close",
             "player.playPause",
             "player.rotationLock",
-            "player.fullScreen"
+            "player.fullScreen",
+            "player.carMode"
         ] {
             XCTAssertTrue(app.buttons[control].exists, control)
         }
-        XCTAssertFalse(app.buttons["player.carMode"].exists)
         XCTAssertTrue(app.buttons["upNext.Football Tonight"].exists)
         snapshot("13-Player", app: app)
         try auditIgnoringBottomEdge(app, for: [.dynamicType, .sufficientElementDescription, .hitRegion])

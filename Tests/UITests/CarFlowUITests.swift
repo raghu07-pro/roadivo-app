@@ -90,4 +90,50 @@ final class CarFlowUITests: XCTestCase {
         help.tap()
         XCTAssertTrue(connect.waitForExistence(timeout: 5))
     }
+
+    /// The player's car button opens Car Mode without a car connected (how App Review reaches it).
+    func testPlayerOpensCarModeForPro() {
+        let app = XCUIApplication.roadivo(skipOnboarding: true, demoLibrary: true, pro: true)
+        let channel = app.buttons["channel.Highway Stop"]
+        XCTAssertTrue(channel.waitForExistence(timeout: 10))
+        channel.tap()
+        let carMode = app.buttons["player.carMode"]
+        XCTAssertTrue(carMode.waitForExistence(timeout: 5))
+        revealPlayerControls(app)
+        carMode.tap()
+        XCTAssertTrue(app.buttons["carMode.exit"].waitForExistence(timeout: 5))
+    }
+
+    /// A free user sees the Car Mode plans over the player, and closing them leaves the video playing.
+    func testPlayerCarModeAsksFreeUsersForPro() {
+        let app = XCUIApplication.roadivo(skipOnboarding: true, demoLibrary: true)
+        let channel = app.buttons["channel.Highway Stop"]
+        XCTAssertTrue(channel.waitForExistence(timeout: 10))
+        channel.tap()
+        let carMode = app.buttons["player.carMode"]
+        XCTAssertTrue(carMode.waitForExistence(timeout: 5))
+        revealPlayerControls(app)
+        carMode.tap()
+        let close = app.buttons["paywall.close"]
+        XCTAssertTrue(close.waitForExistence(timeout: 5))
+        close.tap()
+        XCTAssertFalse(app.buttons["carMode.exit"].exists)
+        XCTAssertTrue(app.descendants(matching: .any)["player.video"].waitForExistence(timeout: 5))
+    }
+
+    /// Buying from the player's Car Mode button goes straight on into Car Mode.
+    func testBuyingFromThePlayerOpensCarMode() {
+        let app = XCUIApplication.roadivo(skipOnboarding: true, demoLibrary: true)
+        let channel = app.buttons["channel.Highway Stop"]
+        XCTAssertTrue(channel.waitForExistence(timeout: 10))
+        channel.tap()
+        let carMode = app.buttons["player.carMode"]
+        XCTAssertTrue(carMode.waitForExistence(timeout: 5))
+        revealPlayerControls(app)
+        carMode.tap()
+        let buy = app.buttons["paywall.buy"]
+        XCTAssertTrue(buy.waitForExistence(timeout: 5))
+        buy.tap()
+        XCTAssertTrue(app.buttons["carMode.exit"].waitForExistence(timeout: 10))
+    }
 }

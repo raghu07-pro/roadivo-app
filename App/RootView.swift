@@ -70,6 +70,8 @@ private struct MainTabView: View {
     @State private var updatePrompt: UpdatePromptModel
     /// Set by a purchase or restore, so Home opens once the paywall has closed.
     @State private var goesHomeAfterPaywall = false
+    /// Set by a purchase from the player's Car Mode button, so Car Mode opens once the paywall closes.
+    @State private var startsCarModeAfterPaywall = false
     /// The mini player's measured height, which every screen keeps clear.
     @State private var miniPlayerHeight: CGFloat = 0
 
@@ -239,8 +241,20 @@ private struct MainTabView: View {
                         router.playerSurface = nil
                         playback.stop()
                     },
-                    onFavoriteChanged: router.libraryDidChange
+                    onFavoriteChanged: router.libraryDidChange,
+                    onCarMode: startCarModeFromPlayer
                 )
+                // Over the player, so a free user stays where they were; buying goes on into Car Mode.
+                .sheet(item: $router.playerPaywall, onDismiss: carModeAfterPlayerPaywall) { reason in
+                    PaywallView(
+                        viewModel: PaywallViewModel(access: environment.proAccess, reason: reason),
+                        onClose: { router.playerPaywall = nil },
+                        onUnlocked: {
+                            startsCarModeAfterPaywall = true
+                            router.playerPaywall = nil
+                        }
+                    )
+                }
             case .carMode:
                 CarModeView(playback: playback) { router.playerSurface = .player }
             }
@@ -270,6 +284,21 @@ private struct MainTabView: View {
             // Next and previous (and the steering wheel) step through the item's own group.
             playback.play(item, queue: item.isLocalFile ? localVideos.items : library.queue(for: item))
         }
+        router.playerSurface = .carMode
+    }
+
+    /// The player's Car Mode button: Pro goes straight in, a free user sees the plans first.
+    private func startCarModeFromPlayer() {
+        if isPro {
+            router.playerSurface = .carMode
+        } else {
+            router.playerPaywall = .carMode
+        }
+    }
+
+    private func carModeAfterPlayerPaywall() {
+        guard startsCarModeAfterPaywall else { return }
+        startsCarModeAfterPaywall = false
         router.playerSurface = .carMode
     }
 

@@ -52,9 +52,7 @@ final class ScreenshotUITests: XCTestCase {
         app.buttons["channel.Steel Horizon · 1080p"].tap()
         XCTAssertTrue(app.buttons["player.minimize"].waitForExistence(timeout: 5))
         snapshot("13-Player", app: app)
-        revealPlayerControls(app)
-        app.buttons["player.minimize"].tap()
-        XCTAssertTrue(app.buttons["miniPlayer.expand"].waitForExistence(timeout: 5))
+        minimizePlayer(app)
         snapshot("14-MiniPlayer", app: app)
 
         app.tabBars.buttons["Favorites"].tap()

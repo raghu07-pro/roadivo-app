@@ -70,6 +70,19 @@ extension XCTestCase {
         XCTAssertTrue(app.buttons["player.minimize"].waitForExistence(timeout: 3))
     }
 
+    /// Minimises the full player and waits until it has really gone. A tap that lands just as the
+    /// controls hide only toggles them, so it tries once more; a player that won't close fails.
+    func minimizePlayer(_ app: XCUIApplication) {
+        let video = app.descendants(matching: .any)["player.video"]
+        for _ in 0..<2 where video.exists {
+            revealPlayerControls(app)
+            app.buttons["player.minimize"].tap()
+            _ = video.waitForNonExistence(timeout: 5)
+        }
+        XCTAssertFalse(video.exists, "The player didn't close")
+        XCTAssertTrue(app.buttons["miniPlayer.expand"].waitForExistence(timeout: 5))
+    }
+
     /// Attaches a named screenshot (and, under fastlane, is where `snapshot()` hooks in). It waits
     /// for the screen to settle first, so a push or sheet is never caught halfway (up to ~3 s).
     func snapshot(_ name: String, app: XCUIApplication) {
