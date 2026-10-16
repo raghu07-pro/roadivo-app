@@ -31,12 +31,22 @@ final class SourceDetailViewModel {
     var errorMessage: String?
 
     private let repository: LibraryRepository
+    private let checker: StreamChecker
 
-    init(source: SourceSummary, repository: LibraryRepository) {
+    init(source: SourceSummary, repository: LibraryRepository, checker: StreamChecker = .live) {
         sourceID = source.id
         kind = source.kind
         name = source.name
         self.repository = repository
+        self.checker = checker
+    }
+
+    /// Source Health for this source.
+    func health() -> SourceHealthViewModel {
+        let summary = SourceSummary(
+            id: sourceID, name: name, kind: kind, itemCount: items.count, host: nil, refreshedAt: nil
+        )
+        return SourceHealthViewModel(source: summary, repository: repository, checker: checker)
     }
 
     var canRefresh: Bool {

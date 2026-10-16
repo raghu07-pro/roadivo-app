@@ -13,6 +13,8 @@ struct SourcesView: View {
     @State private var newName = ""
     /// The source waiting for the user to confirm its deletion.
     @State private var deleting: SourceSummary?
+    /// The source whose Source Health is open (from the row's menu).
+    @State private var checking: SourceSummary?
 
     var body: some View {
         @Bindable var viewModel = viewModel
@@ -47,6 +49,9 @@ struct SourcesView: View {
         .clearsBottomAccessory()
         .navigationTitle("Manage Sources")
         .navigationBarTitleDisplayMode(.inline)
+        .navigationDestination(item: $checking) { source in
+            SourceHealthView(viewModel: viewModel.health(for: source), onPlay: onPlay)
+        }
         .navigationDestination(for: SourceSummary.self) { source in
             SourceDetailView(
                 viewModel: viewModel.detail(for: source),
@@ -150,6 +155,11 @@ struct SourcesView: View {
             } label: {
                 Label("Refresh", systemImage: "arrow.clockwise")
             }
+        }
+        Button {
+            checking = source
+        } label: {
+            Label("Source Health", systemImage: "stethoscope")
         }
         Button {
             newName = source.name

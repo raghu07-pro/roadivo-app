@@ -23,6 +23,7 @@ struct SourceRow: View {
                 TimelineView(.everyMinute) { _ in
                     Text(detail).font(Typography.caption).foregroundStyle(.secondary)
                 }
+                health
             }
             Spacer(minLength: 0)
             if isRefreshing {
@@ -31,6 +32,22 @@ struct SourceRow: View {
         }
         .padding(.vertical, Spacing.xxs)
         .accessibilityElement(children: .combine)
+    }
+
+    /// Source Health at a glance: a failed refresh, else the last stream check.
+    @ViewBuilder private var health: some View {
+        if source.refreshFailed {
+            Label("Last refresh failed", systemImage: "exclamationmark.triangle.fill")
+                .font(Typography.caption)
+                .foregroundStyle(.red)
+        } else if let answered = source.streamsAnswered, let checked = source.streamsChecked, checked > 0 {
+            Label(
+                String(appLocalized: "\(answered) of \(checked) streams working"),
+                systemImage: answered == checked ? "checkmark.seal.fill" : "exclamationmark.triangle.fill"
+            )
+            .font(Typography.caption)
+            .foregroundStyle(answered == checked ? Color.secondary : Color.orange)
+        }
     }
 
     /// "2013 channels · Refreshed 5 minutes ago".

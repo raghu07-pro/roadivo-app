@@ -9,22 +9,28 @@ final class SourcesViewModel {
     var errorMessage: String?
 
     private let repository: LibraryRepository
+    private let checker: StreamChecker
 
-    init(repository: LibraryRepository) {
+    init(repository: LibraryRepository, checker: StreamChecker = .live) {
         self.repository = repository
+        self.checker = checker
     }
 
     func load() {
         do {
             sources = try repository.playlists().map {
-                try SourceSummary(
+                let check = $0.streamCheck
+                return try SourceSummary(
                     id: $0.id,
                     name: $0.name,
                     kind: $0.kind,
                     itemCount: repository.channelCount(in: $0.id),
                     host: $0.sourceHost,
                     refreshedAt: $0.refreshedAt,
-                    server: $0.kind == .mediaServer ? repository.serverKind(of: $0.id) : nil
+                    server: $0.kind == .mediaServer ? repository.serverKind(of: $0.id) : nil,
+                    refreshFailed: $0.lastRefreshError != nil,
+                    streamsAnswered: check?.answered,
+                    streamsChecked: check?.checked
                 )
             }
         } catch {
@@ -34,7 +40,12 @@ final class SourcesViewModel {
 
     /// The screen for one source's channels.
     func detail(for source: SourceSummary) -> SourceDetailViewModel {
-        SourceDetailViewModel(source: source, repository: repository)
+        SourceDetailViewModel(source: source, repository: repository, checker: checker)
+    }
+
+    /// Source Health for one source.
+    func health(for source: SourceSummary) -> SourceHealthViewModel {
+        SourceHealthViewModel(source: source, repository: repository, checker: checker)
     }
 
     /// Returns true when the library changed.

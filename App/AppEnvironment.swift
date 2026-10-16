@@ -19,6 +19,8 @@ final class AppEnvironment {
     /// The App Store's newest version, for "New Version Available"; nil in UI tests.
     let updateChecker: AppUpdateChecking?
     let carConnection = CarConnection()
+    /// Source Health's stream check; scripted in UI tests, so they never open real streams.
+    let streamChecker: StreamChecker
 
     /// The running app's environment, for the CarPlay scene: it is created by
     /// the system, not by SwiftUI, so it can't be handed one.
@@ -34,9 +36,11 @@ final class AppEnvironment {
         preferences: Preferences,
         speech: SpeechTranscribing = SpeechTranscriber(),
         plex: PlexLinking = ScriptedPlexLinking(),
-        updateChecker: AppUpdateChecking? = nil
+        updateChecker: AppUpdateChecking? = nil,
+        streamChecker: StreamChecker = .live
     ) {
         self.apiClient = apiClient
+        self.streamChecker = streamChecker
         self.speech = speech
         self.plex = plex
         self.updateChecker = updateChecker
@@ -113,7 +117,8 @@ final class AppEnvironment {
             updateChecker: isUITesting ? nil : AppStoreUpdateChecker(
                 bundleID: Bundle.main.bundleIdentifier ?? "",
                 country: Locale.current.region?.identifier ?? "US"
-            )
+            ),
+            streamChecker: isUITesting ? StreamChecker(probe: ScriptedStreamProbe()) : .live
         )
         environment.router.asksForReviews = !isUITesting
         environment.proAccess.start()

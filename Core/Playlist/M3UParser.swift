@@ -3,10 +3,33 @@ import Foundation
 /// Parses extended M3U / M3U8 IPTV playlists, tolerating a BOM, CRLF, a missing header, unquoted
 /// attributes, relative URLs and stray directives; anything unresolvable is skipped, not fatal.
 enum M3UParser {
+    /// Entries the parser couldn't use, for Source Health.
+    struct Issues: Codable, Equatable, Sendable {
+        /// An `#EXTINF` with no link after it.
+        var withoutLink = 0
+        /// A link Roadivo can't play (udp, file, or not a link at all).
+        var unsupportedLink = 0
+
+        var total: Int {
+            withoutLink + unsupportedLink
+        }
+    }
+
+    struct Report: Sendable {
+        let entries: [PlaylistEntry]
+        let issues: Issues
+    }
+
     /// Entries in playlist order. Relative URLs resolve against `baseURL` only once the text proves
     /// it's an extended M3U, so words on a login page don't become bogus channels.
     static func parse(_ text: String, baseURL: URL? = nil) -> [PlaylistEntry] {
+        report(text, baseURL: baseURL).entries
+    }
+
+    /// The entries, and how many the playlist listed that couldn't be used.
+    static func report(_ text: String, baseURL: URL? = nil) -> Report {
         var entries: [PlaylistEntry] = []
+        var issues = Issues()
         var pending: ExtInf?
         var pendingGroup: String?
         var relativeBase: URL?
@@ -18,6 +41,9 @@ enum M3UParser {
             if line.hasPrefix("#") {
                 let directive = line.uppercased()
                 if directive.hasPrefix("#EXTINF:") {
+                    if pending != nil {
+                        issues.withoutLink += 1
+                    }
                     pending = ExtInf(line: String(line.dropFirst("#EXTINF:".count)))
                     relativeBase = baseURL
                 } else if directive.hasPrefix("#EXTGRP:") {
@@ -29,6 +55,10 @@ enum M3UParser {
             }
 
             guard let streamURL = resolve(line, against: relativeBase) else {
+                // Stray text is ignored; a listed channel whose link can't play is reported.
+                if pending != nil {
+                    issues.unsupportedLink += 1
+                }
                 pending = nil
                 pendingGroup = nil
                 continue
@@ -43,7 +73,10 @@ enum M3UParser {
             pending = nil
             pendingGroup = nil
         }
-        return entries
+        if pending != nil {
+            issues.withoutLink += 1
+        }
+        return Report(entries: entries, issues: issues)
     }
 
     /// True when `text` is an HLS media or master playlist (a single stream),

@@ -9,6 +9,10 @@ struct SourceSummary: Identifiable, Hashable {
     let refreshedAt: Date?
     /// The server a media-server source signed in to.
     var server: MediaServerKind?
+    /// Source Health at a glance: whether the last refresh failed, and the last stream check.
+    var refreshFailed = false
+    var streamsAnswered: Int?
+    var streamsChecked: Int?
 
     /// A link or a media server, which can be downloaded again.
     var isRefreshable: Bool {

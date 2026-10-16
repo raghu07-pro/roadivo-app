@@ -22,6 +22,14 @@ final class Playlist {
     /// The source's host, safe to display. The full link often carries the
     /// provider's username and password, so it lives in the Keychain instead.
     var sourceHost: String?
+    /// When a refresh was last tried, and why it failed (nil once one works). For Source Health.
+    var lastRefreshAttemptAt: Date?
+    var lastRefreshError: String?
+    /// Entries the last download listed but couldn't use (`M3UParser.Issues`).
+    var skippedWithoutLink: Int?
+    var skippedUnsupportedLink: Int?
+    /// The last stream check (`StreamCheckReport`, as JSON).
+    var streamCheckData: Data?
     @Relationship(deleteRule: .cascade, inverse: \Channel.playlist) var channels: [Channel] = []
 
     var kind: PlaylistKind {

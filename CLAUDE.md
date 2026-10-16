@@ -117,6 +117,7 @@ DECISIONS 33, 37 and 53–57.
 - **Deleting "On this iPhone"** also deletes the copied video files.
 - **Media servers:** Jellyfin, Emby and Xtream sign in with an address and login; Plex with a code at plex.tv/link (`PlexClient`, `PlexLoginViewModel`, DECISIONS 72).
 - **Browsing:** group chips (one group at a time, no "All") in the player, on a group's screen and on a source's screen (Manage Sources › a source: Refresh, Rename, Copy Link, Delete). Home's one button is + until a source exists, then the source menu (DECISIONS 95–96).
+- **Source Health:** Manage Sources › a source › More › Source Health (`SourceHealthViewModel`, `StreamChecker` in `Core/Health`): refresh outcome, unreadable entries, and a user-started stream check, two streams at a time; media servers check the server only (DECISIONS 103). UI tests use `ScriptedStreamProbe`.
 - **Server artwork:** media-server films are 2:3 posters with their year; episodes are 16:9 stills (`ArtworkStyle`, DECISIONS 97).
 - **Voice search:** the mic in Home's search bar (`SearchField`, `VoiceSearchModel`, `Core/Speech`) fills the search as you speak; on-device when the language allows (DECISIONS 68–69).
 

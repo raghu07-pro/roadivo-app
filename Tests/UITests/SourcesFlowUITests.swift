@@ -94,4 +94,45 @@ final class SourcesFlowUITests: XCTestCase {
         XCTAssertTrue(row.waitForExistence(timeout: 5))
         XCTAssertFalse(sports.exists)
     }
+
+    /// Source Health, from a source's More menu: the stream check counts working and failing streams
+    /// (the scripted check fails the 6 "_variant" demo streams), lists them, and the row shows it.
+    func testSourceHealthChecksStreams() throws {
+        let app = XCUIApplication.roadivo(skipOnboarding: true, demoLibrary: true)
+        XCTAssertTrue(app.buttons["channel.Football Tonight"].waitForExistence(timeout: 10))
+        app.tabBars.buttons["Settings"].tap()
+        app.buttons["settings.sources"].tap()
+        let row = app.descendants(matching: .any)["source.Road Trip"]
+        XCTAssertTrue(row.waitForExistence(timeout: 5))
+        row.tap()
+        app.buttons["source.more"].tap()
+        let healthItem = app.buttons["source.health"]
+        XCTAssertTrue(healthItem.waitForExistence(timeout: 5))
+        healthItem.tap()
+
+        XCTAssertTrue(app.descendants(matching: .any)["health.status"].waitForExistence(timeout: 5))
+        let check = app.buttons["health.check"]
+        XCTAssertTrue(check.waitForExistence(timeout: 5))
+        check.tap()
+        XCTAssertTrue(app.buttons["health.stop"].waitForNonExistence(timeout: 20))
+        XCTAssertTrue(check.waitForExistence(timeout: 5))
+
+        let failed = app.descendants(matching: .any)["health.failed"]
+        let working = app.descendants(matching: .any)["health.working"]
+        XCTAssertTrue(failed.waitForExistence(timeout: 5))
+        XCTAssertTrue("\(failed.label) \(failed.value ?? "")".contains("6"), failed.label)
+        XCTAssertTrue("\(working.label) \(working.value ?? "")".contains("7"), working.label)
+        snapshot("20c-SourceHealth", app: app)
+        // The "Streams" header ends 2 pt above the ignored band; scrolled up, it passes (2026-10-16).
+        try auditIgnoringBottomEdge(
+            app,
+            for: [.dynamicType, .sufficientElementDescription, .hitRegion],
+            alsoIgnoring: ["Streams"]
+        )
+
+        app.navigationBars.buttons.element(boundBy: 0).tap()
+        app.navigationBars.buttons.element(boundBy: 0).tap()
+        XCTAssertTrue(row.waitForExistence(timeout: 5))
+        XCTAssertTrue(row.label.contains("7 of 13"), row.label)
+    }
 }

@@ -82,7 +82,7 @@ private struct MainTabView: View {
         _favorites = State(initialValue: LibraryViewModel(repository: repository, scope: .favorites))
         _localVideos = State(initialValue: LocalVideosViewModel(repository: repository))
         _carHub = State(initialValue: CarHubViewModel(repository: repository))
-        _sources = State(initialValue: SourcesViewModel(repository: repository))
+        _sources = State(initialValue: SourcesViewModel(repository: repository, checker: environment.streamChecker))
         _voiceSearch = State(initialValue: VoiceSearchModel(speech: environment.speech, playback: environment.playback))
         _updatePrompt = State(initialValue: UpdatePromptModel(checker: environment.updateChecker))
     }

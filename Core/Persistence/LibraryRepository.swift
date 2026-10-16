@@ -7,11 +7,11 @@ import SwiftData
 final class LibraryRepository {
     private let store: SwiftDataStore
     private let writer: LibraryWriter
-    private let secureStore: SecureStore
+    let secureStore: SecureStore
     private let fetcher: PlaylistFetching
     private let mediaServers: MediaServerConnecting
     private let fileManager: FileManager
-    private let logger = Logger(subsystem: "com.roadivo", category: "Library")
+    let logger = Logger(subsystem: "com.roadivo", category: "Library")
 
     init(
         store: SwiftDataStore,
@@ -28,7 +28,8 @@ final class LibraryRepository {
         writer = LibraryWriter(modelContainer: store.container)
     }
 
-    private var context: ModelContext {
+    /// Internal, with `playlist(_:)` and `sourceKey(_:)`, for the extensions in other files.
+    var context: ModelContext {
         store.mainContext
     }
 
@@ -148,16 +149,25 @@ final class LibraryRepository {
         }
         let text = try await fetcher.fetchText(from: url)
         guard !M3UParser.looksLikeWebPage(text) else { throw LibraryError.webPage }
-        let entries = switch await LibraryWork.parse(text, baseURL: url) {
+        let report = switch await LibraryWork.parse(text, baseURL: url) {
         case .singleStream:
-            [PlaylistEntry(name: displayName(name, fallback: url), group: "", logoURL: nil, streamURL: url)]
-        case let .entries(entries):
-            entries
+            M3UParser.Report(
+                entries: [PlaylistEntry(
+                    name: displayName(name, fallback: url),
+                    group: "",
+                    logoURL: nil,
+                    streamURL: url
+                )],
+                issues: M3UParser.Issues()
+            )
+        case let .entries(report):
+            report
         }
-        guard !entries.isEmpty else { throw LibraryError.emptyPlaylist }
+        guard !report.entries.isEmpty else { throw LibraryError.emptyPlaylist }
 
         let playlist = Playlist(name: displayName(name, fallback: url), kind: .remote, sourceHost: url.host())
-        return try await insert(playlist, secret: url.absoluteString, entries: entries)
+        playlist.record(report.issues)
+        return try await insert(playlist, secret: url.absoluteString, entries: report.entries)
     }
 
     /// Builds an Xtream Codes M3U link and adds it like any other link.
@@ -209,13 +219,27 @@ final class LibraryRepository {
     /// Adds a playlist from M3U text (an imported .m3u file or pasted content).
     @discardableResult
     func addFilePlaylist(name: String, text: String) async throws -> UUID {
-        let entries = await Task.detached(priority: .userInitiated) { M3UParser.parse(text) }.value
-        guard !entries.isEmpty else { throw LibraryError.emptyPlaylist }
-        return try await insert(Playlist(name: name, kind: .file), secret: nil, entries: entries)
+        let report = await Task.detached(priority: .userInitiated) { M3UParser.report(text) }.value
+        guard !report.entries.isEmpty else { throw LibraryError.emptyPlaylist }
+        let playlist = Playlist(name: name, kind: .file)
+        playlist.record(report.issues)
+        return try await insert(playlist, secret: nil, entries: report.entries)
     }
 
-    /// Re-downloads a remote playlist, keeping favourites for streams still present.
+    /// Re-downloads a remote playlist, keeping favourites for streams still present. The outcome is
+    /// kept for Source Health.
     func refresh(_ playlistID: UUID) async throws {
+        do {
+            let issues = try await downloadAgain(playlistID)
+            recordRefresh(of: playlistID, issues: issues, error: nil)
+        } catch {
+            recordRefresh(of: playlistID, issues: nil, error: error)
+            throw error
+        }
+    }
+
+    /// Replaces the source's channels; returns the playlist's unusable entries (none for a server).
+    private func downloadAgain(_ playlistID: UUID) async throws -> M3UParser.Issues? {
         let kind = try playlist(playlistID).kind
         // Secrets are kept "this device only", so a restored iPhone has the source but not its link.
         guard let stored = try secureStore.string(for: sourceKey(playlistID)) else { throw SourceSecretError.missing }
@@ -227,23 +251,27 @@ final class LibraryRepository {
             let entries = try await mediaServers.library(for: account)
             guard !entries.isEmpty else { throw MediaServerError.emptyLibrary }
             try await writer.replaceChannels(of: playlistID, with: entries)
-            return
+            return nil
         }
         guard let url = URL(string: stored) else { throw SourceSecretError.missing }
         let text = try await fetcher.fetchText(from: url)
         // A sign-in page in place of the playlist must never replace the
         // channels: favourites are matched by stream URL and would be lost.
         guard !M3UParser.looksLikeWebPage(text) else { throw LibraryError.webPage }
-        let entries = switch await LibraryWork.parse(text, baseURL: url) {
+        let report = switch await LibraryWork.parse(text, baseURL: url) {
         case .singleStream:
-            try items(in: playlistID).prefix(1).map {
-                PlaylistEntry(name: $0.title, group: $0.group, logoURL: $0.artworkURL, streamURL: $0.streamURL)
-            }
-        case let .entries(entries):
-            entries
+            try M3UParser.Report(
+                entries: items(in: playlistID).prefix(1).map {
+                    PlaylistEntry(name: $0.title, group: $0.group, logoURL: $0.artworkURL, streamURL: $0.streamURL)
+                },
+                issues: M3UParser.Issues()
+            )
+        case let .entries(report):
+            report
         }
-        guard !entries.isEmpty else { throw LibraryError.emptyPlaylist }
-        try await writer.replaceChannels(of: playlistID, with: entries)
+        guard !report.entries.isEmpty else { throw LibraryError.emptyPlaylist }
+        try await writer.replaceChannels(of: playlistID, with: report.entries)
+        return report.issues
     }
 
     func rename(_ playlistID: UUID, to name: String) throws {
@@ -313,7 +341,7 @@ final class LibraryRepository {
         return channel
     }
 
-    private func playlist(_ id: UUID) throws -> Playlist {
+    func playlist(_ id: UUID) throws -> Playlist {
         var descriptor = FetchDescriptor<Playlist>(predicate: #Predicate { $0.id == id })
         descriptor.fetchLimit = 1
         guard let playlist = try context.fetch(descriptor).first else { throw LibraryError.notFound }
@@ -341,7 +369,7 @@ final class LibraryRepository {
         return trimmed.isEmpty ? (url.host() ?? M3UParser.fallbackName(for: url)) : trimmed
     }
 
-    private func sourceKey(_ id: UUID) -> String {
+    func sourceKey(_ id: UUID) -> String {
         "playlist.source.\(id.uuidString)"
     }
 }
@@ -398,7 +426,7 @@ private enum LibraryWork {
     enum ParsedText {
         /// One HLS stream (its own link is the only item).
         case singleStream
-        case entries([PlaylistEntry])
+        case entries(M3UParser.Report)
     }
 
     /// A video file copied into the app's videos folder.
@@ -411,7 +439,7 @@ private enum LibraryWork {
     /// seconds, which would freeze the UI on the main actor.
     static func parse(_ text: String, baseURL: URL) async -> ParsedText {
         await Task.detached(priority: .userInitiated) {
-            M3UParser.isHLSStream(text) ? .singleStream : .entries(M3UParser.parse(text, baseURL: baseURL))
+            M3UParser.isHLSStream(text) ? .singleStream : .entries(M3UParser.report(text, baseURL: baseURL))
         }.value
     }
 

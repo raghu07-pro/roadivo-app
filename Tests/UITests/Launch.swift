@@ -54,12 +54,18 @@ extension XCTestCase {
 
     /// Runs `types`, ignoring only Dynamic Type findings on text within 180 pt of the tab bar or screen
     /// bottom: the audit enlarges text in place, and what slides out of view reads as "partially unsupported".
-    func auditIgnoringBottomEdge(_ app: XCUIApplication, for types: XCUIAccessibilityAuditType) throws {
+    /// `alsoIgnoring`: labels of specific elements with the same false positive just above that band,
+    /// each named with its reason at the call site.
+    func auditIgnoringBottomEdge(
+        _ app: XCUIApplication,
+        for types: XCUIAccessibilityAuditType,
+        alsoIgnoring labels: Set<String> = []
+    ) throws {
         let tabBar = app.tabBars.firstMatch
         let edge = tabBar.exists ? tabBar.frame.minY : app.windows.firstMatch.frame.maxY
         try app.performAccessibilityAudit(for: types) { issue in
             guard issue.auditType == .dynamicType, let element = issue.element else { return false }
-            return element.frame.maxY > edge - 180
+            return element.frame.maxY > edge - 180 || labels.contains(element.label)
         }
     }
 

@@ -16,6 +16,7 @@ struct SourceDetailView: View {
     @State private var newName = ""
     @State private var isConfirmingDelete = false
     @State private var showsCopied = false
+    @State private var showsHealth = false
 
     var body: some View {
         @Bindable var viewModel = viewModel
@@ -64,6 +65,9 @@ struct SourceDetailView: View {
         .navigationTitle(viewModel.name)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar { toolbar }
+        .navigationDestination(isPresented: $showsHealth) {
+            SourceHealthView(viewModel: viewModel.health(), onPlay: onPlay)
+        }
         .alert("Rename Source", isPresented: $isRenaming) {
             TextField("Name", text: $newName)
             Button("Save") {
@@ -138,6 +142,12 @@ struct SourceDetailView: View {
                 } label: {
                     Label("Rename", systemImage: "pencil")
                 }
+                Button {
+                    showsHealth = true
+                } label: {
+                    Label("Source Health", systemImage: "stethoscope")
+                }
+                .accessibilityIdentifier("source.health")
                 if viewModel.canCopyLink {
                     Button(action: copyLink) {
                         Label("Copy Link", systemImage: "doc.on.doc")
