@@ -38,6 +38,11 @@ final class PlaybackController {
         current != nil && duration == nil
     }
 
+    /// Waiting for the seek to a saved place, and set to play once it lands.
+    var isOpeningAtSavedPlace: Bool {
+        isOpening && !staysPaused
+    }
+
     var hasNext: Bool {
         index.map { $0 + 1 < queue.count } ?? false
     }
@@ -48,6 +53,8 @@ final class PlaybackController {
 
     /// Called whenever a new item starts, so the library can record history.
     var onItemStarted: ((MediaItem) -> Void)?
+    /// Where each video's place is read and kept, so the next play picks up there.
+    @ObservationIgnored var progressStore: PlaybackProgressStoring?
 
     @ObservationIgnored private var playerObservation: NSKeyValueObservation?
     @ObservationIgnored private var externalObservation: NSKeyValueObservation?
@@ -60,6 +67,16 @@ final class PlaybackController {
     @ObservationIgnored private var commandsInstalled = false
     /// Paused on purpose (the user, or the car unplugged), so the end of a call doesn't restart it.
     @ObservationIgnored private var staysPaused = false
+    /// The saved place the item opens at, until it can seek there.
+    @ObservationIgnored private var startPoint: Double?
+    /// Opening at a saved place: the clock holds there and playback waits for the seek, so the
+    /// opening seconds neither flash nor download.
+    @ObservationIgnored private var isOpening = false
+    @ObservationIgnored private var lastSavedPosition: Double = 0
+    /// Off once the playing video is taken out of Continue Watching, so its place isn't kept again.
+    @ObservationIgnored private var keepsProgress = true
+    /// How often the place is kept while playing.
+    private static let saveInterval: Double = 10
     @ObservationIgnored let logger = Logger(subsystem: "com.roadivo", category: "Playback")
 
     private var index: Int? {
@@ -79,27 +96,43 @@ final class PlaybackController {
 
     // MARK: Intents
 
-    /// Plays `item`; `queue` is what next/previous step through (usually the item's group).
-    func play(_ item: MediaItem, queue: [MediaItem]) {
+    /// Plays `item` from its saved place, or from the beginning when `startingOver`; `queue` is what
+    /// next/previous step through (usually the item's group).
+    func play(_ item: MediaItem, queue: [MediaItem], startingOver: Bool = false) {
+        saveProgress() // The item being left keeps its place.
         activateAudioSession()
         installRemoteCommands()
         staysPaused = false
-        self.queue = queue.contains(item) ? queue : [item]
+        // By id: the queue's snapshots may carry older progress than `item`.
+        self.queue = queue.contains { $0.id == item.id } ? queue : [item]
         current = item
         duration = nil
-        elapsed = 0
+        keepsProgress = true
+        startPoint = startingOver ? nil : progressStore?.resumePosition(for: item.id)
+        isOpening = startPoint != nil
+        elapsed = startPoint ?? 0
+        lastSavedPosition = elapsed
         status = .loading
         let playerItem = AVPlayerItem(url: item.streamURL)
         observeItem(playerItem)
+        if isOpening {
+            player.pause() // The rate carries over to the new item; play starts once the seek lands.
+        }
         player.replaceCurrentItem(with: playerItem)
-        player.play()
+        if !isOpening {
+            player.play()
+        }
+        watchForStall()
         updateNowPlaying()
         onItemStarted?(item)
     }
 
     func togglePlayPause() {
         guard current != nil else { return }
-        if player.timeControlStatus == .paused {
+        if case .failed = status {
+            resume() // Retries the stream, as the steering wheel's play button does.
+        } else if isOpening ? staysPaused : player.timeControlStatus == .paused {
+            // While opening at a saved place the player waits paused, but it's on its way to playing.
             resume()
         } else {
             pause()
@@ -112,6 +145,9 @@ final class PlaybackController {
         staysPaused = false
         if case .failed = status {
             play(current, queue: queue)
+        } else if isOpening {
+            status = .loading // It plays once the seek to the saved place lands.
+            watchForStall()
         } else {
             activateAudioSession()
             // At the very end, Play starts the video again instead of doing nothing.
@@ -125,6 +161,9 @@ final class PlaybackController {
     func pause() {
         staysPaused = true
         player.pause()
+        if isOpening {
+            status = .paused // The player was already waiting, so no status change will report it.
+        }
     }
 
     func next() {
@@ -166,10 +205,13 @@ final class PlaybackController {
     }
 
     func stop() {
+        saveProgress()
         player.pause()
         player.replaceCurrentItem(with: nil)
         stallWatch?.cancel()
         itemObservers = []
+        startPoint = nil
+        isOpening = false
         current = nil
         queue = []
         status = .idle
@@ -196,9 +238,9 @@ final class PlaybackController {
         timeObserver = player.addPeriodicTimeObserver(
             forInterval: CMTime(seconds: 0.5, preferredTimescale: 600),
             queue: .main
-        ) { [weak self] time in
+        ) { [weak self] _ in
             MainActor.assumeIsolated {
-                self?.elapsed = time.seconds.isFinite ? time.seconds : 0
+                self?.tick()
             }
         }
     }
@@ -227,6 +269,7 @@ final class PlaybackController {
         ]
         itemObservation = item.observe(\.status, options: [.new]) { @Sendable [weak self] item, _ in
             let failed = item.status == .failed
+            let ready = item.status == .readyToPlay
             let message = item.error?.localizedDescription
             let seconds = item.duration.seconds
             let itemID = ObjectIdentifier(item)
@@ -241,6 +284,9 @@ final class PlaybackController {
                     duration = seconds
                     updateNowPlaying()
                 }
+                if ready {
+                    openAtStartPoint()
+                }
             }
         }
     }
@@ -253,8 +299,12 @@ final class PlaybackController {
         switch value {
         case .playing: status = .playing
         case .waitingToPlayAtSpecifiedRate: status = .loading
-        case .paused: status = .paused
+        // Waiting for the seek to a saved place is still loading.
+        case .paused: status = isOpening && !staysPaused ? .loading : .paused
         @unknown default: break
+        }
+        if value == .paused {
+            saveProgress()
         }
         watchForStall()
         updateNowPlaying()
@@ -262,6 +312,10 @@ final class PlaybackController {
 
     private func fail() {
         guard current != nil else { return }
+        saveProgress() // Where it got to before the signal dropped, for Try Again.
+        // No longer opening: Try Again reads the saved place afresh, and Play/Pause reaches it.
+        isOpening = false
+        startPoint = nil
         stallWatch?.cancel()
         status = .failed(String(appLocalized: "This stream can't be played right now."))
         updateNowPlaying()
@@ -280,13 +334,85 @@ final class PlaybackController {
     }
 
     private func reachedEnd() {
+        if let duration {
+            elapsed = duration
+        }
+        saveProgress() // Watched to the end, so it leaves Continue Watching.
         if hasNext {
             next()
         }
     }
+}
 
-    // MARK: System integration
+// MARK: - Saved places
 
+extension PlaybackController {
+    private func tick() {
+        guard !isOpening else { return } // Holds at the saved place until the seek lands.
+        // Read now, not from the callback: one queued before a switch would carry the last video's time.
+        let seconds = player.currentTime().seconds
+        elapsed = seconds.isFinite ? seconds : 0
+        if status == .playing, abs(elapsed - lastSavedPosition) >= Self.saveInterval {
+            saveProgress()
+        }
+    }
+
+    /// Seeks to the saved place once the item is ready, then plays. A place past the end (the file
+    /// changed) plays from the start; a length not known yet doesn't stop the seek.
+    private func openAtStartPoint() {
+        guard isOpening, let item = player.currentItem else { return }
+        let itemID = ObjectIdentifier(item)
+        guard let start = startPoint, duration.map({ start < $0 }) ?? true else {
+            opened(itemID)
+            return
+        }
+        startPoint = nil
+        // A little early rather than late, so nothing is missed, and quicker than an exact frame.
+        player.seek(
+            to: CMTime(seconds: start, preferredTimescale: 600),
+            toleranceBefore: CMTime(seconds: 2, preferredTimescale: 600),
+            toleranceAfter: .zero
+        ) { @Sendable [weak self] _ in
+            Task { @MainActor [weak self] in self?.opened(itemID) }
+        }
+    }
+
+    /// The seek landed (or was overtaken by the user's own): play, unless paused or a call began
+    /// meanwhile (the call's end resumes it).
+    private func opened(_ itemID: ObjectIdentifier) {
+        guard isOpening, let item = player.currentItem, ObjectIdentifier(item) == itemID else { return }
+        isOpening = false
+        startPoint = nil
+        if case .failed = status {
+            return
+        }
+        if staysPaused || isInterrupted {
+            status = .paused
+        } else {
+            activateAudioSession()
+            player.play()
+        }
+        updateNowPlaying()
+    }
+
+    /// Stops keeping the place of `id`, taken out of Continue Watching while it plays.
+    func forgetProgress(of id: UUID) {
+        if current?.id == id {
+            keepsProgress = false
+        }
+    }
+
+    /// Keeps the playing video's place in the library; only a video with a fixed length has one.
+    private func saveProgress() {
+        guard keepsProgress, let current, let duration, let progressStore else { return }
+        progressStore.saveProgress(PlaybackProgress(position: elapsed, duration: duration), for: current.id)
+        lastSavedPosition = elapsed
+    }
+}
+
+// MARK: - System integration
+
+extension PlaybackController {
     /// Set at launch too, so CarPlay and the lock screen treat Roadivo as a video player from the start.
     private func configureAudioSession() {
         do {

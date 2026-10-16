@@ -9,8 +9,13 @@ struct LibraryView: View {
     let onFavoriteChanged: (UUID, Bool) -> Void
     let voiceSearch: VoiceSearchModel
     var onVideoDeleted: (UUID) -> Void = { _ in }
+    /// Continue Watching's "Play from Beginning".
+    var onPlayFromBeginning: (MediaItem, [MediaItem]) -> Void = { _, _ in }
+    /// An item left Continue Watching: the player stops keeping its place and the other screens reload.
+    var onRemovedFromHistory: (UUID) -> Void = { _ in }
 
     @Environment(\.openURL) private var openURL
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     /// Carousels show this many; the group's header opens the rest.
     private let carouselLimit = 20
@@ -114,8 +119,13 @@ struct LibraryView: View {
                             items: viewModel.recent,
                             onPlay: { play($0, nil) },
                             onToggleFavorite: toggleFavorite,
-                            onDelete: deleteVideo
+                            onDelete: deleteVideo,
+                            onPlayFromBeginning: playFromBeginning,
+                            onRemoveFromHistory: removeFromHistory
                         )
+                        // Tells these cards from the same titles in the group rows.
+                        .accessibilityElement(children: .contain)
+                        .accessibilityIdentifier("library.continueWatching")
                     }
                 }
                 ForEach(viewModel.sections) { section in
@@ -191,14 +201,31 @@ struct LibraryView: View {
     }
 
     private func play(_ item: MediaItem, _ queue: [MediaItem]?) {
-        // The keyboard would come back over the tab bar when the player closes.
-        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+        dismissKeyboard()
         onPlay(item, queue ?? viewModel.queue(for: item))
+    }
+
+    /// The keyboard would come back over the tab bar when the player closes.
+    private func dismissKeyboard() {
+        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
     }
 
     private func deleteVideo(_ item: MediaItem) {
         if viewModel.deleteVideo(item) {
             onVideoDeleted(item.id)
+        }
+    }
+
+    private func playFromBeginning(_ item: MediaItem) {
+        dismissKeyboard()
+        onPlayFromBeginning(item, viewModel.queue(for: item))
+    }
+
+    private func removeFromHistory(_ item: MediaItem) {
+        withAnimation(reduceMotion ? nil : .default) {
+            if viewModel.removeFromHistory(item) {
+                onRemovedFromHistory(item.id)
+            }
         }
     }
 

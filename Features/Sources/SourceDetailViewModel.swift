@@ -57,6 +57,11 @@ final class SourceDetailViewModel {
         kind == .remote
     }
 
+    /// On this iPhone has no playlist or streams to check (owner, 2026-10-16).
+    var hasHealthReport: Bool {
+        kind != .localVideos
+    }
+
     /// Chips only help when there's more than one group.
     var showsGroups: Bool {
         groups.count > 1

@@ -310,3 +310,19 @@ struct SourceHealthTests {
         #expect(url.absoluteString == "http://nas.local:8096/System/Info/Public")
     }
 }
+
+@Suite("Source Health menu")
+@MainActor
+struct SourceHealthMenuTests {
+    @Test("On this iPhone offers no Source Health; links, files and servers do")
+    func onlyForSourcesWithStreams() throws {
+        for kind in [PlaylistKind.remote, .file, .mediaServer, .localVideos] {
+            let source = SourceSummary(
+                id: UUID(), name: "S", kind: kind, itemCount: 1, host: nil, refreshedAt: nil
+            )
+            let detail = try SourceDetailViewModel(source: source, repository: TestLibrary().repository)
+            #expect(source.hasHealthReport == (kind != .localVideos))
+            #expect(detail.hasHealthReport == (kind != .localVideos))
+        }
+    }
+}

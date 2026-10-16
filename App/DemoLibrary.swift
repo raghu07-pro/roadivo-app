@@ -5,13 +5,28 @@
     /// The streams are Apple's public HLS test streams, the names fictional.
     enum DemoLibrary {
         @MainActor
-        static func seed(into environment: AppEnvironment) async {
+        static func seed(into environment: AppEnvironment, withHistory: Bool = false) async {
             do {
-                try await environment.repository.addFilePlaylist(name: "Road Trip", text: playlist)
+                let repository = environment.repository
+                try await repository.addFilePlaylist(name: "Road Trip", text: playlist)
+                if withHistory {
+                    try seedHistory(in: repository)
+                }
                 environment.router.libraryDidChange()
             } catch {
                 assertionFailure("Demo seed failed: \(error)")
             }
+        }
+
+        /// Continue Watching for UI tests: a film 25 minutes into an hour, newest, then a live channel.
+        @MainActor
+        private static func seedHistory(in repository: LibraryRepository) throws {
+            let items = try repository.items()
+            guard let film = items.first(where: { $0.title == "Steel Horizon · 1080p" }),
+                  let channel = items.first(where: { $0.title == "Football Tonight" }) else { return }
+            repository.markPlayed(channel.id, at: .now.addingTimeInterval(-3600))
+            repository.markPlayed(film.id)
+            repository.saveProgress(PlaybackProgress(position: 1500, duration: 3600), for: film.id)
         }
 
         private static let streamA =

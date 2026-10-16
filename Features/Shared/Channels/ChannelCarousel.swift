@@ -6,21 +6,35 @@ struct ChannelCarousel: View {
     let onPlay: (MediaItem) -> Void
     let onToggleFavorite: (MediaItem) -> Void
     var onDelete: ((MediaItem) -> Void)?
+    /// Continue Watching's actions, offered only on its own row.
+    var onPlayFromBeginning: ((MediaItem) -> Void)?
+    var onRemoveFromHistory: ((MediaItem) -> Void)?
 
     @ScaledMetric(relativeTo: .subheadline) private var cardWidth: CGFloat = 176
 
+    /// Posters next to wide cards (Continue Watching): every card is drawn wide, posters cropped to fit.
+    private var mixesShapes: Bool {
+        items.contains { $0.artwork == .poster } && items.contains { $0.artwork != .poster }
+    }
+
     var body: some View {
+        let isWide = mixesShapes
         ScrollView(.horizontal, showsIndicators: false) {
-            LazyHStack(alignment: .top, spacing: Spacing.sm) {
+            // Not lazy: a lazy row takes its height from its first card, which squeezed a taller
+            // card's artwork (a poster, or a card with "… left"). Rows hold at most 20 cards.
+            HStack(alignment: .top, spacing: Spacing.sm) {
                 ForEach(items) { item in
                     ChannelCard(
                         item: item,
                         onPlay: { onPlay(item) },
                         onToggleFavorite: { onToggleFavorite(item) },
-                        onDelete: item.deleteAction(onDelete)
+                        onDelete: item.deleteAction(onDelete),
+                        onPlayFromBeginning: onPlayFromBeginning.map { action in { action(item) } },
+                        onRemoveFromHistory: onRemoveFromHistory.map { action in { action(item) } },
+                        isWide: isWide
                     )
                     // Posters stand tall, as on a streaming shelf.
-                    .frame(width: item.artwork == .poster ? min(cardWidth * 0.86, 240) : min(cardWidth, 300))
+                    .frame(width: item.artwork == .poster && !isWide ? min(cardWidth * 0.86, 240) : min(cardWidth, 300))
                 }
             }
             .padding(.horizontal, Spacing.md)

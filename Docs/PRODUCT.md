@@ -42,7 +42,7 @@
 | CarTV | Roadivo (built) |
 |---|---|
 | Grey tiles | Every item gets art: its logo, or a gradient with its initials |
-| Flat groups | **Continue Watching** row, then a carousel per group, with **See All** grids |
+| Flat groups | **Continue Watching** row (films and episodes resume where they stopped, with progress bars and time left), then a carousel per group, with **See All** grids |
 | Basic player | **More in <group>** up-next list, favourite heart, AirPlay, Picture in Picture, and channel switching from lock-screen and steering-wheel buttons |
 | Mini player | Floating mini player with a **live video thumbnail** on every tab |
 | "CarPlay not connected" | **Car tab** that tells the truth: AirPlay in one tap, Car Mode (landscape, giant controls, screen kept awake), a 3-step setup guide and a safety note |

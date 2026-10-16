@@ -69,7 +69,7 @@ final class LibraryViewModel {
                 // Home is the channel library; imported videos live in Favorites › On this iPhone.
                 items = try repository.items(in: sourceFilter).filter { !$0.isLocalFile }
                 // Filtered in the fetch: filtering after the limit let 12 played videos empty the row.
-                recent = try repository.recentlyPlayed(limit: 12, excludingLocal: true, in: sourceFilter)
+                recent = try repository.continueWatching(limit: 12, in: sourceFilter)
             case .favorites:
                 items = try repository.favorites()
                 recent = []
@@ -107,6 +107,32 @@ final class LibraryViewModel {
     func deleteVideo(_ item: MediaItem) -> Bool {
         guard (try? repository.deleteVideo(item.id)) != nil else { return false }
         load()
+        return true
+    }
+
+    /// After watching: Continue Watching and the cards' bars, without re-reading the whole library
+    /// (a second at 30 000 channels). An unreadable store keeps what's shown.
+    func reloadHistory() {
+        guard phase == .loaded, let progress = try? repository.playbackProgress() else { return }
+        if scope == .all, let latest = try? repository.continueWatching(limit: 12, in: sourceFilter) {
+            recent = latest
+        }
+        guard items.contains(where: { $0.progress != progress[$0.id] }) else { return }
+        items = items.map { item in
+            var item = item
+            item.progress = progress[item.id]
+            return item
+        }
+    }
+
+    /// Takes an item out of Continue Watching, with its saved place. Returns true when it was removed.
+    func removeFromHistory(_ item: MediaItem) -> Bool {
+        do {
+            try repository.removeFromHistory(item.id)
+        } catch {
+            return false // Gone already (a refresh), or unsaved: the row stays as the store has it.
+        }
+        recent.removeAll { $0.id == item.id }
         return true
     }
 

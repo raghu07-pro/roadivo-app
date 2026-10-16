@@ -137,6 +137,9 @@ final class CarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegat
             detailText: media.groupTitle,
             image: UIImage(systemName: media.isLocalFile ? "film" : "play.tv")
         )
+        if let progress = media.progress {
+            item.playbackProgress = progress.fraction
+        }
         item.handler = { [weak self] _, completion in
             MainActor.assumeIsolated {
                 AppEnvironment.current?.playback.play(media, queue: queue)

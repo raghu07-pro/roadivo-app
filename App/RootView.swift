@@ -112,7 +112,9 @@ private struct MainTabView: View {
                 onAddSource: addSource,
                 onFavoriteChanged: favoriteChanged,
                 voiceSearch: voiceSearch,
-                onVideoDeleted: videoDeleted
+                onVideoDeleted: videoDeleted,
+                onPlayFromBeginning: playFromBeginning,
+                onRemovedFromHistory: removedFromHistory
             )
             .miniPlayer(
                 playback: playback,
@@ -202,6 +204,18 @@ private struct MainTabView: View {
             }
         }
         .animation(.easeOut(duration: 0.2), value: updatePrompt.release)
+        // Continue Watching and the progress bars show the place reached once the player is put away
+        // or stopped. Only the history is read again; other tabs catch up when they next appear.
+        .onChange(of: router.playerSurface) { _, surface in
+            if surface == nil {
+                reloadHistory()
+            }
+        }
+        .onChange(of: playback.isActive) { _, isActive in
+            if !isActive, router.playerSurface == nil {
+                reloadHistory()
+            }
+        }
         .task { await updatePrompt.check() }
         .onChange(of: router.reviewRequests) {
             // Give the video a moment to start before asking.
@@ -273,6 +287,22 @@ private struct MainTabView: View {
     private func play(_ item: MediaItem, queue: [MediaItem]) {
         router.playerSurface = .player
         playback.play(item, queue: queue)
+    }
+
+    private func playFromBeginning(_ item: MediaItem, queue: [MediaItem]) {
+        router.playerSurface = .player
+        playback.play(item, queue: queue, startingOver: true)
+    }
+
+    private func reloadHistory() {
+        library.reloadHistory()
+        favorites.reloadHistory()
+    }
+
+    /// Taken out of Continue Watching while it plays, it mustn't save its place straight back.
+    private func removedFromHistory(_ id: UUID) {
+        playback.forgetProgress(of: id)
+        router.libraryDidChange()
     }
 
     private func startCarMode(resuming item: MediaItem?) {

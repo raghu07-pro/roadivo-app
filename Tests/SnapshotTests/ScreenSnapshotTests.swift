@@ -108,6 +108,45 @@ final class ScreenSnapshotTests: XCTestCase {
         )
     }
 
+    /// Continue Watching mixing a channel, a film's poster and an episode: every card is drawn wide at
+    /// full size (the poster cropped), the in-progress ones with their bar and time left.
+    func testContinueWatchingMixedShapes() throws {
+        let item = { (title: String, artwork: ArtworkStyle, progress: PlaybackProgress?) throws in
+            try MediaItem(
+                id: UUID(),
+                title: title,
+                group: "",
+                artworkURL: nil,
+                streamURL: XCTUnwrap(URL(string: "https://streams.example.com/\(title.count).m3u8")),
+                isLocalFile: false,
+                isFavorite: false,
+                artwork: artwork,
+                progress: progress
+            )
+        }
+        let items = try [
+            item("Andorra TV", .logo, nil),
+            item("Jungle Book", .poster, PlaybackProgress(position: 1500, duration: 4860)),
+            item("S1 · E2 — Night Drive", .still, PlaybackProgress(position: 900, duration: 2700))
+        ]
+        let view = ChannelCarousel(items: items, onPlay: { _ in }, onToggleFavorite: { _ in })
+            .padding(.vertical)
+            .frame(width: 390)
+            .background(.roadCanvas)
+        for style in [UIUserInterfaceStyle.light, .dark] {
+            assertSnapshot(
+                of: still(view),
+                as: .image(
+                    precision: 0.98,
+                    perceptualPrecision: 0.98,
+                    size: CGSize(width: 390, height: 200),
+                    traits: UITraitCollection(userInterfaceStyle: style)
+                ),
+                named: "continue-watching-\(style == .dark ? "dark" : "light")"
+            )
+        }
+    }
+
     /// No artwork shows the coloured cover; artwork still loading shows the skeleton, not the cover.
     func testArtworkLoadingStates() throws {
         let loading = try XCTUnwrap(URL(string: "https://logos.invalid/channel.png"))

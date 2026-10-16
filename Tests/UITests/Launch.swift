@@ -5,9 +5,11 @@ extension XCUIApplication {
     /// starts clean. `skipOnboarding` also skips the intro paywall.
     /// `restorable`: a Yearly plan bought earlier, which only Restore brings back.
     /// `carConnected`: the iPhone acts as if plugged into a car (CarPlay audio).
+    /// `demoHistory`: the demo library with a film part-watched and a channel played.
     static func roadivo(
         skipOnboarding: Bool = false,
         demoLibrary: Bool = false,
+        demoHistory: Bool = false,
         pro: Bool = false,
         restorable: Bool = false,
         carConnected: Bool = false
@@ -17,8 +19,11 @@ extension XCUIApplication {
         if skipOnboarding {
             app.launchArguments.append("-skip-onboarding")
         }
-        if demoLibrary {
+        if demoLibrary || demoHistory {
             app.launchArguments.append("-demo-library")
+        }
+        if demoHistory {
+            app.launchArguments.append("-demo-history")
         }
         if pro {
             app.launchArguments.append("-pro")

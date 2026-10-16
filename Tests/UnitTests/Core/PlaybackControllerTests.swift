@@ -89,4 +89,144 @@ struct PlaybackControllerTests {
         #expect(controller.queue.isEmpty)
         #expect(controller.status == .idle)
     }
+
+    @Test("An item opens at its saved place; Play from Beginning skips it")
+    func opensAtSavedPlace() {
+        let controller = PlaybackController()
+        let store = FakeProgressStore()
+        controller.progressStore = store
+        let queue = items(2)
+        store.places[queue[0].id] = 1500
+
+        controller.play(queue[0], queue: queue)
+        #expect(controller.elapsed == 1500)
+        #expect(controller.isOpeningAtSavedPlace)
+        #expect(controller.status == .loading)
+
+        controller.play(queue[0], queue: queue, startingOver: true)
+        #expect(controller.elapsed == 0)
+        #expect(!controller.isOpeningAtSavedPlace)
+    }
+
+    @Test("An item that never loaded keeps the place it had")
+    func unloadedKeepsPlace() {
+        let controller = PlaybackController()
+        let store = FakeProgressStore()
+        controller.progressStore = store
+        let queue = items(2)
+        store.places[queue[0].id] = 1500
+
+        controller.play(queue[0], queue: queue)
+        controller.next()
+        controller.stop()
+
+        #expect(store.saved.isEmpty)
+    }
+
+    @Test("Pausing while it opens at a saved place stays paused, and Play carries on opening")
+    func pauseWhileOpening() {
+        let controller = PlaybackController()
+        let store = FakeProgressStore()
+        controller.progressStore = store
+        let queue = items(1)
+        store.places[queue[0].id] = 1500
+        controller.play(queue[0], queue: queue)
+
+        controller.togglePlayPause()
+        #expect(controller.status == .paused)
+        #expect(!controller.isOpeningAtSavedPlace)
+
+        controller.togglePlayPause()
+        #expect(controller.status == .loading)
+        #expect(controller.isOpeningAtSavedPlace)
+    }
+
+    @Test("A video that fails while opening at its saved place shows the error, and Play retries from there")
+    func failWhileOpening() async {
+        let missing = FileManager.default.temporaryDirectory.appending(path: "missing-\(UUID().uuidString).mp4")
+        let item = MediaItem(
+            id: UUID(),
+            title: "Gone",
+            group: "G",
+            artworkURL: nil,
+            streamURL: missing,
+            isLocalFile: true,
+            isFavorite: false
+        )
+        let controller = PlaybackController()
+        let store = FakeProgressStore()
+        controller.progressStore = store
+        store.places[item.id] = 1500
+        controller.play(item, queue: [item])
+
+        await waitUntil {
+            if case .failed = controller.status {
+                true
+            } else {
+                false
+            }
+        }
+        guard case .failed = controller.status else {
+            Issue.record("The missing file never failed")
+            return
+        }
+        #expect(!controller.isOpeningAtSavedPlace)
+
+        controller.togglePlayPause()
+        #expect(controller.status == .loading)
+        #expect(controller.isOpeningAtSavedPlace)
+        #expect(controller.elapsed == 1500)
+    }
+
+    @Test("A real video starts at its saved place and keeps the place it reached when stopped")
+    func resumesRealVideo() async throws {
+        let movie = try await makeTestMovie(seconds: 40, fps: 2)
+        defer { try? FileManager.default.removeItem(at: movie) }
+        let item = MediaItem(
+            id: UUID(),
+            title: "Movie",
+            group: "G",
+            artworkURL: nil,
+            streamURL: movie,
+            isLocalFile: true,
+            isFavorite: false
+        )
+        let controller = PlaybackController()
+        let store = FakeProgressStore()
+        controller.progressStore = store
+        store.places[item.id] = 25
+
+        controller.play(item, queue: [item])
+        await waitUntil { controller.status == .playing }
+
+        #expect(controller.status == .playing)
+        #expect(controller.player.currentTime().seconds >= 23) // The seek may land up to 2 s early.
+        controller.stop()
+        let kept = try #require(store.saved.last)
+        #expect(kept.id == item.id)
+        #expect(kept.progress.position >= 23)
+        #expect(abs(kept.progress.duration - 40) < 0.5)
+    }
+
+    /// Polls for up to 10 s; a real video takes a moment to load and seek.
+    private func waitUntil(_ condition: () -> Bool) async {
+        for _ in 0..<1000 where !condition() {
+            try? await Task.sleep(for: .milliseconds(10)) // Polling; a cancelled sleep just polls sooner.
+        }
+    }
+}
+
+/// Answers with saved places and records what the player keeps.
+@MainActor
+private final class FakeProgressStore: PlaybackProgressStoring {
+    var places: [UUID: Double] = [:]
+    private(set) var saved: [(id: UUID, progress: PlaybackProgress)] = []
+
+    func resumePosition(for id: UUID) -> Double? {
+        places[id]
+    }
+
+    func saveProgress(_ progress: PlaybackProgress, for id: UUID) {
+        saved.append((id, progress))
+    }
 }

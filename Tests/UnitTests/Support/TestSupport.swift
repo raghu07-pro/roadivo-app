@@ -1,3 +1,4 @@
+import AVFoundation
 import Foundation
 @testable import Roadivo
 
@@ -150,4 +151,44 @@ enum Fixtures {
     </body>
     </html>
     """
+}
+
+/// Writes a solid-orange 160×90 H.264 movie `seconds` long, `fps` frames a second, to a temporary file.
+func makeTestMovie(seconds: Int, fps: Int32 = 30) async throws -> URL {
+    let url = FileManager.default.temporaryDirectory.appending(path: "movie-\(UUID().uuidString).mov")
+    let writer = try AVAssetWriter(outputURL: url, fileType: .mov)
+    let input = AVAssetWriterInput(mediaType: .video, outputSettings: [
+        AVVideoCodecKey: AVVideoCodecType.h264, AVVideoWidthKey: 160, AVVideoHeightKey: 90
+    ])
+    let adaptor = AVAssetWriterInputPixelBufferAdaptor(assetWriterInput: input, sourcePixelBufferAttributes: [
+        kCVPixelBufferPixelFormatTypeKey as String: kCVPixelFormatType_32BGRA,
+        kCVPixelBufferWidthKey as String: 160, kCVPixelBufferHeightKey as String: 90
+    ])
+    writer.add(input)
+    writer.startWriting()
+    writer.startSession(atSourceTime: .zero)
+    for frame in 0..<(seconds * Int(fps)) {
+        while !input.isReadyForMoreMediaData {
+            try await Task.sleep(for: .milliseconds(5))
+        }
+        var buffer: CVPixelBuffer?
+        CVPixelBufferCreate(nil, 160, 90, kCVPixelFormatType_32BGRA, nil, &buffer)
+        guard let pixels = buffer else { throw CocoaError(.fileWriteUnknown) }
+        CVPixelBufferLockBaseAddress(pixels, [])
+        guard let base = CVPixelBufferGetBaseAddress(pixels)?.assumingMemoryBound(to: UInt8.self) else {
+            throw CocoaError(.fileWriteUnknown)
+        }
+        for index in stride(from: 0, to: CVPixelBufferGetDataSize(pixels), by: 4) {
+            base[index] = 0x20
+            base[index + 1] = 0x90
+            base[index + 2] = 0xFF
+            base[index + 3] = 0xFF
+        }
+        CVPixelBufferUnlockBaseAddress(pixels, [])
+        adaptor.append(pixels, withPresentationTime: CMTime(value: Int64(frame), timescale: fps))
+    }
+    input.markAsFinished()
+    writer.endSession(atSourceTime: CMTime(value: Int64(seconds), timescale: 1))
+    await writer.finishWriting()
+    return url
 }

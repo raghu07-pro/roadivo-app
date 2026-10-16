@@ -146,4 +146,33 @@ struct LibraryViewModelTests {
         viewModel.load()
         #expect(viewModel.recent.map(\.title) == ["News One", "Untitled Movie"])
     }
+
+    @Test("Continue Watching shows a film's progress and drops it once watched to the end")
+    func recentShowsProgress() async throws {
+        let (viewModel, library) = try await loaded()
+        let movie = try #require(viewModel.items.first { $0.title == "Untitled Movie" })
+        library.repository.markPlayed(movie.id)
+        library.repository.saveProgress(PlaybackProgress(position: 1500, duration: 3600), for: movie.id)
+        viewModel.load()
+        #expect(viewModel.recent.first?.progress?.position == 1500)
+        #expect(viewModel.items.first { $0.id == movie.id }?.progress?.position == 1500)
+
+        library.repository.saveProgress(PlaybackProgress(position: 3500, duration: 3600), for: movie.id)
+        viewModel.load()
+        #expect(viewModel.recent.isEmpty)
+    }
+
+    @Test("Removing an item takes it out of Continue Watching at once and for good")
+    func removeFromHistory() async throws {
+        let (viewModel, library) = try await loaded()
+        library.repository.markPlayed(viewModel.items[0].id, at: Date(timeIntervalSince1970: 1))
+        library.repository.markPlayed(viewModel.items[2].id, at: Date(timeIntervalSince1970: 2))
+        viewModel.load()
+        let football = try #require(viewModel.recent.first)
+
+        #expect(viewModel.removeFromHistory(football))
+        #expect(viewModel.recent.map(\.title) == ["News One"])
+        viewModel.load()
+        #expect(viewModel.recent.map(\.title) == ["News One"])
+    }
 }

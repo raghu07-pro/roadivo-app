@@ -99,6 +99,7 @@ DECISIONS 33, 37 and 53–57.
   - The **full link lives in the Keychain** under `playlist.source.<id>`. Provider links usually embed a username and password.
 - **Channel** (SwiftData):
   - Fields: name, `group` (from `group-title`), logo URL, stream URL, `sortIndex` (file order), `isFavorite`, `lastPlayedAt`.
+  - Watch history: `resumePosition` (where the next play starts), `duration`, `finishedAt` (watched to the end). Rules in `PlaybackProgress`.
   - An imported video is stored as `roadivo-local:<file name>`, never as an absolute path.
 - **MediaItem**: a value snapshot of a Channel. Views and the player only see this.
 - **M3UParser**: a tolerant extended-M3U parser. It handles a BOM, CRLF, a missing header, quoted commas, `#EXTGRP`, `tvg-name` and relative URLs, and skips junk lines.
@@ -110,14 +111,17 @@ DECISIONS 33, 37 and 53–57.
   - `DemoLibrary` uses Apple's public HLS test streams and exists in DEBUG builds only, for UI tests and screenshots.
 - **Single HLS stream:** a link to one HLS stream (`#EXT-X-STREAM-INF` or `#EXT-X-TARGETDURATION`) becomes a one-item playlist.
 - **Pasted M3U text** is added directly, with no download.
-- **Refreshing a source** keeps favourites and watch history for every stream URL that is still present.
+- **Refreshing a source** keeps favourites and watch history for every stream still present: by link, or by title, group and year when the link changed (a new token or server address; DECISIONS 107).
 - **Next / previous** step through the item's own group.
-- **Continue Watching** shows the 12 most recently played items.
+- **Continue Watching** shows the 12 most recently played items not yet watched to the end (DECISIONS 104–107):
+  - Films and episodes of 5 minutes or more resume where they stopped (`PlaybackController` keeps the place every 10 s through `LibraryRepository+History`); from 90 % they count as watched.
+  - Every card shows a progress bar and the time left; the row's card menu adds Play from Beginning and Remove from Continue Watching.
+  - A row mixing posters with wide cards draws every card 16:9, the poster cropped to fill it (DECISIONS 108).
 - **Start Car Mode** on the Car tab resumes the last-played item when nothing is playing.
 - **Deleting "On this iPhone"** also deletes the copied video files.
 - **Media servers:** Jellyfin, Emby and Xtream sign in with an address and login; Plex with a code at plex.tv/link (`PlexClient`, `PlexLoginViewModel`, DECISIONS 72).
 - **Browsing:** group chips (one group at a time, no "All") in the player, on a group's screen and on a source's screen (Manage Sources › a source: Refresh, Rename, Copy Link, Delete). Home's one button is + until a source exists, then the source menu (DECISIONS 95–96).
-- **Source Health:** Manage Sources › a source › More › Source Health (`SourceHealthViewModel`, `StreamChecker` in `Core/Health`): refresh outcome, unreadable entries, and a user-started stream check, two streams at a time; media servers check the server only (DECISIONS 103). UI tests use `ScriptedStreamProbe`.
+- **Source Health:** Manage Sources › a source › More › Source Health (`SourceHealthViewModel`, `StreamChecker` in `Core/Health`): refresh outcome, unreadable entries, and a user-started stream check, two streams at a time; media servers check the server only; On this iPhone has none (DECISIONS 103, 109). UI tests use `ScriptedStreamProbe`.
 - **Server artwork:** media-server films are 2:3 posters with their year; episodes are 16:9 stills (`ArtworkStyle`, DECISIONS 97).
 - **Voice search:** the mic in Home's search bar (`SearchField`, `VoiceSearchModel`, `Core/Speech`) fills the search as you speak; on-device when the language allows (DECISIONS 68–69).
 
@@ -167,4 +171,5 @@ UI tests launch the app with these arguments:
 - `-pro`: the fake store starts with Pro
 - `-skip-onboarding`
 - `-demo-library`
+- `-demo-history`: with `-demo-library`, a film part-watched and a channel played
 - `-voice-phrase <text>`: what the scripted microphone hears (default "Football")

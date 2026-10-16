@@ -10,8 +10,8 @@ actor LibraryWriter {
         self.modelContainer = modelContainer
     }
 
-    /// Replaces the playlist's channels with `entries`, keeping favourites and
-    /// watch history for any stream URL that is still present. Returns the count.
+    /// Replaces the playlist's channels with `entries`, keeping favourites and watch history for each
+    /// stream still present, by its link or, when the link changed, by its title. Returns the count.
     @discardableResult
     func replaceChannels(of playlistID: UUID, with entries: [PlaylistEntry]) throws -> Int {
         let modelContext = ModelContext(modelContainer)
@@ -19,24 +19,40 @@ actor LibraryWriter {
         descriptor.fetchLimit = 1
         guard let playlist = try modelContext.fetch(descriptor).first else { throw LibraryError.notFound }
 
-        // A stream listed twice keeps the favourite if either copy had it, and the latest play.
-        var kept: [String: (favorite: Bool, played: Date?)] = [:]
+        let listedURLs = Set(entries.map(\.streamURL.absoluteString))
+        var byURL: [String: Kept] = [:]
+        // A new login token or server address changes every link. Only links that went away are matched by
+        // title, one old row per new row in playlist order, so a same-named backup keeps its own state.
+        var byTitle: [TitleKey: [(order: Int, kept: Kept)]] = [:]
         for channel in playlist.channels {
-            let earlier = kept[channel.streamURLString]
-            let played = [earlier?.played, channel.lastPlayedAt].compactMap(\.self).max()
-            kept[channel.streamURLString] = ((earlier?.favorite ?? false) || channel.isFavorite, played)
+            let kept = Kept(channel)
+            byURL[channel.streamURLString] = byURL[channel.streamURLString]?.merged(with: kept) ?? kept
+            if !listedURLs.contains(channel.streamURLString) {
+                let title = TitleKey(name: channel.name, group: channel.group, year: channel.year)
+                byTitle[title, default: []].append((channel.sortIndex, kept))
+            }
             modelContext.delete(channel)
         }
+        byTitle = byTitle.mapValues { $0.count > 1 ? $0.sorted { $0.order < $1.order } : $0 }
         for (index, entry) in entries.enumerated() {
             let url = entry.streamURL.absoluteString
+            var kept = byURL[url]
+            let title = TitleKey(name: entry.name, group: entry.group, year: entry.year)
+            if kept == nil, let earlier = byTitle[title]?.first {
+                kept = earlier.kept
+                byTitle[title]?.removeFirst()
+            }
             let channel = Channel(
                 name: entry.name,
                 group: entry.group,
                 logoURLString: entry.logoURL?.absoluteString,
                 streamURLString: url,
                 sortIndex: index,
-                isFavorite: kept[url]?.favorite ?? false,
-                lastPlayedAt: kept[url]?.played,
+                isFavorite: kept?.favorite ?? false,
+                lastPlayedAt: kept?.played,
+                resumePosition: kept?.resumePosition,
+                duration: kept?.duration,
+                finishedAt: kept?.finishedAt,
                 year: entry.year,
                 artwork: entry.artwork
             )
@@ -58,4 +74,35 @@ actor LibraryWriter {
         modelContext.delete(playlist)
         try modelContext.save()
     }
+}
+
+/// What a refresh carries from an old row to the new row for the same video.
+private struct Kept {
+    var favorite: Bool
+    var played: Date?
+    var resumePosition: Double?
+    var duration: Double?
+    var finishedAt: Date?
+
+    init(_ channel: Channel) {
+        favorite = channel.isFavorite
+        played = channel.lastPlayedAt
+        resumePosition = channel.resumePosition
+        duration = channel.duration
+        finishedAt = channel.finishedAt
+    }
+
+    /// One video listed twice: the favourite if either copy had it, and the latest play with its place.
+    func merged(with other: Kept) -> Kept {
+        var latest = (other.played ?? .distantPast) > (played ?? .distantPast) ? other : self
+        latest.favorite = favorite || other.favorite
+        return latest
+    }
+}
+
+/// A video's title within its source; a film's year tells remakes apart.
+private struct TitleKey: Hashable {
+    let name: String
+    let group: String
+    let year: Int?
 }

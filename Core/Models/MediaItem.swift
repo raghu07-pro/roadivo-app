@@ -15,6 +15,8 @@ struct MediaItem: Hashable, Identifiable, Sendable {
     /// A film's release year, from a media server.
     var year: Int?
     var artwork: ArtworkStyle = .logo
+    /// How far it got, while it can be picked up again; nil when it starts from the beginning.
+    var progress: PlaybackProgress?
 
     var groupTitle: String {
         group.isEmpty ? String(appLocalized: "Other") : group
@@ -63,7 +65,10 @@ extension Channel {
             isFavorite: isFavorite,
             sourceID: sourceID,
             year: year,
-            artwork: artworkRaw.flatMap(ArtworkStyle.init(rawValue:)) ?? .logo
+            artwork: artworkRaw.flatMap(ArtworkStyle.init(rawValue:)) ?? .logo,
+            progress: resumePosition.flatMap { position in
+                duration.map { PlaybackProgress(position: position, duration: $0) }
+            }
         )
     }
 }

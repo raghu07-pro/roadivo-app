@@ -156,10 +156,12 @@ struct SourcesView: View {
                 Label("Refresh", systemImage: "arrow.clockwise")
             }
         }
-        Button {
-            checking = source
-        } label: {
-            Label("Source Health", systemImage: "stethoscope")
+        if source.hasHealthReport {
+            Button {
+                checking = source
+            } label: {
+                Label("Source Health", systemImage: "stethoscope")
+            }
         }
         Button {
             newName = source.name

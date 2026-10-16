@@ -280,7 +280,7 @@ struct LibraryRepositoryTests {
         library.repository.markPlayed(video.id, at: Date(timeIntervalSince1970: 10))
 
         #expect(try library.repository.recentlyPlayed(limit: 1).map(\.id) == [video.id])
-        #expect(try library.repository.recentlyPlayed(limit: 1, excludingLocal: true).map(\.id) == [channel.id])
+        #expect(try library.repository.continueWatching(limit: 1).map(\.id) == [channel.id])
     }
 
     @Test("When no video copies, the copy's own error is shown, not \"couldn't be read as a playlist\"")

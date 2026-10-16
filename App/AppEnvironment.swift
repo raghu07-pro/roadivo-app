@@ -51,6 +51,7 @@ final class AppEnvironment {
         )
         proAccess = ProAccess(client: storeClient)
         playback = PlaybackController()
+        playback.progressStore = repository
         router = AppRouter()
         playback.onItemStarted = { [repository, preferences, router] item in
             repository.markPlayed(item.id)
@@ -62,7 +63,8 @@ final class AppEnvironment {
     }
 
     /// Launch arguments for UI tests and screenshots: `-ui-testing` (in-memory, fake App Store, scripted mic),
-    /// `-skip-onboarding` (and the intro paywall), `-pro`, `-car-connected`, and Debug-only `-demo-library`.
+    /// `-skip-onboarding` (and the intro paywall), `-pro`, `-car-connected`, and Debug-only `-demo-library`
+    /// (with `-demo-history`, a film part-watched and a channel played).
     static func live(arguments: [String]) -> AppEnvironment {
         let switches = TestSwitches(arguments: arguments)
         let isUITesting = switches.isUITesting
@@ -127,7 +129,7 @@ final class AppEnvironment {
         current = environment
         #if DEBUG
             if arguments.contains("-demo-library") {
-                Task { await DemoLibrary.seed(into: environment) }
+                Task { await DemoLibrary.seed(into: environment, withHistory: arguments.contains("-demo-history")) }
             }
         #endif
         return environment

@@ -19,6 +19,11 @@ struct SourceSummary: Identifiable, Hashable {
         kind == .remote || kind == .mediaServer
     }
 
+    /// On this iPhone has no playlist or streams to check (owner, 2026-10-16).
+    var hasHealthReport: Bool {
+        kind != .localVideos
+    }
+
     var symbol: String {
         switch kind {
         case .remote: "link"

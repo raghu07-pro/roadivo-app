@@ -28,7 +28,7 @@ final class LibraryRepository {
         writer = LibraryWriter(modelContainer: store.container)
     }
 
-    /// Internal, with `playlist(_:)` and `sourceKey(_:)`, for the extensions in other files.
+    /// Internal, with `channel(_:)`, `playlist(_:)` and `sourceKey(_:)`, for the extensions in other files.
     var context: ModelContext {
         store.mainContext
     }
@@ -75,30 +75,6 @@ final class LibraryRepository {
         return playlist.channels.sorted { $0.sortIndex < $1.sortIndex }.compactMap(\.mediaItem)
     }
 
-    /// The most recently played items, optionally from one source. `excludingLocal` filters imported
-    /// videos inside the fetch, so Home's Continue Watching still gets `limit` items.
-    func recentlyPlayed(
-        limit: Int = 12,
-        excludingLocal: Bool = false,
-        in playlistID: UUID? = nil
-    ) throws -> [MediaItem] {
-        let localPrefix = MediaLocation.localScheme
-        let predicate: Predicate<Channel>
-        if let playlistID {
-            predicate = #Predicate { $0.lastPlayedAt != nil && $0.playlist?.id == playlistID }
-        } else if excludingLocal {
-            predicate = #Predicate { $0.lastPlayedAt != nil && !$0.streamURLString.starts(with: localPrefix) }
-        } else {
-            predicate = #Predicate { $0.lastPlayedAt != nil }
-        }
-        var descriptor = FetchDescriptor<Channel>(
-            predicate: predicate,
-            sortBy: [SortDescriptor(\.lastPlayedAt, order: .reverse)]
-        )
-        descriptor.fetchLimit = limit
-        return try context.fetch(descriptor).compactMap(\.mediaItem)
-    }
-
     /// How many items a source has, counted in the store: reading `channels` loaded every row.
     func channelCount(in playlistID: UUID) throws -> Int {
         try context.fetchCount(FetchDescriptor<Channel>(predicate: #Predicate { $0.playlist?.id == playlistID }))
@@ -131,9 +107,12 @@ final class LibraryRepository {
         (try? channel(id).isFavorite) ?? false
     }
 
+    /// Playing a finished video again puts it back in Continue Watching.
     func markPlayed(_ id: UUID, at date: Date = .now) {
         do {
-            try channel(id).lastPlayedAt = date
+            let channel = try channel(id)
+            channel.lastPlayedAt = date
+            channel.finishedAt = nil
             try context.save()
         } catch {
             logger.error("markPlayed failed: \(error.localizedDescription, privacy: .public)")
@@ -226,8 +205,8 @@ final class LibraryRepository {
         return try await insert(playlist, secret: nil, entries: report.entries)
     }
 
-    /// Re-downloads a remote playlist, keeping favourites for streams still present. The outcome is
-    /// kept for Source Health.
+    /// Re-downloads a remote playlist, keeping favourites and watch history for streams still present.
+    /// The outcome is kept for Source Health.
     func refresh(_ playlistID: UUID) async throws {
         do {
             let issues = try await downloadAgain(playlistID)
@@ -334,7 +313,7 @@ final class LibraryRepository {
         }
     }
 
-    private func channel(_ id: UUID) throws -> Channel {
+    func channel(_ id: UUID) throws -> Channel {
         var descriptor = FetchDescriptor<Channel>(predicate: #Predicate { $0.id == id })
         descriptor.fetchLimit = 1
         guard let channel = try context.fetch(descriptor).first else { throw LibraryError.notFound }

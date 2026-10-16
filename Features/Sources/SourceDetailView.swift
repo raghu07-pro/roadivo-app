@@ -142,12 +142,14 @@ struct SourceDetailView: View {
                 } label: {
                     Label("Rename", systemImage: "pencil")
                 }
-                Button {
-                    showsHealth = true
-                } label: {
-                    Label("Source Health", systemImage: "stethoscope")
+                if viewModel.hasHealthReport {
+                    Button {
+                        showsHealth = true
+                    } label: {
+                        Label("Source Health", systemImage: "stethoscope")
+                    }
+                    .accessibilityIdentifier("source.health")
                 }
-                .accessibilityIdentifier("source.health")
                 if viewModel.canCopyLink {
                     Button(action: copyLink) {
                         Label("Copy Link", systemImage: "doc.on.doc")
