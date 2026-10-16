@@ -15,7 +15,7 @@ struct CarModeView: View {
             ? AnyLayout(HStackLayout(spacing: Spacing.lg))
             : AnyLayout(VStackLayout(spacing: Spacing.lg))
         layout {
-            VideoSurface(player: playback.player)
+            VideoSurface(player: playback.player, gravity: playback.videoGravity)
                 .clipShape(RoundedRectangle(cornerRadius: Radius.lg, style: .continuous))
                 .overlay { status }
                 .overlay(alignment: .topLeading) {

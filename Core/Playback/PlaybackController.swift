@@ -25,6 +25,12 @@ final class PlaybackController {
     private(set) var elapsed: Double = 0
     /// The AirPlay screen the video is on (a car display, an adapter, a TV); nil on this iPhone.
     private(set) var externalScreen: String?
+    /// The connected screen's profile, set through `apply(_:)`: how the picture meets the screen,
+    /// whether the next video follows, and which subtitles play.
+    var videoGravity: AVLayerVideoGravity = .resizeAspect
+    @ObservationIgnored var playsNextAutomatically = true
+    @ObservationIgnored var subtitles: SubtitleMode = .automatic
+    @ObservationIgnored var subtitleTask: Task<Void, Never>?
 
     var isActive: Bool {
         current != nil
@@ -286,6 +292,7 @@ final class PlaybackController {
                 }
                 if ready {
                     openAtStartPoint()
+                    applySubtitles()
                 }
             }
         }
@@ -338,7 +345,7 @@ final class PlaybackController {
             elapsed = duration
         }
         saveProgress() // Watched to the end, so it leaves Continue Watching.
-        if hasNext {
+        if playsNextAutomatically, hasNext {
             next()
         }
     }

@@ -2,12 +2,14 @@ import StoreKit
 import SwiftUI
 
 /// Settings: Pro, Media, Preferences, Legal, About — the reference's sections.
-struct SettingsView<SourcesScreen: View>: View {
+struct SettingsView<SourcesScreen: View, ProfilesScreen: View>: View {
     let isPro: Bool
     var currentPlan: ProPlan?
     var hasSubscription = false
     let onUpgrade: () -> Void
     @ViewBuilder let sourcesScreen: () -> SourcesScreen
+    /// Car & Display Profiles, built by the app (it needs the library and the car connection).
+    @ViewBuilder let profilesScreen: () -> ProfilesScreen
 
     @Environment(\.openURL) private var openURL
     @Environment(\.requestReview) private var requestReview
@@ -55,6 +57,14 @@ struct SettingsView<SourcesScreen: View>: View {
                         )
                     }
                     .accessibilityIdentifier("settings.connectGuide")
+                    NavigationLink(value: SettingsRoute.displayProfiles) {
+                        row(
+                            symbol: "slider.horizontal.below.rectangle",
+                            title: "Car & Display Profiles",
+                            detail: "Aspect ratio · Subtitles · Playback"
+                        )
+                    }
+                    .accessibilityIdentifier("settings.displayProfiles")
                 } header: {
                     Text("Media").foregroundStyle(.roadMuted)
                 }
@@ -134,6 +144,7 @@ struct SettingsView<SourcesScreen: View>: View {
                 case .sources: sourcesScreen()
                 case .connectGuide:
                     ConnectGuideView(guide: ConnectGuide(hasCarPlay: CarPlayAvailability.isEnabled), isPro: isPro)
+                case .displayProfiles: profilesScreen()
                 }
             }
             .navigationTitle("Settings")
@@ -255,15 +266,15 @@ struct SettingsView<SourcesScreen: View>: View {
 }
 
 #Preview("Free") {
-    SettingsView(isPro: false, onUpgrade: {}, sourcesScreen: { EmptyView() })
+    SettingsView(isPro: false, onUpgrade: {}, sourcesScreen: { EmptyView() }, profilesScreen: { EmptyView() })
 }
 
 #Preview("Pro, dark") {
-    SettingsView(isPro: true, onUpgrade: {}, sourcesScreen: { EmptyView() })
+    SettingsView(isPro: true, onUpgrade: {}, sourcesScreen: { EmptyView() }, profilesScreen: { EmptyView() })
         .preferredColorScheme(.dark)
 }
 
 #Preview("Largest text") {
-    SettingsView(isPro: false, onUpgrade: {}, sourcesScreen: { EmptyView() })
+    SettingsView(isPro: false, onUpgrade: {}, sourcesScreen: { EmptyView() }, profilesScreen: { EmptyView() })
         .environment(\.dynamicTypeSize, .accessibility3)
 }

@@ -9,11 +9,11 @@ struct CarTests {
     @Test("Routes: AirPlay destination and car audio are read from the outputs")
     func routes() {
         let connection = CarConnection()
-        connection.apply([(.airPlay, "Car Display"), (.builtInSpeaker, "Speaker")])
+        connection.apply([RouteOutput(.airPlay, "Car Display"), RouteOutput(.builtInSpeaker, "Speaker")])
         #expect(connection.airPlayDestination == "Car Display")
         #expect(!connection.isCarAudio)
 
-        connection.apply([(.carAudio, "CarPlay")])
+        connection.apply([RouteOutput(.carAudio, "CarPlay")])
         #expect(connection.airPlayDestination == nil)
         #expect(connection.isCarAudio)
     }

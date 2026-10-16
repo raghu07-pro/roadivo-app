@@ -69,7 +69,11 @@ struct PlayerView: View {
             // The video fills the screen edge to edge; the controls stay clear of the notch and corners.
             ZStack {
                 Color.black
-                SystemVideoPlayer(player: viewModel.playback.player, showsControls: false)
+                SystemVideoPlayer(
+                    player: viewModel.playback.player,
+                    showsControls: false,
+                    gravity: viewModel.playback.videoGravity
+                )
                 // Catches taps over the video to show or hide the controls.
                 Color.clear
                     .contentShape(Rectangle())

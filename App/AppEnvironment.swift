@@ -21,6 +21,8 @@ final class AppEnvironment {
     let carConnection = CarConnection()
     /// Source Health's stream check; scripted in UI tests, so they never open real streams.
     let streamChecker: StreamChecker
+    /// Settings per car or display, applied to the player whenever the connected screen changes.
+    let displayProfiles: DisplayProfileStore
 
     /// The running app's environment, for the CarPlay scene: it is created by
     /// the system, not by SwiftUI, so it can't be handed one.
@@ -37,10 +39,12 @@ final class AppEnvironment {
         speech: SpeechTranscribing = SpeechTranscriber(),
         plex: PlexLinking = ScriptedPlexLinking(),
         updateChecker: AppUpdateChecking? = nil,
-        streamChecker: StreamChecker = .live
+        streamChecker: StreamChecker = .live,
+        displayProfiles: DisplayProfileStore = DisplayProfileStore()
     ) {
         self.apiClient = apiClient
         self.streamChecker = streamChecker
+        self.displayProfiles = displayProfiles
         self.speech = speech
         self.plex = plex
         self.updateChecker = updateChecker
@@ -60,6 +64,15 @@ final class AppEnvironment {
                 router.requestReview()
             }
         }
+        // The connected screen's profile, or This iPhone's, whenever either changes.
+        // Weak: the connection and the store keep this closure, which would otherwise keep them.
+        let applyProfile = { [weak playback, weak carConnection, weak displayProfiles] in
+            guard let playback, let carConnection, let displayProfiles else { return }
+            playback.apply(displayProfiles.profile(for: carConnection.receiver))
+        }
+        carConnection.onReceiverChange = { _ in applyProfile() }
+        displayProfiles.onChange = applyProfile
+        applyProfile()
     }
 
     /// Launch arguments for UI tests and screenshots: `-ui-testing` (in-memory, fake App Store, scripted mic),
@@ -71,15 +84,7 @@ final class AppEnvironment {
         let skipsOnboarding = switches.skipsOnboarding
         let logger = Logger(subsystem: "com.roadivo", category: "App")
 
-        let store: SwiftDataStore
-        do {
-            store = try SwiftDataStore(inMemory: isUITesting)
-        } catch {
-            // A corrupt on-disk store must not brick the app: fall back to memory
-            // for this launch and log it.
-            logger.fault("Store failed to open: \(error.localizedDescription, privacy: .public)")
-            store = memoryStore()
-        }
+        let store = openLibrary(inMemory: isUITesting, logger: logger)
         let secureStore: SecureStore = isUITesting ? InMemorySecureStore() : KeychainStore()
         clearSecretsFromEarlierInstall(secureStore, library: store, logger: logger)
 
@@ -89,7 +94,9 @@ final class AppEnvironment {
             AppLanguage.shared.set(nil)
             AppTheme.shared.reset()
         }
-        let preferences = Preferences(defaults: isUITesting ? volatileDefaults() : .standard)
+        // One instance: making a second would clear the first's test settings.
+        let defaults = isUITesting ? volatileDefaults() : .standard
+        let preferences = Preferences(defaults: defaults)
         if skipsOnboarding {
             preferences.hasCompletedOnboarding = true
             preferences.hasSeenIntroPaywall = true
@@ -120,11 +127,12 @@ final class AppEnvironment {
                 bundleID: Bundle.main.bundleIdentifier ?? "",
                 country: Locale.current.region?.identifier ?? "US"
             ),
-            streamChecker: isUITesting ? StreamChecker(probe: ScriptedStreamProbe()) : .live
+            streamChecker: isUITesting ? StreamChecker(probe: ScriptedStreamProbe()) : .live,
+            displayProfiles: DisplayProfileStore(defaults: defaults)
         )
         environment.router.asksForReviews = !isUITesting
         environment.proAccess.start()
-        environment.carConnection.simulatedOutputs = switches.isCarConnected ? [(.carAudio, "CarPlay")] : nil
+        environment.carConnection.simulatedOutputs = switches.isCarConnected ? [RouteOutput(.carAudio, "CarPlay")] : nil
         environment.carConnection.start()
         current = environment
         #if DEBUG
@@ -166,6 +174,16 @@ final class AppEnvironment {
             return "Football"
         }
         return arguments[index + 1]
+    }
+
+    /// A corrupt on-disk store must not brick the app: it falls back to memory for this launch, logged.
+    private static func openLibrary(inMemory: Bool, logger: Logger) -> SwiftDataStore {
+        do {
+            return try SwiftDataStore(inMemory: inMemory)
+        } catch {
+            logger.fault("Store failed to open: \(error.localizedDescription, privacy: .public)")
+            return memoryStore()
+        }
     }
 
     private static func memoryStore() -> SwiftDataStore {

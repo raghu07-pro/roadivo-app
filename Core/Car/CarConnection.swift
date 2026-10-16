@@ -12,10 +12,14 @@ final class CarConnection {
     private(set) var airPlayDestination: String?
     /// True when sound goes to the car over CarPlay. iOS reports a Bluetooth car kit like headphones.
     private(set) var isCarAudio = false
+    /// The AirPlay receiver, CarPlay car or wired display connected now, for its display profile.
+    private(set) var receiver: Receiver?
+    /// Called when `receiver` changes, so its profile applies, also with the app in the background.
+    @ObservationIgnored var onReceiverChange: ((Receiver?) -> Void)?
 
     @ObservationIgnored private var routeObserver: NSObjectProtocol?
     /// UI tests stand in for a car's audio route, which a simulator can't have.
-    @ObservationIgnored var simulatedOutputs: [(AVAudioSession.Port, String)]?
+    @ObservationIgnored var simulatedOutputs: [RouteOutput]?
 
     func start() {
         guard routeObserver == nil else { return }
@@ -31,12 +35,17 @@ final class CarConnection {
 
     func refreshRoute() {
         apply(simulatedOutputs ?? AVAudioSession.sharedInstance().currentRoute.outputs
-            .map { ($0.portType, $0.portName) })
+            .map { RouteOutput($0.portType, $0.portName, uid: $0.uid) })
     }
 
     /// Separated from `AVAudioSession` so tests can feed routes in.
-    func apply(_ outputs: [(AVAudioSession.Port, String)]) {
-        airPlayDestination = outputs.first { $0.0 == .airPlay }?.1
-        isCarAudio = outputs.contains { $0.0 == .carAudio }
+    func apply(_ outputs: [RouteOutput]) {
+        airPlayDestination = outputs.first { $0.port == .airPlay }?.name
+        isCarAudio = outputs.contains { $0.port == .carAudio }
+        let current = Receiver.current(in: outputs)
+        if current != receiver {
+            receiver = current
+            onReceiverChange?(current)
+        }
     }
 }

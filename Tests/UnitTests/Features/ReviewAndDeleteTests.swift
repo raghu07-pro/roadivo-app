@@ -21,7 +21,8 @@ struct ReviewAndDeleteTests {
             fetcher: StubFetcher(),
             mediaServers: StubMediaServer(),
             storeClient: FakeStoreClient(),
-            preferences: Preferences(defaults: defaults)
+            preferences: Preferences(defaults: defaults),
+            displayProfiles: DisplayProfileStore(defaults: defaults)
         )
         let item = MediaItem(
             id: UUID(),

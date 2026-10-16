@@ -14,8 +14,10 @@ struct CarHubView: View {
     /// Off until Apple grants the CarPlay entitlement, so the tab never promises it.
     var showsCarPlay = CarPlayAvailability.isEnabled
 
+    @State private var path: [Route] = []
+
     var body: some View {
-        NavigationStack {
+        NavigationStack(path: $path) {
             Group {
                 if isConnected {
                     connectedContent
@@ -35,8 +37,15 @@ struct CarHubView: View {
                     .accessibilityIdentifier("cast.guide")
                 }
             }
-            .navigationDestination(for: Route.self) { _ in
-                ConnectGuideView(guide: ConnectGuide(hasCarPlay: showsCarPlay), isPro: isPro)
+            .navigationDestination(for: Route.self) { route in
+                switch route {
+                case .guide:
+                    ConnectGuideView(guide: ConnectGuide(hasCarPlay: showsCarPlay), isPro: isPro)
+                case let .profile(id):
+                    if let editor = viewModel.profileEditor(for: id) {
+                        DisplayProfileEditorView(viewModel: editor, isPro: isPro)
+                    }
+                }
             }
         }
         .task(id: revision) { viewModel.load() }
@@ -44,6 +53,7 @@ struct CarHubView: View {
 
     private enum Route: Hashable {
         case guide
+        case profile(UUID)
     }
 
     private var connectedContent: some View {
@@ -55,6 +65,10 @@ struct CarHubView: View {
                 }
                 carModeCard
                 airPlayCard
+                // After the ways to the car: a setting, not a first step.
+                if let receiver = connection.receiver {
+                    profileCard(receiver)
+                }
                 safetyNote
             }
             .padding(Spacing.md)
@@ -114,6 +128,7 @@ struct CarHubView: View {
 
     private var isConnected: Bool {
         connection.isCarPlayConnected || connection.airPlayDestination != nil || connection.isCarAudio
+            || connection.receiver != nil // A wired display, too.
     }
 
     /// Before a car is connected: Roadivo → the car's screen, and how to get there. Deliberately no
@@ -305,5 +320,43 @@ struct CarHubView: View {
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .cardStyle()
+    }
+}
+
+// MARK: - Display profile
+
+extension CarHubView {
+    /// The connected screen's display profile: in use, or offered to save (DECISIONS 110).
+    private func profileCard(_ receiver: Receiver) -> some View {
+        let profile = viewModel.profile(for: receiver)
+        return card(
+            title: "Display Profile",
+            symbol: "slider.horizontal.below.rectangle",
+            status: profile
+                .map { String(appLocalized: "Using \($0.displayName)") } ?? String(appLocalized: "Not saved"),
+            state: profile == nil ? .idle : .active
+        ) {
+            Text("Keep this screen's aspect ratio, subtitles and playback; Roadivo uses them each time it connects.")
+                .font(Typography.secondary)
+            if let profile {
+                Button {
+                    path.append(.profile(profile.id))
+                } label: {
+                    Label("Edit Profile", systemImage: "slider.horizontal.3")
+                        .font(Typography.cardTitle)
+                        .frame(minHeight: 44)
+                        .contentShape(Rectangle())
+                }
+                .accessibilityIdentifier("cast.profile.edit")
+            } else {
+                PrimaryButton(title: "Save a Profile for \(receiver.name)", systemImage: "plus") {
+                    path.append(.profile(viewModel.saveProfile(for: receiver)))
+                }
+                .accessibilityIdentifier("cast.profile.save")
+            }
+        }
+        // A container, so the Save and Edit buttons keep their own identifiers.
+        .accessibilityElement(children: .contain)
+        .accessibilityIdentifier("cast.profile")
     }
 }

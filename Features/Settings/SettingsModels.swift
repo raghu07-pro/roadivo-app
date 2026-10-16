@@ -4,6 +4,7 @@ import Foundation
 enum SettingsRoute: Hashable {
     case sources
     case connectGuide
+    case displayProfiles
 }
 
 // FAQ answers are prose; wrapping them mid-sentence hurts more than it helps.

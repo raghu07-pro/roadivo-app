@@ -54,6 +54,8 @@ struct RootView: View {
         .onChange(of: scenePhase) { _, phase in
             if phase == .active {
                 Task { await environment.proAccess.refresh() }
+                // A car or display may have connected while the app was suspended, unannounced.
+                environment.carConnection.refreshRoute()
             }
         }
     }
@@ -66,6 +68,7 @@ private struct MainTabView: View {
     @State private var localVideos: LocalVideosViewModel
     @State private var carHub: CarHubViewModel
     @State private var sources: SourcesViewModel
+    @State private var displayProfiles: DisplayProfilesViewModel
     @State private var voiceSearch: VoiceSearchModel
     @State private var updatePrompt: UpdatePromptModel
     /// Set by a purchase or restore, so Home opens once the paywall has closed.
@@ -74,6 +77,10 @@ private struct MainTabView: View {
     @State private var startsCarModeAfterPaywall = false
     /// The mini player's measured height, which every screen keeps clear.
     @State private var miniPlayerHeight: CGFloat = 0
+    /// The saved car or display last acted on, so a route that drops and comes back (a call, CarPlay
+    /// reconnecting) doesn't reset Home's source or reopen Car Mode.
+    @State private var handledProfileID: UUID?
+    @Environment(\.scenePhase) private var scenePhase
 
     init(environment: AppEnvironment) {
         self.environment = environment
@@ -81,8 +88,13 @@ private struct MainTabView: View {
         _library = State(initialValue: LibraryViewModel(repository: repository, scope: .all))
         _favorites = State(initialValue: LibraryViewModel(repository: repository, scope: .favorites))
         _localVideos = State(initialValue: LocalVideosViewModel(repository: repository))
-        _carHub = State(initialValue: CarHubViewModel(repository: repository))
+        _carHub = State(initialValue: CarHubViewModel(repository: repository, profiles: environment.displayProfiles))
         _sources = State(initialValue: SourcesViewModel(repository: repository, checker: environment.streamChecker))
+        _displayProfiles = State(initialValue: DisplayProfilesViewModel(
+            store: environment.displayProfiles,
+            connection: environment.carConnection,
+            repository: repository
+        ))
         _voiceSearch = State(initialValue: VoiceSearchModel(speech: environment.speech, playback: environment.playback))
         _updatePrompt = State(initialValue: UpdatePromptModel(checker: environment.updateChecker))
     }
@@ -177,6 +189,9 @@ private struct MainTabView: View {
                         onPlay: play,
                         onFavoriteChanged: favoriteChanged
                     )
+                },
+                profilesScreen: {
+                    DisplayProfilesView(viewModel: displayProfiles, isPro: isPro)
                 }
             )
             .miniPlayer(
@@ -214,6 +229,15 @@ private struct MainTabView: View {
         .onChange(of: playback.isActive) { _, isActive in
             if !isActive, router.playerSurface == nil {
                 reloadHistory()
+            }
+        }
+        // A saved car or display connecting (or already connected at launch) brings its source and Car Mode.
+        .onChange(of: environment.carConnection.receiver, initial: true) { _, receiver in
+            receiverConnected(receiver)
+        }
+        .onChange(of: scenePhase) { _, phase in
+            if phase == .active {
+                receiverConnected(environment.carConnection.receiver) // It may have connected in the background.
             }
         }
         .task { await updatePrompt.check() }
@@ -294,17 +318,6 @@ private struct MainTabView: View {
         playback.play(item, queue: queue, startingOver: true)
     }
 
-    private func reloadHistory() {
-        library.reloadHistory()
-        favorites.reloadHistory()
-    }
-
-    /// Taken out of Continue Watching while it plays, it mustn't save its place straight back.
-    private func removedFromHistory(_ id: UUID) {
-        playback.forgetProgress(of: id)
-        router.libraryDidChange()
-    }
-
     private func startCarMode(resuming item: MediaItem?) {
         guard isPro else {
             router.paywall = .carMode
@@ -366,6 +379,41 @@ private struct MainTabView: View {
 
     private func favoriteChanged(_ id: UUID, _ isFavorite: Bool) {
         playback.updateFavorite(isFavorite, for: id)
+        router.libraryDidChange()
+    }
+}
+
+// MARK: - Watch history and connected screens
+
+extension MainTabView {
+    /// A saved screen connects: Home shows its source and Car Mode opens over what's playing, once, in the
+    /// foreground and with no sheet up. Its picture and subtitles apply in `AppEnvironment`.
+    private func receiverConnected(_ receiver: Receiver?) {
+        guard let plan = ReceiverConnectPlan.make(
+            profile: environment.displayProfiles.savedProfile(for: receiver),
+            handledProfileID: handledProfileID,
+            canPresent: scenePhase == .active && router.paywall == nil && router.playerPaywall == nil
+                && !router.isAddingSource,
+            isPro: isPro,
+            isPlaying: playback.isActive
+        ) else { return }
+        handledProfileID = plan.profileID
+        if let source = plan.sourceID {
+            library.showSource(source) // A deleted source falls back to all sources on load.
+        }
+        if plan.opensCarMode {
+            router.playerSurface = .carMode
+        }
+    }
+
+    private func reloadHistory() {
+        library.reloadHistory()
+        favorites.reloadHistory()
+    }
+
+    /// Taken out of Continue Watching while it plays, it mustn't save its place straight back.
+    private func removedFromHistory(_ id: UUID) {
+        playback.forgetProgress(of: id)
         router.libraryDidChange()
     }
 }

@@ -38,6 +38,7 @@ tabs: **Home · Favorites · Cast to Car · Settings**.
   always one tap away from the player's car button (DECISIONS 102).
 - How to Connect (`Features/Shared/ConnectGuide*`, in Cast to Car and Settings › Media) gives the user's steps; its CarPlay steps show
   only once CarPlay is switched on (DECISIONS 101).
+- **Car & Display Profiles** (`Core/Display`, `Features/Shared/DisplayProfiles`; DECISIONS 110–113): This iPhone plus a profile per AirPlay receiver, CarPlay or wired display, with aspect ratio, Play Next Automatically, subtitles, preferred source and Open Car Mode When Connected (Pro). `CarConnection.receiver` picks the profile; `AppEnvironment` applies it to the player.
 - CarPlay needs Apple's entitlements; it is switched off until they are
   granted (`ROADIVO_CARPLAY` in `Config/Shared.xcconfig`, DECISIONS 25). While
   it is off, the app hides every CarPlay promise (`CarPlayAvailability`, DECISIONS 84).

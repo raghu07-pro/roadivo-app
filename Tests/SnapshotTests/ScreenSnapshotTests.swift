@@ -79,7 +79,7 @@ final class ScreenSnapshotTests: XCTestCase {
 
     func testSettings() {
         assertScreen(
-            SettingsView(isPro: false, onUpgrade: {}, sourcesScreen: { EmptyView() }),
+            SettingsView(isPro: false, onUpgrade: {}, sourcesScreen: { EmptyView() }, profilesScreen: { EmptyView() }),
             named: "settings"
         )
     }
@@ -103,7 +103,7 @@ final class ScreenSnapshotTests: XCTestCase {
         AppTheme.shared.setAccent(.ocean)
         defer { AppTheme.shared.reset() }
         assertScreen(
-            SettingsView(isPro: false, onUpgrade: {}, sourcesScreen: { EmptyView() }),
+            SettingsView(isPro: false, onUpgrade: {}, sourcesScreen: { EmptyView() }, profilesScreen: { EmptyView() }),
             named: "settings-ocean"
         )
     }

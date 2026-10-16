@@ -178,6 +178,34 @@ struct PlaybackControllerTests {
         #expect(controller.elapsed == 1500)
     }
 
+    @Test("With Play Next Automatically off, the end of a video stays on it; on, the next one starts")
+    func playsNextSetting() async throws {
+        let movie = try await makeTestMovie(seconds: 1)
+        defer { try? FileManager.default.removeItem(at: movie) }
+        let queue = (0..<2).map { index in
+            MediaItem(
+                id: UUID(),
+                title: "Clip \(index)",
+                group: "G",
+                artworkURL: nil,
+                streamURL: movie,
+                isLocalFile: true,
+                isFavorite: false
+            )
+        }
+        let controller = PlaybackController()
+        controller.playsNextAutomatically = false
+
+        controller.play(queue[0], queue: queue)
+        await waitUntil { controller.status == .paused }
+        #expect(controller.current?.id == queue[0].id)
+
+        controller.playsNextAutomatically = true
+        controller.play(queue[0], queue: queue)
+        await waitUntil { controller.current?.id == queue[1].id }
+        #expect(controller.current?.id == queue[1].id)
+    }
+
     @Test("A real video starts at its saved place and keeps the place it reached when stopped")
     func resumesRealVideo() async throws {
         let movie = try await makeTestMovie(seconds: 40, fps: 2)

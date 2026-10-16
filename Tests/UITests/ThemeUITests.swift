@@ -145,11 +145,17 @@ final class ThemeUITests: XCTestCase {
         let theme = app.buttons["settings.theme"]
         XCTAssertTrue(theme.waitForExistence(timeout: 5))
         waitUntilSettled(theme, in: app)
-        try audit(app)
+        // Enlarged in place, the Media section's third row slides below the screen. Moved up a row, the
+        // flag passed to the row that took its place, so it's the position, not the text (2026-10-16).
+        try audit(app, alsoIgnoring: ["Car & Display Profiles", "Aspect ratio · Subtitles · Playback"])
     }
 
     /// All audits but contrast: it can't name text under the glass bars; `ThemeTests` checks WCAG.
-    private func audit(_ app: XCUIApplication) throws {
-        try auditIgnoringBottomEdge(app, for: XCUIAccessibilityAuditType.all.subtracting(.contrast))
+    private func audit(_ app: XCUIApplication, alsoIgnoring labels: Set<String> = []) throws {
+        try auditIgnoringBottomEdge(
+            app,
+            for: XCUIAccessibilityAuditType.all.subtracting(.contrast),
+            alsoIgnoring: labels
+        )
     }
 }
