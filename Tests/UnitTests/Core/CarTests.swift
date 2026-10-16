@@ -18,6 +18,14 @@ struct CarTests {
         #expect(connection.isCarAudio)
     }
 
+    @Test("Car Mode reopens in Drive View when it was left that way")
+    func driveViewRemembered() throws {
+        let defaults = try #require(UserDefaults(suiteName: "roadivo.tests.\(UUID().uuidString)"))
+        #expect(!Preferences(defaults: defaults).prefersDriveView)
+        Preferences(defaults: defaults).prefersDriveView = true
+        #expect(Preferences(defaults: defaults).prefersDriveView)
+    }
+
     @Test("CarPlay menu mirrors favourites, recent and groups in playlist order")
     func menu() async throws {
         let library = try TestLibrary()

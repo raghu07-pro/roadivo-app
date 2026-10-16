@@ -50,6 +50,11 @@ enum Typography {
         mono(size: 12, relativeTo: .caption)
     }
 
+    /// Car Mode's times, large enough to read from a dashboard mount.
+    static var readout: Font {
+        mono(size: 22, relativeTo: .title2)
+    }
+
     static var badge: Font {
         mono(size: 11, relativeTo: .caption2)
     }

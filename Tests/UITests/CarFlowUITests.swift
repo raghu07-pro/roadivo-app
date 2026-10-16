@@ -46,6 +46,42 @@ final class CarFlowUITests: XCTestCase {
         XCTAssertTrue(app.buttons["carMode.exit"].waitForExistence(timeout: 5))
     }
 
+    /// Drive View hides the video and keeps three big buttons, is remembered when Car Mode opens again,
+    /// and Exit Drive View brings the video back.
+    func testDriveViewHidesTheVideoAndComesBack() throws {
+        let app = XCUIApplication.roadivo(skipOnboarding: true, demoLibrary: true, pro: true, carConnected: true)
+        let channel = app.buttons["channel.Steel Horizon · 1080p"]
+        XCTAssertTrue(channel.waitForExistence(timeout: 10))
+        channel.tap()
+        revealPlayerControls(app)
+        app.buttons["player.carMode"].tap()
+
+        let driveView = app.buttons["carMode.driveView"]
+        let video = app.descendants(matching: .any)["carMode.video"]
+        XCTAssertTrue(driveView.waitForExistence(timeout: 5))
+        XCTAssertTrue(video.exists)
+        driveView.tap()
+        XCTAssertTrue(app.buttons["carMode.exitDriveView"].waitForExistence(timeout: 5))
+        XCTAssertFalse(video.exists)
+
+        // Left in Drive View, Car Mode opens in it again.
+        app.buttons["carMode.exit"].tap()
+        revealPlayerControls(app)
+        app.buttons["player.carMode"].tap()
+        XCTAssertTrue(app.buttons["carMode.exitDriveView"].waitForExistence(timeout: 5))
+        for control in ["carMode.drive.previous", "carMode.drive.playPause", "carMode.drive.next", "carMode.exit"] {
+            XCTAssertTrue(app.buttons[control].exists, control)
+        }
+        // No screenshot: XCUITest captures Car Mode's forced landscape sideways. `ScreenSnapshotTests` draws it.
+        XCTAssertFalse(driveView.exists)
+        try auditIgnoringBottomEdge(app, for: [.dynamicType, .sufficientElementDescription, .hitRegion])
+
+        app.buttons["carMode.exitDriveView"].tap()
+        XCTAssertTrue(driveView.waitForExistence(timeout: 5))
+        XCTAssertTrue(video.exists)
+        XCTAssertFalse(app.buttons["carMode.drive.playPause"].exists)
+    }
+
     func testCarModeAsksFreeUsersForPro() {
         let app = XCUIApplication.roadivo(skipOnboarding: true, demoLibrary: true, carConnected: true)
         let channel = app.buttons["channel.Football Tonight"]
@@ -65,13 +101,14 @@ final class CarFlowUITests: XCTestCase {
         XCTAssertFalse(app.buttons["carMode.exit"].exists)
     }
 
-    /// How to Connect opens from the Car tab, both from the link and the top bar, with the steps for
-    /// each way to the car (no CarPlay steps while CarPlay is off) and the Pro note for free users.
+    /// How to Connect opens from the Car tab's link before a car connects, and from the top bar once one
+    /// has, with the steps for each way (no CarPlay steps while CarPlay is off) and the Pro note.
     func testConnectGuideOpensFromTheCarTab() throws {
         let app = XCUIApplication.roadivo(skipOnboarding: true)
         app.tabBars.buttons["Cast to Car"].tap()
         let link = app.buttons["cast.guide.link"]
         XCTAssertTrue(link.waitForExistence(timeout: 5))
+        XCTAssertFalse(app.buttons["cast.guide"].exists) // The link is on the page, so no top-bar button.
         link.tap()
 
         let connect = app.descendants(matching: .any)["guide.connect"]
@@ -84,11 +121,12 @@ final class CarFlowUITests: XCTestCase {
         XCTAssertTrue(app.descendants(matching: .any)["guide.carmode"].waitForExistence(timeout: 5))
         XCTAssertTrue(app.descendants(matching: .any)["guide.pro"].exists)
 
-        app.navigationBars.buttons.element(boundBy: 0).tap()
-        let help = app.buttons["cast.guide"]
+        let connected = XCUIApplication.roadivo(skipOnboarding: true, carConnected: true)
+        connected.tabBars.buttons["Cast to Car"].tap()
+        let help = connected.buttons["cast.guide"]
         XCTAssertTrue(help.waitForExistence(timeout: 5))
         help.tap()
-        XCTAssertTrue(connect.waitForExistence(timeout: 5))
+        XCTAssertTrue(connected.descendants(matching: .any)["guide.connect"].waitForExistence(timeout: 5))
     }
 
     /// The player's car button opens Car Mode without a car connected (how App Review reaches it).

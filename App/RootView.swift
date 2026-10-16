@@ -294,7 +294,9 @@ private struct MainTabView: View {
                     )
                 }
             case .carMode:
-                CarModeView(playback: playback) { router.playerSurface = .player }
+                CarModeView(playback: playback, isDriveView: Bindable(environment.preferences).prefersDriveView) {
+                    router.playerSurface = .player
+                }
             }
         }
     }

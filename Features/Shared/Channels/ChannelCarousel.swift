@@ -12,13 +12,8 @@ struct ChannelCarousel: View {
 
     @ScaledMetric(relativeTo: .subheadline) private var cardWidth: CGFloat = 176
 
-    /// Posters next to wide cards (Continue Watching): every card is drawn wide, posters cropped to fit.
-    private var mixesShapes: Bool {
-        items.contains { $0.artwork == .poster } && items.contains { $0.artwork != .poster }
-    }
-
     var body: some View {
-        let isWide = mixesShapes
+        let isWide = items.mixesArtworkShapes
         ScrollView(.horizontal, showsIndicators: false) {
             // Not lazy: a lazy row takes its height from its first card, which squeezed a taller
             // card's artwork (a poster, or a card with "… left"). Rows hold at most 20 cards.
@@ -44,6 +39,14 @@ struct ChannelCarousel: View {
     }
 }
 
+extension [MediaItem] {
+    /// Posters beside wide cards (a channel next to a film): every card is then drawn wide, the poster
+    /// cropped to fill it, so a row or grid lines up (DECISIONS 108).
+    var mixesArtworkShapes: Bool {
+        contains { $0.artwork == .poster } && contains { $0.artwork != .poster }
+    }
+}
+
 extension MediaItem {
     /// Videos on this iPhone can be deleted; streams are managed per source.
     func deleteAction(_ onDelete: ((MediaItem) -> Void)?) -> (() -> Void)? {
@@ -59,14 +62,16 @@ struct ChannelGrid: View {
     let onToggleFavorite: (MediaItem) -> Void
     var onDelete: ((MediaItem) -> Void)?
 
-    /// Two equal columns on every iPhone in portrait (375 pt fits two 150 pt cards), three for
-    /// posters, more in landscape. Not scaled with Dynamic Type, so a column never drops.
+    /// Two equal columns on every iPhone in portrait (375 pt fits two 150 pt cards), three when every
+    /// card is a poster, more in landscape. Not scaled with Dynamic Type, so a column never drops.
     private var minimumWidth: CGFloat {
-        items.first?.artwork == .poster ? 100 : 150
+        items.allSatisfy { $0.artwork == .poster } && !items.isEmpty ? 100 : 150
     }
 
     var body: some View {
-        LazyVGrid(
+        // Posters among wide cards are drawn wide too: a 2:3 card beside a 16:9 one left rows uneven.
+        let isWide = items.mixesArtworkShapes
+        return LazyVGrid(
             // Equal columns, so every card has the same width and height.
             columns: [GridItem(.adaptive(minimum: minimumWidth), spacing: Spacing.sm, alignment: .top)],
             spacing: Spacing.md
@@ -76,7 +81,8 @@ struct ChannelGrid: View {
                     item: item,
                     onPlay: { onPlay(item) },
                     onToggleFavorite: { onToggleFavorite(item) },
-                    onDelete: item.deleteAction(onDelete)
+                    onDelete: item.deleteAction(onDelete),
+                    isWide: isWide
                 )
             }
         }

@@ -147,6 +147,55 @@ final class ScreenSnapshotTests: XCTestCase {
         }
     }
 
+    /// Drive View on a landscape iPhone and an iPhone SE: a two-line title, the error with Try Again (the
+    /// fullest state, from a missing file, no network) and the three buttons pinned in view.
+    func testCarModeDriveView() {
+        let playback = PlaybackController()
+        let item = MediaItem(
+            id: UUID(),
+            title: "Steel Horizon · 1080p Director's Cut",
+            group: "Movies",
+            artworkURL: nil,
+            streamURL: URL(fileURLWithPath: "/dev/null/steel.mp4"),
+            isLocalFile: false,
+            isFavorite: false
+        )
+        let next = MediaItem(
+            id: UUID(),
+            title: "Highway Stop",
+            group: "Movies",
+            artworkURL: nil,
+            streamURL: item.streamURL,
+            isLocalFile: false,
+            isFavorite: false
+        )
+        playback.play(item, queue: [item, next])
+        let deadline = Date().addingTimeInterval(10)
+        while playback.status == .loading, Date() < deadline {
+            RunLoop.current.run(until: Date().addingTimeInterval(0.05)) // Waits on the state, not a fixed time.
+        }
+        guard case .failed = playback.status else { return XCTFail("The missing file never failed") }
+        let view = CarModeDriveView(playback: playback, onExitDriveView: {}, onExit: {})
+            .background(Color.black)
+            .environment(\.colorScheme, .dark)
+        let traits = UITraitCollection(traitsFrom: [
+            UITraitCollection(verticalSizeClass: .compact),
+            UITraitCollection(horizontalSizeClass: .compact),
+            UITraitCollection(userInterfaceStyle: .dark)
+        ])
+        for (name, size) in [
+            ("drive-view", CGSize(width: 844, height: 390)),
+            ("drive-view-se", CGSize(width: 667, height: 375))
+        ] {
+            assertSnapshot(
+                of: still(view, style: .dark),
+                as: .image(precision: 0.98, perceptualPrecision: 0.98, size: size, traits: traits),
+                named: name
+            )
+        }
+        playback.stop()
+    }
+
     /// No artwork shows the coloured cover; artwork still loading shows the skeleton, not the cover.
     func testArtworkLoadingStates() throws {
         let loading = try XCTUnwrap(URL(string: "https://logos.invalid/channel.png"))

@@ -5,6 +5,8 @@ import SwiftUI
 struct UpNextCard: View {
     let item: MediaItem
     let isCurrent: Bool
+    /// A poster cropped to 16:9, in a grid that mixes posters with wide cards.
+    var isWide = false
     let action: () -> Void
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
@@ -12,7 +14,7 @@ struct UpNextCard: View {
     var body: some View {
         Button(action: action) {
             VStack(alignment: .leading, spacing: Spacing.xs) {
-                ArtworkTile(item: item)
+                ArtworkTile(item: item, isWide: isWide)
                     .overlay {
                         RoundedRectangle(cornerRadius: Radius.md, style: .continuous)
                             .strokeBorder(

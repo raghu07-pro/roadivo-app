@@ -1,36 +1,26 @@
 import SwiftUI
 import UIKit
 
-/// Landscape dashboard layout for passengers: the video and oversized controls. Steering-wheel
-/// buttons also work (PlaybackController's remote commands).
+/// Landscape dashboard layout: the video with oversized controls for passengers or when parked, or
+/// Drive View (no video) for the driver. Steering-wheel buttons also work (remote commands).
 struct CarModeView: View {
     let playback: PlaybackController
+    /// No video, big controls (DECISIONS 114); remembered for the next time Car Mode opens.
+    @Binding var isDriveView: Bool
     let onExit: () -> Void
 
     @Environment(\.verticalSizeClass) private var verticalSizeClass
 
     var body: some View {
-        let isLandscape = verticalSizeClass == .compact
-        let layout = isLandscape
-            ? AnyLayout(HStackLayout(spacing: Spacing.lg))
-            : AnyLayout(VStackLayout(spacing: Spacing.lg))
-        layout {
-            VideoSurface(player: playback.player, gravity: playback.videoGravity)
-                .clipShape(RoundedRectangle(cornerRadius: Radius.lg, style: .continuous))
-                .overlay { status }
-                .overlay(alignment: .topLeading) {
-                    if playback.isLive, playback.status == .playing {
-                        LiveBadge().padding(Spacing.sm)
-                    }
-                }
-                .accessibilityLabel(Text("Video"))
-            ScrollView {
-                controls
+        // A ZStack, not a Group: a Group's onAppear and onDisappear fire on every switch between the two
+        // views, which let the screen lock and the iPhone turn upright in Drive View.
+        ZStack {
+            if isDriveView {
+                CarModeDriveView(playback: playback, onExitDriveView: { isDriveView = false }, onExit: onExit)
+            } else {
+                videoLayout
             }
-            .scrollBounceBehavior(.basedOnSize)
-            .frame(maxWidth: isLandscape ? 300 : .infinity)
         }
-        .padding(Spacing.md)
         .background(Color.black.ignoresSafeArea())
         .environment(\.colorScheme, .dark)
         .persistentSystemOverlays(.hidden)
@@ -44,6 +34,35 @@ struct CarModeView: View {
         }
     }
 
+    @ViewBuilder private var videoLayout: some View {
+        let isLandscape = verticalSizeClass == .compact
+        let layout = isLandscape
+            ? AnyLayout(HStackLayout(spacing: Spacing.lg))
+            : AnyLayout(VStackLayout(spacing: Spacing.lg))
+        layout {
+            // The progress under the video, so the controls beside it still fit on a landscape iPhone.
+            VStack(spacing: Spacing.sm) {
+                VideoSurface(player: playback.player, gravity: playback.videoGravity)
+                    .clipShape(RoundedRectangle(cornerRadius: Radius.lg, style: .continuous))
+                    .overlay { status }
+                    .overlay(alignment: .topLeading) {
+                        if playback.isLive, playback.status == .playing {
+                            LiveBadge().padding(Spacing.sm)
+                        }
+                    }
+                    .accessibilityLabel(Text("Video"))
+                    .accessibilityIdentifier("carMode.video")
+                CarModeProgress(playback: playback, showsLive: false)
+            }
+            ScrollView {
+                controls
+            }
+            .scrollBounceBehavior(.basedOnSize)
+            .frame(maxWidth: isLandscape ? 300 : .infinity)
+        }
+        .padding(Spacing.md)
+    }
+
     /// Loading, a failed stream (with Try Again) or the screen the video went to, never a silent black box.
     @ViewBuilder private var status: some View {
         if case let .failed(message) = playback.status {
@@ -52,6 +71,7 @@ struct CarModeView: View {
                 Text(message).font(Typography.secondary).multilineTextAlignment(.center)
                 Button("Try Again", action: playback.resume)
                     .buttonStyle(.borderedProminent)
+                    .controlSize(.large)
                     .tint(.roadBrand)
                     .foregroundStyle(.roadOnBrand)
             }
@@ -84,6 +104,7 @@ struct CarModeView: View {
                         .background(.white.opacity(0.14), in: Circle())
                 }
                 .accessibilityIdentifier("carMode.exit")
+                driveViewButton
                 Spacer()
                 RoutePickerButton()
                     .frame(width: 56, height: 56)
@@ -91,10 +112,11 @@ struct CarModeView: View {
             }
 
             VStack(spacing: Spacing.xxs) {
+                // Wraps rather than shrinking, so it stays readable from the mount.
                 Text(playback.current?.title ?? "")
                     .font(Typography.screenTitle)
-                    .lineLimit(2)
-                    .minimumScaleFactor(0.7)
+                    .lineLimit(3)
+                    .fixedSize(horizontal: false, vertical: true)
                 Text(playback.current?.groupTitle ?? "")
                     .font(Typography.secondary)
                     .foregroundStyle(.secondary)
@@ -134,5 +156,29 @@ struct CarModeView: View {
                 }
             }
         }
+    }
+
+    /// Into Drive View: the label while it fits beside the other buttons, else the wheel alone.
+    private var driveViewButton: some View {
+        Button {
+            isDriveView = true
+        } label: {
+            ViewThatFits(in: .horizontal) {
+                Label("Drive View", systemImage: "steeringwheel")
+                    .font(Typography.button)
+                    .padding(.horizontal, Spacing.md)
+                    .frame(height: 56)
+                    .background(.white.opacity(0.14), in: Capsule())
+                Label("Drive View", systemImage: "steeringwheel")
+                    .labelStyle(.iconOnly)
+                    .font(.title3.weight(.bold))
+                    .frame(width: 56, height: 56)
+                    .background(.white.opacity(0.14), in: Circle())
+            }
+            .contentShape(Capsule())
+        }
+        .foregroundStyle(.white)
+        .accessibilityHint(Text("Hides the video and keeps big controls, for the driver"))
+        .accessibilityIdentifier("carMode.driveView")
     }
 }

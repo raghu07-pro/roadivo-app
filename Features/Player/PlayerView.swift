@@ -21,7 +21,8 @@ struct PlayerView: View {
     }
 
     var body: some View {
-        Group {
+        // A ZStack, not a Group: a Group's onDisappear fired on every rotation and cleared the rotation lock.
+        ZStack {
             if isLandscape {
                 stage
                     .background(Color.black.ignoresSafeArea())
@@ -144,14 +145,15 @@ struct PlayerView: View {
                 LazyVGrid(
                     // Three posters across, or two 16:9 cards.
                     columns: [GridItem(
-                        .adaptive(minimum: viewModel.gridItems.first?.artwork == .poster ? 100 : 150),
+                        .adaptive(minimum: viewModel.gridItems.allSatisfy { $0.artwork == .poster } ? 100 : 150),
                         spacing: Spacing.sm,
                         alignment: .top
                     )],
                     spacing: Spacing.md
                 ) {
+                    let isWide = viewModel.gridItems.mixesArtworkShapes
                     ForEach(viewModel.gridItems) { item in
-                        UpNextCard(item: item, isCurrent: item.id == viewModel.current?.id) {
+                        UpNextCard(item: item, isCurrent: item.id == viewModel.current?.id, isWide: isWide) {
                             viewModel.select(item)
                         }
                     }

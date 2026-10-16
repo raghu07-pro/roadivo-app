@@ -16,10 +16,16 @@ final class Preferences {
         didSet { defaults.set(hasSeenIntroPaywall, forKey: Keys.introPaywall) }
     }
 
+    /// Car Mode opens in Drive View (no video, big controls) when it was left that way.
+    var prefersDriveView: Bool {
+        didSet { defaults.set(prefersDriveView, forKey: Keys.driveView) }
+    }
+
     init(defaults: UserDefaults = .standard) {
         self.defaults = defaults
         hasCompletedOnboarding = defaults.bool(forKey: Keys.onboarding)
         hasSeenIntroPaywall = defaults.bool(forKey: Keys.introPaywall)
+        prefersDriveView = defaults.bool(forKey: Keys.driveView)
     }
 
     /// Identifies this install to media servers (their "devices" list). Not
@@ -44,5 +50,6 @@ final class Preferences {
         static let onboarding = "roadivo.hasCompletedOnboarding"
         static let introPaywall = "roadivo.hasSeenIntroPaywall"
         static let deviceID = "roadivo.deviceID"
+        static let driveView = "roadivo.carMode.driveView"
     }
 }

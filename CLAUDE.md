@@ -35,7 +35,7 @@ tabs: **Home · Favorites · Cast to Car · Settings**.
   driving, the car plays sound only.
 - The tab shows live CarPlay and AirPlay status (`CarConnection`). Until a car is connected it only
   explains how to connect; Car Mode and AirPlay appear once connected (DECISIONS 98). Car Mode is
-  always one tap away from the player's car button (DECISIONS 102).
+  always one tap away from the player's car button (DECISIONS 102). Car Mode shows a progress bar with large times, and Drive View hides the video for the driver (DECISIONS 114).
 - How to Connect (`Features/Shared/ConnectGuide*`, in Cast to Car and Settings › Media) gives the user's steps; its CarPlay steps show
   only once CarPlay is switched on (DECISIONS 101).
 - **Car & Display Profiles** (`Core/Display`, `Features/Shared/DisplayProfiles`; DECISIONS 110–113): This iPhone plus a profile per AirPlay receiver, CarPlay or wired display, with aspect ratio, Play Next Automatically, subtitles, preferred source and Open Car Mode When Connected (Pro). `CarConnection.receiver` picks the profile; `AppEnvironment` applies it to the player.

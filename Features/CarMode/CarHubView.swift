@@ -30,11 +30,14 @@ struct CarHubView: View {
             .navigationTitle("Cast to Car")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
-                ToolbarItem(placement: .primaryAction) {
-                    NavigationLink(value: Route.guide) {
-                        Label("How to Connect", systemImage: "questionmark.circle")
+                // Not before a car connects: the page's own How to Connect link is there (owner, 2026-10-16).
+                if isConnected {
+                    ToolbarItem(placement: .primaryAction) {
+                        NavigationLink(value: Route.guide) {
+                            Label("How to Connect", systemImage: "questionmark.circle")
+                        }
+                        .accessibilityIdentifier("cast.guide")
                     }
-                    .accessibilityIdentifier("cast.guide")
                 }
             }
             .navigationDestination(for: Route.self) { route in
