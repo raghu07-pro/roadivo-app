@@ -45,6 +45,16 @@ struct CarModeView: View {
                 VideoSurface(player: playback.player, gravity: playback.videoGravity)
                     .clipShape(RoundedRectangle(cornerRadius: Radius.lg, style: .continuous))
                     .overlay { status }
+                    .overlay {
+                        if let upNext = playback.upNext {
+                            UpNextCountdownView(
+                                upNext: upNext,
+                                onPlayNow: playback.playUpNextNow,
+                                onCancel: playback.cancelUpNext
+                            )
+                            .padding(Spacing.sm)
+                        }
+                    }
                     .overlay(alignment: .topLeading) {
                         if playback.isLive, playback.status == .playing {
                             LiveBadge().padding(Spacing.sm)

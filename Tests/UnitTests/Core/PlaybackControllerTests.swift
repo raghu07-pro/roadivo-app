@@ -194,16 +194,99 @@ struct PlaybackControllerTests {
             )
         }
         let controller = PlaybackController()
+        controller.upNextDelay = 1
         controller.playsNextAutomatically = false
 
         controller.play(queue[0], queue: queue)
         await waitUntil { controller.status == .paused }
         #expect(controller.current?.id == queue[0].id)
+        #expect(controller.upNext == nil)
 
         controller.playsNextAutomatically = true
         controller.play(queue[0], queue: queue)
         await waitUntil { controller.current?.id == queue[1].id }
         #expect(controller.current?.id == queue[1].id)
+    }
+
+    /// Two one-second clips and a controller that counts down a second, on screen or not.
+    private struct Clips {
+        let controller: PlaybackController
+        let queue: [MediaItem]
+        let movie: URL
+    }
+
+    private func endingClips(inForeground: Bool) async throws -> Clips {
+        let movie = try await makeTestMovie(seconds: 1)
+        let queue = (0..<2).map { index in
+            MediaItem(
+                id: UUID(),
+                title: "Clip \(index)",
+                group: "G",
+                artworkURL: nil,
+                streamURL: movie,
+                isLocalFile: true,
+                isFavorite: false
+            )
+        }
+        let controller = PlaybackController()
+        controller.upNextDelay = 1
+        controller.isInForeground = { inForeground }
+        return Clips(controller: controller, queue: queue, movie: movie)
+    }
+
+    @Test("A video that ends counts down to the next, then plays it")
+    func upNextCountsDown() async throws {
+        let clips = try await endingClips(inForeground: true)
+        let (controller, queue, movie) = (clips.controller, clips.queue, clips.movie)
+        defer { try? FileManager.default.removeItem(at: movie) }
+
+        controller.play(queue[0], queue: queue)
+        await waitUntil { controller.upNext != nil }
+        #expect(controller.upNext?.item.id == queue[1].id)
+        #expect(controller.current?.id == queue[0].id)
+
+        await waitUntil { controller.current?.id == queue[1].id }
+        #expect(controller.current?.id == queue[1].id)
+        #expect(controller.upNext == nil)
+    }
+
+    @Test("Cancel stays on the video that ended; Play Now skips the wait")
+    func upNextCancelAndPlayNow() async throws {
+        let clips = try await endingClips(inForeground: true)
+        let (controller, queue, movie) = (clips.controller, clips.queue, clips.movie)
+        defer { try? FileManager.default.removeItem(at: movie) }
+
+        controller.play(queue[0], queue: queue)
+        await waitUntil { controller.upNext != nil }
+        controller.cancelUpNext()
+        await waitUntil(seconds: 2) { controller.current?.id == queue[1].id } // Time for it to (not) finish.
+        #expect(controller.current?.id == queue[0].id)
+        #expect(controller.upNext == nil)
+
+        controller.play(queue[0], queue: queue)
+        await waitUntil { controller.upNext != nil }
+        controller.playUpNextNow()
+        #expect(controller.current?.id == queue[1].id)
+    }
+
+    @Test("In the background the next video plays at once, and starting another cancels the countdown")
+    func upNextInTheBackground() async throws {
+        let clips = try await endingClips(inForeground: false)
+        let (background, queue) = (clips.controller, clips.queue)
+        defer { try? FileManager.default.removeItem(at: clips.movie) }
+        background.play(queue[0], queue: queue)
+        await waitUntil { background.current?.id == queue[1].id }
+        #expect(background.current?.id == queue[1].id)
+
+        let screenClips = try await endingClips(inForeground: true)
+        defer { try? FileManager.default.removeItem(at: screenClips.movie) }
+        let onScreen = screenClips.controller
+        onScreen.play(queue[0], queue: queue)
+        await waitUntil { onScreen.upNext != nil }
+        onScreen.play(queue[0], queue: queue)
+        #expect(onScreen.upNext == nil)
+        onScreen.stop()
+        background.stop()
     }
 
     @Test("A real video starts at its saved place and keeps the place it reached when stopped")
@@ -236,9 +319,9 @@ struct PlaybackControllerTests {
         #expect(abs(kept.progress.duration - 40) < 0.5)
     }
 
-    /// Polls for up to 10 s; a real video takes a moment to load and seek.
-    private func waitUntil(_ condition: () -> Bool) async {
-        for _ in 0..<1000 where !condition() {
+    /// Polls for up to `seconds` (10 by default); a real video takes a moment to load and seek.
+    private func waitUntil(seconds: Int = 10, _ condition: () -> Bool) async {
+        for _ in 0..<(seconds * 100) where !condition() {
             try? await Task.sleep(for: .milliseconds(10)) // Polling; a cancelled sleep just polls sooner.
         }
     }

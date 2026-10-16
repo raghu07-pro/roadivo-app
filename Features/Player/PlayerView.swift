@@ -121,6 +121,23 @@ struct PlayerView: View {
                 )
                 .transition(.opacity)
             }
+            // Over everything once a video ends, centred clear of the controls; the artwork only full screen.
+            ZStack {
+                if let upNext = viewModel.playback.upNext {
+                    UpNextCountdownView(
+                        upNext: upNext,
+                        onPlayNow: viewModel.playback.playUpNextNow,
+                        onCancel: viewModel.playback.cancelUpNext,
+                        showsArtwork: isLandscape
+                    )
+                    .padding(Spacing.sm)
+                    .transition(reduceMotion ? .opacity : .move(edge: .bottom).combined(with: .opacity))
+                }
+            }
+            .animation(
+                reduceMotion ? .easeOut(duration: 0.2) : .spring(duration: 0.4),
+                value: viewModel.playback.upNext == nil
+            )
         }
     }
 

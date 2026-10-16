@@ -20,10 +20,17 @@ struct MiniPlayerBar: View {
                         Text(playback.current?.title ?? "")
                             .font(Typography.cardTitle)
                             .lineLimit(1)
-                        Text(playback.current?.groupTitle ?? "")
-                            .font(Typography.caption)
-                            .foregroundStyle(.secondary)
-                            .lineLimit(1)
+                        // The countdown, after a video ends; the full player has its Play Now and Cancel.
+                        Group {
+                            if let upNext = playback.upNext {
+                                Text("Up next in \(upNext.secondsLeft)")
+                            } else {
+                                Text(playback.current?.groupTitle ?? "")
+                            }
+                        }
+                        .font(Typography.caption)
+                        .foregroundStyle(.secondary)
+                        .lineLimit(1)
                     }
                     Spacer(minLength: 0)
                 }

@@ -104,7 +104,15 @@ struct CarModeDriveView: View {
     }
 
     @ViewBuilder private var status: some View {
-        if case let .failed(message) = playback.status {
+        if let upNext = playback.upNext {
+            UpNextCountdownView(
+                upNext: upNext,
+                onPlayNow: playback.playUpNextNow,
+                onCancel: playback.cancelUpNext,
+                showsArtwork: false
+            )
+            .padding(.top, Spacing.xs)
+        } else if case let .failed(message) = playback.status {
             // Side by side, the message wrapping: stacked, Try Again went behind the buttons on an SE.
             HStack(spacing: Spacing.sm) { failure(message) }
                 .padding(.top, Spacing.xs)

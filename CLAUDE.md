@@ -114,6 +114,7 @@ DECISIONS 33, 37 and 53–57.
 - **Pasted M3U text** is added directly, with no download.
 - **Refreshing a source** keeps favourites and watch history for every stream still present: by link, or by title, group and year when the link changed (a new token or server address; DECISIONS 107).
 - **Next / previous** step through the item's own group.
+- **Up next:** when a video ends (with Play Next Automatically on), a 5 s countdown with Play Now and Cancel comes before the next one; playing, pausing, seeking or stopping cancels it, and in the background the next starts at once (`PlaybackController+UpNext`, `UpNextCountdownView`, DECISIONS 115).
 - **Continue Watching** shows the 12 most recently played items not yet watched to the end (DECISIONS 104–107):
   - Films and episodes of 5 minutes or more resume where they stopped (`PlaybackController` keeps the place every 10 s through `LibraryRepository+History`); from 90 % they count as watched.
   - Every card shows a progress bar and the time left; the row's card menu adds Play from Beginning and Remove from Continue Watching.

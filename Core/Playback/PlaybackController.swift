@@ -2,6 +2,7 @@ import AVFoundation
 import MediaPlayer
 import Observation
 import OSLog
+import UIKit
 
 /// The app's single player, above every screen, so playback continues in the mini player, Car Mode,
 /// PiP and the background. Lock screen and steering-wheel buttons reach it via remote commands.
@@ -31,6 +32,12 @@ final class PlaybackController {
     @ObservationIgnored var playsNextAutomatically = true
     @ObservationIgnored var subtitles: SubtitleMode = .automatic
     @ObservationIgnored var subtitleTask: Task<Void, Never>?
+    /// After a video ends, the next one counting down (`+UpNext`): its seconds (fewer in tests), and
+    /// whether the app is on screen, as in the background the next video starts at once.
+    var upNext: UpNext?
+    @ObservationIgnored var upNextTask: Task<Void, Never>?
+    @ObservationIgnored var upNextDelay = 5
+    @ObservationIgnored var isInForeground: @MainActor () -> Bool = { UIApplication.shared.applicationState == .active }
 
     var isActive: Bool {
         current != nil
@@ -105,6 +112,7 @@ final class PlaybackController {
     /// Plays `item` from its saved place, or from the beginning when `startingOver`; `queue` is what
     /// next/previous step through (usually the item's group).
     func play(_ item: MediaItem, queue: [MediaItem], startingOver: Bool = false) {
+        cancelUpNext()
         saveProgress() // The item being left keeps its place.
         activateAudioSession()
         installRemoteCommands()
@@ -148,6 +156,7 @@ final class PlaybackController {
     /// Plays again; a stream that failed is reloaded, so the steering wheel's play button retries it.
     func resume() {
         guard let current else { return }
+        cancelUpNext() // Play at the end starts this video again, so the next one waits.
         staysPaused = false
         if case .failed = status {
             play(current, queue: queue)
@@ -165,6 +174,7 @@ final class PlaybackController {
     }
 
     func pause() {
+        cancelUpNext()
         staysPaused = true
         player.pause()
         if isOpening {
@@ -185,6 +195,7 @@ final class PlaybackController {
     /// Jumps to `seconds` into a video with a fixed length (live streams can't seek).
     func seek(to seconds: Double) {
         guard let duration else { return }
+        cancelUpNext() // Scrubbing back means staying on this one.
         let target = min(max(0, seconds), duration)
         elapsed = target
         player.seek(to: CMTime(seconds: target, preferredTimescale: 600))
@@ -211,6 +222,7 @@ final class PlaybackController {
     }
 
     func stop() {
+        cancelUpNext()
         saveProgress()
         player.pause()
         player.replaceCurrentItem(with: nil)
@@ -345,8 +357,8 @@ final class PlaybackController {
             elapsed = duration
         }
         saveProgress() // Watched to the end, so it leaves Continue Watching.
-        if playsNextAutomatically, hasNext {
-            next()
+        if playsNextAutomatically, let index, index + 1 < queue.count {
+            countDown(to: queue[index + 1])
         }
     }
 }
@@ -420,28 +432,11 @@ extension PlaybackController {
 // MARK: - System integration
 
 extension PlaybackController {
-    /// Set at launch too, so CarPlay and the lock screen treat Roadivo as a video player from the start.
-    private func configureAudioSession() {
-        do {
-            try AVAudioSession.sharedInstance().setCategory(.playback, mode: .moviePlayback, policy: .longFormVideo)
-        } catch {
-            logger.error("Audio category: \(error.localizedDescription, privacy: .public)")
-        }
-    }
-
-    private func activateAudioSession() {
-        configureAudioSession()
-        do {
-            try AVAudioSession.sharedInstance().setActive(true)
-        } catch {
-            logger.error("Audio session: \(error.localizedDescription, privacy: .public)")
-        }
-    }
-
     private func observeAudioSession() {
         let center = NotificationCenter.default
         let interruption = AVAudioSession.interruptionNotification
         let routeChange = AVAudioSession.routeChangeNotification
+        let background = UIApplication.didEnterBackgroundNotification
         sessionObservers = [
             center.addObserver(forName: interruption, object: nil, queue: .main) { [weak self] note in
                 let type = note.userInfo?[AVAudioSessionInterruptionTypeKey] as? UInt
@@ -451,6 +446,9 @@ extension PlaybackController {
             center.addObserver(forName: routeChange, object: nil, queue: .main) { [weak self] note in
                 let reason = note.userInfo?[AVAudioSessionRouteChangeReasonKey] as? UInt
                 MainActor.assumeIsolated { self?.routeChanged(reason: reason) }
+            },
+            center.addObserver(forName: background, object: nil, queue: .main) { [weak self] _ in
+                MainActor.assumeIsolated { self?.enteredBackground() }
             }
         ]
     }
