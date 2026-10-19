@@ -25,7 +25,7 @@ tabs: **Home · Favorites · Cast to Car · Settings**.
 - **Pro:** unlimited sources and Car Mode, including Roadivo on CarPlay.
 - StoreKit 2 runs through `StoreClient` (`StoreKitClient`; `FakeStoreClient` for
   tests and `-ui-testing`). Simulator runs use `StoreKit/Roadivo.storekit`.
-- Prices and product IDs are placeholders (DECISIONS 23).
+- Product IDs are `com.disolutions.roadivo.pro.{weekly,yearly,lifetime}` and must match App Store Connect (DECISIONS 23).
 
 ## Cast to Car
 
@@ -147,8 +147,7 @@ None in v1 (DECISIONS 6). Everything is stored on the device.
 - **Legal page:** `Docs/Website/roadivo.html` is one self-contained file (privacy,
   terms, support). It is hosted for App Store Connect, and the app shows the same
   file at Settings › Privacy Policy. Edit it directly; it is English only (DECISIONS 81).
-- **Before release:** set `APP_STORE_ID` in `Config/Shared.xcconfig` (Settings › Rate and Share Roadivo; DECISIONS 64),
-  and host `Docs/Website/roadivo.html` for the App Store's Privacy Policy and Support URLs.
+- **Before release:** host `Docs/Website/roadivo.html` for the App Store's Privacy Policy and Support URLs.
 
 ## Commands
 

@@ -1,9 +1,8 @@
 // Roadivo settings shared by Debug and Release. Committed, so nothing secret: secrets go in
 // a gitignored Secrets.xcconfig or the Keychain.
 
-// The Apple Developer Team ID (developer.apple.com → Membership). Empty until
-// the owner picks a team; simulator builds don't need one.
-DEVELOPMENT_TEAM =
+// The Apple Developer Team ID (developer.apple.com → Membership): D.I. Solutions.
+DEVELOPMENT_TEAM = JX6Q67DW6M
 
 // "https:$()/$()/" keeps xcconfig from reading the URL's "//" as a comment.
 WEB_SCHEME = https:$()/$()/
@@ -18,9 +17,8 @@ API_BASE_URL = $(API_SCHEME)$(API_HOST)
 // is the bundled Docs/Website/roadivo.html (DECISIONS 81), so it needs no URL here.
 TERMS_URL = $(WEB_SCHEME)www.apple.com/legal/internet-services/itunes/dev/stdeula/
 
-// The App Store listing's Apple ID (App Store Connect → App Information), for Rate and Share.
-// Empty until the record exists (DECISIONS 64): Share then omits the link, Rate shows the system prompt.
-APP_STORE_ID =
+// The App Store listing's Apple ID (App Store Connect → App Information), for Rate and Share (DECISIONS 64).
+APP_STORE_ID = 6824396756
 
 // CarPlay entitlements are granted by Apple on request (DECISIONS 25); signing fails until they're
 // on the App ID, so set YES once granted. The CarPlay code is inert without them.

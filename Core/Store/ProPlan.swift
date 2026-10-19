@@ -10,9 +10,9 @@ enum ProPlan: String, CaseIterable, Identifiable, Sendable {
         rawValue
     }
 
-    /// Placeholder prefix until the real bundle ID is set (DECISIONS 2).
+    /// Must match the products in App Store Connect exactly (DECISIONS 23).
     var productID: String {
-        "com.example.roadivo.pro.\(rawValue)"
+        "com.disolutions.roadivo.pro.\(rawValue)"
     }
 
     static var productIDs: Set<String> {

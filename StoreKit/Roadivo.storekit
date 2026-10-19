@@ -15,7 +15,7 @@
           "locale" : "en_US"
         }
       ],
-      "productID" : "com.example.roadivo.pro.lifetime",
+      "productID" : "com.disolutions.roadivo.pro.lifetime",
       "referenceName" : "Roadivo Pro Lifetime",
       "type" : "NonConsumable"
     }
@@ -55,7 +55,7 @@
               "locale" : "en_US"
             }
           ],
-          "productID" : "com.example.roadivo.pro.yearly",
+          "productID" : "com.disolutions.roadivo.pro.yearly",
           "recurringSubscriptionPeriod" : "P1Y",
           "referenceName" : "Roadivo Pro Yearly",
           "subscriptionGroupID" : "21700001",
@@ -86,7 +86,7 @@
               "locale" : "en_US"
             }
           ],
-          "productID" : "com.example.roadivo.pro.weekly",
+          "productID" : "com.disolutions.roadivo.pro.weekly",
           "recurringSubscriptionPeriod" : "P1W",
           "referenceName" : "Roadivo Pro Weekly",
           "subscriptionGroupID" : "21700001",

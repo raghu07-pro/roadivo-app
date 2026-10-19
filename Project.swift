@@ -3,8 +3,8 @@ import ProjectDescription
 // Roadivo, an IPTV / M3U and local video player for iPhone (brief: CLAUDE.md, features: Docs/PRODUCT.md).
 // Never hand-edit the generated .pbxproj: change this manifest and run `tuist generate`.
 
-// Placeholder bundle ID (DECISIONS 2): change before the first App Store Connect upload.
-private let bundleID = "com.example.roadivo"
+// Registered for D.I. Solutions (DECISIONS 2). Never change it once a build is uploaded.
+private let bundleID = "com.disolutions.roadivo"
 private let deploymentTarget = "17.0"
 private let marketingVersion = "1.0.0"
 private let buildNumber = "1"
