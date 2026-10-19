@@ -19,7 +19,7 @@ TV on the road.
 ## First-launch flow & Pro
 
 Onboarding (4 pages) → "Buy a plan" paywall (closable, shown once) → four
-tabs: **Home · Favorites · Cast to Car · Settings**.
+tabs: **Home · Favorites · Discover · Settings**.
 
 - **Free:** 1 source, unlimited videos On this iPhone, AirPlay and PiP.
 - **Pro:** unlimited sources and Car Mode, including Roadivo on CarPlay.
@@ -27,21 +27,25 @@ tabs: **Home · Favorites · Cast to Car · Settings**.
   tests and `-ui-testing`). Simulator runs use `StoreKit/Roadivo.storekit`.
 - Product IDs are `com.disolutions.roadivo.pro.{weekly,yearly,lifetime}` and must match App Store Connect (DECISIONS 23).
 
-## Cast to Car
+## Discover and the car
 
 - Roadivo's CarPlay app (`App/CarPlaySceneDelegate.swift`) shows Favorites,
   Recent and Library, then hands playback to the shared player.
 - Video plays over AirPlay, parked only, in cars with CarPlay video. While
   driving, the car plays sound only.
-- The tab shows live CarPlay and AirPlay status (`CarConnection`). Until a car is connected it only
-  explains how to connect; Car Mode and AirPlay appear once connected (DECISIONS 98). Car Mode is
-  always one tap away from the player's car button (DECISIONS 102). Car Mode shows a progress bar with large times, and Drive View hides the video for the driver (DECISIONS 114).
-- How to Connect (`Features/Shared/ConnectGuide*`, in Cast to Car and Settings › Media) gives the user's steps; its CarPlay steps show
+- The **Discover** tab (`DiscoverView`, once "Cast to Car") shows only CarTV's three options (DECISIONS 118–122):
+  **Browser** (`Features/Browser`, `Core/Browser`: full screen, a grid of sites with icons loaded at run time; nothing
+  kept, no bookmarks or Recent; pages never open their apps; direct videos offer Play in Roadivo; its menu has only
+  Start Page and Leave Browser), **Cast to Screen** (How to Connect's Screen Mirroring steps) and **Cast from an app**
+  (`CastFromAppView`: AirPlay from other apps; Your Videos imports into On this iPhone and plays). Car Mode is
+  one tap away from the player's car button (DECISIONS 102). Car Mode shows a progress bar with large times, and Drive View hides the video for the driver (DECISIONS 114).
+- How to Connect (`Features/Shared/ConnectGuide*`, in Settings › Media and behind Cast to Screen) gives the user's steps; its CarPlay steps show
   only once CarPlay is switched on (DECISIONS 101).
 - **Car & Display Profiles** (`Core/Display`, `Features/Shared/DisplayProfiles`; DECISIONS 110–113): This iPhone plus a profile per AirPlay receiver, CarPlay or wired display, with aspect ratio, Play Next Automatically, subtitles, preferred source and Open Car Mode When Connected (Pro). `CarConnection.receiver` picks the profile; `AppEnvironment` applies it to the player.
 - CarPlay needs Apple's entitlements; it is switched off until they are
   granted (`ROADIVO_CARPLAY` in `Config/Shared.xcconfig`, DECISIONS 25). While
-  it is off, the app hides every CarPlay promise (`CarPlayAvailability`, DECISIONS 84).
+  it is off, the app hides every CarPlay promise (`CarPlayAvailability`, DECISIONS 84). Simulator builds carry
+  the entitlements so Xcode's CarPlay window shows the app (DECISIONS 121).
 
 ## Design
 
@@ -119,7 +123,6 @@ DECISIONS 33, 37 and 53–57.
   - Films and episodes of 5 minutes or more resume where they stopped (`PlaybackController` keeps the place every 10 s through `LibraryRepository+History`); from 90 % they count as watched.
   - Every card shows a progress bar and the time left; the row's card menu adds Play from Beginning and Remove from Continue Watching.
   - A row mixing posters with wide cards draws every card 16:9, the poster cropped to fill it (DECISIONS 108).
-- **Start Car Mode** on the Car tab resumes the last-played item when nothing is playing.
 - **Deleting "On this iPhone"** also deletes the copied video files.
 - **Media servers:** Jellyfin, Emby and Xtream sign in with an address and login; Plex with a code at plex.tv/link (`PlexClient`, `PlexLoginViewModel`, DECISIONS 72).
 - **Browsing:** group chips (one group at a time, no "All") in the player, on a group's screen and on a source's screen (Manage Sources › a source: Refresh, Rename, Copy Link, Delete). Home's one button is + until a source exists, then the source menu (DECISIONS 95–96).

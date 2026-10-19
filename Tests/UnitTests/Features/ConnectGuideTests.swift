@@ -8,7 +8,7 @@ struct ConnectGuideTests {
     func withoutCarPlay() {
         let guide = ConnectGuide(hasCarPlay: false)
 
-        #expect(guide.sections.map(\.id) == ["connect", "airplay", "carmode"])
+        #expect(guide.sections.map(\.id) == ["connect", "airplay", "mirroring", "carmode"])
         #expect(guide.title.key == "Connect Roadivo to Your Car")
         // No promise that Roadivo shows on the car's screen (App Review 2.3).
         let steps = guide.sections.flatMap(\.steps).map(\.key)
@@ -20,11 +20,23 @@ struct ConnectGuideTests {
     func withCarPlay() throws {
         let guide = ConnectGuide(hasCarPlay: true)
 
-        #expect(guide.sections.map(\.id) == ["carplay", "airplay", "carmode"])
+        #expect(guide.sections.map(\.id) == ["carplay", "airplay", "mirroring", "carmode"])
         #expect(guide.title.key == "Connect Roadivo to CarPlay")
         let carPlay = try #require(guide.sections.first)
         #expect(carPlay.steps.count == 4)
         #expect(guide.proNote.key == "CarPlay and Car Mode are included with Roadivo Pro.")
+    }
+
+    @Test("Screen Mirroring is explained as iOS's own feature, with how to stop it")
+    func mirroring() throws {
+        let section = try #require(ConnectGuide(hasCarPlay: false).sections.first { $0.id == "mirroring" })
+        let steps = section.steps.map(\.key)
+
+        #expect(steps.count == 4)
+        #expect(steps.contains { $0.contains("iOS now shows your whole iPhone") })
+        #expect(steps.contains { $0.contains("Stop Mirroring") })
+        // iOS does the mirroring: no step claims Roadivo shows other apps (App Review 2.3.1).
+        #expect(!steps.contains { $0.contains("Roadivo shows") })
     }
 
     @Test("Every step is in the string catalog, so it shows translated")

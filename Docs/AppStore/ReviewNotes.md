@@ -39,6 +39,14 @@ controls for a phone on a dashboard mount. Its "Drive View" hides the video for 
 needed to test it. Video reaches a car display only over AirPlay (Control Center, or the AirPlay button
 in Car Mode), and only while parked. This version does not include CarPlay.
 
+DISCOVER TAB › BROWSER, CAST TO SCREEN, CAST FROM AN APP
+- Browser: a general web browser. Its start page links to popular video websites (opened as websites,
+  never their apps; their icons load from the sites). Roadivo provides no content. A page's videos play
+  in the page, with its own AirPlay button; a direct video link can play in Roadivo's player instead.
+- Cast to Screen: explains iOS's own Screen Mirroring (Control Center) to an AirPlay car display.
+- Cast from an app: explains AirPlay from other apps, and adds the user's own videos from Files or
+  Photos to "On this iPhone".
+
 PERMISSIONS (each asked only when the feature is used)
 - Camera: scanning a QR code that contains a playlist link.
 - Microphone and Speech Recognition: voice search on Home.

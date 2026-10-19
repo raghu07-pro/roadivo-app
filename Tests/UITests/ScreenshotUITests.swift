@@ -64,7 +64,7 @@ final class ScreenshotUITests: XCTestCase {
         snapshot("17-ImportMenu", app: app)
         app.tap()
 
-        app.tabBars.buttons["Cast to Car"].tap()
+        app.tabBars.buttons["Discover"].tap()
         snapshot("18-Car", app: app)
 
         // Stop playback first, for a clean Settings screenshot.

@@ -1,6 +1,6 @@
 import XCTest
 
-/// Car & Display Profiles: saved for the connected car from Cast to Car, edited, and listed in Settings.
+/// Car & Display Profiles: saved for the connected car, edited, and listed in Settings.
 /// `-car-connected` stands in for CarPlay audio, which a simulator can't have.
 @MainActor
 final class DisplayProfilesUITests: XCTestCase {
@@ -8,13 +8,12 @@ final class DisplayProfilesUITests: XCTestCase {
         continueAfterFailure = false
     }
 
-    func testSaveAndEditProfileFromCastToCar() throws {
+    func testSaveAndEditProfileFromSettings() throws {
         let app = XCUIApplication.roadivo(skipOnboarding: true, pro: true, carConnected: true)
-        app.tabBars.buttons.element(boundBy: 2).tap()
-        let save = app.buttons["cast.profile.save"]
+        app.tabBars.buttons["Settings"].tap()
+        app.buttons["settings.displayProfiles"].tap()
+        let save = app.buttons["profiles.saveCurrent"]
         XCTAssertTrue(save.waitForExistence(timeout: 10))
-        app.swipeUp() // The card comes after the ways to the car, below the fold on smaller iPhones.
-        snapshot("40-Cast-Profile", app: app)
         save.tap()
 
         let fill = app.buttons["Fill"]
@@ -30,10 +29,9 @@ final class DisplayProfilesUITests: XCTestCase {
         try auditIgnoringBottomEdge(app, for: [.dynamicType, .sufficientElementDescription, .hitRegion])
 
         app.navigationBars.buttons.element(boundBy: 0).tap()
-        let edit = app.buttons["cast.profile.edit"]
-        XCTAssertTrue(edit.waitForExistence(timeout: 5))
-        app.swipeUp()
-        edit.tap()
+        let row = app.buttons["profiles.row.CarPlay"]
+        XCTAssertTrue(row.waitForExistence(timeout: 5))
+        row.tap()
         XCTAssertTrue(app.buttons["Fill"].waitForExistence(timeout: 5))
         XCTAssertTrue(app.buttons["Fill"].isSelected)
         XCTAssertEqual(app.switches["profile.playsNext"].value as? String, "0")

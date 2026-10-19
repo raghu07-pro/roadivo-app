@@ -48,7 +48,7 @@ struct FAQEntry: Identifiable {
         FAQEntry(
             id: 6,
             question: "What do I need to watch in the car?",
-            answer: "A car display or wireless adapter that accepts AirPlay video. Start a channel, then pick the display for AirPlay in Control Center. Once your iPhone is connected to the car, Cast to Car also offers Car Mode for a mounted iPhone. Never watch video while driving."
+            answer: "A car display or wireless adapter that accepts AirPlay video. Start a channel, then pick the display for AirPlay in Control Center. For a mounted iPhone, tap the car button in the player for Car Mode. Never watch video while driving."
         ),
         FAQEntry(
             id: 7,

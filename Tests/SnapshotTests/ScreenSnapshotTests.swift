@@ -309,3 +309,14 @@ extension ScreenSnapshotTests {
         playback.cancelUpNext()
     }
 }
+
+// MARK: - Browser
+
+extension ScreenSnapshotTests {
+    /// The Browser's start page: CarTV's grid of sites (letters, as icons load from the sites) and the
+    /// address bar, light and dark.
+    func testBrowserStartPage() {
+        let browser = NavigationStack { BrowserView(viewModel: BrowserViewModel()) { _ in } }
+        assertScreen(browser, named: "browser-start")
+    }
+}

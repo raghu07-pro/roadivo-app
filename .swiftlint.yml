@@ -1,6 +1,7 @@
 # Roadivo — SwiftLint. Run `swiftlint --strict` (the pre-commit guard does).
 included:
   - App
+  - Broadcast
   - Core
   - DesignSystem
   - Features

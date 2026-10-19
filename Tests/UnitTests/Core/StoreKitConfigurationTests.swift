@@ -12,6 +12,7 @@ struct StoreKitConfigurationTests {
         let session = try SKTestSession(configurationFileNamed: "Roadivo")
         session.resetToDefaultState()
         session.disableDialogs = true
+        session.clearTransactions() // The first-week price is only for someone who never subscribed.
 
         let offers = try await StoreKitClient().offers()
 

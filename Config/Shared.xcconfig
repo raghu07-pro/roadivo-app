@@ -25,5 +25,8 @@ APP_STORE_ID = 6824396756
 ROADIVO_CARPLAY = NO
 ROADIVO_CARPLAY_ENTITLEMENTS_YES = Resources/Roadivo.entitlements
 ROADIVO_CARPLAY_ENTITLEMENTS_NO =
+// The simulator doesn't check Apple's approval, so its builds carry the entitlements and the CarPlay
+// window shows Roadivo's CarPlay app. Device and App Store builds still wait for ROADIVO_CARPLAY = YES.
+ROADIVO_CARPLAY_ENTITLEMENTS_NO[sdk=iphonesimulator*] = Resources/Roadivo.entitlements
 
 PRODUCT_NAME = Roadivo

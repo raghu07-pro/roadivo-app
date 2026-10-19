@@ -116,10 +116,10 @@ final class LibraryFlowUITests: XCTestCase {
         let miniPlayer = app.buttons["miniPlayer.expand"]
         XCTAssertTrue(miniPlayer.waitForExistence(timeout: 5))
 
-        app.tabBars.buttons["Cast to Car"].tap()
-        let note = app.descendants(matching: .any)["cast.safety"]
-        XCTAssertTrue(note.waitForExistence(timeout: 5))
-        XCTAssertLessThanOrEqual(note.frame.maxY, miniPlayer.frame.minY)
+        app.tabBars.buttons["Discover"].tap()
+        let lastOption = app.buttons["cast.fromApp"]
+        XCTAssertTrue(lastOption.waitForExistence(timeout: 5))
+        XCTAssertLessThanOrEqual(lastOption.frame.maxY, miniPlayer.frame.minY)
 
         app.tabBars.buttons["Settings"].tap()
         let list = app.collectionViews.firstMatch

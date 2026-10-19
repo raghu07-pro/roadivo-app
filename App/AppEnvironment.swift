@@ -210,7 +210,7 @@ final class AppEnvironment {
 private struct TestSwitches {
     let isUITesting: Bool
     let skipsOnboarding: Bool
-    /// `-car-connected`: the iPhone acts as if plugged into a car, for the Cast to Car tab.
+    /// `-car-connected`: the iPhone acts as if plugged into a car, for the car-connected paths.
     let isCarConnected: Bool
 
     init(arguments: [String]) {

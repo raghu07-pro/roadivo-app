@@ -1,17 +1,37 @@
 import SwiftUI
 
-/// "How to Connect", from Cast to Car and Settings: numbered steps for each way to the car, then what Pro adds
+/// "How to Connect", from Settings and Discover › Cast to Screen: numbered steps for each way to the car, then what Pro
+/// adds
 /// and the safety note.
 struct ConnectGuideView: View {
     let guide: ConnectGuide
     let isPro: Bool
+    /// The section to open at: Discover's Cast to Screen opens at "mirroring".
+    var focusedSection: String?
 
     var body: some View {
+        ScrollViewReader { proxy in
+            content
+                .task {
+                    if let focusedSection {
+                        proxy.scrollTo(focusedSection, anchor: .top)
+                    }
+                }
+        }
+        .background(.roadCanvas)
+        .clearsBottomAccessory()
+        .navigationTitle("How to Connect")
+        .navigationBarTitleDisplayMode(.inline)
+        .accessibilityIdentifier("guide.screen")
+    }
+
+    private var content: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: Spacing.lg) {
                 header
                 ForEach(guide.sections) { section in
                     GuideSectionCard(section: section)
+                        .id(section.id)
                 }
                 if !isPro {
                     Label {
@@ -34,11 +54,6 @@ struct ConnectGuideView: View {
             .frame(maxWidth: 640)
             .frame(maxWidth: .infinity)
         }
-        .background(.roadCanvas)
-        .clearsBottomAccessory()
-        .navigationTitle("How to Connect")
-        .navigationBarTitleDisplayMode(.inline)
-        .accessibilityIdentifier("guide.screen")
     }
 
     private var header: some View {
@@ -79,7 +94,7 @@ private struct GuideSectionCard: View {
     }
 }
 
-private struct GuideStep: View {
+struct GuideStep: View {
     let number: Int
     let text: LocalizedStringResource
 

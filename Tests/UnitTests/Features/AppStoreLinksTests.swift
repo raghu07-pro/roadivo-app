@@ -21,9 +21,9 @@ struct AppStoreLinksTests {
         #expect(links.writeReview == nil)
     }
 
-    @Test("The shipped build has no ID until the App Store Connect record exists")
+    @Test("The shipped build links to Roadivo's App Store listing")
     func currentBuild() {
-        // Flip this expectation when APP_STORE_ID is set in Config/Shared.xcconfig.
-        #expect(AppStoreLinks.current.page == nil)
+        // APP_STORE_ID in Config/Shared.xcconfig: the App Store Connect record's Apple ID.
+        #expect(AppStoreLinks.current.page?.absoluteString == "https://apps.apple.com/app/id6824396756")
     }
 }

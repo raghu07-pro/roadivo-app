@@ -1,49 +1,71 @@
 import XCTest
 
-/// Cast to Car: before and after a car is connected, Car Mode, AirPlay and How to Connect.
+/// Discover (CarTV's three options: Browser, Cast to Screen, Cast from an app), How to Connect, and Car
+/// Mode from the player.
 @MainActor
 final class CarFlowUITests: XCTestCase {
     override func setUp() {
         continueAfterFailure = false
     }
 
-    /// Before a car is connected the tab only explains how to connect: no Car Mode or AirPlay buttons.
-    func testCarTabWaitsForACar() {
-        let app = XCUIApplication.roadivo(skipOnboarding: true, demoLibrary: true, pro: true)
-        XCTAssertTrue(app.buttons["channel.Highway Stop"].waitForExistence(timeout: 10))
-        app.tabBars.buttons["Cast to Car"].tap()
-        XCTAssertTrue(app.descendants(matching: .any)["cast.status"].waitForExistence(timeout: 5))
+    /// Discover shows only its three options, whether a car is connected or not.
+    func testDiscoverShowsTheThreeOptions() throws {
+        let app = XCUIApplication.roadivo(skipOnboarding: true)
+        app.tabBars.buttons["Discover"].tap()
+        XCTAssertTrue(app.buttons["cast.browser"].waitForExistence(timeout: 5))
+        XCTAssertTrue(app.buttons["cast.mirroring"].exists)
+        XCTAssertTrue(app.buttons["cast.fromApp"].exists)
+        XCTAssertFalse(app.buttons["cast.guide.link"].exists)
         XCTAssertFalse(app.buttons["car.start"].exists)
-        XCTAssertFalse(app.buttons["car.browse"].exists)
-        XCTAssertFalse(app.descendants(matching: .any)["cast.airplay"].exists)
+        snapshot("18d-Cast-Options", app: app)
+        try auditIgnoringBottomEdge(app, for: [.dynamicType, .sufficientElementDescription, .hitRegion])
+
+        let connected = XCUIApplication.roadivo(skipOnboarding: true, carConnected: true)
+        connected.tabBars.buttons["Discover"].tap()
+        XCTAssertTrue(connected.buttons["cast.browser"].waitForExistence(timeout: 5))
+        XCTAssertFalse(connected.descendants(matching: .any)["cast.airplay"].exists)
+        XCTAssertFalse(connected.buttons["car.start"].exists)
     }
 
-    /// Connected, the AirPlay card holds Apple's own AirPlay button, which lists the screens (the list
-    /// itself needs a real iPhone).
-    func testAirPlayButtonIsTheSystemPicker() {
-        let app = XCUIApplication.roadivo(skipOnboarding: true, carConnected: true)
-        app.tabBars.buttons["Cast to Car"].tap()
-        let picker = app.descendants(matching: .any)["cast.airplay"]
-        XCTAssertTrue(picker.waitForExistence(timeout: 5))
-        XCTAssertTrue(picker.isHittable)
-        XCTAssertGreaterThanOrEqual(picker.frame.width, 44)
+    /// Cast to Screen: Start Broadcast, the address for the car screen's browser, the steps, and Screen
+    /// Mirroring for AirPlay screens. (The broadcast itself needs a real iPhone.)
+    func testCastToScreen() throws {
+        let app = XCUIApplication.roadivo(skipOnboarding: true)
+        app.tabBars.buttons["Discover"].tap()
+        let castToScreen = app.buttons["cast.mirroring"]
+        XCTAssertTrue(castToScreen.waitForExistence(timeout: 5))
+        castToScreen.tap()
+
+        XCTAssertTrue(app.buttons["broadcast.start"].waitForExistence(timeout: 5))
+        XCTAssertTrue(app.descendants(matching: .any)["broadcast.address"].exists)
+        XCTAssertTrue(app.descendants(matching: .any)["broadcast.steps"].exists)
+        snapshot("47-Cast-To-Screen", app: app)
+        try auditIgnoringBottomEdge(app, for: [.dynamicType, .sufficientElementDescription, .hitRegion])
+
+        let mirroring = app.buttons["broadcast.mirroring"]
+        app.swipeUp()
+        XCTAssertTrue(mirroring.waitForExistence(timeout: 5))
+        mirroring.tap()
+        XCTAssertTrue(app.descendants(matching: .any)["guide.mirroring"].waitForExistence(timeout: 5))
     }
 
-    func testCarTabStartsCarModeForTheLastPlayed() {
-        let app = XCUIApplication.roadivo(skipOnboarding: true, demoLibrary: true, pro: true, carConnected: true)
-        let channel = app.buttons["channel.Highway Stop"]
-        XCTAssertTrue(channel.waitForExistence(timeout: 10))
-        channel.tap()
-        let minimize = app.buttons["player.minimize"]
-        XCTAssertTrue(minimize.waitForExistence(timeout: 5))
-        minimize.tap()
-        app.tabBars.buttons["Cast to Car"].tap()
-        let start = app.buttons["car.start"]
-        XCTAssertTrue(start.waitForExistence(timeout: 5))
-        snapshot("18b-Car-Connected", app: app)
-        app.swipeUp() // On smaller iPhones the button starts behind the mini player.
-        start.tap()
-        XCTAssertTrue(app.buttons["carMode.exit"].waitForExistence(timeout: 5))
+    /// Cast from an app: the car's screen, the AirPlay steps for other apps, and the user's own videos.
+    func testCastFromAnApp() throws {
+        let app = XCUIApplication.roadivo(skipOnboarding: true)
+        app.tabBars.buttons["Discover"].tap()
+        let row = app.buttons["cast.fromApp"]
+        XCTAssertTrue(row.waitForExistence(timeout: 5))
+        row.tap()
+
+        XCTAssertTrue(app.descendants(matching: .any)["castApp.status"].waitForExistence(timeout: 5))
+        XCTAssertTrue(app.descendants(matching: .any)["castApp.steps"].exists)
+        XCTAssertTrue(app.buttons["castApp.files"].exists)
+        XCTAssertTrue(app.buttons["castApp.photos"].exists)
+        snapshot("45-Cast-From-App", app: app)
+        try auditIgnoringBottomEdge(app, for: [.dynamicType, .sufficientElementDescription, .hitRegion])
+        app.buttons["castApp.photos"].tap()
+        // Apple's Photos picker opens over Roadivo, which stays in front.
+        XCTAssertEqual(app.state, .runningForeground)
     }
 
     /// Drive View hides the video and keeps three big buttons, is remembered when Car Mode opens again,
@@ -128,51 +150,24 @@ final class CarFlowUITests: XCTestCase {
         XCTAssertTrue(app.buttons["carMode.drive.playPause"].exists)
     }
 
-    func testCarModeAsksFreeUsersForPro() {
-        let app = XCUIApplication.roadivo(skipOnboarding: true, demoLibrary: true, carConnected: true)
-        let channel = app.buttons["channel.Football Tonight"]
-        XCTAssertTrue(channel.waitForExistence(timeout: 10))
-        channel.tap()
-        let minimize = app.buttons["player.minimize"]
-        XCTAssertTrue(minimize.waitForExistence(timeout: 5))
-        minimize.tap()
-        app.tabBars.buttons["Cast to Car"].tap()
-        let start = app.buttons["car.start"]
-        XCTAssertTrue(start.waitForExistence(timeout: 5))
-        app.swipeUp() // On smaller iPhones the button starts behind the mini player.
-        start.tap()
-        let close = app.buttons["paywall.close"]
-        XCTAssertTrue(close.waitForExistence(timeout: 5))
-        close.tap()
-        XCTAssertFalse(app.buttons["carMode.exit"].exists)
-    }
-
-    /// How to Connect opens from the Car tab's link before a car connects, and from the top bar once one
-    /// has, with the steps for each way (no CarPlay steps while CarPlay is off) and the Pro note.
-    func testConnectGuideOpensFromTheCarTab() throws {
+    /// How to Connect, from Settings › Media: the steps for each way (no CarPlay steps while CarPlay is
+    /// off), Screen Mirroring, Car Mode and the Pro note.
+    func testConnectGuideInSettings() throws {
         let app = XCUIApplication.roadivo(skipOnboarding: true)
-        app.tabBars.buttons["Cast to Car"].tap()
-        let link = app.buttons["cast.guide.link"]
+        app.tabBars.buttons["Settings"].tap()
+        let link = app.buttons["settings.connectGuide"]
         XCTAssertTrue(link.waitForExistence(timeout: 5))
-        XCTAssertFalse(app.buttons["cast.guide"].exists) // The link is on the page, so no top-bar button.
         link.tap()
 
-        let connect = app.descendants(matching: .any)["guide.connect"]
-        XCTAssertTrue(connect.waitForExistence(timeout: 5))
+        XCTAssertTrue(app.descendants(matching: .any)["guide.connect"].waitForExistence(timeout: 5))
         XCTAssertTrue(app.descendants(matching: .any)["guide.airplay"].exists)
         XCTAssertFalse(app.descendants(matching: .any)["guide.carplay"].exists)
         snapshot("18c-Car-Guide", app: app)
         try app.performAccessibilityAudit(for: [.dynamicType, .sufficientElementDescription, .hitRegion])
         app.swipeUp()
+        XCTAssertTrue(app.descendants(matching: .any)["guide.mirroring"].waitForExistence(timeout: 5))
         XCTAssertTrue(app.descendants(matching: .any)["guide.carmode"].waitForExistence(timeout: 5))
         XCTAssertTrue(app.descendants(matching: .any)["guide.pro"].exists)
-
-        let connected = XCUIApplication.roadivo(skipOnboarding: true, carConnected: true)
-        connected.tabBars.buttons["Cast to Car"].tap()
-        let help = connected.buttons["cast.guide"]
-        XCTAssertTrue(help.waitForExistence(timeout: 5))
-        help.tap()
-        XCTAssertTrue(connected.descendants(matching: .any)["guide.connect"].waitForExistence(timeout: 5))
     }
 
     /// The player's car button opens Car Mode without a car connected (how App Review reaches it).
@@ -184,6 +179,8 @@ final class CarFlowUITests: XCTestCase {
         let carMode = app.buttons["player.carMode"]
         XCTAssertTrue(carMode.waitForExistence(timeout: 5))
         revealPlayerControls(app)
+        // Apple's AirPlay button sits beside it: video to a car display without mirroring.
+        XCTAssertTrue(app.descendants(matching: .any)["player.airplay"].exists)
         carMode.tap()
         XCTAssertTrue(app.buttons["carMode.exit"].waitForExistence(timeout: 5))
     }

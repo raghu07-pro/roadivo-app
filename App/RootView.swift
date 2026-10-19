@@ -66,7 +66,7 @@ private struct MainTabView: View {
     @State private var library: LibraryViewModel
     @State private var favorites: LibraryViewModel
     @State private var localVideos: LocalVideosViewModel
-    @State private var carHub: CarHubViewModel
+    @State private var browser: BrowserViewModel
     @State private var sources: SourcesViewModel
     @State private var displayProfiles: DisplayProfilesViewModel
     @State private var voiceSearch: VoiceSearchModel
@@ -88,7 +88,14 @@ private struct MainTabView: View {
         _library = State(initialValue: LibraryViewModel(repository: repository, scope: .all))
         _favorites = State(initialValue: LibraryViewModel(repository: repository, scope: .favorites))
         _localVideos = State(initialValue: LocalVideosViewModel(repository: repository))
-        _carHub = State(initialValue: CarHubViewModel(repository: repository, profiles: environment.displayProfiles))
+        // A web page that starts playing takes over: Roadivo's own video stops, keeping its place, so CarPlay,
+        // the lock screen and the steering wheel control the page's video, not a paused one behind it.
+        _browser =
+            State(initialValue: BrowserViewModel { [playback = environment.playback] in
+                if playback.isActive {
+                    playback.stop()
+                }
+            })
         _sources = State(initialValue: SourcesViewModel(repository: repository, checker: environment.streamChecker))
         _displayProfiles = State(initialValue: DisplayProfilesViewModel(
             store: environment.displayProfiles,
@@ -156,15 +163,12 @@ private struct MainTabView: View {
             .tabItem { Label("Favorites", systemImage: "heart") }
             .tag(AppRouter.Tab.favorites)
 
-            CarHubView(
-                viewModel: carHub,
-                playback: playback,
+            DiscoverView(
                 connection: environment.carConnection,
                 isPro: isPro,
-                revision: router.libraryRevision,
-                onStartCarMode: startCarMode,
-                onUpgrade: { router.paywall = .carMode },
-                onBrowse: { router.selectedTab = .home }
+                browser: browser,
+                onPlayWebVideo: { item in play(item, queue: [item]) },
+                onImportVideos: importAndPlay
             )
             .miniPlayer(
                 playback: playback,
@@ -172,7 +176,7 @@ private struct MainTabView: View {
                 height: $miniPlayerHeight,
                 onExpand: expandPlayer
             )
-            .tabItem { Label("Cast to Car", systemImage: "car") }
+            .tabItem { Label("Discover", systemImage: "location.north.circle") }
             .tag(AppRouter.Tab.car)
 
             SettingsView(
@@ -320,18 +324,6 @@ private struct MainTabView: View {
         playback.play(item, queue: queue, startingOver: true)
     }
 
-    private func startCarMode(resuming item: MediaItem?) {
-        guard isPro else {
-            router.paywall = .carMode
-            return
-        }
-        if let item {
-            // Next and previous (and the steering wheel) step through the item's own group.
-            playback.play(item, queue: item.isLocalFile ? localVideos.items : library.queue(for: item))
-        }
-        router.playerSurface = .carMode
-    }
-
     /// The player's Car Mode button: Pro goes straight in, a free user sees the plans first.
     private func startCarModeFromPlayer() {
         if isPro {
@@ -406,6 +398,22 @@ extension MainTabView {
         if plan.opensCarMode {
             router.playerSurface = .carMode
         }
+    }
+
+    /// Cast from an app › Your Videos: added to On this iPhone as an import there would be, then the first
+    /// new one plays. Any problem is shown on that page, so Favorites doesn't show it again.
+    private func importAndPlay(_ urls: [URL], skipped: Int, isTemporary: Bool) async -> String? {
+        localVideos.load()
+        let earlier = Set(localVideos.items.map(\.id))
+        let added = await localVideos.importFiles(urls, skipped: skipped, removingSourcesAfterwards: isTemporary)
+        let message = localVideos.problem?.message
+        localVideos.problem = nil
+        guard added else { return message }
+        router.libraryDidChange()
+        if let video = localVideos.items.first(where: { !earlier.contains($0.id) }) {
+            play(video, queue: localVideos.items)
+        }
+        return message
     }
 
     private func reloadHistory() {

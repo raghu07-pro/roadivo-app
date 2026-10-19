@@ -60,6 +60,10 @@ struct PlayerControls: View {
                 .lineLimit(1)
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .accessibilityAddTraits(.isHeader)
+            // Apple's AirPlay button: the video alone, full screen, on a car display or adapter, with no mirroring.
+            RoutePickerButton()
+                .frame(width: 44, height: 44)
+                .accessibilityIdentifier("player.airplay")
             button("car.fill", label: "Car Mode", identifier: "player.carMode", action: onCarMode)
             Button {
                 onFavorite()
@@ -71,6 +75,8 @@ struct PlayerControls: View {
                     .contentTransition(.symbolEffect(.replace))
                     .frame(width: 44, height: 44)
             }
+            .dynamicTypeSize(...Self.largestIcon)
+            .accessibilityShowsLargeContentViewer()
             .accessibilityLabel(isFavorite ? Text("Remove from Favorites") : Text("Add to Favorites"))
             .accessibilityIdentifier("player.favorite")
             button("xmark", label: "Close player", identifier: "player.close", action: onClose)
@@ -147,9 +153,15 @@ struct PlayerControls: View {
                 .background(Color.white.opacity(isOn ? 0.25 : 0), in: Circle())
                 .contentShape(Circle())
         }
+        .dynamicTypeSize(...Self.largestIcon)
+        .accessibilityShowsLargeContentViewer()
         .accessibilityLabel(Text(label))
         .accessibilityIdentifier(identifier)
     }
+
+    /// Like the system's bars, the icons stop growing here so they never overlap; a long press shows them
+    /// enlarged (Large Content Viewer). The title and times keep scaling.
+    private static let largestIcon = DynamicTypeSize.xxxLarge
 
     /// "0:07", "12:40" or "1:02:05".
     static func clock(_ seconds: Double) -> String {

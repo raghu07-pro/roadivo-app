@@ -123,7 +123,7 @@ struct DisplayProfilesView: View {
     }
 }
 
-/// A profile's own screen, from Settings or Cast to Car.
+/// A profile's own screen, from Settings.
 struct DisplayProfileRoute: Hashable {
     let id: UUID
 }

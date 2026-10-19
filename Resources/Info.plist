@@ -38,7 +38,11 @@
 	<key>NSSpeechRecognitionUsageDescription</key>
 	<string>Roadivo turns what you say into search text, on your iPhone when your language allows it.</string>
 	<key>NSLocalNetworkUsageDescription</key>
-	<string>Roadivo connects to playlists and video servers on your local network when you add one.</string>
+	<string>Roadivo connects to playlists and video servers on your local network, and shows your iPhone on your car&apos;s screen when you broadcast.</string>
+	<key>NSBonjourServices</key>
+	<array>
+		<string>_roadivo._tcp</string>
+	</array>
 	<key>APP_STORE_ID</key>
 	<string>$(APP_STORE_ID)</string>
 	<key>TERMS_URL</key>

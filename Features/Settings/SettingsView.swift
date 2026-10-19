@@ -46,7 +46,7 @@ struct SettingsView<SourcesScreen: View, ProfilesScreen: View>: View {
                         )
                     }
                     .accessibilityIdentifier("settings.sources")
-                    // Also on Cast to Car; here so it's easy to find again to help someone.
+                    // Also behind Discover › Cast to Screen; here so it's easy to find again to help someone.
                     NavigationLink(value: SettingsRoute.connectGuide) {
                         row(
                             symbol: "car.fill",

@@ -161,67 +161,67 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Roadivo verbindet sich mit Playlists und Videoservern in deinem lokalen Netzwerk, wenn du einen hinzufügst."
+            "value" : "Roadivo verbindet sich mit Playlists und Videoservern in deinem lokalen Netzwerk und zeigt dein iPhone auf dem Bildschirm deines Autos, wenn du überträgst."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Roadivo connects to playlists and video servers on your local network when you add one."
+            "value" : "Roadivo connects to playlists and video servers on your local network, and shows your iPhone on your car's screen when you broadcast."
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Roadivo se conecta a listas de reproducción y servidores de vídeo de tu red local cuando añades uno."
+            "value" : "Roadivo se conecta a listas y servidores de vídeo de tu red local, y muestra tu iPhone en la pantalla del coche cuando emites."
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Roadivo se connecte aux playlists et serveurs vidéo de votre réseau local lorsque vous en ajoutez un."
+            "value" : "Roadivo se connecte aux playlists et serveurs vidéo de votre réseau local, et affiche votre iPhone sur l’écran de la voiture quand vous diffusez."
           }
         },
         "hi" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "जब आप अपने लोकल नेटवर्क पर कोई प्लेलिस्ट या वीडियो सर्वर जोड़ते हैं, तो Roadivo उससे कनेक्ट होता है।"
+            "value" : "Roadivo आपके लोकल नेटवर्क पर प्लेलिस्ट और वीडियो सर्वर से कनेक्ट होता है, और ब्रॉडकास्ट करने पर आपका iPhone कार की स्क्रीन पर दिखाता है।"
           }
         },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Roadivo si connette a playlist e server video sulla tua rete locale quando ne aggiungi uno."
+            "value" : "Roadivo si collega a playlist e server video sulla tua rete locale e mostra l’iPhone sullo schermo dell’auto quando trasmetti."
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Roadivo は、ローカルネットワーク上のプレイリストやビデオサーバを追加したときに、それらに接続します。"
+            "value" : "Roadivoはローカルネットワーク上のプレイリストやビデオサーバに接続し、ブロードキャスト中はiPhoneの画面を車の画面に表示します。"
           }
         },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Roadivo는 로컬 네트워크에 있는 재생목록 및 비디오 서버를 추가하면 해당 서버에 연결합니다."
+            "value" : "Roadivo는 로컬 네트워크의 재생목록과 비디오 서버에 연결하며, 방송하면 iPhone 화면을 차량 화면에 표시합니다."
           }
         },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "O Roadivo se conecta a playlists e servidores de vídeo na sua rede local quando você adiciona um."
+            "value" : "O Roadivo se conecta a playlists e servidores de vídeo na sua rede local e mostra o seu iPhone na tela do carro quando você transmite."
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "当你添加本地网络上的播放列表或视频服务器时，Roadivo 会连接到它们。"
+            "value" : "Roadivo 会连接你本地网络上的播放列表和视频服务器，并在你广播时将 iPhone 画面显示在车载屏幕上。"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "當你加入區域網路上的播放列表或影片伺服器時，Roadivo 會連線至它們。"
+            "value" : "Roadivo 會連接你區域網路上的播放列表和影片伺服器，並在你廣播時將 iPhone 畫面顯示在車上螢幕。"
           }
         }
       }

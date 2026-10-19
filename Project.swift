@@ -62,7 +62,8 @@ let project = Project(
                 // The privacy page: the one file hosted for the App Store is also shown in the app.
                 "Docs/Website/roadivo.html"
             ],
-            dependencies: [],
+            // Screen Broadcast: Apple's screen recording, streamed to a car screen's browser (DECISIONS 124).
+            dependencies: [.target(name: "RoadivoBroadcast")],
             settings: .settings(base: [
                 // Follows the CarPlay switch in Config/Shared.xcconfig.
                 "CODE_SIGN_ENTITLEMENTS": "$(ROADIVO_CARPLAY_ENTITLEMENTS_$(ROADIVO_CARPLAY))",
@@ -72,6 +73,27 @@ let project = Project(
                 "ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES": "AppIcon-Classic",
                 "ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS": "YES"
             ])
+        ),
+        .target(
+            name: "RoadivoBroadcast",
+            destinations: [.iPhone],
+            product: .appExtension,
+            bundleId: "\(bundleID).broadcast",
+            deploymentTargets: .iOS(deploymentTarget),
+            infoPlist: .extendingDefault(with: [
+                // The name in Apple's Start Broadcast sheet.
+                "CFBundleDisplayName": "Roadivo",
+                // An extension's versions must match the app's, or the upload is refused.
+                "CFBundleShortVersionString": "$(MARKETING_VERSION)",
+                "CFBundleVersion": "$(CURRENT_PROJECT_VERSION)",
+                "NSExtension": [
+                    "NSExtensionPointIdentifier": "com.apple.broadcast-services-upload",
+                    "NSExtensionPrincipalClass": "$(PRODUCT_MODULE_NAME).SampleHandler",
+                    "RPBroadcastProcessMode": "RPBroadcastProcessModeSampleBuffer"
+                ]
+            ]),
+            sources: ["Broadcast/**", "Core/Broadcast/BroadcastHTTP.swift"],
+            dependencies: []
         ),
         .target(
             name: "RoadivoTests",

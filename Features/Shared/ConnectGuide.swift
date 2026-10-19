@@ -31,7 +31,7 @@ struct ConnectGuide {
     }
 
     var sections: [Section] {
-        [hasCarPlay ? carPlay : connect, airPlay, carMode]
+        [hasCarPlay ? carPlay : connect, airPlay, mirroring, carMode]
     }
 
     private var carPlay: Section {
@@ -57,11 +57,20 @@ struct ConnectGuide {
         ])
     }
 
+    /// iOS's own Screen Mirroring, for other apps on the car's screen; Roadivo can only explain it (DECISIONS 119).
+    private var mirroring: Section {
+        Section(id: "mirroring", title: "Screen Mirroring", systemImage: "rectangle.on.rectangle", steps: [
+            "Connect your iPhone to the car's AirPlay display or wireless adapter, usually through its Wi‑Fi.",
+            "Open Control Center and tap Screen Mirroring.",
+            "Choose the car's display or adapter. iOS now shows your whole iPhone there, whatever app is open.",
+            "To stop, tap Screen Mirroring and choose Stop Mirroring. Some apps hide their videos while mirroring."
+        ])
+    }
+
     private var carMode: Section {
         Section(id: "carmode", title: "Car Mode", systemImage: "iphone.landscape", steps: [
             "Mount your iPhone on the dashboard.",
-            "Start a channel and tap the car button at the top of the player.",
-            "Once your iPhone is connected to the car, open Cast to Car and tap Start Car Mode."
+            "Start a channel and tap the car button at the top of the player."
         ])
     }
 
