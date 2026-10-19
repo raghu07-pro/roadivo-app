@@ -23498,6 +23498,70 @@
         }
       }
     },
+    "Screen Broadcast couldn't start on this network. Try again in a moment." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Die Bildschirmübertragung konnte in diesem Netzwerk nicht starten. Versuche es gleich noch einmal."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La transmisión de pantalla no pudo iniciarse en esta red. Vuelve a intentarlo en un momento."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La diffusion d’écran n’a pas pu démarrer sur ce réseau. Réessayez dans un instant."
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "इस नेटवर्क पर स्क्रीन ब्रॉडकास्ट शुरू नहीं हो सका। थोड़ी देर में फिर से कोशिश करें।"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Impossibile avviare la trasmissione dello schermo su questa rete. Riprova tra poco."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "このネットワークでは画面ブロードキャストを開始できませんでした。しばらくしてからもう一度お試しください。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "이 네트워크에서 화면 방송을 시작할 수 없습니다. 잠시 후 다시 시도하세요."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Não foi possível iniciar a Transmissão de Tela nesta rede. Tente novamente em instantes."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无法在此网络上开始屏幕直播。请稍后再试。"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "無法在此網路上開始螢幕直播。請稍後再試一次。"
+          }
+        }
+      }
+    },
     "Screen Mirroring" : {
       "localizations" : {
         "de" : {
@@ -29382,6 +29446,70 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "再試一次"
+          }
+        }
+      }
+    },
+    "Turn on Local Network for Roadivo in Settings, or the car's screen can't reach this iPhone." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aktiviere in den Einstellungen „Lokales Netzwerk“ für Roadivo, sonst kann das Autodisplay dieses iPhone nicht erreichen."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Activa Red local para Roadivo en Ajustes; si no, la pantalla del coche no podrá conectarse a este iPhone."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Activez Réseau local pour Roadivo dans Réglages, sinon l’écran de la voiture ne pourra pas joindre cet iPhone."
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "सेटिंग्स में Roadivo के लिए लोकल नेटवर्क चालू करें, वरना कार की स्क्रीन इस iPhone तक नहीं पहुँच पाएगी।"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Attiva Rete locale per Roadivo in Impostazioni, altrimenti lo schermo dell’auto non può raggiungere questo iPhone."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "設定で Roadivo のローカルネットワークをオンにしてください。オフのままだと、車の画面からこの iPhone に接続できません。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "설정에서 Roadivo의 로컬 네트워크를 켜세요. 그렇지 않으면 차량 화면이 이 iPhone에 연결할 수 없습니다."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ative a Rede Local para o Roadivo em Ajustes, ou a tela do carro não conseguirá acessar este iPhone."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "请在“设置”中为 Roadivo 打开“本地网络”，否则车机屏幕无法连接此 iPhone。"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "請在「設定」中為 Roadivo 開啟「區域網路」，否則車機螢幕無法連線到此 iPhone。"
           }
         }
       }

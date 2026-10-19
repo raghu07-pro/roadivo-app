@@ -7,7 +7,8 @@ import ProjectDescription
 private let bundleID = "com.disolutions.roadivo"
 private let deploymentTarget = "17.0"
 private let marketingVersion = "1.0.0"
-private let buildNumber = "1"
+// One higher for every upload: App Store Connect refuses a build number it has seen (1 went up on 2026-10-19).
+private let buildNumber = "2"
 
 private let baseSettings: SettingsDictionary = [
     "SWIFT_VERSION": "6.0",
@@ -25,6 +26,8 @@ let project = Project(
     organizationName: "Roadivo",
     options: .options(
         // English plus the 10 shipped translations (DECISIONS 33).
+        // Only the Roadivo scheme below: an extension's own scheme has no StoreKit file and archives the wrong way.
+        automaticSchemesOptions: .disabled,
         defaultKnownRegions: ["en", "es", "fr", "de", "it", "pt-BR", "ja", "ko", "zh-Hans", "zh-Hant", "hi"],
         developmentRegion: "en"
     ),
@@ -93,7 +96,11 @@ let project = Project(
                 ]
             ]),
             sources: ["Broadcast/**", "Core/Broadcast/BroadcastHTTP.swift"],
-            dependencies: []
+            // The app's catalog, for the message shown when the broadcast can't start.
+            resources: ["Resources/Localizable.xcstrings"],
+            dependencies: [],
+            // Installed inside the app only, so the archive stays an iOS App Archive Organizer can upload.
+            settings: .settings(base: ["SKIP_INSTALL": "YES"])
         ),
         .target(
             name: "RoadivoTests",

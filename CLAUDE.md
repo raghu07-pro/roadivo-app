@@ -33,10 +33,12 @@ tabs: **Home · Favorites · Discover · Settings**.
   Recent and Library, then hands playback to the shared player.
 - Video plays over AirPlay, parked only, in cars with CarPlay video. While
   driving, the car plays sound only.
-- The **Discover** tab (`DiscoverView`, once "Cast to Car") shows only CarTV's three options (DECISIONS 118–122):
+- The **Discover** tab (`DiscoverView`, once "Cast to Car") shows only CarTV's three options (DECISIONS 118–124):
   **Browser** (`Features/Browser`, `Core/Browser`: full screen, a grid of sites with icons loaded at run time; nothing
   kept, no bookmarks or Recent; pages never open their apps; direct videos offer Play in Roadivo; its menu has only
-  Start Page and Leave Browser), **Cast to Screen** (How to Connect's Screen Mirroring steps) and **Cast from an app**
+  Start Page and Leave Browser), **Cast to Screen** (`CastToScreenView`: Screen Broadcast, the whole iPhone in a car
+  screen's browser over the local network, served by the `RoadivoBroadcast` extension with `Core/Broadcast`; real
+  iPhone only. Screen Mirroring steps below it) and **Cast from an app**
   (`CastFromAppView`: AirPlay from other apps; Your Videos imports into On this iPhone and plays). Car Mode is
   one tap away from the player's car button (DECISIONS 102). Car Mode shows a progress bar with large times, and Drive View hides the video for the driver (DECISIONS 114).
 - How to Connect (`Features/Shared/ConnectGuide*`, in Settings › Media and behind Cast to Screen) gives the user's steps; its CarPlay steps show
@@ -143,7 +145,7 @@ None in v1 (DECISIONS 6). Everything is stored on the device.
 - **Not in v1:**
   - EPG
   - MKV, raw TS and AC3
-  - screen mirroring
+  - starting AirPlay Screen Mirroring from the app (Apple has no API; Screen Broadcast covers browser screens)
   - Arabic and other right-to-left languages
 - **ATS:** `NSAllowsArbitraryLoads` is on (DECISIONS 8). Justify it in the App Review notes.
 - **Privacy:** no tracking, no ATT prompt, no third-party SDKs.

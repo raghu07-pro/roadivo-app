@@ -75,6 +75,7 @@
 		4C0E5F4F051389A105CF404A /* SourceRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 650D2FC74672866FDF188974 /* SourceRow.swift */; };
 		4CDFD450C021286F8F810A8A /* Typography.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A424614EA0839BABDFCDB16 /* Typography.swift */; };
 		4DCB0AE181F2CBF219EE28B2 /* AppRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E276B3B5B73A80E16AA12AF /* AppRouter.swift */; };
+		4DDD069BF438E28D72BB24B4 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 7D8DE2CB681743DADEA3DDD6 /* Localizable.xcstrings */; };
 		4E86BC78AC4275D39D58045D /* PlaybackClock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F49902E1933F33628A92DB0 /* PlaybackClock.swift */; };
 		4EE24CBCC3F5E5149232397B /* CarModeProgress.swift in Sources */ = {isa = PBXBuildFile; fileRef = 639D72EC83E9F3DE8F286648 /* CarModeProgress.swift */; };
 		503E5268D8A7EC968E1FCC81 /* PlexLoginViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B76484B283A75ED2AD8CCD9 /* PlexLoginViewModelTests.swift */; };
@@ -157,6 +158,7 @@
 		94689BC341E633783F8F32DA /* TuistFonts+Roadivo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 030FE6148D9D8C146BF83B29 /* TuistFonts+Roadivo.swift */; };
 		95ACF8E0C841C9FBC5953B7F /* TuistAssets+Roadivo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3669C97C2672D652D5B732CD /* TuistAssets+Roadivo.swift */; };
 		96FCD81FFFE282011B152595 /* LoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F91780B116CF31B3023DF3C /* LoadingView.swift */; };
+		978E01FDBB11179A3710A667 /* TuistBundle+RoadivoBroadcast.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7053DF62213EE1A84FADBD39 /* TuistBundle+RoadivoBroadcast.swift */; };
 		97FF3B36979EF7AF1A8C1683 /* ThemeFont.swift in Sources */ = {isa = PBXBuildFile; fileRef = D315D34D2E62A57F6C0D3B05 /* ThemeFont.swift */; };
 		991D4722D92F2951E7A7B732 /* ServerBadge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25624CAF48CAB084F4BF47D9 /* ServerBadge.swift */; };
 		9A38E872273925F7B76A54D0 /* BrowserViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D5A2782E35C47B5D7C4F0F5 /* BrowserViewModelTests.swift */; };
@@ -436,6 +438,7 @@
 		6B897B6937945CF387BD056E /* SettingsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsTests.swift; sourceTree = "<group>"; };
 		6BFCEBC0C0A460D25FF7E9F8 /* PlaylistFetcherTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaylistFetcherTests.swift; sourceTree = "<group>"; };
 		6F06E82D267EB59D4F3CE0D9 /* CarModeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CarModeView.swift; sourceTree = "<group>"; };
+		7053DF62213EE1A84FADBD39 /* TuistBundle+RoadivoBroadcast.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TuistBundle+RoadivoBroadcast.swift"; sourceTree = "<group>"; };
 		72E60E22B922D7228BCF6090 /* OrientationLock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrientationLock.swift; sourceTree = "<group>"; };
 		7398DE53B4C68C0E606798E2 /* IconTile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IconTile.swift; sourceTree = "<group>"; };
 		74FE01734889CA74EC502894 /* ConnectGuide.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectGuide.swift; sourceTree = "<group>"; };
@@ -1146,6 +1149,7 @@
 			children = (
 				3669C97C2672D652D5B732CD /* TuistAssets+Roadivo.swift */,
 				99854018FB5D8FFF8B6BFF37 /* TuistBundle+Roadivo.swift */,
+				7053DF62213EE1A84FADBD39 /* TuistBundle+RoadivoBroadcast.swift */,
 				9194647AD3F0DF51C6ADAB7F /* TuistBundle+RoadivoTests.swift */,
 				030FE6148D9D8C146BF83B29 /* TuistFonts+Roadivo.swift */,
 			);
@@ -1538,6 +1542,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4DDD069BF438E28D72BB24B4 /* Localizable.xcstrings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1560,6 +1565,7 @@
 				8E0933D75DD474DE98917B74 /* FrameServer.swift in Sources */,
 				59D020F2F284012DA12288C1 /* SampleHandler.swift in Sources */,
 				8FD3EA8F746BBB06DA25C360 /* BroadcastHTTP.swift in Sources */,
+				978E01FDBB11179A3710A667 /* TuistBundle+RoadivoBroadcast.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

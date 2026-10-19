@@ -43,14 +43,17 @@ DISCOVER TAB › BROWSER, CAST TO SCREEN, CAST FROM AN APP
 - Browser: a general web browser. Its start page links to popular video websites (opened as websites,
   never their apps; their icons load from the sites). Roadivo provides no content. A page's videos play
   in the page, with its own AirPlay button; a direct video link can play in Roadivo's player instead.
-- Cast to Screen: explains iOS's own Screen Mirroring (Control Center) to an AirPlay car display.
+- Cast to Screen: Start Broadcast opens Apple's broadcast sheet with Roadivo's Broadcast Upload
+  Extension, which shows the screen (JPEG frames) to a web browser on the same Wi-Fi, at the
+  http://...:8080/<code> address shown. Nothing is recorded or uploaded. To test: a real iPhone and any
+  computer's browser. Below it, steps for iOS's own Screen Mirroring.
 - Cast from an app: explains AirPlay from other apps, and adds the user's own videos from Files or
   Photos to "On this iPhone".
 
 PERMISSIONS (each asked only when the feature is used)
 - Camera: scanning a QR code that contains a playlist link.
 - Microphone and Speech Recognition: voice search on Home.
-- Local Network: reaching a media server or playlist on the user's home network.
+- Local Network: reaching a media server or playlist on the user's home network; Screen Broadcast.
 
 APP TRANSPORT SECURITY
 NSAllowsArbitraryLoads is set because users play their own playlists and servers, and these are often

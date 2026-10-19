@@ -7,19 +7,25 @@ struct CastToScreenView: View {
     let isPro: Bool
 
     @State private var picker = BroadcastPicker()
+    @State private var localNetwork = LocalNetworkAccess()
     @State private var address = BroadcastAddress.current()
     @Environment(\.scenePhase) private var scenePhase
+    @Environment(\.openURL) private var openURL
+    @ScaledMetric(relativeTo: .largeTitle) private var tileSide: CGFloat = 88
 
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: Spacing.lg) {
                 hero
                 PrimaryButton(title: "Start Broadcast", systemImage: "record.circle") {
-                    LocalNetworkAccess.request()
+                    localNetwork.request()
                     picker.show()
                 }
                 .accessibilityHint(Text("Opens Apple's Screen Broadcast; choose Roadivo, then Start Broadcast"))
                 .accessibilityIdentifier("broadcast.start")
+                if localNetwork.isDenied {
+                    localNetworkCard
+                }
                 addressCard
                 SectionHeader("How It Works")
                 VStack(alignment: .leading, spacing: Spacing.md) {
@@ -32,7 +38,7 @@ struct CastToScreenView: View {
                 .cardStyle()
                 .accessibilityElement(children: .contain)
                 .accessibilityIdentifier("broadcast.steps")
-                Text(Self.notes)
+                Text(app: Self.notes)
                     .font(Typography.caption)
                     .foregroundStyle(.secondary)
                 SectionHeader("AirPlay Screens")
@@ -52,10 +58,14 @@ struct CastToScreenView: View {
         .clearsBottomAccessory()
         .navigationTitle("Cast to Screen")
         .navigationBarTitleDisplayMode(.inline)
+        // Asked on arrival, so iOS's alert comes before the broadcast sheet instead of over it.
+        .task { localNetwork.request() }
+        .task { await refreshAddress() }
         // The address changes with the network: joining the car's Wi-Fi or turning on the hotspot.
         .onChange(of: scenePhase) { _, phase in
             if phase == .active {
                 address = BroadcastAddress.current()
+                localNetwork.request() // Back from Settings or iOS's alert: check the answer again.
             }
         }
         .accessibilityIdentifier("broadcast.screen")
@@ -70,26 +80,46 @@ struct CastToScreenView: View {
     streaming apps, show black. Sound stays on your iPhone. For passengers, or while parked.
     """
 
-    /// The iPhone, a stream, the car's screen.
+    /// Personal Hotspot's interface has an address only once a device joins, so look again while the page is open.
+    private func refreshAddress() async {
+        while !Task.isCancelled {
+            let current = BroadcastAddress.current()
+            if current != address {
+                address = current
+            }
+            try? await Task.sleep(for: .seconds(2)) // Throws only when cancelled, and the loop then ends.
+        }
+    }
+
+    /// The iPhone, a stream, the car's screen: side by side, or stacked when larger text won't fit that way.
     private var hero: some View {
-        HStack(spacing: Spacing.lg) {
-            endpoint("iphone", label: "iPhone")
-            Image(systemName: "dot.radiowaves.right")
-                .font(.title2.weight(.semibold))
-                .foregroundStyle(.roadAccent)
-                .accessibilityHidden(true)
-            endpoint("tv", label: "Car screen")
+        ViewThatFits(in: .horizontal) {
+            HStack(spacing: Spacing.lg) { heroParts(stacked: false) }
+            VStack(spacing: Spacing.sm) { heroParts(stacked: true) }
         }
         .frame(maxWidth: .infinity)
         .accessibilityElement(children: .combine)
     }
 
+    @ViewBuilder
+    private func heroParts(stacked: Bool) -> some View {
+        endpoint("iphone", label: "iPhone")
+        Image(systemName: "dot.radiowaves.right")
+            .font(.title2.weight(.semibold))
+            .foregroundStyle(.roadAccent)
+            .rotationEffect(.degrees(stacked ? 90 : 0))
+            .accessibilityHidden(true)
+        endpoint("tv", label: "Car screen")
+    }
+
     private func endpoint(_ symbol: String, label: LocalizedStringKey) -> some View {
-        VStack(spacing: Spacing.xs) {
+        // Capped so two tiles and the stream still fit side by side on a 320-point-wide iPhone SE.
+        let side = min(tileSide, 100)
+        return VStack(spacing: Spacing.xs) {
             Image(systemName: symbol)
                 .font(.largeTitle)
                 .foregroundStyle(.roadAccent)
-                .frame(width: 88, height: 88)
+                .frame(width: side, height: side)
                 .background(.roadSurface, in: RoundedRectangle(cornerRadius: Radius.lg, style: .continuous))
             Text(label)
                 .font(Typography.secondary)
@@ -97,18 +127,53 @@ struct CastToScreenView: View {
         }
     }
 
+    /// iOS reported Local Network off for Roadivo, so the car screen's browser can't load the broadcast.
+    private var localNetworkCard: some View {
+        VStack(alignment: .leading, spacing: Spacing.xs) {
+            Label {
+                Text("Turn on Local Network for Roadivo in Settings, or the car's screen can't reach this iPhone.")
+                    .fixedSize(horizontal: false, vertical: true)
+            } icon: {
+                Image(systemName: "exclamationmark.triangle.fill")
+                    .foregroundStyle(.roadAccent)
+            }
+            .font(Typography.body)
+            Button {
+                if let settings = URL(string: UIApplication.openSettingsURLString) {
+                    openURL(settings)
+                }
+            } label: {
+                Text("Open Settings")
+                    .font(Typography.cardTitle)
+                    .foregroundStyle(.roadAccent)
+                    .frame(minHeight: 44)
+                    .contentShape(Rectangle())
+            }
+            .buttonStyle(PressableStyle())
+            .accessibilityIdentifier("broadcast.openSettings")
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .cardStyle()
+        .accessibilityElement(children: .contain)
+        .accessibilityIdentifier("broadcast.localNetwork")
+    }
+
     /// What to type on the car's screen, or what to do first when there's no Wi-Fi or hotspot.
     private var addressCard: some View {
         VStack(alignment: .leading, spacing: Spacing.xs) {
-            Text("On the car's screen, open")
-                .font(Typography.caption)
-                .foregroundStyle(.secondary)
             if let address {
                 HStack(spacing: Spacing.sm) {
-                    Text(address) // An address reads the same in every language.
-                        .font(Typography.sectionTitle.monospaced())
-                        .textSelection(.enabled)
-                        .frame(maxWidth: .infinity, alignment: .leading)
+                    // One element, so VoiceOver reads the address as part of a sentence, not on its own.
+                    VStack(alignment: .leading, spacing: Spacing.xs) {
+                        Text("On the car's screen, open")
+                            .font(Typography.caption)
+                            .foregroundStyle(.secondary)
+                        Text(address) // An address reads the same in every language.
+                            .font(Typography.sectionTitle.monospaced())
+                            .textSelection(.enabled)
+                    }
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .accessibilityElement(children: .combine)
                     Button {
                         UIPasteboard.general.string = address
                     } label: {
@@ -120,6 +185,9 @@ struct CastToScreenView: View {
                     .accessibilityIdentifier("broadcast.copy")
                 }
             } else {
+                Text("On the car's screen, open")
+                    .font(Typography.caption)
+                    .foregroundStyle(.secondary)
                 Text("Join a Wi‑Fi network or turn on Personal Hotspot first.")
                     .font(Typography.cardTitle)
             }

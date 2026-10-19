@@ -176,7 +176,7 @@ private struct MainTabView: View {
                 height: $miniPlayerHeight,
                 onExpand: expandPlayer
             )
-            .tabItem { Label("Discover", systemImage: "location.north.circle") }
+            .tabItem { Label("Discover", systemImage: "sparkles.tv") }
             .tag(AppRouter.Tab.car)
 
             SettingsView(
