@@ -4323,6 +4323,70 @@
         }
       }
     },
+    "Got Xtream login details instead? Choose Xtream on Add a Source and sign in" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Stattdessen Xtream-Zugangsdaten erhalten? Wähle beim Hinzufügen einer Quelle Xtream und melde dich an"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¿Te dieron datos de acceso Xtream? Elige Xtream en Añadir una fuente e inicia sesión"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vous avez reçu des identifiants Xtream ? Choisissez Xtream dans Ajouter une source et connectez-vous"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "इसके बजाय Xtream लॉगिन डिटेल मिली हैं? सोर्स जोड़ें में Xtream चुनें और साइन इन करें"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hai ricevuto credenziali Xtream? Scegli Xtream in Aggiungi una sorgente e accedi"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Xtream のログイン情報を受け取った場合は、「ソースを追加」で Xtream を選んでサインインしてください"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "대신 Xtream 로그인 정보를 받으셨나요? 소스 추가에서 Xtream을 선택하고 로그인하세요"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Recebeu dados de login Xtream? Escolha Xtream em Adicionar uma Fonte e entre"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "拿到的是 Xtream 登录信息？在“添加来源”中选择 Xtream 并登录"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "拿到的是 Xtream 登入資料？在「加入來源」中選擇 Xtream 並登入"
+          }
+        }
+      }
+    },
     "Hear Roadivo through the car, watch on its screen with AirPlay, or use a mounted iPhone." : {
       "localizations" : {
         "de" : {
@@ -4899,6 +4963,70 @@
         }
       }
     },
+    "Link shown as a QR code on a TV or computer? Scan it with the scan button on Add a Source" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wird der Link als QR-Code auf einem Fernseher oder Computer angezeigt? Scanne ihn mit der Scan-Taste beim Hinzufügen einer Quelle"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¿El enlace aparece como código QR en una TV u ordenador? Escanéalo con el botón de escaneo en Añadir una fuente"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Le lien s’affiche en code QR sur une TV ou un ordinateur ? Scannez-le avec le bouton de scan dans Ajouter une source"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "लिंक TV या कंप्यूटर पर QR कोड के रूप में दिख रहा है? सोर्स जोड़ें में स्कैन बटन से उसे स्कैन करें"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Il link appare come codice QR su una TV o un computer? Scansionalo con il pulsante di scansione in Aggiungi una sorgente"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "リンクがテレビやパソコンに QR コードで表示されている場合は、「ソースを追加」のスキャンボタンで読み取ってください"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "링크가 TV나 컴퓨터에 QR 코드로 표시되나요? 소스 추가의 스캔 버튼으로 스캔하세요"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "O link aparece como código QR numa TV ou computador? Leia-o com o botão de leitura em Adicionar uma Fonte"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "链接以 QR 码显示在电视或电脑上？用“添加来源”中的扫描按钮扫描"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "連結以 QR 碼顯示在電視或電腦上？用「加入來源」中的掃描按鈕掃描"
+          }
+        }
+      }
+    },
     "Links Roadivo can't play" : {
       "localizations" : {
         "de" : {
@@ -4959,6 +5087,70 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Roadivo 無法播放的連結"
+          }
+        }
+      }
+    },
+    "Look in their welcome email or your account page for a link marked M3U, M3U8 or playlist" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Suche in der Willkommens-E-Mail oder auf deiner Kontoseite nach einem Link mit M3U, M3U8 oder Playlist"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Busca en su correo de bienvenida o en la página de tu cuenta un enlace marcado como M3U, M3U8 o lista"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cherchez dans l’e-mail de bienvenue ou sur la page de votre compte un lien indiqué M3U, M3U8 ou playlist"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "उनके वेलकम ईमेल या अपने अकाउंट पेज में M3U, M3U8 या प्लेलिस्ट लिखा लिंक देखें"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cerca nell’email di benvenuto o nella pagina del tuo account un link indicato come M3U, M3U8 o playlist"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ウェルカムメールやアカウントページで、M3U、M3U8、プレイリストと書かれたリンクを探してください"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "환영 이메일이나 계정 페이지에서 M3U, M3U8 또는 재생목록이라고 표시된 링크를 찾으세요"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Procure no e-mail de boas-vindas ou na página da sua conta um link marcado como M3U, M3U8 ou playlist"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "在欢迎邮件或你的账户页面中，查找标有 M3U、M3U8 或播放列表的链接"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "在歡迎郵件或你的帳戶頁面中，尋找標有 M3U、M3U8 或播放列表的連結"
           }
         }
       }
@@ -5663,6 +5855,70 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "未儲存"
+          }
+        }
+      }
+    },
+    "Not sure which to use? Ask your provider for your M3U or playlist link" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unsicher, was du nehmen sollst? Frag deinen Anbieter nach deinem M3U- oder Playlist-Link"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¿No sabes cuál usar? Pide a tu proveedor tu enlace M3U o de lista"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vous ne savez pas lequel utiliser ? Demandez à votre fournisseur votre lien M3U ou de playlist"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "पक्का नहीं कि कौन-सा इस्तेमाल करें? अपने प्रोवाइडर से अपना M3U या प्लेलिस्ट लिंक माँगें"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Non sai quale usare? Chiedi al tuo fornitore il tuo link M3U o della playlist"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "どれを使えばよいかわからない場合は、プロバイダーに M3U またはプレイリストのリンクを問い合わせてください"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "무엇을 써야 할지 모르겠나요? 제공업체에 M3U 또는 재생목록 링크를 요청하세요"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Não sabe qual usar? Peça ao seu provedor o seu link M3U ou de playlist"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "不确定用哪个？向你的提供商索取 M3U 或播放列表链接"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "不確定要用哪個？向你的供應商索取 M3U 或播放列表連結"
           }
         }
       }
@@ -9247,6 +9503,70 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "正常"
+          }
+        }
+      }
+    },
+    "Your IPTV provider or TV service gives you one when you sign up. To find it:" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dein IPTV-Anbieter oder TV-Dienst gibt dir eine, wenn du dich anmeldest. So findest du sie:"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tu proveedor de IPTV o servicio de TV te da una al suscribirte. Para encontrarla:"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Votre fournisseur IPTV ou service TV vous en donne une à l’inscription. Pour la trouver :"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "साइन अप करने पर आपका IPTV प्रोवाइडर या TV सर्विस आपको यह देता है। इसे ढूँढने के लिए:"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Il tuo fornitore IPTV o servizio TV te ne fornisce una quando ti abboni. Per trovarla:"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "IPTV プロバイダーやテレビサービスに登録すると提供されます。見つけ方："
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "IPTV 제공업체나 TV 서비스에 가입하면 받을 수 있습니다. 찾는 방법:"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Seu provedor de IPTV ou serviço de TV fornece uma quando você assina. Para encontrá-la:"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "注册时，你的 IPTV 提供商或电视服务会提供给你。查找方法："
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "註冊時，你的 IPTV 供應商或電視服務會提供給你。尋找方法："
           }
         }
       }
@@ -24603,70 +24923,6 @@
         }
       }
     },
-    "Search on Google" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Bei Google suchen"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Buscar en Google"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Rechercher sur Google"
-          }
-        },
-        "hi" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Google पर खोजें"
-          }
-        },
-        "it" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Cerca su Google"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Google で検索"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Google에서 검색"
-          }
-        },
-        "pt-BR" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Pesquisar no Google"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "在 Google 上搜索"
-          }
-        },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "在 Google 上搜尋"
-          }
-        }
-      }
-    },
     "Send video to an AirPlay car display, a wireless adapter or a TV." : {
       "localizations" : {
         "de" : {
@@ -30363,70 +30619,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "你的目前方案"
-          }
-        }
-      }
-    },
-    "Your IPTV or streaming provider usually gives you the link — check their website, email, or app. Many TV stations and communities also publish public playlists." : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Dein IPTV- oder Streaming-Anbieter gibt dir den Link meist selbst – sieh auf seiner Website, in seiner E-Mail oder App nach. Viele Sender und Communities veröffentlichen auch öffentliche Playlists."
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Tu proveedor de IPTV o streaming suele darte el enlace: revisa su web, su correo o su app. Muchas cadenas y comunidades también publican listas públicas."
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Votre fournisseur IPTV ou de streaming vous donne généralement le lien : consultez son site, ses e-mails ou son app. De nombreuses chaînes et communautés publient aussi des playlists publiques."
-          }
-        },
-        "hi" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "आपका IPTV या स्ट्रीमिंग प्रदाता आमतौर पर लिंक देता है — उसकी वेबसाइट, ईमेल या ऐप देखें। कई टीवी चैनल और कम्युनिटी सार्वजनिक प्लेलिस्ट भी प्रकाशित करते हैं।"
-          }
-        },
-        "it" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Di solito il link te lo dà il tuo provider IPTV o di streaming: controlla il suo sito, le email o l'app. Molte emittenti e community pubblicano anche playlist pubbliche."
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "リンクは通常、IPTV やストリーミングのプロバイダから提供されます。プロバイダの Web サイト、メール、App を確認してください。多くのテレビ局やコミュニティも公開プレイリストを公開しています。"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "링크는 보통 IPTV 또는 스트리밍 제공업체에서 제공합니다. 제공업체의 웹사이트, 이메일 또는 앱을 확인하세요. 많은 방송국과 커뮤니티에서도 공개 재생목록을 게시합니다."
-          }
-        },
-        "pt-BR" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Normalmente seu provedor de IPTV ou streaming fornece o link — confira o site, o e-mail ou o app dele. Muitas emissoras e comunidades também publicam playlists públicas."
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "链接通常由你的 IPTV 或流媒体提供商提供——请查看他们的网站、电子邮件或 App。许多电视台和社区也会发布公开播放列表。"
-          }
-        },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "連結通常由你的 IPTV 或串流供應商提供——請查看他們的網站、電子郵件或 App。許多電視台和社群也會發佈公開播放列表。"
           }
         }
       }

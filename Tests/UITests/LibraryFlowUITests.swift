@@ -253,8 +253,20 @@ final class LibraryFlowUITests: XCTestCase {
         XCTAssertFalse(app.buttons["addSource.submit"].isEnabled)
         snapshot("07-AddSource", app: app)
         app.buttons["addSource.whatIsSource"].tap()
-        XCTAssertTrue(app.buttons["whatIsSource.search"].waitForExistence(timeout: 5))
+        // Tips for finding the user's own link and a way to Help & FAQ; no web search for playlists.
+        let help = app.buttons["whatIsSource.help"]
+        XCTAssertTrue(help.waitForExistence(timeout: 5))
+        XCTAssertFalse(app.buttons["whatIsSource.search"].exists)
         snapshot("07b-WhatIsASource", app: app)
+        try auditIgnoringBottomEdge(app, for: [.dynamicType, .sufficientElementDescription, .hitRegion])
+        help.tap()
+        let contact = app.buttons["help.contactSupport"]
+        if !contact.waitForExistence(timeout: 3) {
+            app.swipeUp() // Below the questions on shorter iPhones.
+        }
+        XCTAssertTrue(contact.waitForExistence(timeout: 5))
+        app.navigationBars.buttons.element(boundBy: 0).tap()
+        XCTAssertTrue(help.waitForExistence(timeout: 5))
         app.navigationBars.buttons.element(boundBy: 0).tap()
         app.swipeUp() // On shorter iPhones the server cards start at the bottom edge, where text can't grow.
         try auditIgnoringBottomEdge(app, for: [.dynamicType, .sufficientElementDescription, .hitRegion])

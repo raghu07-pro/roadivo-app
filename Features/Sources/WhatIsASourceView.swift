@@ -1,14 +1,9 @@
 import SwiftUI
 
-/// "What is a source?": what Roadivo can play from, and where people usually get a source.
-struct WhatIsASourceView: View {
-    @Environment(\.openURL) private var openURL
-
-    private static var search: URL? {
-        var components = URLComponents(string: "https://www.google.com/search")
-        components?.queryItems = [URLQueryItem(name: "q", value: "IPTV channels from all over the world playlist")]
-        return components?.url
-    }
+/// "What is a source?": what Roadivo can play from, and how to find the one a provider gave you. No web
+/// search for playlists (DECISIONS 117). `Help` is injected by the app, as on Add a Source.
+struct WhatIsASourceView<Help: View>: View {
+    @ViewBuilder let help: () -> Help
 
     var body: some View {
         ScrollView {
@@ -30,17 +25,25 @@ struct WhatIsASourceView: View {
                 VStack(alignment: .leading, spacing: Spacing.md) {
                     heading(
                         "Where do I get one?",
-                        detail: """
-                        Your IPTV or streaming provider usually gives you the link — check their website, email, or \
-                        app. Many TV stations and communities also publish public playlists.
-                        """
+                        detail: "Your IPTV provider or TV service gives you one when you sign up. To find it:"
                     )
-                    Button {
-                        if let url = Self.search {
-                            openURL(url)
-                        }
+                    kind(
+                        "envelope.fill",
+                        "Look in their welcome email or your account page for a link marked M3U, M3U8 or playlist"
+                    )
+                    kind("play.tv.fill", "Got Xtream login details instead? Choose Xtream on Add a Source and sign in")
+                    kind(
+                        "qrcode.viewfinder",
+                        "Link shown as a QR code on a TV or computer? Scan it with the scan button on Add a Source"
+                    )
+                    kind(
+                        "questionmark.bubble.fill",
+                        "Not sure which to use? Ask your provider for your M3U or playlist link"
+                    )
+                    NavigationLink {
+                        help()
                     } label: {
-                        Label("Search on Google", systemImage: "magnifyingglass")
+                        Label("Get Help", systemImage: "bubble.left.and.text.bubble.right.fill")
                             .font(Typography.button)
                             .foregroundStyle(.roadAccent)
                             .padding(.horizontal, Spacing.lg)
@@ -50,7 +53,7 @@ struct WhatIsASourceView: View {
                     }
                     .buttonStyle(PressableStyle())
                     .frame(maxWidth: .infinity)
-                    .accessibilityIdentifier("whatIsSource.search")
+                    .accessibilityIdentifier("whatIsSource.help")
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .cardStyle(padding: Spacing.lg)
@@ -102,11 +105,11 @@ struct WhatIsASourceView: View {
 }
 
 #Preview("Light") {
-    NavigationStack { WhatIsASourceView() }
+    NavigationStack { WhatIsASourceView { Text("Help & FAQ") } }
 }
 
 #Preview("Dark, largest text") {
-    NavigationStack { WhatIsASourceView() }
+    NavigationStack { WhatIsASourceView { Text("Help & FAQ") } }
         .preferredColorScheme(.dark)
         .environment(\.dynamicTypeSize, .accessibility3)
 }

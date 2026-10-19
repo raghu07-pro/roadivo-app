@@ -76,7 +76,7 @@ struct AddSourceView<Help: View>: View {
                 .font(Typography.secondary)
                 .foregroundStyle(.roadMuted)
             NavigationLink {
-                WhatIsASourceView()
+                WhatIsASourceView(help: help)
             } label: {
                 Text("What is a source?").font(Typography.secondary.weight(.semibold))
             }
