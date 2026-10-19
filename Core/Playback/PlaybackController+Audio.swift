@@ -10,6 +10,10 @@ extension PlaybackController {
     /// Pauses while voice search has the microphone; true when `resume()` should follow.
     func pauseForMicrophone() -> Bool {
         guard current != nil else { return false }
+        if upNext != nil {
+            cancelUpNext() // The next video would otherwise start mid-sentence and cut the dictation off.
+            return false
+        }
         if isOpeningAtSavedPlace {
             pause() // It would otherwise start once its seek lands, mid-sentence.
             return true

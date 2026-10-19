@@ -37,7 +37,11 @@ struct MiniPlayerBar: View {
                 .contentShape(Rectangle())
             }
             .buttonStyle(.plain)
-            .accessibilityLabel(Text("Now playing: \(playback.current?.title ?? "")"))
+            // Minimised, the countdown is only this line, so VoiceOver reads it here.
+            .accessibilityLabel(
+                playback.upNext.map { Text("Up next: \($0.item.title)") }
+                    ?? Text("Now playing: \(playback.current?.title ?? "")")
+            )
             .accessibilityHint(Text("Opens the player"))
             .accessibilityIdentifier("miniPlayer.expand")
 

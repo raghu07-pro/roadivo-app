@@ -217,6 +217,9 @@ final class PlaybackController {
             stop()
             return
         }
+        if let upNext, ids.contains(upNext.item.id) {
+            cancelUpNext()
+        }
         queue.removeAll { ids.contains($0.id) }
         updateCommands()
     }
@@ -456,6 +459,9 @@ extension PlaybackController {
     /// A call or Siri pauses the video; it carries on afterwards unless it was paused before.
     private func interruptionChanged(type: UInt?, options: UInt?) {
         isInterrupted = type == AVAudioSession.InterruptionType.began.rawValue
+        if isInterrupted {
+            cancelUpNext() // A call or Siri has the audio; the next video waits for the user.
+        }
         guard type == AVAudioSession.InterruptionType.ended.rawValue, let options,
               AVAudioSession.InterruptionOptions(rawValue: options).contains(.shouldResume),
               current != nil, !staysPaused else { return }

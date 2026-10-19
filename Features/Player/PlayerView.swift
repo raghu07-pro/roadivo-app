@@ -44,6 +44,7 @@ struct PlayerView: View {
                 .background(.roadCanvas)
             }
         }
+        .overlay(alignment: isLandscape ? .center : .bottom) { upNext }
         .statusBarHidden(isLandscape)
         .persistentSystemOverlays(isLandscape ? .hidden : .automatic)
         .onAppear(perform: showControls)
@@ -121,24 +122,27 @@ struct PlayerView: View {
                 )
                 .transition(.opacity)
             }
-            // Over everything once a video ends, centred clear of the controls; the artwork only full screen.
-            ZStack {
-                if let upNext = viewModel.playback.upNext {
-                    UpNextCountdownView(
-                        upNext: upNext,
-                        onPlayNow: viewModel.playback.playUpNextNow,
-                        onCancel: viewModel.playback.cancelUpNext,
-                        showsArtwork: isLandscape
-                    )
-                    .padding(Spacing.sm)
-                    .transition(reduceMotion ? .opacity : .move(edge: .bottom).combined(with: .opacity))
-                }
-            }
-            .animation(
-                reduceMotion ? .easeOut(duration: 0.2) : .spring(duration: 0.4),
-                value: viewModel.playback.upNext == nil
-            )
         }
+    }
+
+    /// Once a video ends: over the picture full screen; upright, along the bottom over the grid, clear of
+    /// the player's buttons and with room for large text (the 16:9 video is too short for it).
+    private var upNext: some View {
+        ZStack {
+            if let upNext = viewModel.playback.upNext {
+                UpNextCountdownView(
+                    upNext: upNext,
+                    onPlayNow: viewModel.playback.playUpNextNow,
+                    onCancel: viewModel.playback.cancelUpNext
+                )
+                .padding(Spacing.sm)
+                .transition(reduceMotion ? .opacity : .move(edge: .bottom).combined(with: .opacity))
+            }
+        }
+        .animation(
+            reduceMotion ? .easeOut(duration: 0.2) : .spring(duration: 0.4),
+            value: viewModel.playback.upNext == nil
+        )
     }
 
     private func errorOverlay(_ message: String) -> some View {

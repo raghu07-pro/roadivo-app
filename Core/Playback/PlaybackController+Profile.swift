@@ -7,6 +7,9 @@ extension PlaybackController {
         // An AirPlay receiver may ignore it: Apple documents the property, not that every receiver honours it.
         player.externalPlaybackVideoGravity = profile.aspect.gravity
         playsNextAutomatically = profile.playsNextAutomatically
+        if !playsNextAutomatically {
+            cancelUpNext() // A screen set not to play on, connected mid-countdown.
+        }
         if subtitles != profile.subtitles {
             subtitles = profile.subtitles
             applySubtitles()

@@ -36,7 +36,19 @@ struct CarModeDriveView: View {
         // Pinned to the bottom edge, so a long title or a status line never pushes the buttons off screen.
         .safeAreaInset(edge: .bottom, spacing: 0) {
             VStack(alignment: .leading, spacing: Spacing.sm) {
-                CarModeProgress(playback: playback)
+                // Pinned with the buttons in place of the finished progress, so it can't scroll out of view.
+                if let upNext = playback.upNext {
+                    UpNextCountdownView(
+                        upNext: upNext,
+                        onPlayNow: playback.playUpNextNow,
+                        onCancel: playback.cancelUpNext,
+                        showsArtwork: false,
+                        isCompact: true
+                    )
+                    .frame(maxWidth: .infinity)
+                } else {
+                    CarModeProgress(playback: playback)
+                }
                 controls
             }
             .padding(.horizontal, Spacing.md)
@@ -104,15 +116,7 @@ struct CarModeDriveView: View {
     }
 
     @ViewBuilder private var status: some View {
-        if let upNext = playback.upNext {
-            UpNextCountdownView(
-                upNext: upNext,
-                onPlayNow: playback.playUpNextNow,
-                onCancel: playback.cancelUpNext,
-                showsArtwork: false
-            )
-            .padding(.top, Spacing.xs)
-        } else if case let .failed(message) = playback.status {
+        if case let .failed(message) = playback.status {
             // Side by side, the message wrapping: stacked, Try Again went behind the buttons on an SE.
             HStack(spacing: Spacing.sm) { failure(message) }
                 .padding(.top, Spacing.xs)

@@ -60,6 +60,8 @@ struct CarModeView: View {
                             LiveBadge().padding(Spacing.sm)
                         }
                     }
+                    // A container, so the Up Next buttons and Try Again keep their own labels and identifiers.
+                    .accessibilityElement(children: .contain)
                     .accessibilityLabel(Text("Video"))
                     .accessibilityIdentifier("carMode.video")
                 CarModeProgress(playback: playback, showsLive: false)

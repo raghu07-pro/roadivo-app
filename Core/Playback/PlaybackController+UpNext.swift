@@ -1,4 +1,4 @@
-import Foundation
+import UIKit
 
 /// After a video ends: the next one, counting down so there's a moment to stop it (DECISIONS 115).
 struct UpNext: Equatable {
@@ -24,6 +24,8 @@ extension PlaybackController {
         }
         let delay = upNextDelay
         upNext = UpNext(item: item, secondsLeft: delay, total: delay)
+        // From here, not the card: minimised, no card is on screen to say it.
+        UIAccessibility.post(notification: .announcement, argument: String(appLocalized: "Up next: \(item.title)"))
         upNextTask = Task { [weak self] in
             for remaining in stride(from: delay - 1, through: 0, by: -1) {
                 try? await Task.sleep(for: .seconds(1)) // Cut short when the user acts first.
@@ -35,9 +37,13 @@ extension PlaybackController {
         }
     }
 
+    /// Plays the card's video, unless a refresh or delete took it out of the queue meanwhile.
     func playUpNextNow() {
+        guard let item = upNext?.item else { return }
         cancelUpNext()
-        next()
+        if let target = queue.first(where: { $0.id == item.id }) {
+            play(target, queue: queue)
+        }
     }
 
     /// Stays on the video that ended.

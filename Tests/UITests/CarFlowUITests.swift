@@ -82,6 +82,52 @@ final class CarFlowUITests: XCTestCase {
         XCTAssertFalse(app.buttons["carMode.drive.playPause"].exists)
     }
 
+    /// A film that ends counts down to the next over the player, then over Car Mode's video and in Drive
+    /// View, where Play Now and Cancel keep their own names and pass the audit (UI tests count from 120).
+    func testUpNextWhenAFilmEnds() throws {
+        let app = XCUIApplication.roadivo(skipOnboarding: true, demoLibrary: true, pro: true)
+        let film = app.buttons["channel.Steel Horizon · 1080p"]
+        XCTAssertTrue(film.waitForExistence(timeout: 10))
+        film.tap()
+        revealPlayerControls(app)
+        let scrubber = app.sliders["player.scrubber"]
+        XCTAssertTrue(scrubber.waitForExistence(timeout: 20))
+        scrubber.adjust(toNormalizedSliderPosition: 0.998)
+
+        let card = app.descendants(matching: .any)["upNext.countdown"]
+        XCTAssertTrue(card.waitForExistence(timeout: 30))
+        XCTAssertTrue(app.buttons["upNext.playNow"].isHittable)
+        XCTAssertTrue(app.buttons["upNext.cancel"].isHittable)
+        // "SH": the playing film's cover initials in the grid, art drawn to fit its tile and hidden from
+        // VoiceOver (the card reads its title); the audit still sees the text and enlarges it in place.
+        try auditIgnoringBottomEdge(
+            app,
+            for: [.dynamicType, .sufficientElementDescription, .hitRegion],
+            alsoIgnoring: ["SH"]
+        )
+
+        revealPlayerControls(app)
+        app.buttons["player.carMode"].tap()
+        XCTAssertTrue(app.buttons["upNext.playNow"].waitForExistence(timeout: 5))
+        XCTAssertTrue(app.buttons["upNext.playNow"].isHittable)
+        // "Drive View": Car Mode's button trades its label for the steering wheel when larger text won't
+        // fit beside the other buttons (`ViewThatFits`); the audit enlarges the label in place instead.
+        try auditIgnoringBottomEdge(
+            app,
+            for: [.dynamicType, .sufficientElementDescription, .hitRegion],
+            alsoIgnoring: ["Drive View"]
+        )
+
+        app.buttons["carMode.driveView"].tap()
+        let cancel = app.buttons["upNext.cancel"]
+        XCTAssertTrue(cancel.waitForExistence(timeout: 5))
+        XCTAssertTrue(cancel.isHittable)
+        try auditIgnoringBottomEdge(app, for: [.dynamicType, .sufficientElementDescription, .hitRegion])
+        cancel.tap()
+        XCTAssertTrue(card.waitForNonExistence(timeout: 5))
+        XCTAssertTrue(app.buttons["carMode.drive.playPause"].exists)
+    }
+
     func testCarModeAsksFreeUsersForPro() {
         let app = XCUIApplication.roadivo(skipOnboarding: true, demoLibrary: true, carConnected: true)
         let channel = app.buttons["channel.Football Tonight"]

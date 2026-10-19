@@ -250,3 +250,62 @@ final class ScreenSnapshotTests: XCTestCase {
         assertScreen(view, named: "home-empty")
     }
 }
+
+// MARK: - Up Next
+
+extension ScreenSnapshotTests {
+    /// Up Next where it's tightest: the upright player at the largest text, Car Mode's video on an iPhone SE
+    /// and Drive View's pinned bar. It once covered the player's buttons and cut its own labels.
+    func testUpNextCountdown() throws {
+        let library = try TestLibrary()
+        let playback = PlaybackController()
+        let item = MediaItem(
+            id: UUID(),
+            title: "Midnight Courier · 4K HDR",
+            group: "Movies",
+            artworkURL: nil,
+            streamURL: URL(fileURLWithPath: "/dev/null"),
+            isLocalFile: false,
+            isFavorite: false
+        )
+        playback.upNext = UpNext(item: item, secondsLeft: 3, total: 5)
+        let player = PlayerView(
+            viewModel: PlayerViewModel(playback: playback, repository: library.repository),
+            onMinimize: {},
+            onClose: {},
+            onFavoriteChanged: {},
+            onCarMode: {}
+        )
+        .environment(\.dynamicTypeSize, .accessibility3)
+        let upright = UITraitCollection(traitsFrom: [
+            UITraitCollection(verticalSizeClass: .regular),
+            UITraitCollection(horizontalSizeClass: .compact),
+            UITraitCollection(userInterfaceStyle: .dark)
+        ])
+        assertSnapshot(
+            of: still(player, style: .dark),
+            as: .image(
+                precision: 0.98,
+                perceptualPrecision: 0.98,
+                size: CGSize(width: 390, height: 844),
+                traits: upright
+            ),
+            named: "player-largest-text"
+        )
+        let landscape = UITraitCollection(traitsFrom: [
+            UITraitCollection(verticalSizeClass: .compact),
+            UITraitCollection(horizontalSizeClass: .compact),
+            UITraitCollection(userInterfaceStyle: .dark)
+        ])
+        for (name, isDriveView) in [("car-mode-se", false), ("drive-view", true)] {
+            let carMode = CarModeView(playback: playback, isDriveView: .constant(isDriveView), onExit: {})
+            let size = isDriveView ? CGSize(width: 844, height: 390) : CGSize(width: 667, height: 375)
+            assertSnapshot(
+                of: still(carMode, style: .dark),
+                as: .image(precision: 0.98, perceptualPrecision: 0.98, size: size, traits: landscape),
+                named: name
+            )
+        }
+        playback.cancelUpNext()
+    }
+}

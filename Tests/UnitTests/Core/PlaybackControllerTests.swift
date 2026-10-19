@@ -1,4 +1,4 @@
-import Foundation
+import AVFoundation
 import Testing
 @testable import Roadivo
 
@@ -324,6 +324,54 @@ struct PlaybackControllerTests {
         for _ in 0..<(seconds * 100) where !condition() {
             try? await Task.sleep(for: .milliseconds(10)) // Polling; a cancelled sleep just polls sooner.
         }
+    }
+}
+
+// MARK: - What else stops the countdown
+
+extension PlaybackControllerTests {
+    @Test("Voice search, a call, a deleted next video or a screen set not to play on all cancel the countdown")
+    func upNextCancelledByTheRest() async throws {
+        let clips = try await endingClips(inForeground: true)
+        let (controller, queue) = (clips.controller, clips.queue)
+        defer { try? FileManager.default.removeItem(at: clips.movie) }
+        var noAutoplay = DisplayProfile(id: UUID(), name: "Car", receiver: nil)
+        noAutoplay.playsNextAutomatically = false
+        let interruption = [AVAudioSessionInterruptionTypeKey: AVAudioSession.InterruptionType.began.rawValue]
+        let stoppers: [(String, () -> Void)] = [
+            ("voice search", { #expect(!controller.pauseForMicrophone()) }),
+            ("a call", {
+                NotificationCenter.default.post(
+                    name: AVAudioSession.interruptionNotification, object: nil, userInfo: interruption
+                )
+            }),
+            ("a deleted next video", { controller.forget([queue[1].id]) }),
+            ("a screen set not to play on", { controller.apply(noAutoplay) })
+        ]
+        for (name, stop) in stoppers {
+            controller.playsNextAutomatically = true
+            controller.play(queue[0], queue: queue)
+            await waitUntil { controller.upNext != nil }
+            stop()
+            await waitUntil(seconds: 2) { controller.current?.id == queue[1].id } // Time for it to (not) play.
+            #expect(controller.upNext == nil, "\(name)")
+            #expect(controller.current?.id == queue[0].id, "\(name)")
+        }
+        controller.stop()
+    }
+
+    @Test("Leaving the app mid-countdown plays the card's video at once")
+    func upNextLeavingTheApp() async throws {
+        let clips = try await endingClips(inForeground: true)
+        let (controller, queue) = (clips.controller, clips.queue)
+        defer { try? FileManager.default.removeItem(at: clips.movie) }
+
+        controller.play(queue[0], queue: queue)
+        await waitUntil { controller.upNext != nil }
+        controller.enteredBackground()
+        #expect(controller.upNext == nil)
+        #expect(controller.current?.id == queue[1].id)
+        controller.stop()
     }
 }
 
