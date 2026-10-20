@@ -44,9 +44,8 @@ tabs: **Home · Favorites · Discover · Settings**.
 - How to Connect (`Features/Shared/ConnectGuide*`, in Settings › Media and behind Cast to Screen) gives the user's steps; its CarPlay steps show
   only once CarPlay is switched on (DECISIONS 101).
 - **Car & Display Profiles** (`Core/Display`, `Features/Shared/DisplayProfiles`; DECISIONS 110–113): This iPhone plus a profile per AirPlay receiver, CarPlay or wired display, with aspect ratio, Play Next Automatically, subtitles, preferred source and Open Car Mode When Connected (Pro). `CarConnection.receiver` picks the profile; `AppEnvironment` applies it to the player.
-- CarPlay needs Apple's entitlements; it is switched off until they are
-  granted (`ROADIVO_CARPLAY` in `Config/Shared.xcconfig`, DECISIONS 25). While
-  it is off, the app hides every CarPlay promise (`CarPlayAvailability`, DECISIONS 84). Simulator builds carry
+- CarPlay Audio was granted on 2026-10-20 and is on (`ROADIVO_CARPLAY = YES` in `Config/Shared.xcconfig`,
+  DECISIONS 25, 127). Set to NO, the app hides every CarPlay promise (`CarPlayAvailability`, DECISIONS 84). Simulator builds carry
   the entitlements so Xcode's CarPlay window shows the app (DECISIONS 121). Only the Audio entitlement is
   requested; the steps after Apple grants it are in DECISIONS 127. Video views let go of the player in the
   background (`PlayerLayerView`, `SystemVideoPlayer.Coordinator`) so sound plays on with the iPhone locked.

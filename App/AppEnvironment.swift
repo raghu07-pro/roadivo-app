@@ -135,7 +135,7 @@ final class AppEnvironment {
         // mid-step on a busy simulator.
         if isUITesting {
             environment.playback.upNextDelay = 120
-            environment.playback.controlsHideDelay = .seconds(10)
+            environment.playback.controlsHideDelay = .seconds(120)
         }
         environment.proAccess.start()
         environment.carConnection.simulatedOutputs = switches.isCarConnected ? [RouteOutput(.carAudio, "CarPlay")] : nil

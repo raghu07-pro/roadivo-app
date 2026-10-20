@@ -33,11 +33,12 @@ IN-APP PURCHASES (Roadivo Pro)
   and in Settings › Roadivo Pro. The paywall shows each plan's price and period, the first-week offer,
   the renewal terms, Terms of Use (Apple's standard EULA), Privacy Policy and Restore.
 
-CAR MODE (Pro)
-Play any video, then tap the car button at the top of the player. Car Mode shows large landscape
-controls for a phone on a dashboard mount. Its "Drive View" hides the video for the driver. No car is
-needed to test it. Video reaches a car display only over AirPlay (Control Center, or the AirPlay button
-in Car Mode), and only while parked. This version does not include CarPlay.
+CAR MODE AND CARPLAY (Pro)
+Play any video, then tap the car button in the player: Car Mode shows large landscape controls for
+a phone on a dashboard mount, and "Drive View" hides the video for the driver. Roadivo is
+also a CarPlay audio app: Favorites, Recent and Library lists and Now Playing, sound only, never video
+on the CarPlay screen. Test it in the CarPlay Simulator or a car after buying Pro in the sandbox.
+Video reaches a car display only over AirPlay, while parked.
 
 DISCOVER TAB › BROWSER, CAST TO SCREEN, CAST FROM AN APP
 - Browser: a general web browser. Its start page links to popular video websites (opened as websites,

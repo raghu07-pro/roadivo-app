@@ -236,6 +236,7 @@
 		E71E217580A077104FB04AD0 /* StringCatalogTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CE302D7CEC335239E6FAA47 /* StringCatalogTests.swift */; };
 		E72E6C105EF9659251275FA1 /* PlexClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 949A6194693774CF27C94B74 /* PlexClient.swift */; };
 		E83F80784BFA6CAE2E1E2BD7 /* ArtworkTile+MediaItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23071812F1953B4D802BFE3B /* ArtworkTile+MediaItem.swift */; };
+		ED72BB0E0CB78A28B684BE57 /* StepsHelp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 009001A8E1383CBE1C0481C8 /* StepsHelp.swift */; };
 		ED751622E5BAEEB81CD107CF /* BrowserTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BE1EEF23919A2859C62FB76 /* BrowserTests.swift */; };
 		EE47E06EF46B92916E951A6A /* ContinueWatchingUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05FE5724CE058B7950AC3EDC /* ContinueWatchingUITests.swift */; };
 		EFC6FD6C31167DFD07C02CE1 /* ConnectGuide.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74FE01734889CA74EC502894 /* ConnectGuide.swift */; };
@@ -331,6 +332,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		009001A8E1383CBE1C0481C8 /* StepsHelp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StepsHelp.swift; sourceTree = "<group>"; };
 		00DD2BDDCF97F585AAC1E02E /* BrowserSites.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserSites.swift; sourceTree = "<group>"; };
 		018F190D31EA1856E4D7B84B /* LargeControlButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LargeControlButton.swift; sourceTree = "<group>"; };
 		02C462CC4B917F1001582A67 /* PickedVideo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PickedVideo.swift; sourceTree = "<group>"; };
@@ -962,6 +964,7 @@
 				D38FEE4D43E943062C45E91C /* ConnectGuideView.swift */,
 				02C462CC4B917F1001582A67 /* PickedVideo.swift */,
 				AD61767932865557ECF3FAF3 /* PrivacyPolicyView.swift */,
+				009001A8E1383CBE1C0481C8 /* StepsHelp.swift */,
 				155884B6F74B5291D5EBE429 /* UpNextCountdownView.swift */,
 				5D7A186A9A5962A3BB61FB45 /* VoiceSearchModel.swift */,
 			);
@@ -1746,6 +1749,7 @@
 				3506597B635EE834FFB1B04D /* SectionText.swift in Sources */,
 				0A019CC5F3E1E34EA8A0305E /* PickedVideo.swift in Sources */,
 				7E7B1946B719EDFD4FC46A44 /* PrivacyPolicyView.swift in Sources */,
+				ED72BB0E0CB78A28B684BE57 /* StepsHelp.swift in Sources */,
 				A6367D1A03630A9AA4F141E5 /* UpNextCountdownView.swift in Sources */,
 				DBD22B102F3748C9B46300F6 /* VoiceSearchModel.swift in Sources */,
 				C4311B7EDEC83A6A3DB1BDD5 /* AddSourceView.swift in Sources */,

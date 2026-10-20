@@ -20,13 +20,13 @@ TERMS_URL = $(WEB_SCHEME)www.apple.com/legal/internet-services/itunes/dev/stdeul
 // The App Store listing's Apple ID (App Store Connect → App Information), for Rate and Share (DECISIONS 64).
 APP_STORE_ID = 6824396756
 
-// CarPlay entitlements are granted by Apple on request (DECISIONS 25); signing fails until they're
-// on the App ID, so set YES once granted. The CarPlay code is inert without them.
-ROADIVO_CARPLAY = NO
+// CarPlay Audio was granted by Apple on 2026-10-20 (DECISIONS 25, 127). Signing needs CarPlay Audio App enabled on
+// the App ID; NO again hides every CarPlay promise and drops the entitlement from device builds.
+ROADIVO_CARPLAY = YES
 ROADIVO_CARPLAY_ENTITLEMENTS_YES = Resources/Roadivo.entitlements
 ROADIVO_CARPLAY_ENTITLEMENTS_NO =
-// The simulator doesn't check Apple's approval, so its builds carry the entitlements and the CarPlay
-// window shows Roadivo's CarPlay app. Device and App Store builds still wait for ROADIVO_CARPLAY = YES.
+// The simulator doesn't check Apple's approval, so its builds carry the entitlement either way and the CarPlay
+// window shows Roadivo's CarPlay app.
 ROADIVO_CARPLAY_ENTITLEMENTS_NO[sdk=iphonesimulator*] = Resources/Roadivo.entitlements
 
 PRODUCT_NAME = Roadivo

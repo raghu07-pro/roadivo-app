@@ -17,23 +17,17 @@ struct CastFromAppView: View {
     @State private var problem: String?
 
     private static let videoTypes: [UTType] = [.movie, .video, .mpeg4Movie, .quickTimeMovie]
-    private static let lastStep: LocalizedStringResource =
+    /// Casting from other apps, behind the ? in the navigation bar (DECISIONS 128).
+    private static let steps: [LocalizedStringResource] = [
+        "Connect your iPhone to the car's AirPlay display or wireless adapter.",
+        "Play a video in any app that has an AirPlay button.",
         "Tap AirPlay and choose the car's display. Some apps limit quality or block certain videos."
+    ]
 
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: Spacing.lg) {
                 carScreen
-                SectionHeader("Other Apps")
-                VStack(alignment: .leading, spacing: Spacing.md) {
-                    GuideStep(number: 1, text: "Connect your iPhone to the car's AirPlay display or wireless adapter.")
-                    GuideStep(number: 2, text: "Play a video in any app that has an AirPlay button.")
-                    GuideStep(number: 3, text: Self.lastStep)
-                }
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .cardStyle()
-                .accessibilityElement(children: .contain)
-                .accessibilityIdentifier("castApp.steps")
                 SectionHeader("Your Videos")
                 VStack(spacing: 0) {
                     row("Choose Files", symbol: "folder", identifier: "castApp.files") { isPickingFiles = true }
@@ -57,6 +51,7 @@ struct CastFromAppView: View {
         .clearsBottomAccessory()
         .navigationTitle("Cast from an app")
         .navigationBarTitleDisplayMode(.inline)
+        .stepsHelp(identifier: "castApp", steps: Self.steps)
         .overlay {
             if isImporting {
                 LoadingView(message: "Importing…")

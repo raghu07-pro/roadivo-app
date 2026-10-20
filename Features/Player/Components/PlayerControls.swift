@@ -55,9 +55,9 @@ struct PlayerControls: View {
     private var topBar: some View {
         HStack(spacing: Spacing.xxs) {
             button("chevron.down", label: "Minimize player", identifier: "player.minimize", action: onMinimize)
-            Text(title)
+            Text(title) // Two lines, so larger text wraps a long title rather than cutting it off.
                 .font(Typography.cardTitle)
-                .lineLimit(1)
+                .lineLimit(2)
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .accessibilityAddTraits(.isHeader)
             // Apple's AirPlay button: the video alone, full screen, on a car display or adapter, with no mirroring.

@@ -24,10 +24,13 @@ struct UpNextCard: View {
                             )
                     }
                 HStack(spacing: Spacing.xs) {
+                    // Two lines, as Home's cards: one cut long titles off at larger text sizes.
                     Text(item.title)
                         .font(Typography.cardTitle)
                         .foregroundStyle(isCurrent ? Color.roadAccent : Color.primary)
-                        .lineLimit(1)
+                        .lineLimit(2)
+                        .multilineTextAlignment(.leading)
+                        .fixedSize(horizontal: false, vertical: true)
                     if isCurrent {
                         Image(systemName: "waveform")
                             .font(.caption.weight(.bold))

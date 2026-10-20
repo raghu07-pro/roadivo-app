@@ -28,20 +28,6 @@ struct CastToScreenView: View {
                     localNetworkCard
                 }
                 addressCard
-                SectionHeader("How It Works")
-                VStack(alignment: .leading, spacing: Spacing.md) {
-                    GuideStep(number: 1, text: Self.stepConnect)
-                    GuideStep(number: 2, text: "Tap Start Broadcast, then Start Broadcast again.")
-                    GuideStep(number: 3, text: "On the car's screen, open its web browser and go to the address above.")
-                    GuideStep(number: 4, text: Self.stepStop)
-                }
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .cardStyle()
-                .accessibilityElement(children: .contain)
-                .accessibilityIdentifier("broadcast.steps")
-                Text(app: Self.notes)
-                    .font(Typography.caption)
-                    .foregroundStyle(.secondary)
                 SectionHeader("AirPlay Screens")
                 mirroringLink
             }
@@ -59,6 +45,7 @@ struct CastToScreenView: View {
         .clearsBottomAccessory()
         .navigationTitle("Cast to Screen")
         .navigationBarTitleDisplayMode(.inline)
+        .stepsHelp(identifier: "broadcast", steps: Self.steps, note: Self.notes)
         // Asked on arrival, so iOS's alert comes before the broadcast sheet instead of over it.
         .task { localNetwork.request() }
         .task { await refreshAddress() }
@@ -72,10 +59,13 @@ struct CastToScreenView: View {
         .accessibilityIdentifier("broadcast.screen")
     }
 
-    private static let stepConnect: LocalizedStringResource =
-        "Join the car's screen to the same Wi‑Fi as this iPhone, or to this iPhone's Personal Hotspot."
-    private static let stepStop: LocalizedStringResource =
+    /// Behind the ? in the navigation bar, so the page stays short (DECISIONS 128).
+    private static let steps: [LocalizedStringResource] = [
+        "Join the car's screen to the same Wi‑Fi as this iPhone, or to this iPhone's Personal Hotspot.",
+        "Tap Start Broadcast, then Start Broadcast again.",
+        "On the car's screen, open its web browser and go to the address above.",
         "To stop, tap the red indicator at the top of the screen, or Start Broadcast, and choose Stop."
+    ]
     private static let notes: LocalizedStringResource = """
     Everything on your iPhone shows, including notifications. Apps that protect their videos, like most paid \
     streaming apps, show black. Sound stays on your iPhone. For passengers, or while parked.

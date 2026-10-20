@@ -24,7 +24,7 @@ final class SettingsUITests: XCTestCase {
         let row = app.buttons["settings.connectGuide"]
         XCTAssertTrue(row.waitForExistence(timeout: 5))
         row.tap()
-        XCTAssertTrue(app.descendants(matching: .any)["guide.connect"].waitForExistence(timeout: 5))
+        XCTAssertTrue(app.descendants(matching: .any)["guide.carplay"].waitForExistence(timeout: 5))
         XCTAssertTrue(app.descendants(matching: .any)["guide.airplay"].exists)
         app.navigationBars.buttons.element(boundBy: 0).tap()
         XCTAssertTrue(row.waitForExistence(timeout: 5))

@@ -27,8 +27,8 @@ final class CarFlowUITests: XCTestCase {
         XCTAssertFalse(connected.buttons["car.start"].exists)
     }
 
-    /// Cast to Screen: Start Broadcast, the address for the car screen's browser, the steps, and Screen
-    /// Mirroring for AirPlay screens. (The broadcast itself needs a real iPhone.)
+    /// Cast to Screen: Start Broadcast, the address for the car screen's browser, the steps behind the ?, and
+    /// Screen Mirroring for AirPlay screens. (The broadcast itself needs a real iPhone.)
     func testCastToScreen() throws {
         let app = XCUIApplication.roadivo(skipOnboarding: true)
         app.tabBars.buttons["Discover"].tap()
@@ -38,9 +38,9 @@ final class CarFlowUITests: XCTestCase {
 
         XCTAssertTrue(app.buttons["broadcast.start"].waitForExistence(timeout: 5))
         XCTAssertTrue(app.descendants(matching: .any)["broadcast.address"].exists)
-        XCTAssertTrue(app.descendants(matching: .any)["broadcast.steps"].exists)
         snapshot("47-Cast-To-Screen", app: app)
         try auditIgnoringBottomEdge(app, for: [.dynamicType, .sufficientElementDescription, .hitRegion])
+        try checkStepsHelp(app, identifier: "broadcast", snapshot: "47c-Cast-To-Screen-Steps")
 
         let mirroring = app.buttons["broadcast.mirroring"]
         app.swipeUp()
@@ -49,7 +49,28 @@ final class CarFlowUITests: XCTestCase {
         XCTAssertTrue(app.descendants(matching: .any)["guide.mirroring"].waitForExistence(timeout: 5))
     }
 
-    /// Cast from an app: the car's screen, the AirPlay steps for other apps, and the user's own videos.
+    /// Local Network off: the car's screen can't reach the iPhone, so Cast to Screen says so and Open Settings
+    /// goes straight to Roadivo's settings.
+    func testCastToScreenAsksForLocalNetwork() throws {
+        let app = XCUIApplication.roadivo(skipOnboarding: true, localNetworkDenied: true)
+        app.tabBars.buttons["Discover"].tap()
+        let castToScreen = app.buttons["cast.mirroring"]
+        XCTAssertTrue(castToScreen.waitForExistence(timeout: 5))
+        castToScreen.tap()
+
+        XCTAssertTrue(app.descendants(matching: .any)["broadcast.localNetwork"].waitForExistence(timeout: 5))
+        let openSettings = app.buttons["broadcast.openSettings"]
+        XCTAssertTrue(openSettings.isHittable)
+        snapshot("47b-Cast-To-Screen-Local-Network", app: app)
+        try auditIgnoringBottomEdge(app, for: [.dynamicType, .sufficientElementDescription, .hitRegion])
+
+        openSettings.tap()
+        let settings = XCUIApplication(bundleIdentifier: "com.apple.Preferences")
+        XCTAssertTrue(settings.wait(for: .runningForeground, timeout: 10), "Open Settings didn't open Settings")
+    }
+
+    /// Cast from an app: the car's screen, the AirPlay steps for other apps behind the ?, and the user's own
+    /// videos.
     func testCastFromAnApp() throws {
         let app = XCUIApplication.roadivo(skipOnboarding: true)
         app.tabBars.buttons["Discover"].tap()
@@ -58,11 +79,11 @@ final class CarFlowUITests: XCTestCase {
         row.tap()
 
         XCTAssertTrue(app.descendants(matching: .any)["castApp.status"].waitForExistence(timeout: 5))
-        XCTAssertTrue(app.descendants(matching: .any)["castApp.steps"].exists)
         XCTAssertTrue(app.buttons["castApp.files"].exists)
         XCTAssertTrue(app.buttons["castApp.photos"].exists)
         snapshot("45-Cast-From-App", app: app)
         try auditIgnoringBottomEdge(app, for: [.dynamicType, .sufficientElementDescription, .hitRegion])
+        try checkStepsHelp(app, identifier: "castApp", snapshot: "45b-Cast-From-App-Steps")
         app.buttons["castApp.photos"].tap()
         // Apple's Photos picker opens over Roadivo, which stays in front.
         XCTAssertEqual(app.state, .runningForeground)
@@ -150,8 +171,8 @@ final class CarFlowUITests: XCTestCase {
         XCTAssertTrue(app.buttons["carMode.drive.playPause"].exists)
     }
 
-    /// How to Connect, from Settings › Media: the steps for each way (no CarPlay steps while CarPlay is
-    /// off), Screen Mirroring, Car Mode and the Pro note.
+    /// How to Connect, from Settings › Media: the CarPlay steps first (CarPlay Audio is granted and on,
+    /// DECISIONS 127), then AirPlay, Screen Mirroring, Car Mode and the Pro note.
     func testConnectGuideInSettings() throws {
         let app = XCUIApplication.roadivo(skipOnboarding: true)
         app.tabBars.buttons["Settings"].tap()
@@ -159,9 +180,9 @@ final class CarFlowUITests: XCTestCase {
         XCTAssertTrue(link.waitForExistence(timeout: 5))
         link.tap()
 
-        XCTAssertTrue(app.descendants(matching: .any)["guide.connect"].waitForExistence(timeout: 5))
+        XCTAssertTrue(app.descendants(matching: .any)["guide.carplay"].waitForExistence(timeout: 5))
         XCTAssertTrue(app.descendants(matching: .any)["guide.airplay"].exists)
-        XCTAssertFalse(app.descendants(matching: .any)["guide.carplay"].exists)
+        XCTAssertFalse(app.descendants(matching: .any)["guide.connect"].exists)
         snapshot("18c-Car-Guide", app: app)
         try app.performAccessibilityAudit(for: [.dynamicType, .sufficientElementDescription, .hitRegion])
         app.swipeUp()

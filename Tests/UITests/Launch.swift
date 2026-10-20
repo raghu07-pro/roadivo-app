@@ -6,13 +6,15 @@ extension XCUIApplication {
     /// `restorable`: a Yearly plan bought earlier, which only Restore brings back.
     /// `carConnected`: the iPhone acts as if plugged into a car (CarPlay audio).
     /// `demoHistory`: the demo library with a film part-watched and a channel played.
+    /// `localNetworkDenied`: Local Network access is off, as iOS reports when it's refused.
     static func roadivo(
         skipOnboarding: Bool = false,
         demoLibrary: Bool = false,
         demoHistory: Bool = false,
         pro: Bool = false,
         restorable: Bool = false,
-        carConnected: Bool = false
+        carConnected: Bool = false,
+        localNetworkDenied: Bool = false
     ) -> XCUIApplication {
         let app = XCUIApplication()
         app.launchArguments = ["-ui-testing"]
@@ -33,6 +35,9 @@ extension XCUIApplication {
         }
         if carConnected {
             app.launchArguments.append("-car-connected")
+        }
+        if localNetworkDenied {
+            app.launchArguments.append("-local-network-denied")
         }
         app.launch()
         return app
@@ -79,12 +84,27 @@ extension XCTestCase {
         }
     }
 
-    /// The player's controls hide after a few seconds of playback (10 s under UI tests); a tap on the video brings
+    /// The player's controls hide after a few seconds of playback (2 minutes under UI tests); a tap on the video brings
     /// them back.
     func revealPlayerControls(_ app: XCUIApplication) {
         guard !app.buttons["player.minimize"].exists else { return }
         app.descendants(matching: .any)["player.video"].firstMatch.tap()
         XCTAssertTrue(app.buttons["player.minimize"].waitForExistence(timeout: 3))
+    }
+
+    /// A page's ? opens its steps in a sheet (they're no longer on the page), which passes the audit and
+    /// closes with its ✕ (DECISIONS 128).
+    func checkStepsHelp(_ app: XCUIApplication, identifier: String, snapshot name: String) throws {
+        let steps = app.descendants(matching: .any)["\(identifier).steps"]
+        XCTAssertFalse(steps.exists, "The steps belong in the ? sheet")
+        let help = app.buttons["\(identifier).help"]
+        XCTAssertTrue(help.waitForExistence(timeout: 5))
+        help.tap()
+        XCTAssertTrue(steps.waitForExistence(timeout: 5))
+        snapshot(name, app: app)
+        try auditIgnoringBottomEdge(app, for: [.dynamicType, .sufficientElementDescription, .hitRegion])
+        app.buttons["\(identifier).done"].tap()
+        XCTAssertTrue(steps.waitForNonExistence(timeout: 5))
     }
 
     /// Minimises the full player and waits until it has really gone. A tap that lands just as the

@@ -45,8 +45,21 @@ struct BroadcastPickerHost: UIViewRepresentable {
 final class LocalNetworkAccess {
     private(set) var isDenied = false
     @ObservationIgnored private var browser: NWBrowser?
+    /// UI tests force the "off" answer, which simulators never give.
+    private let isDeniedForTests: Bool = {
+        #if DEBUG
+            let arguments = ProcessInfo.processInfo.arguments
+            return arguments.contains("-ui-testing") && arguments.contains("-local-network-denied")
+        #else
+            return false
+        #endif
+    }()
 
     func request() {
+        if isDeniedForTests {
+            isDenied = true
+            return
+        }
         guard browser == nil else { return }
         let search = NWBrowser(for: .bonjour(type: "_roadivo._tcp", domain: nil), using: .tcp)
         search.stateUpdateHandler = { [weak self] state in

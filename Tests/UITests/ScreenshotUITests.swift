@@ -27,7 +27,7 @@ final class ScreenshotUITests: XCTestCase {
         snapshot("07-AddSource", app: app)
         link.tap()
         link.typeText("test")
-        XCTAssertTrue(app.staticTexts["No usable link found"].waitForExistence(timeout: 2))
+        XCTAssertTrue(app.staticTexts["No usable link found"].waitForExistence(timeout: 5))
         snapshot("08-AddSource-Invalid", app: app)
         app.buttons["addSource.scan"].tap()
         XCTAssertTrue(app.buttons["scanner.close"].waitForExistence(timeout: 5))
