@@ -153,6 +153,9 @@ None in v1 (DECISIONS 6). Everything is stored on the device.
   terms, support). It is hosted for App Store Connect, and the app shows the same
   file at Settings › Privacy Policy. Edit it directly; it is English only (DECISIONS 81).
 - **Before release:** host `Docs/Website/roadivo.html` for the App Store's Privacy Policy and Support URLs.
+- **Uploads:** build 1 of 1.0.0 is on TestFlight. Raise `buildNumber` in `Project.swift` by one for every upload
+  (App Store Connect refuses a number it has seen), keep `marketingVersion` until 1.0.0 is released, run
+  `tuist generate`, and archive with the `Roadivo` scheme (DECISIONS 126).
 
 ## Commands
 
