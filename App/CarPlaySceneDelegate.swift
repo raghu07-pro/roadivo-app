@@ -2,13 +2,16 @@ import CarPlay
 import Observation
 import OSLog
 
-/// Roadivo on CarPlay: Favorites, Recent and Library lists, played through the shared player.
-/// Video goes over AirPlay only while parked in supported cars (sound only when driving); DECISIONS 25.
+/// Roadivo on CarPlay: Favorites, Recent and Library lists, played through the shared player, and a Browser
+/// tab of sites. Video goes over AirPlay only while parked in supported cars (sound only when driving); DECISIONS 25.
 final class CarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegate {
     private var interfaceController: CPInterfaceController?
     /// Filled in place, so a list or Now Playing the driver has open stays put.
     private var tabs: Tabs?
     private var isWatching = false
+    /// Each site's solid CarPlay tile, made once per icon (`SiteIconTile`).
+    private var siteTiles: [String: (icon: UIImage, tile: UIImage)] = [:]
+    private lazy var placeholderTile = SiteIconTile.placeholder()
     private let logger = Logger(subsystem: "com.roadivo", category: "CarPlay")
 
     func templateApplicationScene(
@@ -22,6 +25,8 @@ final class CarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegat
             if !isWatching {
                 watchLibrary()
             }
+            // The Browser tab's icons, when Discover hasn't fetched them yet.
+            Task { await AppEnvironment.current?.siteIcons.refresh(BrowserSite.all) }
         }
     }
 
@@ -38,8 +43,8 @@ final class CarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegat
 
     // MARK: Updates
 
-    /// Redraws after a purchase (Pro may still be loading at a cold start), a library change, or
-    /// a new video (for Recent).
+    /// Redraws after a purchase (Pro may still be loading at a cold start), a library change, a new video
+    /// (for Recent), or a site's icon arriving.
     @MainActor
     private func watchLibrary() {
         guard let environment = AppEnvironment.current else { return }
@@ -48,6 +53,7 @@ final class CarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegat
             _ = environment.proAccess.isPro
             _ = environment.router.libraryRevision
             _ = environment.playback.current?.id
+            _ = environment.siteIcons.icons
         } onChange: { [weak self] in
             Task { @MainActor [weak self] in self?.libraryChanged() }
         }
@@ -91,9 +97,13 @@ final class CarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegat
         let recent = list(String(appLocalized: "Recent"), items: [], symbol: "clock.fill")
         let library = list(String(appLocalized: "Library"), items: [], symbol: "play.square.stack.fill")
         library.emptyViewTitleVariants = [String(appLocalized: "Add a source on your iPhone")]
-        tabs = Tabs(favorites: favorites, recent: recent, library: library)
+        // Audio apps get four tabs; a car that allows fewer goes without the Browser.
+        let browser = CPTabBarTemplate.maximumTabCount > 3
+            ? list(String(appLocalized: "Browser"), items: [], symbol: "globe")
+            : nil
+        tabs = Tabs(favorites: favorites, recent: recent, library: library, browser: browser)
         fillTabs()
-        return CPTabBarTemplate(templates: [favorites, recent, library])
+        return CPTabBarTemplate(templates: [favorites, recent, library, browser].compactMap(\.self))
     }
 
     @MainActor
@@ -104,6 +114,7 @@ final class CarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegat
         tabs.favorites.updateSections([CPListSection(items: menu.favorites.map { row($0, queue: menu.favorites) })])
         tabs.recent.updateSections([CPListSection(items: menu.recent.map { row($0, queue: menu.recent) })])
         tabs.library.updateSections([CPListSection(items: menu.groups.map(groupRow))])
+        tabs.browser?.updateSections([CPListSection(items: siteItems(menu, icons: environment.siteIcons))])
     }
 
     @MainActor
@@ -152,6 +163,92 @@ final class CarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegat
         return item
     }
 
+    /// The Browser tab: each site's icon and name, in rows the car wraps to fit its screen (iOS 26), or one site
+    /// per row before that.
+    @MainActor
+    private func siteItems(_ menu: CarPlayMenu, icons: SiteIconStore) -> [any CPListTemplateItem] {
+        guard #available(iOS 26, *) else {
+            return menu.sites.map { siteRow($0, image: tile(for: $0, icons: icons)) }
+        }
+        return menu.siteRows(perRow: CPMaximumNumberOfGridImages).map { siteGrid($0, icons: icons) }
+    }
+
+    @available(iOS 26, *)
+    @MainActor
+    private func siteGrid(_ sites: [BrowserSite], icons: SiteIconStore) -> CPListImageRowItem {
+        let elements = sites.map { site in
+            CPListImageRowItemImageGridElement(
+                image: tile(for: site, icons: icons),
+                imageShape: .roundedRectangle,
+                title: site.name,
+                accessorySymbolName: nil
+            )
+        }
+        let item = CPListImageRowItem(text: nil, imageGridElements: elements, allowsMultipleLines: true)
+        item.listImageRowHandler = { [weak self] _, index, completion in
+            MainActor.assumeIsolated {
+                if sites.indices.contains(index) {
+                    self?.open(sites[index])
+                }
+                completion()
+            }
+        }
+        return item
+    }
+
+    @MainActor
+    private func siteRow(_ site: BrowserSite, image: UIImage) -> CPListItem {
+        let item = CPListItem(text: site.name, detailText: nil, image: image)
+        item.handler = { [weak self] _, completion in
+            MainActor.assumeIsolated {
+                self?.open(site)
+                completion()
+            }
+        }
+        return item
+    }
+
+    /// CarPlay shows a see-through tile behind any clear pixel, so every icon goes in solid.
+    @MainActor
+    private func tile(for site: BrowserSite, icons: SiteIconStore) -> UIImage {
+        guard let icon = icons.icon(for: site) else { return placeholderTile }
+        if let made = siteTiles[site.name], made.icon === icon {
+            return made.tile
+        }
+        let tile = SiteIconTile.make(from: icon) ?? icon
+        siteTiles[site.name] = (icon, tile)
+        return tile
+    }
+
+    /// CarPlay can't show a web page, so a site opens in the iPhone's Browser; its videos reach the car over
+    /// AirPlay while parked (DECISIONS 131).
+    @MainActor
+    private func open(_ site: BrowserSite) {
+        AppEnvironment.current?.router.openInBrowser(site.url)
+        showOpenedOnPhone(site)
+    }
+
+    @MainActor
+    private func showOpenedOnPhone(_ site: BrowserSite) {
+        let done = CPAlertAction(title: String(appLocalized: "OK"), style: .cancel) { [weak self] _ in
+            MainActor.assumeIsolated {
+                self?.interfaceController?.dismissTemplate(animated: true, completion: nil)
+            }
+        }
+        let alert = CPAlertTemplate(
+            titleVariants: [
+                String(appLocalized: "\(site.name) is open on your iPhone. For passengers, or while parked."),
+                String(appLocalized: "Opened on your iPhone")
+            ],
+            actions: [done]
+        )
+        interfaceController?.presentTemplate(alert, animated: true) { [logger] _, error in
+            if let error {
+                logger.error("Browser alert: \(error.localizedDescription, privacy: .public)")
+            }
+        }
+    }
+
     @MainActor
     private func message(_ text: String) -> CPTemplate {
         let template = CPListTemplate(title: "Roadivo", sections: [])
@@ -163,5 +260,6 @@ final class CarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegat
         let favorites: CPListTemplate
         let recent: CPListTemplate
         let library: CPListTemplate
+        let browser: CPListTemplate?
     }
 }

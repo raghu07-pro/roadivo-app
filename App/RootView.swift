@@ -91,7 +91,7 @@ private struct MainTabView: View {
         // A web page that starts playing takes over: Roadivo's own video stops, keeping its place, so CarPlay,
         // the lock screen and the steering wheel control the page's video, not a paused one behind it.
         _browser =
-            State(initialValue: BrowserViewModel(icons: .onDevice()) { [playback = environment.playback] in
+            State(initialValue: BrowserViewModel(icons: environment.siteIcons) { [playback = environment.playback] in
                 if playback.isActive {
                     playback.stop()
                 }
@@ -168,7 +168,8 @@ private struct MainTabView: View {
                 isPro: isPro,
                 browser: browser,
                 onPlayWebVideo: { item in play(item, queue: [item]) },
-                onImportVideos: importAndPlay
+                onImportVideos: importAndPlay,
+                browserRequest: $router.browserRequest
             )
             .miniPlayer(
                 playback: playback,

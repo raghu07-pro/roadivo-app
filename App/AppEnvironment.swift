@@ -23,6 +23,8 @@ final class AppEnvironment {
     let streamChecker: StreamChecker
     /// Settings per car or display, applied to the player whenever the connected screen changes.
     let displayProfiles: DisplayProfileStore
+    /// The Browser's site icons, shared by Discover and the CarPlay screen's Browser tab.
+    let siteIcons = SiteIconStore.onDevice()
 
     /// The running app's environment, for the CarPlay scene: it is created by
     /// the system, not by SwiftUI, so it can't be handed one.

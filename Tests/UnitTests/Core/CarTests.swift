@@ -65,4 +65,30 @@ struct CarTests {
         #expect(menu.groups.allSatisfy { $0.items.count == 12 })
         #expect(CarPlayMenu.build(from: library.repository, limit: 500).groups.count == 30)
     }
+
+    @Test("CarPlay's Browser tab lists the Browser's sites, within the car's limit")
+    func menuSites() throws {
+        let library = try TestLibrary()
+        #expect(CarPlayMenu.build(from: library.repository).sites == BrowserSite.all)
+        #expect(CarPlayMenu.build(from: library.repository, limit: 12).sites.count == 12)
+    }
+
+    @Test("CarPlay's Browser icons are split into rows no longer than CarPlay allows, every site once, in order")
+    func menuSiteRows() throws {
+        let library = try TestLibrary()
+        let menu = CarPlayMenu.build(from: library.repository)
+        let rows = menu.siteRows(perRow: 5)
+        #expect(rows.allSatisfy { (1...5).contains($0.count) })
+        #expect(rows.flatMap(\.self) == menu.sites)
+        #expect(menu.siteRows(perRow: 0).flatMap(\.self) == menu.sites)
+    }
+
+    @Test("A site picked on CarPlay opens in Discover's Browser")
+    func siteFromCarPlay() throws {
+        let router = AppRouter()
+        let site = try #require(BrowserSite.all.first)
+        router.openInBrowser(site.url)
+        #expect(router.selectedTab == .car)
+        #expect(router.browserRequest == site.url)
+    }
 }

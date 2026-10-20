@@ -1,6 +1,70 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
+    "%@ is open on your iPhone. For passengers, or while parked." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ ist auf deinem iPhone geöffnet. Für Mitfahrende oder beim Parken."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ está abierto en tu iPhone. Para los pasajeros o con el coche aparcado."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ est ouvert sur votre iPhone. Pour les passagers, ou à l’arrêt."
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ आपके iPhone पर खुला है। यात्रियों के लिए, या गाड़ी पार्क होने पर।"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ è aperto sul tuo iPhone. Per i passeggeri o con l’auto parcheggiata."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ を iPhone で開きました。同乗者向け、または駐車中にご利用ください。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@이(가) iPhone에서 열렸습니다. 동승자용 또는 주차 중에만 사용하세요."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ está aberto no seu iPhone. Para passageiros ou com o carro estacionado."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ 已在 iPhone 上打开。供乘客观看，或在停车时观看。"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ 已在 iPhone 上打開。供乘客觀看，或在停車時觀看。"
+          }
+        }
+      }
+    },
     "%@ · %@" : {
       "localizations" : {
         "de" : {
@@ -18683,6 +18747,70 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "打開 Pro 頁面並點一下「回復購買」。請確定登入的 Apple 帳號與購買時相同。等待「購買前詢問」核准的購買項目會在核准後解鎖。"
+          }
+        }
+      }
+    },
+    "Opened on your iPhone" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Auf deinem iPhone geöffnet"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Abierto en tu iPhone"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ouvert sur votre iPhone"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "आपके iPhone पर खोला गया"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aperto sul tuo iPhone"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "iPhone で開きました"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "iPhone에서 열림"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aberto no seu iPhone"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "已在 iPhone 上打开"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "已在 iPhone 上打開"
           }
         }
       }

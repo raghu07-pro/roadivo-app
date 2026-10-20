@@ -11,6 +11,14 @@ struct CarPlayMenu: Equatable {
     let favorites: [MediaItem]
     let recent: [MediaItem]
     let groups: [Group]
+    /// The Browser tab's sites, which open in the iPhone's Browser (DECISIONS 131).
+    let sites: [BrowserSite]
+
+    /// The sites in rows of at most `perRow`, CarPlay's limit for one row of icons; the car wraps each to fit.
+    func siteRows(perRow: Int) -> [[BrowserSite]] {
+        let perRow = max(1, perRow)
+        return stride(from: 0, to: sites.count, by: perRow).map { Array(sites[$0..<min($0 + perRow, sites.count)]) }
+    }
 
     /// The most rows any list gets; the car may allow fewer (`CPListTemplate.maximumItemCount`), passed as `limit`.
     static let itemLimit = 100
@@ -32,7 +40,8 @@ struct CarPlayMenu: Equatable {
         return CarPlayMenu(
             favorites: Array(((try? repository.favorites()) ?? []).prefix(limit)),
             recent: Array(((try? repository.recentlyPlayed(limit: 20)) ?? []).prefix(limit)),
-            groups: order.prefix(limit).map { Group(title: $0, items: Array((buckets[$0] ?? []).prefix(limit))) }
+            groups: order.prefix(limit).map { Group(title: $0, items: Array((buckets[$0] ?? []).prefix(limit))) },
+            sites: Array(BrowserSite.all.prefix(limit))
         )
     }
 }

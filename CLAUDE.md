@@ -30,7 +30,8 @@ tabs: **Home · Favorites · Discover · Settings**.
 ## Discover and the car
 
 - Roadivo's CarPlay app (`App/CarPlaySceneDelegate.swift`) shows Favorites,
-  Recent and Library, then hands playback to the shared player.
+  Recent and Library, then hands playback to the shared player. A fourth **Browser** tab lists the Browser's
+  sites; tapping one opens it in Discover › Browser on the iPhone, as CarPlay can't show web pages (DECISIONS 131).
 - Video plays over AirPlay, parked only, in cars with CarPlay video. While
   driving, the car plays sound only.
 - The **Discover** tab (`DiscoverView`, once "Cast to Car") shows only CarTV's three options (DECISIONS 118–124):

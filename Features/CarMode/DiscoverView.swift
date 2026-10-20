@@ -11,6 +11,8 @@ struct DiscoverView: View {
     let onPlayWebVideo: (MediaItem) -> Void
     /// Cast from an app › Your Videos: added to On this iPhone and played; a message if that failed.
     let onImportVideos: (_ urls: [URL], _ skipped: Int, _ isTemporary: Bool) async -> String?
+    /// A site picked on the CarPlay screen; opened in the Browser, then cleared (DECISIONS 131).
+    @Binding var browserRequest: URL?
 
     @State private var path: [Route] = []
 
@@ -69,6 +71,13 @@ struct DiscoverView: View {
                     CastToScreenView(isPro: isPro)
                 }
             }
+        }
+        // Initial too: a site picked in the car before this tab was first shown still opens.
+        .onChange(of: browserRequest, initial: true) { _, url in
+            guard let url else { return }
+            browserRequest = nil
+            browser.open(url)
+            path = [.browser]
         }
     }
 
