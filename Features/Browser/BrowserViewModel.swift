@@ -22,7 +22,11 @@ final class BrowserViewModel {
     @ObservationIgnored private let onWebMediaStarted: () -> Void
     @ObservationIgnored private var controller: WebPageController?
 
-    init(onWebMediaStarted: @escaping () -> Void = {}) {
+    /// The start page's site icons, kept on the iPhone (DECISIONS 129); memory only unless the app passes its own.
+    let icons: SiteIconStore
+
+    init(icons: SiteIconStore = SiteIconStore(directory: nil), onWebMediaStarted: @escaping () -> Void = {}) {
+        self.icons = icons
         self.onWebMediaStarted = onWebMediaStarted
     }
 

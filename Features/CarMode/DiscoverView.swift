@@ -57,6 +57,8 @@ struct DiscoverView: View {
             .clearsBottomAccessory()
             .navigationTitle("Discover")
             .navigationBarTitleDisplayMode(.inline)
+            // The Browser's icons start arriving here, so they're usually in before it opens (DECISIONS 129).
+            .task { await browser.icons.refresh(BrowserSite.all) }
             .navigationDestination(for: Route.self) { route in
                 switch route {
                 case .browser:

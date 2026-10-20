@@ -12,7 +12,7 @@ struct BrowserStartPage: View {
             VStack(alignment: .leading, spacing: Spacing.lg) {
                 TileGrid(minimumWidth: tileWidth, spacing: Spacing.sm, rowSpacing: Spacing.lg) {
                     ForEach(BrowserSite.all) { site in
-                        SiteTile(site: site) { viewModel.open(site.url) }
+                        SiteTile(site: site, image: viewModel.icons.icon(for: site)) { viewModel.open(site.url) }
                     }
                 }
                 Text("""
@@ -35,6 +35,7 @@ struct BrowserStartPage: View {
                 .background(.bar)
         }
         .clearsBottomAccessory()
+        .task { await viewModel.icons.refresh(BrowserSite.all) }
         .accessibilityElement(children: .contain)
         .accessibilityIdentifier("browser.startPage")
     }
@@ -95,9 +96,10 @@ private struct TileGrid: Layout {
     }
 }
 
-/// A site in the grid: its own icon, loaded from the site, and its initial until then or if it can't load.
+/// A site in the grid: its icon, kept on the iPhone (DECISIONS 129), or its initial until the icon first arrives.
 private struct SiteTile: View {
     let site: BrowserSite
+    let image: UIImage?
     let action: () -> Void
 
     @ScaledMetric(relativeTo: .body) private var iconSize: CGFloat = 60
@@ -130,12 +132,10 @@ private struct SiteTile: View {
         return shape
             .fill(.roadSurface)
             .overlay {
-                AsyncImage(url: site.iconURL) { phase in
-                    if let image = phase.image {
-                        image.resizable().interpolation(.high).scaledToFit().padding(10)
-                    } else {
-                        initial
-                    }
+                if let image {
+                    Image(uiImage: image).resizable().interpolation(.high).scaledToFit().padding(10)
+                } else {
+                    initial
                 }
             }
             .clipShape(shape)
