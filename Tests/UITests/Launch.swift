@@ -70,11 +70,17 @@ extension XCTestCase {
         let edge = tabBar.exists ? tabBar.frame.minY : app.windows.firstMatch.frame.maxY
         try app.performAccessibilityAudit(for: types) { issue in
             guard issue.auditType == .dynamicType, let element = issue.element else { return false }
-            return element.frame.maxY > edge - 180 || labels.contains(element.label)
+            let isIgnored = element.frame.maxY > edge - 180 || labels.contains(element.label)
+            if !isIgnored { // A step in the test's log naming what to fix; the failure alone is a one-line summary.
+                let detail = "'\(element.label)' at \(element.frame): \(issue.detailedDescription)"
+                XCTContext.runActivity(named: "Audit: \(detail)") { _ in }
+            }
+            return isIgnored
         }
     }
 
-    /// The player's controls hide after 3 s of playback; a tap on the video brings them back.
+    /// The player's controls hide after a few seconds of playback (10 s under UI tests); a tap on the video brings
+    /// them back.
     func revealPlayerControls(_ app: XCUIApplication) {
         guard !app.buttons["player.minimize"].exists else { return }
         app.descendants(matching: .any)["player.video"].firstMatch.tap()

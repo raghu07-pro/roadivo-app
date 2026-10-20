@@ -213,7 +213,7 @@ struct PlayerView: View {
         hideTask?.cancel()
         guard !voiceOver else { return }
         hideTask = Task {
-            try? await Task.sleep(for: .seconds(3)) // Cancelled by the next touch.
+            try? await Task.sleep(for: viewModel.playback.controlsHideDelay) // Cancelled by the next touch.
             guard !Task.isCancelled, viewModel.playback.status == .playing else { return }
             setControls(shown: false)
         }

@@ -131,9 +131,11 @@ final class AppEnvironment {
             displayProfiles: DisplayProfileStore(defaults: defaults)
         )
         environment.router.asksForReviews = !isUITesting
-        // UI tests tap and audit the Up Next card; a real 5 s countdown could run out mid-audit.
+        // UI tests tap and audit the Up Next card and the player's controls; real 5 s and 3 s timers could run out
+        // mid-step on a busy simulator.
         if isUITesting {
             environment.playback.upNextDelay = 120
+            environment.playback.controlsHideDelay = .seconds(10)
         }
         environment.proAccess.start()
         environment.carConnection.simulatedOutputs = switches.isCarConnected ? [RouteOutput(.carAudio, "CarPlay")] : nil

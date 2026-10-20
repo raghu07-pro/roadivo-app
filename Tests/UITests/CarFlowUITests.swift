@@ -170,6 +170,24 @@ final class CarFlowUITests: XCTestCase {
         XCTAssertTrue(app.descendants(matching: .any)["guide.pro"].exists)
     }
 
+    /// In the car the iPhone is locked: the sound plays on in the background. iOS pauses a player still drawing video
+    /// when the app leaves the screen, so the mini player lets go of it there (DECISIONS 127).
+    func testSoundPlaysOnInTheBackground() {
+        let app = XCUIApplication.roadivo(skipOnboarding: true, demoLibrary: true)
+        let channel = app.buttons["channel.Football Tonight"]
+        XCTAssertTrue(channel.waitForExistence(timeout: 10))
+        channel.tap()
+        minimizePlayer(app)
+        XCTAssertTrue(app.buttons["miniPlayer.pause"].waitForExistence(timeout: 20), "It never started playing")
+
+        XCUIDevice.shared.press(.home)
+        XCTAssertTrue(app.wait(for: .runningBackground, timeout: 10))
+        app.activate()
+        XCTAssertTrue(app.wait(for: .runningForeground, timeout: 10))
+        XCTAssertTrue(app.buttons["miniPlayer.pause"].waitForExistence(timeout: 5), "It paused in the background")
+        XCTAssertFalse(app.buttons["miniPlayer.play"].exists)
+    }
+
     /// The player's car button opens Car Mode without a car connected (how App Review reaches it).
     func testPlayerOpensCarModeForPro() {
         let app = XCUIApplication.roadivo(skipOnboarding: true, demoLibrary: true, pro: true)

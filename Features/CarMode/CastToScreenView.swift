@@ -11,6 +11,7 @@ struct CastToScreenView: View {
     @State private var address = BroadcastAddress.current()
     @Environment(\.scenePhase) private var scenePhase
     @Environment(\.openURL) private var openURL
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     @ScaledMetric(relativeTo: .largeTitle) private var tileSide: CGFloat = 88
 
     var body: some View {
@@ -92,24 +93,23 @@ struct CastToScreenView: View {
     }
 
     /// The iPhone, a stream, the car's screen: side by side, or stacked when larger text won't fit that way.
+    /// Side by side, stacked at accessibility sizes. One set of views in either layout (`AnyLayout`), so nothing is
+    /// rebuilt as text grows, which the accessibility audit would read as text that can't scale.
     private var hero: some View {
-        ViewThatFits(in: .horizontal) {
-            HStack(spacing: Spacing.lg) { heroParts(stacked: false) }
-            VStack(spacing: Spacing.sm) { heroParts(stacked: true) }
+        let isStacked = dynamicTypeSize.isAccessibilitySize
+        let layout = isStacked ? AnyLayout(VStackLayout(spacing: Spacing.sm)) :
+            AnyLayout(HStackLayout(spacing: Spacing.lg))
+        return layout {
+            endpoint("iphone", label: "iPhone")
+            Image(systemName: "dot.radiowaves.right")
+                .font(.title2.weight(.semibold))
+                .foregroundStyle(.roadAccent)
+                .rotationEffect(.degrees(isStacked ? 90 : 0))
+                .accessibilityHidden(true)
+            endpoint("tv", label: "Car screen")
         }
         .frame(maxWidth: .infinity)
         .accessibilityElement(children: .combine)
-    }
-
-    @ViewBuilder
-    private func heroParts(stacked: Bool) -> some View {
-        endpoint("iphone", label: "iPhone")
-        Image(systemName: "dot.radiowaves.right")
-            .font(.title2.weight(.semibold))
-            .foregroundStyle(.roadAccent)
-            .rotationEffect(.degrees(stacked ? 90 : 0))
-            .accessibilityHidden(true)
-        endpoint("tv", label: "Car screen")
     }
 
     private func endpoint(_ symbol: String, label: LocalizedStringKey) -> some View {

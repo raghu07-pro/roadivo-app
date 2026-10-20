@@ -50,4 +50,19 @@ struct CarTests {
         let menu = CarPlayMenu.build(from: library.repository)
         #expect(menu.groups.first?.items.count == CarPlayMenu.itemLimit)
     }
+
+    @Test("A car that allows fewer rows gets fewer, and Library's list of groups is capped too")
+    func menuFollowsTheCarsLimit() async throws {
+        let library = try TestLibrary()
+        let rows = (0..<30).flatMap { group in
+            (0..<20).map { "#EXTINF:-1 group-title=\"G\(group)\",Ch \(group)-\($0)\nhttps://e.com/\(group)/\($0).m3u8" }
+        }
+        try await library.repository.addFilePlaylist(name: "Many", text: rows.joined(separator: "\n"))
+
+        let menu = CarPlayMenu.build(from: library.repository, limit: 12)
+
+        #expect(menu.groups.count == 12)
+        #expect(menu.groups.allSatisfy { $0.items.count == 12 })
+        #expect(CarPlayMenu.build(from: library.repository, limit: 500).groups.count == 30)
+    }
 }

@@ -51,6 +51,7 @@ struct MiniPlayerBar: View {
                     .frame(width: 44, height: 44)
             }
             .accessibilityLabel(playback.isPlaying ? Text("Pause") : Text("Play"))
+            .accessibilityIdentifier(playback.isPlaying ? "miniPlayer.pause" : "miniPlayer.play")
 
             Button(action: playback.stop) {
                 Image(systemName: "xmark")

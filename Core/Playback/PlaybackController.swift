@@ -37,6 +37,8 @@ final class PlaybackController {
     var upNext: UpNext?
     @ObservationIgnored var upNextTask: Task<Void, Never>?
     @ObservationIgnored var upNextDelay = 5
+    /// How long the player's controls stay up while playing; UI tests lengthen it so a tap never races the hide.
+    @ObservationIgnored var controlsHideDelay: Duration = .seconds(3)
     @ObservationIgnored var isInForeground: @MainActor () -> Bool = { UIApplication.shared.applicationState == .active }
 
     var isActive: Bool {

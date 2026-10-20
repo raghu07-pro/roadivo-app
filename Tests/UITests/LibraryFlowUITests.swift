@@ -237,9 +237,10 @@ final class LibraryFlowUITests: XCTestCase {
         let app = XCUIApplication.roadivo(skipOnboarding: true)
         app.buttons["library.empty.addSource"].tap()
         let jellyfin = app.buttons["addSource.server.jellyfin"]
-        XCTAssertTrue(jellyfin.waitForExistence(timeout: 5))
+        // A sheet's first appearance on a cold simulator can take longer than 5 s.
+        XCTAssertTrue(jellyfin.waitForExistence(timeout: 10))
         jellyfin.tap()
-        XCTAssertTrue(app.textFields["server.address"].waitForExistence(timeout: 5))
+        XCTAssertTrue(app.textFields["server.address"].waitForExistence(timeout: 10))
         XCTAssertFalse(app.buttons["server.connect"].isEnabled)
     }
 

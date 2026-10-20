@@ -12,11 +12,12 @@ struct CarPlayMenu: Equatable {
     let recent: [MediaItem]
     let groups: [Group]
 
-    /// CarPlay lists show at most a few hundred rows; stay well inside it.
+    /// The most rows any list gets; the car may allow fewer (`CPListTemplate.maximumItemCount`), passed as `limit`.
     static let itemLimit = 100
 
     @MainActor
-    static func build(from repository: LibraryRepository) -> CarPlayMenu {
+    static func build(from repository: LibraryRepository, limit: Int = itemLimit) -> CarPlayMenu {
+        let limit = max(1, min(limit, itemLimit))
         // A read failure shows empty lists in the car rather than nothing at all.
         let items = (try? repository.items()) ?? []
         var order: [String] = []
@@ -27,10 +28,11 @@ struct CarPlayMenu: Equatable {
             }
             buckets[item.groupTitle, default: []].append(item)
         }
+        // Library lists the groups themselves, so they're capped too: a big playlist can have hundreds.
         return CarPlayMenu(
-            favorites: Array(((try? repository.favorites()) ?? []).prefix(itemLimit)),
-            recent: Array(((try? repository.recentlyPlayed(limit: 20)) ?? []).prefix(itemLimit)),
-            groups: order.map { Group(title: $0, items: Array((buckets[$0] ?? []).prefix(itemLimit))) }
+            favorites: Array(((try? repository.favorites()) ?? []).prefix(limit)),
+            recent: Array(((try? repository.recentlyPlayed(limit: 20)) ?? []).prefix(limit)),
+            groups: order.prefix(limit).map { Group(title: $0, items: Array((buckets[$0] ?? []).prefix(limit))) }
         )
     }
 }

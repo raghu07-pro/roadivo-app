@@ -99,7 +99,8 @@ final class CarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegat
     @MainActor
     private func fillTabs() {
         guard let tabs, let environment = AppEnvironment.current else { return }
-        let menu = CarPlayMenu.build(from: environment.repository)
+        // The car sets how many rows a list may show; more would be cut off or refused.
+        let menu = CarPlayMenu.build(from: environment.repository, limit: Int(CPListTemplate.maximumItemCount))
         tabs.favorites.updateSections([CPListSection(items: menu.favorites.map { row($0, queue: menu.favorites) })])
         tabs.recent.updateSections([CPListSection(items: menu.recent.map { row($0, queue: menu.recent) })])
         tabs.library.updateSections([CPListSection(items: menu.groups.map(groupRow))])
