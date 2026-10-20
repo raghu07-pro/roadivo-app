@@ -17,6 +17,18 @@ struct RoadScene: View {
     /// The logo's idea: the sun on the horizon is a play button. Centred
     /// over the road.
     var sunIsPlayButton = false
+    /// Off when the view on top draws its own sun or moon: the splash's play-button sun (DECISIONS 130).
+    var showsOrb = true
+    /// The sky (with its sun or moon and stars), the land (mountains and road), or both. The splash puts its sun
+    /// between the two, so it rises and sets behind the mountains (DECISIONS 130).
+    var layers: Layers = .all
+
+    struct Layers: OptionSet, Sendable {
+        let rawValue: Int
+        static let sky = Layers(rawValue: 1)
+        static let land = Layers(rawValue: 2)
+        static let all: Layers = [.sky, .land]
+    }
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
@@ -37,7 +49,23 @@ struct RoadScene: View {
     private func draw(in canvas: inout GraphicsContext, size: CGSize, phase: Double) {
         let horizonY = size.height * horizon
         let colors = palette
+        if layers.contains(.sky) {
+            drawSky(in: &canvas, size: size, horizonY: horizonY, colors: colors)
+        }
+        guard layers.contains(.land) else { return }
+        canvas.fill(
+            ridge(size: size, base: horizonY, height: size.height * 0.16, seed: 1),
+            with: .color(colors.farRidge)
+        )
+        canvas.fill(
+            ridge(size: size, base: horizonY, height: size.height * 0.09, seed: 2),
+            with: .color(colors.nearRidge)
+        )
 
+        drawRoad(in: &canvas, size: size, horizonY: horizonY, colors: colors, phase: phase)
+    }
+
+    private func drawSky(in canvas: inout GraphicsContext, size: CGSize, horizonY: CGFloat, colors: Colors) {
         canvas.fill(
             Path(CGRect(origin: .zero, size: CGSize(width: size.width, height: horizonY + 1))),
             with: .linearGradient(
@@ -56,29 +84,20 @@ struct RoadScene: View {
             width: radius * 2,
             height: radius * 2
         )
-        canvas.fill(
-            Path(ellipseIn: orb.insetBy(dx: -radius * 0.6, dy: -radius * 0.6)),
-            with: .color((sunIsPlayButton ? Palette.laneYellow : colors.orb).opacity(0.18))
-        )
-        canvas.fill(Path(ellipseIn: orb), with: .color(sunIsPlayButton ? Palette.laneYellow : colors.orb))
-        if sunIsPlayButton {
-            drawPlayMark(in: &canvas, orb: orb)
+        if showsOrb {
+            canvas.fill(
+                Path(ellipseIn: orb.insetBy(dx: -radius * 0.6, dy: -radius * 0.6)),
+                with: .color((sunIsPlayButton ? Palette.laneYellow : colors.orb).opacity(0.18))
+            )
+            canvas.fill(Path(ellipseIn: orb), with: .color(sunIsPlayButton ? Palette.laneYellow : colors.orb))
+            if sunIsPlayButton {
+                drawPlayMark(in: &canvas, orb: orb)
+            }
         }
 
         if time == .night {
             drawStars(in: &canvas, width: size.width, horizonY: horizonY)
         }
-
-        canvas.fill(
-            ridge(size: size, base: horizonY, height: size.height * 0.16, seed: 1),
-            with: .color(colors.farRidge)
-        )
-        canvas.fill(
-            ridge(size: size, base: horizonY, height: size.height * 0.09, seed: 2),
-            with: .color(colors.nearRidge)
-        )
-
-        drawRoad(in: &canvas, size: size, horizonY: horizonY, colors: colors, phase: phase)
     }
 
     private func drawPlayMark(in canvas: inout GraphicsContext, orb: CGRect) {

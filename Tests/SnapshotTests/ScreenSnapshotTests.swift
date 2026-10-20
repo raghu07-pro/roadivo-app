@@ -53,6 +53,27 @@ final class ScreenSnapshotTests: XCTestCase {
         }
     }
 
+    /// The opening splash, settled, at each time of day it follows, and with Reduce Motion, where the icon stays
+    /// put (DECISIONS 130). Its road holds still because the splash isn't animating.
+    func testSplash() {
+        for moment in SplashMoment.allCases {
+            assertSplash(SplashView(onFinish: {}, isAnimated: false, moment: moment), named: "splash-\(moment)")
+        }
+        let still = SplashView(onFinish: {}, isAnimated: false, moment: .sunrise)
+            .environment(\._accessibilityReduceMotion, true)
+        assertSplash(still, named: "splash-reduce-motion")
+    }
+
+    private func assertSplash(_ view: some View, named name: String, line: UInt = #line) {
+        assertSnapshot(
+            of: UIHostingController(rootView: view),
+            as: .image(on: .iPhone13, drawHierarchyInKeyWindow: true, precision: 0.98, perceptualPrecision: 0.98),
+            named: name,
+            testName: "testSplash",
+            line: line
+        )
+    }
+
     func testOnboarding() {
         assertScreen(OnboardingView(viewModel: OnboardingViewModel {}), named: "onboarding")
     }

@@ -7,6 +7,7 @@ extension XCUIApplication {
     /// `carConnected`: the iPhone acts as if plugged into a car (CarPlay audio).
     /// `demoHistory`: the demo library with a film part-watched and a channel played.
     /// `localNetworkDenied`: Local Network access is off, as iOS reports when it's refused.
+    /// `showSplash`: plays the opening splash, which UI tests otherwise skip.
     static func roadivo(
         skipOnboarding: Bool = false,
         demoLibrary: Bool = false,
@@ -14,7 +15,8 @@ extension XCUIApplication {
         pro: Bool = false,
         restorable: Bool = false,
         carConnected: Bool = false,
-        localNetworkDenied: Bool = false
+        localNetworkDenied: Bool = false,
+        showSplash: Bool = false
     ) -> XCUIApplication {
         let app = XCUIApplication()
         app.launchArguments = ["-ui-testing"]
@@ -38,6 +40,9 @@ extension XCUIApplication {
         }
         if localNetworkDenied {
             app.launchArguments.append("-local-network-denied")
+        }
+        if showSplash {
+            app.launchArguments.append("-show-splash")
         }
         app.launch()
         return app
