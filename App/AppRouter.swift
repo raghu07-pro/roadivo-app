@@ -9,6 +9,7 @@ final class AppRouter {
         case home
         case favorites
         case car
+        case directions
         case settings
     }
 

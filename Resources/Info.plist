@@ -41,6 +41,8 @@
 	<string>Roadivo uses the camera only to scan a QR code that contains a playlist link.</string>
 	<key>NSLocalNetworkUsageDescription</key>
 	<string>Roadivo connects to playlists and video servers on your local network, and shows your iPhone on your car's screen when you broadcast.</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Roadivo uses your location only in Directions, to show the route from where you are to the place you search for.</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>Roadivo uses the microphone only while you search by voice.</string>
 	<key>NSSpeechRecognitionUsageDescription</key>

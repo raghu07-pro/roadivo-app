@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "2710"
+   LastUpgradeVersion = "1010"
    version = "1.3">
    <BuildAction
       parallelizeBuildables = "YES"
@@ -29,15 +29,6 @@
       shouldUseLaunchSchemeArgsEnv = "YES"
       codeCoverageEnabled = "YES"
       onlyGenerateCoverageForSpecifiedTargets = "YES">
-      <CodeCoverageTargets>
-         <BuildableReference
-            BuildableIdentifier = "primary"
-            BlueprintIdentifier = "EE0AF8DED2067FE97ACA6993"
-            BuildableName = "Roadivo.app"
-            BlueprintName = "Roadivo"
-            ReferencedContainer = "container:Roadivo.xcodeproj">
-         </BuildableReference>
-      </CodeCoverageTargets>
       <Testables>
          <TestableReference
             skipped = "NO"
@@ -51,7 +42,8 @@
             </BuildableReference>
          </TestableReference>
          <TestableReference
-            skipped = "NO">
+            skipped = "NO"
+            parallelizable = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "DE58DCA6B07054276D5CBFD2"
@@ -61,6 +53,15 @@
             </BuildableReference>
          </TestableReference>
       </Testables>
+      <CodeCoverageTargets>
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "EE0AF8DED2067FE97ACA6993"
+            BuildableName = "Roadivo.app"
+            BlueprintName = "Roadivo"
+            ReferencedContainer = "container:Roadivo.xcodeproj">
+         </BuildableReference>
+      </CodeCoverageTargets>
    </TestAction>
    <LaunchAction
       buildConfiguration = "Debug"

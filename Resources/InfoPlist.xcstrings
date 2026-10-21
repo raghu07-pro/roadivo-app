@@ -226,6 +226,77 @@
         }
       }
     },
+    "NSLocationWhenInUseUsageDescription" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Roadivo verwendet deinen Standort nur unter Routen, um die Route von deinem Standort zu dem Ort zu zeigen, den du suchst."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Roadivo uses your location only in Directions, to show the route from where you are to the place you search for."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Roadivo usa tu ubicación solo en Indicaciones, para mostrar la ruta desde donde estás hasta el lugar que buscas."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Roadivo utilise votre position uniquement dans Itinéraires, pour afficher l’itinéraire entre l’endroit où vous êtes et le lieu que vous recherchez."
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Roadivo आपकी लोकेशन का इस्तेमाल सिर्फ़ दिशा-निर्देश में करता है, ताकि आपकी जगह से खोजी गई जगह तक का रास्ता दिखा सके।"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Roadivo usa la tua posizione solo in Indicazioni, per mostrare il percorso da dove ti trovi al luogo che cerchi."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Roadivoは「経路」でのみ位置情報を使用し、現在地から検索した場所までの経路を表示します。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Roadivo는 '경로'에서만 위치를 사용하여 현재 위치에서 검색한 장소까지의 경로를 보여 줍니다."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "O Roadivo usa sua localização apenas em Rotas, para mostrar a rota de onde você está até o local que você busca."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Roadivo 仅在“路线”中使用你的位置，用于显示从你所在位置到你搜索的地点的路线。"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Roadivo 僅在「路線」中使用你的位置，用於顯示從你所在位置到你搜尋的地點的路線。"
+          }
+        }
+      }
+    },
     "NSMicrophoneUsageDescription" : {
       "extractionState" : "manual",
       "localizations" : {

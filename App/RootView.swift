@@ -70,6 +70,7 @@ private struct MainTabView: View {
     @State private var displayProfiles: DisplayProfilesViewModel
     @State private var voiceSearch: VoiceSearchModel
     @State private var updatePrompt: UpdatePromptModel
+    @State private var directions: DirectionsViewModel
     /// Set by a purchase or restore, so Home opens once the paywall has closed.
     @State private var goesHomeAfterPaywall = false
     /// Set by a purchase from the player's Car Mode button, so Car Mode opens once the paywall closes.
@@ -95,6 +96,10 @@ private struct MainTabView: View {
         ))
         _voiceSearch = State(initialValue: VoiceSearchModel(speech: environment.speech, playback: environment.playback))
         _updatePrompt = State(initialValue: UpdatePromptModel(checker: environment.updateChecker))
+        _directions = State(initialValue: DirectionsViewModel(
+            finder: environment.places,
+            location: environment.location
+        ))
     }
 
     @Environment(\.requestReview) private var requestReview
@@ -130,6 +135,8 @@ private struct MainTabView: View {
                 playback: playback,
                 isPlayerOpen: router.playerSurface != nil,
                 height: $miniPlayerHeight,
+                directions: directions,
+                onOpenDirections: { router.selectedTab = .directions },
                 onExpand: expandPlayer
             )
             .tabItem { Label("Home", systemImage: "house") }
@@ -149,6 +156,8 @@ private struct MainTabView: View {
                 playback: playback,
                 isPlayerOpen: router.playerSurface != nil,
                 height: $miniPlayerHeight,
+                directions: directions,
+                onOpenDirections: { router.selectedTab = .directions },
                 onExpand: expandPlayer
             )
             .tabItem { Label("Favorites", systemImage: "heart") }
@@ -164,10 +173,22 @@ private struct MainTabView: View {
                 playback: playback,
                 isPlayerOpen: router.playerSurface != nil,
                 height: $miniPlayerHeight,
+                directions: directions,
+                onOpenDirections: { router.selectedTab = .directions },
                 onExpand: expandPlayer
             )
             .tabItem { Label("Discover", systemImage: "sparkles.tv") }
             .tag(AppRouter.Tab.car)
+
+            DirectionsView(viewModel: directions)
+                .miniPlayer(
+                    playback: playback,
+                    isPlayerOpen: router.playerSurface != nil,
+                    height: $miniPlayerHeight,
+                    onExpand: expandPlayer
+                )
+                .tabItem { Label("Directions", systemImage: "map") }
+                .tag(AppRouter.Tab.directions)
 
             SettingsView(
                 isPro: isPro,
@@ -192,6 +213,8 @@ private struct MainTabView: View {
                 playback: playback,
                 isPlayerOpen: router.playerSurface != nil,
                 height: $miniPlayerHeight,
+                directions: directions,
+                onOpenDirections: { router.selectedTab = .directions },
                 onExpand: expandPlayer
             )
             .tabItem { Label("Settings", systemImage: "gearshape") }
@@ -405,13 +428,18 @@ extension MainTabView {
 private extension View {
     /// The now-playing bar, floating just above the tab bar while the full player is closed (opening
     /// a video goes straight to the player). Its height goes to every screen so content clears it.
+    /// On the other tabs an open route floats in the bottom-right corner, above the bar, like Maps' own
+    /// window; it covers content as such a window does (DECISIONS 146).
     func miniPlayer(
         playback: PlaybackController,
         isPlayerOpen: Bool,
         height: Binding<CGFloat>,
+        directions: DirectionsViewModel? = nil,
+        onOpenDirections: @escaping () -> Void = {},
         onExpand: @escaping () -> Void
     ) -> some View {
         let isShown = playback.isActive && !isPlayerOpen
+        let barSpace = isShown ? height.wrappedValue + Spacing.xs * 2 : 0
         return overlay(alignment: .bottom) {
             if isShown {
                 MiniPlayerBar(playback: playback, onExpand: onExpand)
@@ -421,6 +449,14 @@ private extension View {
                     .transition(.move(edge: .bottom).combined(with: .opacity))
             }
         }
-        .environment(\.bottomAccessoryHeight, isShown ? height.wrappedValue + Spacing.xs * 2 : 0)
+        .overlay(alignment: .bottomTrailing) {
+            if !isPlayerOpen, let directions, directions.hasActiveRoute {
+                RouteMiniCard(viewModel: directions, onOpen: onOpenDirections)
+                    .padding(.trailing, Spacing.sm)
+                    .padding(.bottom, barSpace + Spacing.xs)
+                    .transition(.scale(scale: 0.8, anchor: .bottomTrailing).combined(with: .opacity))
+            }
+        }
+        .environment(\.bottomAccessoryHeight, barSpace)
     }
 }

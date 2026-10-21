@@ -27,6 +27,16 @@ final class AppEnvironment {
     let siteIcons = SiteIconStore.onDevice()
     /// Discover's Browser; the CarPlay screen offers its page's video (DECISIONS 134).
     let browser: BrowserViewModel
+    /// Directions' place search and routes, and the iPhone's location; scripted in UI tests (DECISIONS 145).
+    let places: PlaceFinding
+    let location: LocationProviding
+
+    enum DirectionsSetup {
+        /// Apple Maps and the iPhone's own location.
+        case live
+        /// Two places and two routes from a fixed spot, with no network; Location on or off.
+        case scripted(isLocationDenied: Bool)
+    }
 
     /// The running app's environment, for the CarPlay scene: it is created by
     /// the system, not by SwiftUI, so it can't be handed one.
@@ -44,8 +54,17 @@ final class AppEnvironment {
         plex: PlexLinking = ScriptedPlexLinking(),
         updateChecker: AppUpdateChecking? = nil,
         streamChecker: StreamChecker = .live,
-        displayProfiles: DisplayProfileStore = DisplayProfileStore()
+        displayProfiles: DisplayProfileStore = DisplayProfileStore(),
+        directions: DirectionsSetup = .live
     ) {
+        switch directions {
+        case .live:
+            places = MapKitPlaceFinder()
+            location = DeviceLocation()
+        case let .scripted(isLocationDenied):
+            places = ScriptedPlaceFinder()
+            location = ScriptedLocation(status: isLocationDenied ? .denied : .allowed)
+        }
         self.apiClient = apiClient
         self.streamChecker = streamChecker
         self.displayProfiles = displayProfiles
@@ -92,7 +111,6 @@ final class AppEnvironment {
     static func live(arguments: [String]) -> AppEnvironment {
         let switches = TestSwitches(arguments: arguments)
         let isUITesting = switches.isUITesting
-        let skipsOnboarding = switches.skipsOnboarding
         let logger = Logger(subsystem: "com.roadivo", category: "App")
 
         let store = openLibrary(inMemory: isUITesting, logger: logger)
@@ -108,7 +126,7 @@ final class AppEnvironment {
         // One instance: making a second would clear the first's test settings.
         let defaults = isUITesting ? volatileDefaults() : .standard
         let preferences = Preferences(defaults: defaults)
-        if skipsOnboarding {
+        if switches.skipsOnboarding {
             preferences.hasCompletedOnboarding = true
             preferences.hasSeenIntroPaywall = true
         }
@@ -139,7 +157,8 @@ final class AppEnvironment {
                 country: Locale.current.region?.identifier ?? "US"
             ),
             streamChecker: isUITesting ? StreamChecker(probe: ScriptedStreamProbe()) : .live,
-            displayProfiles: DisplayProfileStore(defaults: defaults)
+            displayProfiles: DisplayProfileStore(defaults: defaults),
+            directions: isUITesting ? .scripted(isLocationDenied: switches.isLocationDenied) : .live
         )
         environment.router.asksForReviews = !isUITesting
         // UI tests tap and audit the Up Next card and the player's controls; real 5 s and 3 s timers could run out
@@ -225,16 +244,20 @@ private struct TestSwitches {
     let skipsOnboarding: Bool
     /// `-car-connected`: the iPhone acts as if plugged into a car, for the car-connected paths.
     let isCarConnected: Bool
+    /// `-location-denied`: Location is off for Roadivo, for Directions' "turn it on" path.
+    let isLocationDenied: Bool
 
     init(arguments: [String]) {
         #if DEBUG
             isUITesting = arguments.contains("-ui-testing")
             skipsOnboarding = arguments.contains("-skip-onboarding")
             isCarConnected = isUITesting && arguments.contains("-car-connected")
+            isLocationDenied = isUITesting && arguments.contains("-location-denied")
         #else
             isUITesting = false
             skipsOnboarding = false
             isCarConnected = false
+            isLocationDenied = false
         #endif
     }
 }

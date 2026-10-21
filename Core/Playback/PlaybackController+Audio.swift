@@ -33,9 +33,26 @@ extension PlaybackController {
     }
 
     func activateAudioSession() {
-        configureAudioSession()
+        let session = AVAudioSession.sharedInstance()
+        // Set again only after voice search borrowed it: setting it while active can stall the screen (Xcode 27).
+        let isSet = session.category == .playback && session.mode == .moviePlayback
+            && session.routeSharingPolicy == .longFormVideo
+        if !isSet {
+            configureAudioSession()
+        }
+        // The iOS 27 SDK's activate(options:) doesn't hold the main thread; older SDKs and iOS keep setActive.
+        #if compiler(>=6.4)
+            if #available(iOS 27, *) {
+                session.activate(options: []) { [logger] _, error in
+                    if let error {
+                        logger.error("Audio session: \(error.localizedDescription, privacy: .public)")
+                    }
+                }
+                return
+            }
+        #endif
         do {
-            try AVAudioSession.sharedInstance().setActive(true)
+            try session.setActive(true)
         } catch {
             logger.error("Audio session: \(error.localizedDescription, privacy: .public)")
         }
@@ -44,8 +61,19 @@ extension PlaybackController {
     /// Hands the audio back to the car's radio or other apps, when nothing here is playing.
     func releaseAudio() {
         guard player.timeControlStatus == .paused, !isOpeningAtSavedPlace else { return }
+        let session = AVAudioSession.sharedInstance()
+        #if compiler(>=6.4)
+            if #available(iOS 27, *) {
+                session.deactivate(options: .notifyOthersOnDeactivation) { [logger] _, error in
+                    if let error {
+                        logger.error("Audio release: \(error.localizedDescription, privacy: .public)")
+                    }
+                }
+                return
+            }
+        #endif
         do {
-            try AVAudioSession.sharedInstance().setActive(false, options: .notifyOthersOnDeactivation)
+            try session.setActive(false, options: .notifyOthersOnDeactivation)
         } catch {
             logger.error("Audio release: \(error.localizedDescription, privacy: .public)")
         }

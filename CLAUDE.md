@@ -18,8 +18,15 @@ TV on the road.
 
 ## First-launch flow & Pro
 
-Onboarding (4 pages) → "Buy a plan" paywall (closable, shown once) → four
-tabs: **Home · Favorites · Discover · Settings**.
+Onboarding (4 pages) → "Buy a plan" paywall (closable, shown once) → five
+tabs: **Home · Favorites · Discover · Directions · Settings**.
+
+- **Directions** (`Features/Directions`, `Core/Directions`; DECISIONS 145, free): search a place (Apple Maps search),
+  see the driving routes from the iPhone's location on a map, pick one, and hand off to Apple Maps for guidance.
+  Location is asked the first time the tab opens. iPhone only: it isn't a CarPlay navigation app and doesn't qualify
+  for CarPlay Navigation. UI tests use `ScriptedPlaceFinder` and `ScriptedLocation` (`-location-denied` for Location off).
+  An open route follows to the other tabs as an upright window in the bottom-right corner, like Maps' own, above the
+  mini player (`RouteMiniCard`, `RouteSnapshot`; DECISIONS 146).
 
 - **Free:** 1 source, unlimited videos On this iPhone, AirPlay and PiP.
 - **Pro:** unlimited sources and Car Mode, including Roadivo on CarPlay.

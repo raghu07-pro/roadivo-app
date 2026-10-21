@@ -58,6 +58,8 @@ PERMISSIONS (each asked only when the feature is used)
 - Camera: scanning a QR code that contains a playlist link.
 - Microphone and Speech Recognition: voice search on Home.
 - Local Network: reaching a media server or playlist on the user's home network; Screen Broadcast.
+- Location (While Using): only in the Directions tab, as the start of a route to a searched place. It's asked the
+  first time Directions opens, never stored, and sent nowhere but Apple Maps' own routing. Guidance opens in Apple Maps.
 
 APP TRANSPORT SECURITY
 NSAllowsArbitraryLoads is set because users play their own playlists and servers, and these are often

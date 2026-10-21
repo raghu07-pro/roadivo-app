@@ -30,7 +30,7 @@ final class LibraryFlowUITests: XCTestCase {
         revealPlayerControls(app)
         app.buttons["player.minimize"].tap()
         app.buttons["miniPlayer.close"].tap()
-        app.tabBars.buttons.element(boundBy: 3).tap()
+        app.tabBars.buttons.element(boundBy: 4).tap()
         app.buttons["settings.theme"].tap()
         app.buttons["theme.appearance.dark"].tap()
         app.tabBars.buttons.element(boundBy: 0).tap()
