@@ -8,7 +8,8 @@ struct AddSourceView<Help: View>: View {
     @ViewBuilder let help: () -> Help
 
     @Environment(\.dismiss) private var dismiss
-    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+    /// Two server cards a row; larger text widens the column until one fits, so names never cut off.
+    @ScaledMetric(relativeTo: .body) private var serverColumn: CGFloat = 150
     @State private var isScanning = false
     @FocusState private var focusedField: Field?
 
@@ -143,13 +144,6 @@ struct AddSourceView<Help: View>: View {
         .accessibilityIdentifier("addSource.unusable")
     }
 
-    /// Two cards a row, one at accessibility text sizes so server names never cut off.
-    private var serverColumns: [GridItem] {
-        dynamicTypeSize.isAccessibilitySize
-            ? [GridItem(.flexible())]
-            : [GridItem(.adaptive(minimum: 150), spacing: Spacing.sm)]
-    }
-
     private var servers: some View {
         VStack(alignment: .leading, spacing: Spacing.sm) {
             HStack(spacing: Spacing.sm) {
@@ -160,7 +154,8 @@ struct AddSourceView<Help: View>: View {
                     .fixedSize()
                 VStack { Divider() }
             }
-            LazyVGrid(columns: serverColumns, spacing: Spacing.sm) {
+            // Eager, unlike LazyVGrid: a card rebuilt when larger text changes the columns reads as unscaled.
+            TileGrid(minimumWidth: serverColumn, spacing: Spacing.sm, rowSpacing: Spacing.sm) {
                 ForEach(MediaServerKind.allCases) { kind in
                     // Name only on screen (owner's choice); VoiceOver also hears what signing in takes.
                     NavigationLink(value: kind) { ServerCard(kind: kind) }

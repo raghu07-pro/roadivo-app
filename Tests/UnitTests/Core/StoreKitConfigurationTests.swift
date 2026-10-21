@@ -27,11 +27,24 @@ struct StoreKitConfigurationTests {
         let session = try SKTestSession(configurationFileNamed: "Roadivo")
         session.resetToDefaultState()
         session.disableDialogs = true
-        session.clearTransactions()
-
         let client = StoreKitClient()
+        try await clearPurchases(in: session, seenBy: client)
+
         #expect(await !client.hasActiveEntitlement())
         #expect(try await client.purchase(.lifetime) == .purchased)
         #expect(await client.hasActiveEntitlement())
+    }
+
+    /// An earlier run's lifetime purchase outlives `clearTransactions()` for a moment: StoreKit's entitlements
+    /// catch up after the session. Each is deleted, then the client is given up to 5 s to stop seeing them.
+    private func clearPurchases(in session: SKTestSession, seenBy client: StoreKitClient) async throws {
+        for transaction in session.allTransactions() {
+            try session.deleteTransaction(identifier: transaction.identifier)
+        }
+        session.clearTransactions()
+        let deadline = ContinuousClock.now + .seconds(5)
+        while await client.hasActiveEntitlement(), ContinuousClock.now < deadline {
+            try await Task.sleep(for: .milliseconds(100)) // Polls the condition; the deadline bounds it.
+        }
     }
 }
