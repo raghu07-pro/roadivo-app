@@ -34,12 +34,11 @@ tabs: **Home · Favorites · Discover · Settings**.
   sites; tapping one opens it in Discover › Browser on the iPhone, as CarPlay can't show web pages (DECISIONS 131).
   Now Playing has a ♥ for what's playing and Up Next for the rest of its group (DECISIONS 140); rows show each
   item's logo, still or video frame (`Core/Car/CarPlayArtwork.swift`, DECISIONS 141).
-- **CarPlay Audio only, never Video too** (DECISIONS 139): Apple doesn't allow the two entitlements in one app, and with
-  both iOS 27 never opened Roadivo's CarPlay screen. Apple's iOS 27.2 guide lets Audio apps mix in video: when the car's
-  `supportsVideoPlayback` is true, rows carry a video `CPPlaybackConfiguration` and CarPlay shows the picture when
-  parked, Now Playing otherwise (DECISIONS 132). On iOS 27.0.1 it's false for Roadivo, so the car plays sound. Test with
-  a real iPhone on USB: Device Hub › select the iPhone › Device › CarPlay Simulator › vehicle "Standard Video Playback".
-  Device Hub has no CarPlay window for simulators.
+- **CarPlay Audio only for now** (DECISIONS 139, 143): the combined Audio + Video build left Roadivo's CarPlay scene
+  blank in Device Hub, while Audio-only shows the tabs. Apple's current entitlement documentation says both keys may
+  coexist, so this is being treated as an unresolved signing or runtime issue, not an Apple restriction. CarPlay-side
+  video presentation is temporarily disabled; ordinary audio tabs remain. Test with a real iPhone on USB: Device Hub ›
+  select the iPhone › Device › CarPlay Simulator › vehicle "Standard Video Playback".
 - CarTV draws its own screens on CarPlay (web pages, mirroring, its player), which only navigation apps may do. The owner
   asked for the same (2026-10-21); not built, as it needs a false navigation claim to Apple and shows video while driving.
 - Video plays over AirPlay, parked only, in cars with CarPlay video. While

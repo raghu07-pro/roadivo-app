@@ -1,5 +1,4 @@
 import CarPlay
-import CoreMedia
 import Observation
 import OSLog
 
@@ -277,22 +276,8 @@ final class CarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegat
 
     @MainActor
     private func playsAsVideo(_ item: CPListItem, times: (elapsed: Double, duration: Double)) -> Bool {
-        // iOS 26.4 SDK APIs (Swift 6.3). The car says whether this Audio app may show video: on iOS 27.0.1 it
-        // never did, and Apple's iOS 27.2 guide lets Audio apps mix in video (DECISIONS 139).
-        #if compiler(>=6.3)
-            guard #available(iOS 27, *), session?.supportsVideoPlayback == true else {
-                return false
-            }
-            item.playbackConfiguration = CPPlaybackConfiguration(
-                preferredPresentation: .video,
-                playbackAction: .play,
-                elapsedTime: CMTime(seconds: times.elapsed, preferredTimescale: 600),
-                duration: CMTime(seconds: times.duration, preferredTimescale: 600)
-            )
-            return true
-        #else
-            return false
-        #endif
+        // Temporarily keep CarPlay audio-only while investigating the blank scene with Video enabled.
+        false
     }
 
     @MainActor
