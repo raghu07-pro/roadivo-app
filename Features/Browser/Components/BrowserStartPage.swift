@@ -43,7 +43,7 @@ struct BrowserStartPage: View {
 
 /// As many equal columns as fit `minimumWidth`, rows as tall as their tallest tile. Eager, unlike `LazyVGrid`, so
 /// tiles keep their identity when larger text changes the column count (the audit reads a rebuilt tile as unscaled).
-private struct TileGrid: Layout {
+struct TileGrid: Layout {
     let minimumWidth: CGFloat
     let spacing: CGFloat
     let rowSpacing: CGFloat
@@ -54,7 +54,9 @@ private struct TileGrid: Layout {
     }
 
     func sizeThatFits(proposal: ProposedViewSize, subviews: Subviews, cache _: inout ()) -> CGSize {
-        let width = proposal.width ?? minimumWidth
+        // An unlimited width (ViewThatFits asks for one) means every tile in one row, never infinite columns.
+        let oneRow = CGFloat(subviews.count) * (minimumWidth + spacing) - spacing
+        let width = proposal.width.map { $0.isFinite ? $0 : max(minimumWidth, oneRow) } ?? minimumWidth
         let rows = rows(of: subviews, width: width)
         let height = rows.reduce(0) { $0 + $1.height } + rowSpacing * CGFloat(max(rows.count - 1, 0))
         return CGSize(width: width, height: height)
@@ -92,63 +94,6 @@ private struct TileGrid: Layout {
             let indices = Array(start..<min(start + count, subviews.count))
             let height = indices.map { subviews[$0].sizeThatFits(proposal).height }.max() ?? 0
             return Row(indices: indices, height: height)
-        }
-    }
-}
-
-/// A site in the grid: its icon, kept on the iPhone (DECISIONS 129), or its initial until the icon first arrives.
-private struct SiteTile: View {
-    let site: BrowserSite
-    let image: UIImage?
-    let action: () -> Void
-
-    @ScaledMetric(relativeTo: .body) private var iconSize: CGFloat = 60
-
-    var body: some View {
-        Button(action: action) {
-            VStack(spacing: Spacing.xs) {
-                icon
-                    .frame(width: min(iconSize, 84), height: min(iconSize, 84))
-                Text(site.name)
-                    .font(Typography.caption)
-                    .foregroundStyle(.primary)
-                    .multilineTextAlignment(.center)
-                    .lineLimit(2)
-                    .fixedSize(horizontal: false, vertical: true)
-            }
-            .frame(maxWidth: .infinity)
-            .contentShape(Rectangle())
-        }
-        .buttonStyle(PressableStyle())
-        .accessibilityElement(children: .ignore)
-        .accessibilityLabel(Text(site.name))
-        .accessibilityHint(Text("Opens this page"))
-        .accessibilityAddTraits(.isButton)
-        .accessibilityIdentifier("browser.site.\(site.name)")
-    }
-
-    private var icon: some View {
-        let shape = RoundedRectangle(cornerRadius: Radius.md, style: .continuous)
-        return shape
-            .fill(.roadSurface)
-            .overlay {
-                if let image {
-                    Image(uiImage: image).resizable().interpolation(.high).scaledToFit().padding(10)
-                } else {
-                    initial
-                }
-            }
-            .clipShape(shape)
-            .overlay { shape.strokeBorder(Color.primary.opacity(0.08), lineWidth: 1) }
-            .accessibilityHidden(true)
-    }
-
-    private var initial: some View {
-        ZStack {
-            Palette.placeholderGradient(for: site.name)
-            Text(String(site.name.prefix(1)))
-                .font(Typography.sectionTitle)
-                .foregroundStyle(.white)
         }
     }
 }

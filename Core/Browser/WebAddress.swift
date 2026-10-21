@@ -9,15 +9,25 @@ enum WebAddress {
     static func url(for input: String) -> URL? {
         let text = input.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !text.isEmpty else { return nil }
+        return address(for: text) ?? searchURL(for: text)
+    }
+
+    /// What was typed as a web address, or nil when it's words to search for.
+    static func address(for input: String) -> URL? {
+        let text = input.trimmingCharacters(in: .whitespacesAndNewlines)
         if let url = URL(string: text), isWeb(url), url.host() != nil {
             return url
         }
-        if !text.contains(" "), looksLikeHost(text),
+        if !text.isEmpty, !text.contains(" "), looksLikeHost(text),
            let url = URL(string: (isOnHomeNetwork(text) ? "http://" : "https://") + text), url.host() != nil {
             return url
         }
+        return nil
+    }
+
+    static func searchURL(for text: String) -> URL? {
         var search = URLComponents(string: searchEngine)
-        search?.queryItems = [URLQueryItem(name: "q", value: text)]
+        search?.queryItems = [URLQueryItem(name: "q", value: text.trimmingCharacters(in: .whitespacesAndNewlines))]
         return search?.url
     }
 

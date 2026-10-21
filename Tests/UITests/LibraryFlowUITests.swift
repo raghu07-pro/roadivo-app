@@ -117,7 +117,7 @@ final class LibraryFlowUITests: XCTestCase {
         XCTAssertTrue(miniPlayer.waitForExistence(timeout: 5))
 
         app.tabBars.buttons["Discover"].tap()
-        let lastOption = app.buttons["cast.fromApp"]
+        let lastOption = app.buttons["cast.mirroring"]
         XCTAssertTrue(lastOption.waitForExistence(timeout: 5))
         XCTAssertLessThanOrEqual(lastOption.frame.maxY, miniPlayer.frame.minY)
 

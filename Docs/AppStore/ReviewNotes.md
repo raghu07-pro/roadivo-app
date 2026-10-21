@@ -36,11 +36,13 @@ IN-APP PURCHASES (Roadivo Pro)
 CAR MODE AND CARPLAY (Pro)
 Play any video, then tap the car button in the player: Car Mode shows large landscape controls for
 a phone on a dashboard mount, and "Drive View" hides the video for the driver. Roadivo is
-also a CarPlay audio app: Favorites, Recent and Library lists and Now Playing, sound only, never video
-on the CarPlay screen. Test it in the CarPlay Simulator or a car after buying Pro in the sandbox.
-Video reaches a car display only over AirPlay, while parked.
+also a CarPlay audio app (CarPlay Audio entitlement only): Favorites, Recent and Library lists, and Now
+Playing with a favourite button and Up Next. Where the car offers video to the app, a chosen item plays as
+video over AirPlay while the car allows it (parked); otherwise CarPlay shows Now Playing with sound only.
+Roadivo never asks whether the car is parked; the car decides. Test it in the CarPlay Simulator after
+buying Pro in the sandbox.
 
-DISCOVER TAB › BROWSER, CAST TO SCREEN, CAST FROM AN APP
+DISCOVER TAB › BROWSER, CAST TO SCREEN
 - Browser: a general web browser. Its start page links to popular video websites (opened as websites,
   never their apps; their icons load from the sites). Roadivo provides no content. A page's videos play
   in the page, with its own AirPlay button; a direct video link can play in Roadivo's player instead.
@@ -48,8 +50,9 @@ DISCOVER TAB › BROWSER, CAST TO SCREEN, CAST FROM AN APP
   Extension, which shows the screen (JPEG frames) to a web browser on the same Wi-Fi, at the
   http://...:8080/<code> address shown. Nothing is recorded or uploaded. To test: a real iPhone and any
   computer's browser. Below it, steps for iOS's own Screen Mirroring.
-- Cast from an app: explains AirPlay from other apps, and adds the user's own videos from Files or
-  Photos to "On this iPhone".
+- On CarPlay, a Browser tab lists the same sites and (iOS 27) a search field. No web page is ever shown on
+  the car's screen: a site or search opens in the Browser on the iPhone, and a direct video found on the
+  iPhone's open page can be played through Roadivo's player (as video where the car allows it).
 
 PERMISSIONS (each asked only when the feature is used)
 - Camera: scanning a QR code that contains a playlist link.

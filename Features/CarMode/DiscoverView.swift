@@ -1,58 +1,47 @@
 import SwiftUI
 
-/// Discover, laid out like CarTV's (owner, 2026-10-19; DECISIONS 122): only its three options. The Browser
-/// on its own card, then Cast to Screen (Screen Broadcast to a car screen's browser, DECISIONS 124) and
-/// Cast from an app. Car Mode stays one tap away on the player's car button (DECISIONS 102).
+/// Discover (DECISIONS 122, 135–136): two cards, the Browser with its first sites one tap away, and Cast to Screen
+/// (Screen Broadcast to a car screen's browser, DECISIONS 124). Car Mode stays on the player's car button (DECISIONS
+/// 102).
 struct DiscoverView: View {
-    let connection: CarConnection
     let isPro: Bool
     /// The Browser (DECISIONS 118); its page stays open between visits.
     let browser: BrowserViewModel
     let onPlayWebVideo: (MediaItem) -> Void
-    /// Cast from an app › Your Videos: added to On this iPhone and played; a message if that failed.
-    let onImportVideos: (_ urls: [URL], _ skipped: Int, _ isTemporary: Bool) async -> String?
     /// A site picked on the CarPlay screen; opened in the Browser, then cleared (DECISIONS 131).
     @Binding var browserRequest: URL?
 
     @State private var path: [Route] = []
+    /// The start page's tile width, so the quick sites match it.
+    @ScaledMetric(relativeTo: .body) private var siteColumn: CGFloat = 76
 
     private enum Route: Hashable {
         case browser
-        case castFromApp
         case castToScreen
     }
+
+    /// The Browser's first sites, as quick links on its card.
+    private let quickSites = Array(BrowserSite.all.prefix(4))
 
     var body: some View {
         NavigationStack(path: $path) {
             ScrollView {
-                VStack(spacing: Spacing.md) {
-                    optionsCard {
-                        option(
-                            title: "Browser",
-                            detail: "Browse websites and watch their videos",
-                            symbol: "globe",
-                            identifier: "cast.browser"
-                        ) { path.append(.browser) }
+                VStack(spacing: Spacing.lg) {
+                    // Side by side where there's room (landscape), else one above the other.
+                    ViewThatFits(in: .horizontal) {
+                        HStack(alignment: .top, spacing: Spacing.md) {
+                            browserCard.frame(minWidth: 320)
+                            castCard.frame(minWidth: 320)
+                        }
+                        VStack(spacing: Spacing.md) {
+                            browserCard
+                            castCard
+                        }
                     }
-                    optionsCard {
-                        option(
-                            title: "Cast to Screen",
-                            detail: "Mirror your iPhone screen",
-                            symbol: "rectangle.on.rectangle",
-                            identifier: "cast.mirroring"
-                        ) { path.append(.castToScreen) }
-                        Divider()
-                            .padding(.leading, 56)
-                        option(
-                            title: "Cast from an app",
-                            detail: "Apps with a built-in AirPlay button",
-                            symbol: "arrow.up.forward.app",
-                            identifier: "cast.fromApp"
-                        ) { path.append(.castFromApp) }
-                    }
+                    safetyNote
                 }
                 .padding(Spacing.md)
-                .frame(maxWidth: 640)
+                .frame(maxWidth: 900)
                 .frame(maxWidth: .infinity)
             }
             .background(.roadCanvas)
@@ -65,8 +54,6 @@ struct DiscoverView: View {
                 switch route {
                 case .browser:
                     BrowserView(viewModel: browser, onPlay: onPlayWebVideo)
-                case .castFromApp:
-                    CastFromAppView(connection: connection, onImport: onImportVideos)
                 case .castToScreen:
                     CastToScreenView(isPro: isPro)
                 }
@@ -76,20 +63,58 @@ struct DiscoverView: View {
         .onChange(of: browserRequest, initial: true) { _, url in
             guard let url else { return }
             browserRequest = nil
-            browser.open(url)
-            path = [.browser]
+            open(url)
         }
     }
 
-    private func optionsCard(@ViewBuilder _ rows: () -> some View) -> some View {
-        VStack(spacing: 0, content: rows)
-            .padding(.horizontal, Spacing.md)
-            .padding(.vertical, Spacing.xs)
-            .frame(maxWidth: .infinity)
-            .background(.roadSurface, in: RoundedRectangle(cornerRadius: Radius.lg, style: .continuous))
+    // MARK: Cards
+
+    private var browserCard: some View {
+        VStack(alignment: .leading, spacing: Spacing.md) {
+            cardHeader(
+                title: "Browser",
+                detail: "Browse websites and watch their videos",
+                symbol: "globe",
+                identifier: "cast.browser"
+            ) { path.append(.browser) }
+            // The start page's eager grid: the text-size audit reads a tile LazyVGrid rebuilds as unscaled.
+            TileGrid(minimumWidth: siteColumn, spacing: Spacing.sm, rowSpacing: Spacing.md) {
+                ForEach(quickSites) { site in
+                    SiteTile(site: site, image: browser.icons.icon(for: site)) { open(site.url) }
+                }
+            }
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .cardStyle()
     }
 
-    private func option(
+    private var castCard: some View {
+        VStack(alignment: .leading, spacing: Spacing.md) {
+            cardHeader(
+                title: "Cast to Screen",
+                detail: "Mirror your iPhone screen",
+                symbol: "rectangle.on.rectangle",
+                identifier: "cast.mirroring"
+            ) { path.append(.castToScreen) }
+            CastPicture()
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .cardStyle()
+    }
+
+    private var safetyNote: some View {
+        Label {
+            Text("For passengers, or while parked. Never watch video while driving.")
+                .foregroundStyle(.secondary)
+        } icon: {
+            Image(systemName: "exclamationmark.triangle.fill").foregroundStyle(.roadAccent)
+        }
+        .font(Typography.caption)
+        .frame(maxWidth: .infinity, alignment: .leading)
+    }
+
+    /// The card's title row; the whole row opens the option.
+    private func cardHeader(
         title: LocalizedStringKey,
         detail: LocalizedStringKey,
         symbol: String,
@@ -97,24 +122,24 @@ struct DiscoverView: View {
         action: @escaping () -> Void
     ) -> some View {
         Button(action: action) {
-            HStack(spacing: Spacing.sm) {
-                IconTile(systemImage: symbol, style: .soft, size: 44)
-                VStack(alignment: .leading, spacing: 2) {
+            HStack(spacing: Spacing.md) {
+                IconTile(systemImage: symbol, style: .filled, size: 56)
+                VStack(alignment: .leading, spacing: Spacing.xs) {
                     Text(title)
-                        .font(Typography.cardTitle)
+                        .font(Typography.sectionTitle)
                         .foregroundStyle(.primary)
                     Text(detail)
                         .font(Typography.secondary)
                         .foregroundStyle(.secondary)
                 }
                 .multilineTextAlignment(.leading)
+                .fixedSize(horizontal: false, vertical: true)
                 .frame(maxWidth: .infinity, alignment: .leading)
                 Image(systemName: "chevron.right")
                     .font(.footnote.weight(.semibold))
                     .foregroundStyle(.tertiary)
                     .accessibilityHidden(true)
             }
-            .padding(.vertical, Spacing.sm)
             .frame(minHeight: 44)
             .contentShape(Rectangle())
         }
@@ -122,4 +147,37 @@ struct DiscoverView: View {
         .accessibilityElement(children: .combine)
         .accessibilityIdentifier(identifier)
     }
+
+    private func open(_ url: URL) {
+        browser.open(url)
+        path = [.browser]
+    }
+}
+
+/// What Cast to Screen does, drawn: the iPhone's screen going to the car's. Decorative.
+private struct CastPicture: View {
+    var body: some View {
+        HStack(spacing: Spacing.lg) {
+            Image(systemName: "iphone")
+            Image(systemName: "dot.radiowaves.right")
+                .foregroundStyle(.roadAccent)
+            Image(systemName: "car.side")
+        }
+        .font(.largeTitle)
+        .foregroundStyle(.secondary)
+        .frame(maxWidth: .infinity)
+        .padding(.vertical, Spacing.md)
+        .background(.roadCanvas, in: RoundedRectangle(cornerRadius: Radius.md, style: .continuous))
+        .accessibilityHidden(true)
+    }
+}
+
+#Preview("Discover") {
+    DiscoverView(isPro: false, browser: BrowserViewModel(), onPlayWebVideo: { _ in }, browserRequest: .constant(nil))
+}
+
+#Preview("Discover, dark, large text") {
+    DiscoverView(isPro: true, browser: BrowserViewModel(), onPlayWebVideo: { _ in }, browserRequest: .constant(nil))
+        .preferredColorScheme(.dark)
+        .environment(\.dynamicTypeSize, .accessibility2)
 }

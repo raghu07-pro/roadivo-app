@@ -32,23 +32,36 @@ tabs: **Home · Favorites · Discover · Settings**.
 - Roadivo's CarPlay app (`App/CarPlaySceneDelegate.swift`) shows Favorites,
   Recent and Library, then hands playback to the shared player. A fourth **Browser** tab lists the Browser's
   sites; tapping one opens it in Discover › Browser on the iPhone, as CarPlay can't show web pages (DECISIONS 131).
+  Now Playing has a ♥ for what's playing and Up Next for the rest of its group (DECISIONS 140); rows show each
+  item's logo, still or video frame (`Core/Car/CarPlayArtwork.swift`, DECISIONS 141).
+- **CarPlay Audio only, never Video too** (DECISIONS 139): Apple doesn't allow the two entitlements in one app, and with
+  both iOS 27 never opened Roadivo's CarPlay screen. Apple's iOS 27.2 guide lets Audio apps mix in video: when the car's
+  `supportsVideoPlayback` is true, rows carry a video `CPPlaybackConfiguration` and CarPlay shows the picture when
+  parked, Now Playing otherwise (DECISIONS 132). On iOS 27.0.1 it's false for Roadivo, so the car plays sound. Test with
+  a real iPhone on USB: Device Hub › select the iPhone › Device › CarPlay Simulator › vehicle "Standard Video Playback".
+  Device Hub has no CarPlay window for simulators.
+- CarTV draws its own screens on CarPlay (web pages, mirroring, its player), which only navigation apps may do. The owner
+  asked for the same (2026-10-21); not built, as it needs a false navigation claim to Apple and shows video while driving.
 - Video plays over AirPlay, parked only, in cars with CarPlay video. While
   driving, the car plays sound only.
-- The **Discover** tab (`DiscoverView`, once "Cast to Car") shows only CarTV's three options (DECISIONS 118–124):
+- The **Discover** tab (`DiscoverView`, once "Cast to Car") has two cards (DECISIONS 118–124, 135–136; the Browser's card links its first four sites):
   **Browser** (`Features/Browser`, `Core/Browser`: full screen, a grid of sites with icons loaded at run time; nothing
   kept, no bookmarks or Recent; pages never open their apps; direct videos offer Play in Roadivo; its menu has only
-  Start Page and Leave Browser), **Cast to Screen** (`CastToScreenView`: Screen Broadcast, the whole iPhone in a car
+  Start Page and Leave Browser) and **Cast to Screen** (`CastToScreenView`: Screen Broadcast, the whole iPhone in a car
   screen's browser over the local network, served by the `RoadivoBroadcast` extension with `Core/Broadcast`; real
-  iPhone only. Screen Mirroring steps below it) and **Cast from an app**
-  (`CastFromAppView`: AirPlay from other apps; Your Videos imports into On this iPhone and plays). Car Mode is
+  iPhone only. Screen Mirroring steps below it). Cast from an app was removed (owner, 2026-10-21). Car Mode is
   one tap away from the player's car button (DECISIONS 102). Car Mode shows a progress bar with large times, and Drive View hides the video for the driver (DECISIONS 114).
+- The **CarPlay Browser tab** (`App/CarPlayBrowserTab.swift`, DECISIONS 134): on iOS 27 a search row (`CPSearchTemplate`,
+  `BrowserSearch`: the address, matching sites, a web search), "Video on this page" when the iPhone's open page has a
+  direct video (played on the car's screen as CarPlay video), then the sites. CarPlay can't show web pages, so sites and
+  searches open in the iPhone's Browser (`AppEnvironment.browser`, `AppRouter.openInBrowser`).
 - How to Connect (`Features/Shared/ConnectGuide*`, in Settings › Media and behind Cast to Screen) gives the user's steps; its CarPlay steps show
   only once CarPlay is switched on (DECISIONS 101).
 - **Car & Display Profiles** (`Core/Display`, `Features/Shared/DisplayProfiles`; DECISIONS 110–113): This iPhone plus a profile per AirPlay receiver, CarPlay or wired display, with aspect ratio, Play Next Automatically, subtitles, preferred source and Open Car Mode When Connected (Pro). `CarConnection.receiver` picks the profile; `AppEnvironment` applies it to the player.
 - CarPlay Audio was granted on 2026-10-20 and is on (`ROADIVO_CARPLAY = YES` in `Config/Shared.xcconfig`,
   DECISIONS 25, 127). Set to NO, the app hides every CarPlay promise (`CarPlayAvailability`, DECISIONS 84). Simulator builds carry
-  the entitlements so Xcode's CarPlay window shows the app (DECISIONS 121). Only the Audio entitlement is
-  requested; the steps after Apple grants it are in DECISIONS 127. Video views let go of the player in the
+  the entitlements so Xcode's CarPlay window shows the app (DECISIONS 121). CarPlay Video was tried on
+  2026-10-21 and dropped (DECISIONS 133, 139); the signing steps are in DECISIONS 127. Video views let go of the player in the
   background (`PlayerLayerView`, `SystemVideoPlayer.Coordinator`) so sound plays on with the iPhone locked.
 
 ## Design
@@ -143,7 +156,7 @@ None in v1 (DECISIONS 6). Everything is stored on the device.
 ## Constraints & non-goals
 
 - **Device:** iPhone only, iOS 17+, portrait and landscape.
-- **CarPlay:** a CarPlay video and audio app, gated on Apple's entitlements (DECISIONS 25).
+- **CarPlay:** a CarPlay Audio app that shows video where the car allows it, gated on Apple's entitlement (DECISIONS 25, 139).
 - **Not in v1:**
   - EPG
   - MKV, raw TS and AC3
@@ -160,6 +173,9 @@ None in v1 (DECISIONS 6). Everything is stored on the device.
   `tuist generate`, and archive with the `Roadivo` scheme (DECISIONS 126).
 
 ## Commands
+
+Xcode 26.4 or later builds CarPlay's video rows (their APIs need Swift 6.3); Xcode 26.2 and 26.3 still build Roadivo, without them.
+Xcode 27 needs macOS 26.6 or later.
 
 ```bash
 tuist generate --no-open

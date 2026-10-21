@@ -1,70 +1,6 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
-    "%@ is open on your iPhone. For passengers, or while parked." : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%@ ist auf deinem iPhone geöffnet. Für Mitfahrende oder beim Parken."
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%@ está abierto en tu iPhone. Para los pasajeros o con el coche aparcado."
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%@ est ouvert sur votre iPhone. Pour les passagers, ou à l’arrêt."
-          }
-        },
-        "hi" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%@ आपके iPhone पर खुला है। यात्रियों के लिए, या गाड़ी पार्क होने पर।"
-          }
-        },
-        "it" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%@ è aperto sul tuo iPhone. Per i passeggeri o con l’auto parcheggiata."
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%@ を iPhone で開きました。同乗者向け、または駐車中にご利用ください。"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%@이(가) iPhone에서 열렸습니다. 동승자용 또는 주차 중에만 사용하세요."
-          }
-        },
-        "pt-BR" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%@ está aberto no seu iPhone. Para passageiros ou com o carro estacionado."
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%@ 已在 iPhone 上打开。供乘客观看，或在停车时观看。"
-          }
-        },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%@ 已在 iPhone 上打開。供乘客觀看，或在停車時觀看。"
-          }
-        }
-      }
-    },
     "%@ · %@" : {
       "localizations" : {
         "de" : {
@@ -451,6 +387,70 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%@ 立即購買"
+          }
+        }
+      }
+    },
+    "%@ is open on your iPhone. For passengers, or while parked." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ ist auf deinem iPhone geöffnet. Für Mitfahrende oder beim Parken."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ está abierto en tu iPhone. Para los pasajeros o con el coche aparcado."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ est ouvert sur votre iPhone. Pour les passagers, ou à l’arrêt."
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ आपके iPhone पर खुला है। यात्रियों के लिए, या गाड़ी पार्क होने पर।"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ è aperto sul tuo iPhone. Per i passeggeri o con l’auto parcheggiata."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ を iPhone で開きました。同乗者向け、または駐車中にご利用ください。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@이(가) iPhone에서 열렸습니다. 동승자용 또는 주차 중에만 사용하세요."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ está aberto no seu iPhone. Para passageiros ou com o carro estacionado."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ 已在 iPhone 上打开。供乘客观看，或在停车时观看。"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ 已在 iPhone 上打開。供乘客觀看，或在停車時觀看。"
           }
         }
       }
@@ -4008,70 +4008,6 @@
         }
       }
     },
-    "Apps with a built-in AirPlay button" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Apps mit eigener AirPlay-Taste"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Apps con botón AirPlay integrado"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Apps avec un bouton AirPlay intégré"
-          }
-        },
-        "hi" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "बिल्ट-इन AirPlay बटन वाली ऐप्स"
-          }
-        },
-        "it" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "App con pulsante AirPlay integrato"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "AirPlayボタンがあるアプリ"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "AirPlay 버튼이 있는 앱"
-          }
-        },
-        "pt-BR" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Apps com botão AirPlay integrado"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "带有 AirPlay 按钮的 App"
-          }
-        },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "具有 AirPlay 按鈕的 App"
-          }
-        }
-      }
-    },
     "Aspect Ratio" : {
       "localizations" : {
         "de" : {
@@ -5802,70 +5738,6 @@
         }
       }
     },
-    "Cast from an app" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Aus einer App streamen"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Enviar desde una app"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Diffuser depuis une app"
-          }
-        },
-        "hi" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "किसी ऐप से कास्ट करें"
-          }
-        },
-        "it" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Trasmetti da un’app"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "アプリからキャスト"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "앱에서 전송"
-          }
-        },
-        "pt-BR" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Transmitir de um app"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "从 App 投放"
-          }
-        },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "從 App 投放"
-          }
-        }
-      }
-    },
     "Cast to Screen" : {
       "localizations" : {
         "de" : {
@@ -6827,6 +6699,7 @@
       }
     },
     "Choose Files" : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -7782,134 +7655,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "將 iPhone 連接到車輛的 AirPlay 顯示器或無線轉接器，通常透過其 Wi‑Fi。"
-          }
-        }
-      }
-    },
-    "Connect your iPhone to the car's AirPlay display or wireless adapter." : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Verbinde dein iPhone mit dem AirPlay-Display oder Funkadapter des Autos."
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Conecta tu iPhone a la pantalla AirPlay o al adaptador inalámbrico del coche."
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Connectez votre iPhone à l’écran AirPlay ou à l’adaptateur sans fil de la voiture."
-          }
-        },
-        "hi" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "अपने iPhone को कार के AirPlay डिस्प्ले या वायरलेस अडैप्टर से कनेक्ट करें।"
-          }
-        },
-        "it" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Collega l’iPhone allo schermo AirPlay o all’adattatore wireless dell’auto."
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "iPhoneを車のAirPlayディスプレイまたはワイヤレスアダプタに接続します。"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "iPhone을 차량의 AirPlay 디스플레이 또는 무선 어댑터에 연결하세요."
-          }
-        },
-        "pt-BR" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Conecte o iPhone à tela AirPlay ou ao adaptador sem fio do carro."
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "将 iPhone 连接到车辆的 AirPlay 显示屏或无线适配器。"
-          }
-        },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "將 iPhone 連接到車輛的 AirPlay 顯示器或無線轉接器。"
-          }
-        }
-      }
-    },
-    "Connected with AirPlay" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Per AirPlay verbunden"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Conectado con AirPlay"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Connecté avec AirPlay"
-          }
-        },
-        "hi" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "AirPlay से कनेक्टेड"
-          }
-        },
-        "it" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Connesso con AirPlay"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "AirPlayで接続済み"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "AirPlay로 연결됨"
-          }
-        },
-        "pt-BR" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Conectado com AirPlay"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "已通过 AirPlay 连接"
-          }
-        },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "已透過 AirPlay 連接"
           }
         }
       }
@@ -11571,6 +11316,7 @@
       }
     },
     "From Photos" : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -20169,6 +19915,7 @@
       }
     },
     "Play a video in any app that has an AirPlay button." : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -27082,70 +26829,6 @@
         }
       }
     },
-    "Tap AirPlay and choose the car's display. Some apps limit quality or block certain videos." : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Tippe auf AirPlay und wähle das Display des Autos. Manche Apps begrenzen die Qualität oder sperren bestimmte Videos."
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Toca AirPlay y elige la pantalla del coche. Algunas apps limitan la calidad o bloquean ciertos vídeos."
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Touchez AirPlay et choisissez l’écran de la voiture. Certaines apps limitent la qualité ou bloquent certaines vidéos."
-          }
-        },
-        "hi" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "AirPlay पर टैप करें और कार का डिस्प्ले चुनें। कुछ ऐप क्वालिटी सीमित करती हैं या कुछ वीडियो रोक देती हैं।"
-          }
-        },
-        "it" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Tocca AirPlay e scegli lo schermo dell’auto. Alcune app limitano la qualità o bloccano alcuni video."
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "AirPlayをタップして車のディスプレイを選びます。画質を制限したり、一部の動画をブロックしたりするアプリもあります。"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "AirPlay를 탭하고 차량 디스플레이를 선택하세요. 일부 앱은 화질을 제한하거나 특정 동영상을 차단합니다."
-          }
-        },
-        "pt-BR" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Toque em AirPlay e escolha a tela do carro. Alguns apps limitam a qualidade ou bloqueiam certos vídeos."
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "轻点 AirPlay 并选择车辆的显示屏。部分 App 会限制画质或屏蔽某些视频。"
-          }
-        },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "點一下 AirPlay 並選擇車輛的顯示器。部分 App 會限制畫質或封鎖某些影片。"
-          }
-        }
-      }
-    },
     "Tap Start Broadcast, then Start Broadcast again." : {
       "localizations" : {
         "de" : {
@@ -30730,70 +30413,6 @@
         }
       }
     },
-    "Waiting for an AirPlay screen…" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Warte auf einen AirPlay-Bildschirm …"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Esperando una pantalla AirPlay…"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "En attente d’un écran AirPlay…"
-          }
-        },
-        "hi" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "AirPlay स्क्रीन का इंतज़ार…"
-          }
-        },
-        "it" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "In attesa di uno schermo AirPlay…"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "AirPlayの画面を待っています…"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "AirPlay 화면을 기다리는 중…"
-          }
-        },
-        "pt-BR" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Aguardando uma tela AirPlay…"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "正在等待 AirPlay 屏幕…"
-          }
-        },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "正在等待 AirPlay 螢幕…"
-          }
-        }
-      }
-    },
     "Waiting for Plex…" : {
       "localizations" : {
         "de" : {
@@ -32582,134 +32201,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "你的來源"
-          }
-        }
-      }
-    },
-    "Your Videos" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Deine Videos"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Tus vídeos"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Vos vidéos"
-          }
-        },
-        "hi" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "आपके वीडियो"
-          }
-        },
-        "it" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "I tuoi video"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "あなたの動画"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "내 동영상"
-          }
-        },
-        "pt-BR" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Seus vídeos"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "你的视频"
-          }
-        },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "你的影片"
-          }
-        }
-      }
-    },
-    "Your videos are added to On this iPhone in Favorites, then play in Roadivo." : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Deine Videos kommen unter „Auf diesem iPhone“ in die Favoriten und werden dann in Roadivo abgespielt."
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Tus vídeos se añaden a En este iPhone en Favoritos y se reproducen en Roadivo."
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Vos vidéos sont ajoutées à « Sur cet iPhone » dans Favoris, puis lues dans Roadivo."
-          }
-        },
-        "hi" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "आपके वीडियो पसंदीदा में ‘इस iPhone पर’ में जुड़ जाते हैं, फिर Roadivo में चलते हैं।"
-          }
-        },
-        "it" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "I tuoi video vengono aggiunti a Su questo iPhone in Preferiti, poi si riproducono in Roadivo."
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "動画はお気に入りの「この iPhone 上」に追加され、Roadivoで再生されます。"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "동영상은 즐겨찾기의 ‘이 iPhone에서’에 추가된 뒤 Roadivo에서 재생됩니다."
-          }
-        },
-        "pt-BR" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Seus vídeos são adicionados a Neste iPhone em Favoritos e reproduzidos no Roadivo."
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "你的视频会添加到“收藏”中的“在此 iPhone 上”，然后在 Roadivo 中播放。"
-          }
-        },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "你的影片會加入「收藏」中的「在此 iPhone 上」，然後在 Roadivo 中播放。"
           }
         }
       }

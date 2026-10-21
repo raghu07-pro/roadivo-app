@@ -83,6 +83,27 @@ struct CarTests {
         #expect(menu.siteRows(perRow: 0).flatMap(\.self) == menu.sites)
     }
 
+    @Test("A CarPlay video row picks up where a film stopped; an unplayed channel's length is unknown (0)")
+    func videoTimes() throws {
+        let url = try #require(URL(string: "https://e.com/film.m3u8"))
+        var film = MediaItem(
+            id: UUID(),
+            title: "Film",
+            group: "Films",
+            artworkURL: nil,
+            streamURL: url,
+            isLocalFile: false,
+            isFavorite: false
+        )
+        #expect(CarPlayMenu.videoTimes(for: film) == (0, 0))
+
+        film.progress = PlaybackProgress(position: 1200, duration: 6000)
+        #expect(CarPlayMenu.videoTimes(for: film) == (1200, 6000))
+
+        film.progress = PlaybackProgress(position: 30, duration: 6000) // Under a minute in: starts over.
+        #expect(CarPlayMenu.videoTimes(for: film) == (0, 6000))
+    }
+
     @Test("A site picked on CarPlay opens in Discover's Browser")
     func siteFromCarPlay() throws {
         let router = AppRouter()

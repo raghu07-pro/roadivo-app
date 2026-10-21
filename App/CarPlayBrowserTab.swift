@@ -1,0 +1,199 @@
+import CarPlay
+import OSLog
+
+/// The CarPlay screen's Browser tab (DECISIONS 131, 134): search (iOS 27), the video on the iPhone's open page,
+/// and the sites as icons. CarPlay shows no web pages, so what's chosen opens in the iPhone's Browser.
+@MainActor
+final class CarPlayBrowserTab: NSObject, CPSearchTemplateDelegate {
+    let template: CPListTemplate
+    private weak var interfaceController: CPInterfaceController?
+    /// Marks a row to play as video where the car allows it; true when CarPlay then presents it itself.
+    private let markAsVideo: (CPListItem) -> Bool
+    /// Each site's solid tile, made once per icon (`SiteIconTile`).
+    private var siteTiles: [String: (icon: UIImage, tile: UIImage)] = [:]
+    private lazy var placeholderTile = SiteIconTile.placeholder()
+    private let logger = Logger(subsystem: "com.roadivo", category: "CarPlay")
+
+    init(interfaceController: CPInterfaceController?, markAsVideo: @escaping (CPListItem) -> Bool) {
+        self.interfaceController = interfaceController
+        self.markAsVideo = markAsVideo
+        template = CPListTemplate(title: String(appLocalized: "Browser"), sections: [])
+        template.tabImage = UIImage(systemName: "globe")
+        super.init()
+    }
+
+    func fill(menu: CarPlayMenu, environment: AppEnvironment) {
+        var top: [any CPListTemplateItem] = []
+        // Apple's guide gives audio and video apps the search template from iOS 27.
+        if #available(iOS 27, *) {
+            top.append(searchRow())
+        }
+        if environment.browser.foundVideo != nil {
+            top.append(videoRow(environment.browser))
+        }
+        let icons = CPListSection(items: siteItems(menu, icons: environment.siteIcons))
+        template.updateSections(top.isEmpty ? [icons] : [CPListSection(items: top), icons])
+    }
+
+    // MARK: Search
+
+    /// Cars hide the keyboard while driving, so search is an extra way in, never the only one.
+    private func searchRow() -> CPListItem {
+        let item = CPListItem(
+            text: String(appLocalized: "Search or enter website"),
+            detailText: nil,
+            image: UIImage(systemName: "magnifyingglass")
+        )
+        item.handler = { [weak self] _, completion in
+            MainActor.assumeIsolated {
+                guard let self else { return completion() }
+                let search = CPSearchTemplate()
+                search.delegate = self
+                self.interfaceController?.pushTemplate(search, animated: true) { _, _ in completion() }
+            }
+        }
+        return item
+    }
+
+    func searchTemplate(
+        _ searchTemplate: CPSearchTemplate,
+        updatedSearchText searchText: String,
+        completionHandler: @escaping ([CPListItem]) -> Void
+    ) {
+        let icons = AppEnvironment.current?.siteIcons
+        let results = BrowserSearch.results(for: searchText, limit: Int(CPListTemplate.maximumItemCount))
+        completionHandler(results.map { result in
+            let item = CPListItem(
+                text: result.title,
+                detailText: result.detail,
+                image: image(for: result, icons: icons)
+            )
+            item.userInfo = result.url
+            return item
+        })
+    }
+
+    func searchTemplate(
+        _ searchTemplate: CPSearchTemplate,
+        selectedResult item: CPListItem,
+        completionHandler: @escaping () -> Void
+    ) {
+        if let url = item.userInfo as? URL {
+            openOnPhone(url, name: item.text ?? WebAddress.displayName(of: url))
+        }
+        completionHandler()
+    }
+
+    private func image(for result: BrowserSearch.Result, icons: SiteIconStore?) -> UIImage? {
+        switch result {
+        case let .site(site): icons.map { tile(for: site, icons: $0) }
+        case .address: UIImage(systemName: "globe")
+        case .search: UIImage(systemName: "magnifyingglass")
+        }
+    }
+
+    // MARK: The page's video
+
+    /// A video Roadivo can play on the iPhone's open page, played on this screen by Roadivo's player.
+    private func videoRow(_ browser: BrowserViewModel) -> CPListItem {
+        let title = browser.page?.title.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+        let item = CPListItem(
+            text: String(appLocalized: "Video on this page"),
+            detailText: title.isEmpty ? browser.pageURL.map(WebAddress.displayName(of:)) : title,
+            image: UIImage(systemName: "play.rectangle.fill")
+        )
+        let presentsItself = markAsVideo(item)
+        item.handler = { [weak self] _, completion in
+            MainActor.assumeIsolated {
+                guard let environment = AppEnvironment.current, let media = environment.browser.takeVideo() else {
+                    return completion()
+                }
+                environment.playback.play(media, queue: [media])
+                guard !presentsItself else { return completion() }
+                self?.interfaceController?.pushTemplate(CPNowPlayingTemplate.shared, animated: true) { _, _ in
+                    completion()
+                }
+            }
+        }
+        return item
+    }
+
+    // MARK: Sites
+
+    /// Each site's icon and name, in rows the car wraps to fit its screen (iOS 26), or one site per row before.
+    private func siteItems(_ menu: CarPlayMenu, icons: SiteIconStore) -> [any CPListTemplateItem] {
+        guard #available(iOS 26, *) else {
+            return menu.sites.map { siteRow($0, image: tile(for: $0, icons: icons)) }
+        }
+        return menu.siteRows(perRow: CPMaximumNumberOfGridImages).map { siteGrid($0, icons: icons) }
+    }
+
+    @available(iOS 26, *)
+    private func siteGrid(_ sites: [BrowserSite], icons: SiteIconStore) -> CPListImageRowItem {
+        let elements = sites.map { site in
+            CPListImageRowItemImageGridElement(
+                image: tile(for: site, icons: icons),
+                imageShape: .roundedRectangle,
+                title: site.name,
+                accessorySymbolName: nil
+            )
+        }
+        let item = CPListImageRowItem(text: nil, imageGridElements: elements, allowsMultipleLines: true)
+        item.listImageRowHandler = { [weak self] _, index, completion in
+            MainActor.assumeIsolated {
+                if sites.indices.contains(index) {
+                    self?.openOnPhone(sites[index].url, name: sites[index].name)
+                }
+                completion()
+            }
+        }
+        return item
+    }
+
+    private func siteRow(_ site: BrowserSite, image: UIImage) -> CPListItem {
+        let item = CPListItem(text: site.name, detailText: nil, image: image)
+        item.handler = { [weak self] _, completion in
+            MainActor.assumeIsolated {
+                self?.openOnPhone(site.url, name: site.name)
+                completion()
+            }
+        }
+        return item
+    }
+
+    /// CarPlay shows a see-through tile behind any clear pixel, so every icon goes in solid.
+    private func tile(for site: BrowserSite, icons: SiteIconStore) -> UIImage {
+        guard let icon = icons.icon(for: site) else { return placeholderTile }
+        if let made = siteTiles[site.name], made.icon === icon {
+            return made.tile
+        }
+        let tile = SiteIconTile.make(from: icon) ?? icon
+        siteTiles[site.name] = (icon, tile)
+        return tile
+    }
+
+    // MARK: Opening on the iPhone
+
+    /// CarPlay can't show a web page, so it opens in the iPhone's Browser; its videos come back here as
+    /// "Video on this page", or reach the car over AirPlay while parked.
+    private func openOnPhone(_ url: URL, name: String) {
+        AppEnvironment.current?.router.openInBrowser(url)
+        let done = CPAlertAction(title: String(appLocalized: "OK"), style: .cancel) { [weak self] _ in
+            MainActor.assumeIsolated {
+                self?.interfaceController?.dismissTemplate(animated: true, completion: nil)
+            }
+        }
+        let alert = CPAlertTemplate(
+            titleVariants: [
+                String(appLocalized: "\(name) is open on your iPhone. For passengers, or while parked."),
+                String(appLocalized: "Opened on your iPhone")
+            ],
+            actions: [done]
+        )
+        interfaceController?.presentTemplate(alert, animated: true) { [logger] _, error in
+            if let error {
+                logger.error("Browser alert: \(error.localizedDescription, privacy: .public)")
+            }
+        }
+    }
+}

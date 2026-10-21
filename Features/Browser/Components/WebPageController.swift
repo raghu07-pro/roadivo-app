@@ -85,7 +85,7 @@ final class WebPageController: NSObject {
 
     /// Reported together, so the bar never shows a half-updated page.
     private func observe() {
-        let changed: (WKWebView) -> Void = { [weak self] _ in
+        let changed: @Sendable (WKWebView) -> Void = { [weak self] _ in
             MainActor.assumeIsolated { self?.publish() }
         }
         observations = [

@@ -1,20 +1,19 @@
 import XCTest
 
-/// Discover (CarTV's three options: Browser, Cast to Screen, Cast from an app), How to Connect, and Car
-/// Mode from the player.
+/// Discover (Browser and Cast to Screen; DECISIONS 135), How to Connect, and Car Mode from the player.
 @MainActor
 final class CarFlowUITests: XCTestCase {
     override func setUp() {
         continueAfterFailure = false
     }
 
-    /// Discover shows only its three options, whether a car is connected or not.
-    func testDiscoverShowsTheThreeOptions() throws {
+    /// Discover shows only its two options, whether a car is connected or not; Cast from an app is gone.
+    func testDiscoverShowsTheTwoOptions() throws {
         let app = XCUIApplication.roadivo(skipOnboarding: true)
         app.tabBars.buttons["Discover"].tap()
         XCTAssertTrue(app.buttons["cast.browser"].waitForExistence(timeout: 5))
         XCTAssertTrue(app.buttons["cast.mirroring"].exists)
-        XCTAssertTrue(app.buttons["cast.fromApp"].exists)
+        XCTAssertFalse(app.buttons["cast.fromApp"].exists)
         XCTAssertFalse(app.buttons["cast.guide.link"].exists)
         XCTAssertFalse(app.buttons["car.start"].exists)
         snapshot("18d-Cast-Options", app: app)
@@ -67,26 +66,6 @@ final class CarFlowUITests: XCTestCase {
         openSettings.tap()
         let settings = XCUIApplication(bundleIdentifier: "com.apple.Preferences")
         XCTAssertTrue(settings.wait(for: .runningForeground, timeout: 10), "Open Settings didn't open Settings")
-    }
-
-    /// Cast from an app: the car's screen, the AirPlay steps for other apps behind the ?, and the user's own
-    /// videos.
-    func testCastFromAnApp() throws {
-        let app = XCUIApplication.roadivo(skipOnboarding: true)
-        app.tabBars.buttons["Discover"].tap()
-        let row = app.buttons["cast.fromApp"]
-        XCTAssertTrue(row.waitForExistence(timeout: 5))
-        row.tap()
-
-        XCTAssertTrue(app.descendants(matching: .any)["castApp.status"].waitForExistence(timeout: 5))
-        XCTAssertTrue(app.buttons["castApp.files"].exists)
-        XCTAssertTrue(app.buttons["castApp.photos"].exists)
-        snapshot("45-Cast-From-App", app: app)
-        try auditIgnoringBottomEdge(app, for: [.dynamicType, .sufficientElementDescription, .hitRegion])
-        try checkStepsHelp(app, identifier: "castApp", snapshot: "45b-Cast-From-App-Steps")
-        app.buttons["castApp.photos"].tap()
-        // Apple's Photos picker opens over Roadivo, which stays in front.
-        XCTAssertEqual(app.state, .runningForeground)
     }
 
     /// Drive View hides the video and keeps three big buttons, is remembered when Car Mode opens again,

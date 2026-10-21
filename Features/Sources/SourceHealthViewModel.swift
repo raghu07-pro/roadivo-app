@@ -96,8 +96,9 @@ final class SourceHealthViewModel {
         isChecking = true
         let targets = all.map { StreamTarget(id: $0.id, url: $0.streamURL) }
         checkTask = Task {
-            await checker.check(targets) { @MainActor [weak self] target, outcome in
-                self?.record(target, outcome)
+            // The task already holds the model until the check ends (`stop()` on leaving cancels it).
+            await checker.check(targets) { @MainActor target, outcome in
+                self.record(target, outcome)
             }
             finish()
         }

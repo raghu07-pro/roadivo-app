@@ -14,6 +14,12 @@ struct CarPlayMenu: Equatable {
     /// The Browser tab's sites, which open in the iPhone's Browser (DECISIONS 131).
     let sites: [BrowserSite]
 
+    /// Where an item picks up and how long it is, for CarPlay's video rows; 0 when the length isn't known yet, as
+    /// for a live channel (DECISIONS 132).
+    static func videoTimes(for media: MediaItem) -> (elapsed: Double, duration: Double) {
+        (media.progress?.resumePoint ?? 0, media.progress?.duration ?? 0)
+    }
+
     /// The sites in rows of at most `perRow`, CarPlay's limit for one row of icons; the car wraps each to fit.
     func siteRows(perRow: Int) -> [[BrowserSite]] {
         let perRow = max(1, perRow)

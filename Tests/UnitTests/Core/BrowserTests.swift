@@ -63,3 +63,51 @@ struct WebAddressTests {
         #expect(!WebMedia.isPlayableSource(URL(string: "https://provider.example.com/list.m3u")))
     }
 }
+
+@Suite("CarPlay Browser search")
+struct BrowserSearchTests {
+    private let sites = Array(BrowserSite.all.prefix(5))
+
+    @Test("Nothing typed lists the sites")
+    func emptyListsSites() {
+        #expect(BrowserSearch.results(for: "  ", sites: sites, limit: 12) == sites.map(BrowserSearch.Result.site))
+    }
+
+    @Test("A typed address comes first, then a web search for it")
+    func addressThenSearch() throws {
+        let results = BrowserSearch.results(for: "example.com", sites: sites, limit: 12)
+        #expect(try results.first == .address(#require(URL(string: "https://example.com"))))
+        guard case let .search(query, url) = results.last else {
+            Issue.record("No web search row")
+            return
+        }
+        #expect(query == "example.com")
+        #expect(url.absoluteString.hasPrefix(WebAddress.searchEngine))
+        #expect(results.count == 2)
+    }
+
+    @Test("Words match sites by name or address, then a web search; a site's own address shows as the site")
+    func wordsMatchSites() throws {
+        let youtube = try #require(sites.first { $0.name == "YouTube" })
+        #expect(BrowserSearch.results(for: "tube", sites: sites, limit: 12).first == .site(youtube))
+        let typed = BrowserSearch.results(for: "m.youtube.com", sites: sites, limit: 12)
+        #expect(typed.first == .site(youtube))
+        #expect(!typed.contains {
+            if case .address = $0 {
+                true
+            } else {
+                false
+            }
+        })
+    }
+
+    @Test("A short list keeps the web search as its last row")
+    func limitKeepsSearch() {
+        let results = BrowserSearch.results(for: "o", sites: BrowserSite.all, limit: 3)
+        #expect(results.count == 3)
+        guard case .search = results.last else {
+            Issue.record("The web search was cut")
+            return
+        }
+    }
+}

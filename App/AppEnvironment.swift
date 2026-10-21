@@ -25,6 +25,8 @@ final class AppEnvironment {
     let displayProfiles: DisplayProfileStore
     /// The Browser's site icons, shared by Discover and the CarPlay screen's Browser tab.
     let siteIcons = SiteIconStore.onDevice()
+    /// Discover's Browser; the CarPlay screen offers its page's video (DECISIONS 134).
+    let browser: BrowserViewModel
 
     /// The running app's environment, for the CarPlay scene: it is created by
     /// the system, not by SwiftUI, so it can't be handed one.
@@ -59,6 +61,13 @@ final class AppEnvironment {
         playback = PlaybackController()
         playback.progressStore = repository
         router = AppRouter()
+        // A web page that starts playing takes over: Roadivo's own video stops, keeping its place, so CarPlay,
+        // the lock screen and the steering wheel control the page's video, not a paused one behind it.
+        browser = BrowserViewModel(icons: siteIcons) { [playback] in
+            if playback.isActive {
+                playback.stop()
+            }
+        }
         playback.onItemStarted = { [repository, preferences, router] item in
             repository.markPlayed(item.id)
             preferences.videosOpened += 1

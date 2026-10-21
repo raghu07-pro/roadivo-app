@@ -2,7 +2,7 @@ import AVFoundation
 import Observation
 
 /// What the car sees right now: whether Roadivo is on CarPlay, and where audio and video go
-/// (an AirPlay display, the car's audio). Car Mode, profiles and Cast from an app use this.
+/// (an AirPlay display, the car's audio). Car Mode and the display profiles use this.
 @Observable
 @MainActor
 final class CarConnection {
