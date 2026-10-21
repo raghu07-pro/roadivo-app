@@ -81,9 +81,16 @@ final class ScreenSnapshotTests: XCTestCase {
     func testOnboardingLargestText() {
         let view = OnboardingView(viewModel: OnboardingViewModel {})
             .environment(\.dynamicTypeSize, .accessibility3)
+        // Light, not the simulator's own setting: a dark simulator turned this light reference dark.
         assertSnapshot(
-            of: still(view),
-            as: .image(on: .iPhone13, drawHierarchyInKeyWindow: true, precision: 0.98, perceptualPrecision: 0.98),
+            of: still(view, style: .light),
+            as: .image(
+                on: .iPhone13,
+                drawHierarchyInKeyWindow: true,
+                precision: 0.98,
+                perceptualPrecision: 0.98,
+                traits: UITraitCollection(userInterfaceStyle: .light)
+            ),
             named: "onboarding-ax3"
         )
     }
@@ -112,9 +119,16 @@ final class ScreenSnapshotTests: XCTestCase {
     func testThemeLargestText() {
         let view = NavigationStack { ThemeView(viewModel: ThemeViewModel()) }
             .environment(\.dynamicTypeSize, .accessibility3)
+        // Light, not the simulator's own setting, like onboarding-ax3.
         assertSnapshot(
-            of: still(view),
-            as: .image(on: .iPhone13, drawHierarchyInKeyWindow: true, precision: 0.98, perceptualPrecision: 0.98),
+            of: still(view, style: .light),
+            as: .image(
+                on: .iPhone13,
+                drawHierarchyInKeyWindow: true,
+                precision: 0.98,
+                perceptualPrecision: 0.98,
+                traits: UITraitCollection(userInterfaceStyle: .light)
+            ),
             named: "theme-ax3"
         )
     }
