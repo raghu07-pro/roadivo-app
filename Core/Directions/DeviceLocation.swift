@@ -12,6 +12,8 @@ final class DeviceLocation: NSObject, LocationProviding {
     @ObservationIgnored private var waitingForFix: [CheckedContinuation<Coordinate?, Never>] = []
     /// A fix this recent is reused instead of asking for a new one.
     private static let freshness: TimeInterval = 120
+    /// Guidance skips fixes vaguer than this, in metres, so a poor one doesn't look like leaving the route.
+    private static let guidanceAccuracy: Double = 50
 
     override init() {
         super.init()
@@ -42,6 +44,27 @@ final class DeviceLocation: NSObject, LocationProviding {
             if waitingForFix.count == 1 {
                 manager.requestLocation()
             }
+        }
+    }
+
+    func updates() -> AsyncStream<Coordinate> {
+        AsyncStream { continuation in
+            let task = Task { @MainActor [weak self] in
+                do {
+                    for try await update in CLLocationUpdate.liveUpdates(.automotiveNavigation) {
+                        guard let fix = update.location, fix.horizontalAccuracy >= 0,
+                              fix.horizontalAccuracy <= Self.guidanceAccuracy
+                        else { continue }
+                        let coordinate = Coordinate(fix.coordinate)
+                        self?.lastCoordinate = coordinate
+                        continuation.yield(coordinate)
+                    }
+                } catch {
+                    // Core Location ended the updates; guidance keeps its last fix until it's started again.
+                }
+                continuation.finish()
+            }
+            continuation.onTermination = { _ in task.cancel() }
         }
     }
 

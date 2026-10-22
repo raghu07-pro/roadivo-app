@@ -6,4 +6,10 @@ enum CarPlayAvailability {
     static var isEnabled: Bool {
         (Bundle.main.object(forInfoDictionaryKey: "ROADIVO_CARPLAY") as? String) == "YES"
     }
+
+    /// `ROADIVO_CARPLAY_NAVIGATION`: the car shows Roadivo's map and guidance instead of its media lists
+    /// (DECISIONS 147). Simulator builds only until Apple grants CarPlay Navigation.
+    static var isNavigation: Bool {
+        (Bundle.main.object(forInfoDictionaryKey: "ROADIVO_CARPLAY_NAVIGATION") as? String) == "YES"
+    }
 }

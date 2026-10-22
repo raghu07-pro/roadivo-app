@@ -268,4 +268,8 @@ private final class FakeLocation: LocationProviding {
     func currentCoordinate() async -> Coordinate? {
         lastCoordinate
     }
+
+    func updates() -> AsyncStream<Coordinate> {
+        AsyncStream { $0.finish() }
+    }
 }

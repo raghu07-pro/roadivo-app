@@ -70,7 +70,6 @@ private struct MainTabView: View {
     @State private var displayProfiles: DisplayProfilesViewModel
     @State private var voiceSearch: VoiceSearchModel
     @State private var updatePrompt: UpdatePromptModel
-    @State private var directions: DirectionsViewModel
     /// Set by a purchase or restore, so Home opens once the paywall has closed.
     @State private var goesHomeAfterPaywall = false
     /// Set by a purchase from the player's Car Mode button, so Car Mode opens once the paywall closes.
@@ -96,10 +95,6 @@ private struct MainTabView: View {
         ))
         _voiceSearch = State(initialValue: VoiceSearchModel(speech: environment.speech, playback: environment.playback))
         _updatePrompt = State(initialValue: UpdatePromptModel(checker: environment.updateChecker))
-        _directions = State(initialValue: DirectionsViewModel(
-            finder: environment.places,
-            location: environment.location
-        ))
     }
 
     @Environment(\.requestReview) private var requestReview
@@ -111,6 +106,11 @@ private struct MainTabView: View {
 
     private var playback: PlaybackController {
         environment.playback
+    }
+
+    /// Owned by the environment: the CarPlay map shows the same place and routes (DECISIONS 147).
+    private var directions: DirectionsViewModel {
+        environment.directions
     }
 
     private var isPro: Bool {

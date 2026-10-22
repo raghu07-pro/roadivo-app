@@ -27,6 +27,17 @@ final class ScriptedLocation: LocationProviding {
         requestAccess()
         return status == .allowed ? Self.lisbon : nil
     }
+
+    /// One fix at the start, so guidance shows its first maneuver and stays there.
+    func updates() -> AsyncStream<Coordinate> {
+        let fix = status == .allowed ? Self.lisbon : nil
+        return AsyncStream { continuation in
+            if let fix {
+                continuation.yield(fix)
+            }
+            continuation.finish()
+        }
+    }
 }
 
 /// UI tests' and previews' Apple Maps: two places for any search, two routes to either, no network.
@@ -51,8 +62,33 @@ struct ScriptedPlaceFinder: PlaceFinding {
         )
         let end = destination.coordinate
         return [
-            RouteOption(id: 0, name: "A5", distance: 38400, travelTime: 2460, path: [origin, end]),
-            RouteOption(id: 1, name: "N6", distance: 41200, travelTime: 3300, path: [origin, middle, end])
+            RouteOption(
+                id: 0,
+                name: "A5",
+                distance: 38400,
+                travelTime: 2460,
+                path: [origin, end],
+                steps: [
+                    RouteStep(instructions: "", distance: 0, path: [origin]),
+                    RouteStep(instructions: "Head west on A5", distance: 38400, path: [origin, end]),
+                    RouteStep(instructions: "The destination is on your right", distance: 0, path: [end])
+                ]
+            ),
+            RouteOption(
+                id: 1,
+                name: "N6",
+                distance: 41200,
+                travelTime: 3300,
+                path: [origin, middle, end],
+                steps: [
+                    RouteStep(instructions: "Head west on N6", distance: 20600, path: [origin, middle]),
+                    RouteStep(
+                        instructions: "Keep left toward \(destination.name)",
+                        distance: 20600,
+                        path: [middle, end]
+                    )
+                ]
+            )
         ]
     }
 }

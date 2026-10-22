@@ -23,7 +23,9 @@ final class AppDelegate: NSObject, UIApplicationDelegate {
         let configuration = UISceneConfiguration(name: nil, sessionRole: role)
         if role == .carTemplateApplication {
             configuration.sceneClass = CPTemplateApplicationScene.self
-            configuration.delegateClass = CarPlaySceneDelegate.self
+            configuration.delegateClass = CarPlayAvailability.isNavigation
+                ? CarPlayNavigationSceneDelegate.self
+                : CarPlaySceneDelegate.self
         }
         return configuration
     }

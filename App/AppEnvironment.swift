@@ -30,6 +30,8 @@ final class AppEnvironment {
     /// Directions' place search and routes, and the iPhone's location; scripted in UI tests (DECISIONS 145).
     let places: PlaceFinding
     let location: LocationProviding
+    /// The Directions tab, shared with the CarPlay map so both show the same place and routes (DECISIONS 147).
+    let directions: DirectionsViewModel
 
     enum DirectionsSetup {
         /// Apple Maps and the iPhone's own location.
@@ -65,6 +67,7 @@ final class AppEnvironment {
             places = ScriptedPlaceFinder()
             location = ScriptedLocation(status: isLocationDenied ? .denied : .allowed)
         }
+        self.directions = DirectionsViewModel(finder: places, location: location)
         self.apiClient = apiClient
         self.streamChecker = streamChecker
         self.displayProfiles = displayProfiles

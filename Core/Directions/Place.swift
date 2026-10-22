@@ -49,6 +49,24 @@ struct RouteOption: Identifiable, Equatable, Sendable {
     let distance: Double
     let travelTime: TimeInterval
     let path: [Coordinate]
+    /// Turn by turn, for guidance on the CarPlay screen (DECISIONS 147); empty when Maps gave none.
+    let steps: [RouteStep]
+
+    init(
+        id: Int,
+        name: String,
+        distance: Double,
+        travelTime: TimeInterval,
+        path: [Coordinate],
+        steps: [RouteStep] = []
+    ) {
+        self.id = id
+        self.name = name
+        self.distance = distance
+        self.travelTime = travelTime
+        self.path = path
+        self.steps = steps
+    }
 }
 
 enum DirectionsError: Error, Equatable {

@@ -23,8 +23,8 @@ tabs: **Home · Favorites · Discover · Directions · Settings**.
 
 - **Directions** (`Features/Directions`, `Core/Directions`; DECISIONS 145, free): search a place (Apple Maps search),
   see the driving routes from the iPhone's location on a map, pick one, and hand off to Apple Maps for guidance.
-  Location is asked the first time the tab opens. iPhone only: it isn't a CarPlay navigation app and doesn't qualify
-  for CarPlay Navigation. UI tests use `ScriptedPlaceFinder` and `ScriptedLocation` (`-location-denied` for Location off).
+  Location is asked the first time the tab opens. On CarPlay it's Roadivo's navigation app in simulator builds only
+  (DECISIONS 147, below). UI tests use `ScriptedPlaceFinder` and `ScriptedLocation` (`-location-denied` for Location off).
   An open route follows to the other tabs as an upright window in the bottom-right corner, like Maps' own, above the
   mini player (`RouteMiniCard`, `RouteSnapshot`; DECISIONS 146).
 
@@ -46,6 +46,11 @@ tabs: **Home · Favorites · Discover · Directions · Settings**.
   coexist, so this is being treated as an unresolved signing or runtime issue, not an Apple restriction. CarPlay-side
   video presentation is temporarily disabled; ordinary audio tabs remain. Test with a real iPhone on USB: Device Hub ›
   select the iPhone › Device › CarPlay Simulator › vehicle "Standard Video Playback".
+- **CarPlay Navigation, requested from Apple** (DECISIONS 147): `ROADIVO_CARPLAY_NAVIGATION` (NO on devices, YES in
+  the simulator) swaps the media app for `CarPlayNavigationSceneDelegate`: Roadivo's map, a place search, Directions'
+  routes as a trip, and turn-by-turn guidance (`CarPlayGuidance`, `RouteGuide`). One CarPlay type per app, so it
+  replaces the media tabs. Apple's screenshots come from the simulator's CarPlay window (I/O › External Displays ›
+  CarPlay, with a simulated location). The window draws only the map: never video or web pages there.
 - CarTV draws its own screens on CarPlay (web pages, mirroring, its player), which only navigation apps may do. The owner
   asked for the same (2026-10-21); not built, as it needs a false navigation claim to Apple and shows video while driving.
 - Video plays over AirPlay, parked only, in cars with CarPlay video. While
@@ -163,6 +168,7 @@ None in v1 (DECISIONS 6). Everything is stored on the device.
 
 - **Device:** iPhone only, iOS 17+, portrait and landscape.
 - **CarPlay:** a CarPlay Audio app that shows video where the car allows it, gated on Apple's entitlement (DECISIONS 25, 139).
+  CarPlay Navigation is built but simulator-only until Apple grants it (DECISIONS 147).
 - **Not in v1:**
   - EPG
   - MKV, raw TS and AC3

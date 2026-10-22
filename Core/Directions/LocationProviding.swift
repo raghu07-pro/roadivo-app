@@ -16,4 +16,6 @@ protocol LocationProviding: AnyObject {
     func requestAccess()
     /// Asks first if needed, then waits for a fix; nil when Location is off or no fix comes.
     func currentCoordinate() async -> Coordinate?
+    /// Fixes as the iPhone moves, for guidance on the CarPlay screen (DECISIONS 147); stops when the task ends.
+    func updates() -> AsyncStream<Coordinate>
 }

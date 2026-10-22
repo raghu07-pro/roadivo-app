@@ -51,15 +51,21 @@ struct MapKitPlaceFinder: PlaceFinding {
     }
 
     private static func option(_ route: MKRoute, id: Int) -> RouteOption {
-        let polyline = route.polyline
-        var points = [CLLocationCoordinate2D](repeating: kCLLocationCoordinate2DInvalid, count: polyline.pointCount)
-        polyline.getCoordinates(&points, range: NSRange(location: 0, length: polyline.pointCount))
-        return RouteOption(
+        RouteOption(
             id: id,
             name: route.name,
             distance: route.distance,
             travelTime: route.expectedTravelTime,
-            path: points.map(Coordinate.init)
+            path: coordinates(of: route.polyline),
+            steps: route.steps.map {
+                RouteStep(instructions: $0.instructions, distance: $0.distance, path: coordinates(of: $0.polyline))
+            }
         )
+    }
+
+    private static func coordinates(of polyline: MKPolyline) -> [Coordinate] {
+        var points = [CLLocationCoordinate2D](repeating: kCLLocationCoordinate2DInvalid, count: polyline.pointCount)
+        polyline.getCoordinates(&points, range: NSRange(location: 0, length: polyline.pointCount))
+        return points.map(Coordinate.init)
     }
 }

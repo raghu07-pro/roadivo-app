@@ -49,6 +49,8 @@
 	<string>Roadivo turns what you say into search text, on your iPhone when your language allows it.</string>
 	<key>ROADIVO_CARPLAY</key>
 	<string>$(ROADIVO_CARPLAY)</string>
+	<key>ROADIVO_CARPLAY_NAVIGATION</key>
+	<string>$(ROADIVO_CARPLAY_NAVIGATION)</string>
 	<key>TERMS_URL</key>
 	<string>$(TERMS_URL)</string>
 	<key>UIAppFonts</key>
@@ -72,7 +74,7 @@
 					<key>UISceneConfigurationName</key>
 					<string>CarPlay</string>
 					<key>UISceneDelegateClassName</key>
-					<string>$(PRODUCT_MODULE_NAME).CarPlaySceneDelegate</string>
+					<string>$(PRODUCT_MODULE_NAME).$(ROADIVO_CARPLAY_SCENE_DELEGATE)</string>
 				</dict>
 			</array>
 		</dict>
