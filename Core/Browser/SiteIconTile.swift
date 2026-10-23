@@ -7,6 +7,40 @@ enum SiteIconTile {
     /// In pixels; CarPlay scales the tile to the car's grid.
     static let side: CGFloat = 180
 
+    /// Rounded artwork and a small inset keep every car shortcut the same visual size.
+    static func carTile(from image: UIImage) -> UIImage {
+        carArtwork { context in
+            let rect = CGRect(x: 5, y: 5, width: side - 10, height: side - 10)
+            UIBezierPath(roundedRect: rect, cornerRadius: 34).addClip()
+            (make(from: image) ?? image).draw(in: rect)
+            context.cgContext.resetClip()
+        }
+    }
+
+    static func carPlaceholder(for name: String) -> UIImage {
+        carArtwork { _ in
+            let rect = CGRect(x: 5, y: 5, width: side - 10, height: side - 10)
+            UIColor.darkGray.setFill()
+            UIBezierPath(roundedRect: rect, cornerRadius: 34).fill()
+            let letter = String(name.prefix(1)).uppercased() as NSString
+            let attributes: [NSAttributedString.Key: Any] = [
+                .font: UIFont.systemFont(ofSize: 72, weight: .semibold), .foregroundColor: UIColor.white
+            ]
+            let size = letter.size(withAttributes: attributes)
+            letter.draw(at: CGPoint(x: (side - size.width) / 2, y: (side - size.height) / 2),
+                        withAttributes: attributes)
+        }
+    }
+
+    private static func carArtwork(_ draw: (UIGraphicsImageRendererContext) -> Void) -> UIImage {
+        let format = UIGraphicsImageRendererFormat()
+        format.scale = 2
+        format.opaque = false
+        format.preferredRange = .standard
+        return UIGraphicsImageRenderer(size: CGSize(width: side, height: side), format: format)
+            .image(actions: draw).withRenderingMode(.alwaysOriginal)
+    }
+
     static func make(from image: UIImage) -> UIImage? {
         guard let cgImage = image.cgImage, let logo = Logo(cgImage) else { return nil }
         return render { context in

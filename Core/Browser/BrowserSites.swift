@@ -11,11 +11,15 @@ struct BrowserSite: Identifiable, Hashable, Sendable {
         name
     }
 
+    var carDisplayName: String {
+        name == "iQIYI International" ? "iQIYI" : name
+    }
+
     /// The site's own icon, through Google's icon service, which sees only the site's name.
     var iconURL: URL? {
         guard let host = url.host() else { return nil }
         var icon = URLComponents(string: "https://www.google.com/s2/favicons")
-        icon?.queryItems = [URLQueryItem(name: "domain", value: host), URLQueryItem(name: "sz", value: "128")]
+        icon?.queryItems = [URLQueryItem(name: "domain", value: host), URLQueryItem(name: "sz", value: "256")]
         return icon?.url
     }
 

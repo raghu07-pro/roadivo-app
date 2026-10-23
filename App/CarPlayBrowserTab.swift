@@ -1,8 +1,7 @@
 import CarPlay
 import OSLog
 
-/// The CarPlay screen's Browser tab (DECISIONS 131, 134): search (iOS 27), the video on the iPhone's open page,
-/// and the sites as icons. CarPlay shows no web pages, so what's chosen opens in the iPhone's Browser.
+/// Site shortcuts and search. The window prototype opens its own browser; the media app keeps its phone handoff.
 @MainActor
 final class CarPlayBrowserTab: NSObject, CPSearchTemplateDelegate {
     let template: CPListTemplate
@@ -11,19 +10,22 @@ final class CarPlayBrowserTab: NSObject, CPSearchTemplateDelegate {
     private let markAsVideo: (CPListItem) -> Bool
     /// After the page's video starts on a row that presents itself, as Roadivo's own window does (DECISIONS 152).
     private let onPlay: () -> Void
+    private let openPage: ((URL) -> Void)?
+    private var searchScope: URL?
     /// Each site's solid tile, made once per icon (`SiteIconTile`).
     private var siteTiles: [String: (icon: UIImage, tile: UIImage)] = [:]
-    private lazy var placeholderTile = SiteIconTile.placeholder()
     private let logger = Logger(subsystem: "com.roadivo", category: "CarPlay")
 
     init(
         interfaceController: CPInterfaceController?,
         markAsVideo: @escaping (CPListItem) -> Bool,
-        onPlay: @escaping () -> Void = {}
+        onPlay: @escaping () -> Void = {},
+        openPage: ((URL) -> Void)? = nil
     ) {
         self.interfaceController = interfaceController
         self.markAsVideo = markAsVideo
         self.onPlay = onPlay
+        self.openPage = openPage
         template = CPListTemplate(title: String(appLocalized: "Browser"), sections: [])
         template.tabImage = UIImage(systemName: "globe")
         super.init()
@@ -32,10 +34,10 @@ final class CarPlayBrowserTab: NSObject, CPSearchTemplateDelegate {
     func fill(menu: CarPlayMenu, environment: AppEnvironment) {
         var top: [any CPListTemplateItem] = []
         // Apple's guide gives audio and video apps the search template from iOS 27.
-        if #available(iOS 27, *) {
+        if supportsSearch {
             top.append(searchRow())
         }
-        if environment.browser.foundVideo != nil {
+        if openPage == nil, environment.browser.foundVideo != nil {
             top.append(videoRow(environment.browser))
         }
         let icons = CPListSection(items: siteItems(menu, icons: environment.siteIcons))
@@ -43,6 +45,20 @@ final class CarPlayBrowserTab: NSObject, CPSearchTemplateDelegate {
     }
 
     // MARK: Search
+
+    private var supportsSearch: Bool {
+        if openPage != nil { return true }
+        if #available(iOS 27, *) { return true }
+        return false
+    }
+
+    func showSearch(on pageURL: URL? = nil) {
+        guard supportsSearch else { return }
+        searchScope = pageURL
+        let search = CPSearchTemplate()
+        search.delegate = self
+        interfaceController?.pushTemplate(search, animated: true, completion: nil)
+    }
 
     /// Cars hide the keyboard while driving, so search is an extra way in, never the only one.
     private func searchRow() -> CPListItem {
@@ -54,9 +70,8 @@ final class CarPlayBrowserTab: NSObject, CPSearchTemplateDelegate {
         item.handler = { [weak self] _, completion in
             MainActor.assumeIsolated {
                 guard let self else { return completion() }
-                let search = CPSearchTemplate()
-                search.delegate = self
-                self.interfaceController?.pushTemplate(search, animated: true) { _, _ in completion() }
+                self.showSearch()
+                completion()
             }
         }
         return item
@@ -69,7 +84,7 @@ final class CarPlayBrowserTab: NSObject, CPSearchTemplateDelegate {
     ) {
         let icons = AppEnvironment.current?.siteIcons
         let results = BrowserSearch.results(for: searchText, limit: Int(CPListTemplate.maximumItemCount))
-        completionHandler(results.map { result in
+        var rows = results.map { result in
             let item = CPListItem(
                 text: result.title,
                 detailText: result.detail,
@@ -77,7 +92,16 @@ final class CarPlayBrowserTab: NSObject, CPSearchTemplateDelegate {
             )
             item.userInfo = result.url
             return item
-        })
+        }
+        if let url = CarBrowserSiteSearch.url(for: searchText, on: searchScope) {
+            let item = CPListItem(
+                text: String(appLocalized: "Search YouTube"), detailText: searchText,
+                image: UIImage(systemName: "play.rectangle")
+            )
+            item.userInfo = url
+            rows.insert(item, at: 0)
+        }
+        completionHandler(Array(rows.prefix(Int(CPListTemplate.maximumItemCount))))
     }
 
     func searchTemplate(
@@ -135,7 +159,8 @@ final class CarPlayBrowserTab: NSObject, CPSearchTemplateDelegate {
         guard #available(iOS 26, *) else {
             return menu.sites.map { siteRow($0, image: tile(for: $0, icons: icons)) }
         }
-        return menu.siteRows(perRow: CPMaximumNumberOfGridImages).map { siteGrid($0, icons: icons) }
+        let columns = min(4, CPMaximumNumberOfGridImages)
+        return menu.siteRows(perRow: columns).map { siteGrid($0, icons: icons) }
     }
 
     @available(iOS 26, *)
@@ -144,7 +169,7 @@ final class CarPlayBrowserTab: NSObject, CPSearchTemplateDelegate {
             CPListImageRowItemImageGridElement(
                 image: tile(for: site, icons: icons),
                 imageShape: .roundedRectangle,
-                title: site.name,
+                title: site.carDisplayName,
                 accessorySymbolName: nil
             )
         }
@@ -173,20 +198,23 @@ final class CarPlayBrowserTab: NSObject, CPSearchTemplateDelegate {
 
     /// CarPlay shows a see-through tile behind any clear pixel, so every icon goes in solid.
     private func tile(for site: BrowserSite, icons: SiteIconStore) -> UIImage {
-        guard let icon = icons.icon(for: site) else { return placeholderTile }
+        guard let icon = icons.icon(for: site) else { return SiteIconTile.carPlaceholder(for: site.name) }
         if let made = siteTiles[site.name], made.icon === icon {
             return made.tile
         }
-        let tile = SiteIconTile.make(from: icon) ?? icon
+        let tile = SiteIconTile.carTile(from: icon)
         siteTiles[site.name] = (icon, tile)
         return tile
     }
 
-    // MARK: Opening on the iPhone
+    // MARK: Opening a page
 
-    /// CarPlay can't show a web page, so it opens in the iPhone's Browser; its videos come back here as
-    /// "Video on this page", or reach the car over AirPlay while parked.
+    /// A window browser owns its navigation. The media app retains the existing phone handoff.
     private func openOnPhone(_ url: URL, name: String) {
+        if let openPage {
+            openPage(url)
+            return
+        }
         AppEnvironment.current?.router.openInBrowser(url)
         let done = CPAlertAction(title: String(appLocalized: "OK"), style: .cancel) { [weak self] _ in
             MainActor.assumeIsolated {

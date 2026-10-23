@@ -32,6 +32,7 @@ final class ParkingMonitor {
 
     /// The latest reading, for the CarPlay trace and the car's word above.
     @ObservationIgnored private(set) var lastSample: MotionSample?
+    @ObservationIgnored private(set) var lastSampleAt: Date?
     @ObservationIgnored private var detector: ParkingDetector
     @ObservationIgnored private let sampler: MotionSampling
     @ObservationIgnored private let now: () -> Date
@@ -72,12 +73,14 @@ final class ParkingMonitor {
         waiting = nil
         detector.reset()
         lastSample = nil
+        lastSampleAt = nil
         carAllowsFullInterface = false
         isParked = false
     }
 
     func record(_ sample: MotionSample) {
         lastSample = sample
+        lastSampleAt = now()
         detector.record(sample, at: now())
         update()
     }

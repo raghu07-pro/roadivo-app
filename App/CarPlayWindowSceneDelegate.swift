@@ -11,6 +11,9 @@ final class CarPlayWindowSceneDelegate: UIResponder, CPTemplateApplicationSceneD
     private let screen = CarPlayWindowController()
     private let root = CPMapTemplate()
     private let artwork = CarPlayArtwork()
+    private var carBrowser: CarBrowserController?
+    private var browserControls: CarBrowserControls?
+    private var fieldEditor: CarBrowserFieldEditor?
     private var lists: Lists?
     private var isWatching = false
     /// What the window and buttons last showed, so the buttons are only rebuilt when that changes.
@@ -27,6 +30,12 @@ final class CarPlayWindowSceneDelegate: UIResponder, CPTemplateApplicationSceneD
         MainActor.assumeIsolated {
             CarPlayTrace.write("window connect, iOS \(UIDevice.current.systemVersion)")
             self.interfaceController = interfaceController
+            if CarPlayAvailability.hasExperimentalBrowser, carBrowser == nil {
+                let browser = CarBrowserController()
+                carBrowser = browser
+                screen.installBrowser(browser)
+                browser.onChange = { [weak self] in self?.browserControls?.refresh() }
+            }
             window.rootViewController = screen
             screen.avoidMapButtons(window.mapButtonSafeAreaLayoutGuide)
             root.mapDelegate = self
@@ -36,6 +45,21 @@ final class CarPlayWindowSceneDelegate: UIResponder, CPTemplateApplicationSceneD
             self.session = session
             carLimitsChanged(session.limitedUserInterfaces)
             lists = makeLists(interfaceController)
+            if let carBrowser {
+                let editor = CarBrowserFieldEditor(interface: interfaceController)
+                fieldEditor = editor
+                carBrowser.onEditField = { [weak editor] bridge, request in
+                    editor?.present(bridge: bridge, request: request)
+                }
+                carBrowser.onInputReset = { [weak editor] in editor?.cancel() }
+                let controls = CarBrowserControls(browser: carBrowser, root: root, interface: interfaceController)
+                controls.onSearch = { [weak self] in self?.lists?.browser.showSearch() }
+                controls.onSiteSearch = { [weak self] url in self?.lists?.browser.showSearch(on: url) }
+                controls.onHome = { [weak self] in self?.showBrowserStartPage() }
+                controls.onClose = { [weak self] in self?.closeBrowser() }
+                controls.onOpen = { [weak self] url in self?.openBrowser(url) }
+                browserControls = controls
+            }
             shownState = nil
             shownPlaying = nil
             shownLive = nil
@@ -86,6 +110,10 @@ final class CarPlayWindowSceneDelegate: UIResponder, CPTemplateApplicationSceneD
         MainActor.assumeIsolated {
             CarPlayTrace.write("window disconnect")
             AppEnvironment.current?.parking.stop()
+            carBrowser?.close()
+            fieldEditor?.cancel()
+            fieldEditor = nil
+            browserControls = nil
             screen.stopUpdating()
             AppEnvironment.current?.carConnection.isCarPlayConnected = false
             window.rootViewController = nil
@@ -156,6 +184,13 @@ final class CarPlayWindowSceneDelegate: UIResponder, CPTemplateApplicationSceneD
             isLocationDenied: environment.parking.isLocationDenied
         )
         screen.show(state, playback: playback)
+        screen.showBrowser(carBrowser?.isOpen == true)
+        if let browser = carBrowser, browser.isOpen {
+            browser.setAllowed(CarBrowserAccess.isAllowed(isPro: environment.proAccess.isPro))
+            browserControls?.refresh()
+            shownState = nil
+            return
+        }
         if state != shownState {
             let parking = environment.parking
             CarPlayTrace.write("""
@@ -248,25 +283,6 @@ final class CarPlayWindowSceneDelegate: UIResponder, CPTemplateApplicationSceneD
         }
     }
 
-    // MARK: Moving the video's place
-
-    /// CarPlay passes a drag on the window as a map pan; over the video it moves the video's place instead.
-    nonisolated func mapTemplateDidBeginPanGesture(_ mapTemplate: CPMapTemplate) {
-        MainActor.assumeIsolated { Self.perform { screen.scrubBegan(playback: $0) } }
-    }
-
-    nonisolated func mapTemplate(
-        _ mapTemplate: CPMapTemplate,
-        didUpdatePanGestureWithTranslation translation: CGPoint,
-        velocity: CGPoint
-    ) {
-        MainActor.assumeIsolated { screen.scrubMoved(by: translation.x) }
-    }
-
-    nonisolated func mapTemplate(_ mapTemplate: CPMapTemplate, didEndPanGestureWithVelocity velocity: CGPoint) {
-        MainActor.assumeIsolated { Self.perform { screen.scrubEnded(playback: $0) } }
-    }
-
     // MARK: Lists
 
     private enum Tab {
@@ -305,7 +321,8 @@ final class CarPlayWindowSceneDelegate: UIResponder, CPTemplateApplicationSceneD
         let browser = CarPlayBrowserTab(
             interfaceController: interfaceController,
             markAsVideo: { _ in true },
-            onPlay: { [weak self] in self?.backToWindow() }
+            onPlay: { [weak self] in self?.backToWindow() },
+            openPage: carBrowser == nil ? nil : { [weak self] url in self?.openBrowser(url) }
         )
         return Lists(favorites: favorites, recent: recent, library: library, browser: browser)
     }
@@ -360,6 +377,7 @@ final class CarPlayWindowSceneDelegate: UIResponder, CPTemplateApplicationSceneD
         item.handler = { [weak self] _, completion in
             MainActor.assumeIsolated {
                 AppEnvironment.current?.playback.play(media, queue: queue, from: .car)
+                self?.closeBrowser()
                 self?.backToWindow()
                 completion()
             }
@@ -371,5 +389,70 @@ final class CarPlayWindowSceneDelegate: UIResponder, CPTemplateApplicationSceneD
     private func backToWindow() {
         guard let interfaceController, interfaceController.templates.count > 1 else { return }
         interfaceController.popToRootTemplate(animated: true, completion: nil)
+    }
+}
+
+private extension CarPlayWindowSceneDelegate {
+    @MainActor
+    func showBrowserStartPage() {
+        guard let interfaceController, let template = lists?.browser.template else { return }
+        interfaceController.popToRootTemplate(animated: false) { [weak self] _, _ in
+            MainActor.assumeIsolated {
+                self?.interfaceController?.pushTemplate(template, animated: true, completion: nil)
+            }
+        }
+    }
+
+    @MainActor
+    func openBrowser(_ url: URL) {
+        guard let carBrowser, let environment = AppEnvironment.current, environment.proAccess.isPro else { return }
+        if environment.playback.origin == .car { environment.playback.stop() }
+        carBrowser.open(url)
+        browserControls?.reset()
+        refresh()
+        backToWindow()
+    }
+
+    @MainActor
+    func closeBrowser() {
+        carBrowser?.close()
+        browserControls?.reset()
+        shownState = nil
+        refresh()
+    }
+}
+
+extension CarPlayWindowSceneDelegate {
+    // MARK: Moving the video's place
+
+    /// CarPlay passes a drag on the window as a map pan; over the video it moves the video's place instead.
+    nonisolated func mapTemplateDidBeginPanGesture(_ mapTemplate: CPMapTemplate) {
+        MainActor.assumeIsolated {
+            if let browser = carBrowser, browser.isOpen {
+                browser.beginPan()
+            } else {
+                Self.perform { screen.scrubBegan(playback: $0) }
+            }
+        }
+    }
+
+    nonisolated func mapTemplate(
+        _ mapTemplate: CPMapTemplate,
+        didUpdatePanGestureWithTranslation translation: CGPoint,
+        velocity: CGPoint
+    ) {
+        MainActor.assumeIsolated {
+            if let browser = carBrowser, browser.isOpen {
+                browser.pan(by: translation)
+            } else {
+                screen.scrubMoved(by: translation.x)
+            }
+        }
+    }
+
+    nonisolated func mapTemplate(_ mapTemplate: CPMapTemplate, didEndPanGestureWithVelocity velocity: CGPoint) {
+        MainActor.assumeIsolated {
+            if carBrowser?.isOpen != true { Self.perform { screen.scrubEnded(playback: $0) } }
+        }
     }
 }
