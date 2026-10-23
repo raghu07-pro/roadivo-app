@@ -20,6 +20,8 @@ final class CarPlayWindowSceneDelegate: UIResponder, CPTemplateApplicationSceneD
     private var shownState: CarWindowState?
     private var shownPlaying: Bool?
     private var shownLive: Bool?
+    private let mirror = CarPlayMirror()
+    private var tabs: CarPlayTabs?
     private let logger = Logger(subsystem: "com.roadivo", category: "CarPlay")
 
     func templateApplicationScene(
@@ -44,34 +46,22 @@ final class CarPlayWindowSceneDelegate: UIResponder, CPTemplateApplicationSceneD
             let session = CPSessionConfiguration(delegate: self)
             self.session = session
             carLimitsChanged(session.limitedUserInterfaces)
-            lists = makeLists(interfaceController)
-            if let carBrowser {
-                let editor = CarBrowserFieldEditor(interface: interfaceController)
-                fieldEditor = editor
-                carBrowser.onEditField = { [weak editor] bridge, request in
-                    editor?.present(bridge: bridge, request: request)
-                }
-                carBrowser.onInputReset = { [weak editor] in editor?.cancel() }
-                let controls = CarBrowserControls(browser: carBrowser, root: root, interface: interfaceController)
-                controls.onSearch = { [weak self] in self?.lists?.browser.showSearch() }
-                controls.onSiteSearch = { [weak self] url in self?.lists?.browser.showSearch(on: url) }
-                controls.onHome = { [weak self] in self?.showBrowserStartPage() }
-                controls.onClose = { [weak self] in self?.closeBrowser() }
-                controls.onOpen = { [weak self] url in self?.openBrowser(url) }
-                browserControls = controls
-            }
+            let made = makeLists(interfaceController)
+            lists = made
+            let tabs = CarPlayTabs(map: root, interface: interfaceController, mirror: mirror)
+            tabs.install(home: made.home, favorites: made.favorites, cast: made.cast, browser: made.browser.template)
+            self.tabs = tabs
+            connectBrowser(interfaceController)
             shownState = nil
             shownPlaying = nil
             shownLive = nil
             refresh()
-            interfaceController.setRootTemplate(root, animated: false) { [logger] success, error in
-                if let error {
-                    logger.error("Window root: \(error.localizedDescription, privacy: .public)")
-                }
-                CarPlayTrace.write("window root accepted: \(success)")
-            }
+            tabs.show(home: shownState == .home) // Also when the library isn't ready to say what to show.
             if !isWatching {
                 watch()
+            }
+            mirror.start(screen: screen, root: root, interface: interfaceController) { [weak self] started in
+                self?.mirrorChanged(started: started)
             }
             // The Browser tab's icons, when Discover hasn't fetched them yet.
             Task { await AppEnvironment.current?.siteIcons.refresh(BrowserSite.all) }
@@ -114,6 +104,7 @@ final class CarPlayWindowSceneDelegate: UIResponder, CPTemplateApplicationSceneD
             fieldEditor?.cancel()
             fieldEditor = nil
             browserControls = nil
+            mirror.stop()
             screen.stopUpdating()
             AppEnvironment.current?.carConnection.isCarPlayConnected = false
             window.rootViewController = nil
@@ -175,6 +166,11 @@ final class CarPlayWindowSceneDelegate: UIResponder, CPTemplateApplicationSceneD
     @MainActor
     private func refresh() {
         guard let environment = AppEnvironment.current else { return }
+        if mirror.refresh(environment) {
+            tabs?.show(home: false)
+            shownState = nil
+            return
+        }
         let playback = environment.playback
         let state = CarWindowState.make(
             isPro: environment.proAccess.isPro,
@@ -185,6 +181,7 @@ final class CarPlayWindowSceneDelegate: UIResponder, CPTemplateApplicationSceneD
         )
         screen.show(state, playback: playback)
         screen.showBrowser(carBrowser?.isOpen == true)
+        tabs?.show(home: state == .home && carBrowser?.isOpen != true)
         if let browser = carBrowser, browser.isOpen {
             browser.setAllowed(CarBrowserAccess.isAllowed(isPro: environment.proAccess.isPro))
             browserControls?.refresh()
@@ -224,8 +221,9 @@ final class CarPlayWindowSceneDelegate: UIResponder, CPTemplateApplicationSceneD
             root.leadingNavigationBarButtons = []
             root.trailingNavigationBarButtons = []
         case .home:
-            root.leadingNavigationBarButtons = [tabButton(.favorites), tabButton(.recent)]
-            root.trailingNavigationBarButtons = [tabButton(.library), tabButton(.browser)]
+            root.leadingNavigationBarButtons = [tabButton(.home), tabButton(.favorites)]
+            // CarPlay sets the trailing buttons from the edge in, so this reads Cast, Browser.
+            root.trailingNavigationBarButtons = [tabButton(.browser), tabButton(.cast)]
         case .video, .driving, .needsLocation:
             let close = CPBarButton(title: String(appLocalized: "Close")) { _ in
                 MainActor.assumeIsolated { AppEnvironment.current?.playback.stop() }
@@ -282,41 +280,40 @@ final class CarPlayWindowSceneDelegate: UIResponder, CPTemplateApplicationSceneD
             action(playback)
         }
     }
+}
 
-    // MARK: Lists
-
+/// The car's tabs and the lists behind them.
+extension CarPlayWindowSceneDelegate {
+    /// As in CarTV: Home (recent picks, then the library), Favorites, Cast (the iPhone's screen) and Browser.
     private enum Tab {
+        case home
         case favorites
-        case recent
-        case library
+        case cast
         case browser
 
         var title: String {
             switch self {
+            case .home: String(appLocalized: "Home")
             case .favorites: String(appLocalized: "Favorites")
-            case .recent: String(appLocalized: "Recent")
-            case .library: String(appLocalized: "Library")
+            case .cast: String(appLocalized: "Cast")
             case .browser: String(appLocalized: "Browser")
             }
         }
     }
 
     private struct Lists {
+        let home: CPListTemplate
         let favorites: CPListTemplate
-        let recent: CPListTemplate
-        let library: CPListTemplate
+        let cast: CPListTemplate
         let browser: CarPlayBrowserTab
     }
 
     @MainActor
     private func makeLists(_ interfaceController: CPInterfaceController) -> Lists {
+        let home = CPListTemplate(title: Tab.home.title, sections: [])
         let favorites = CPListTemplate(title: Tab.favorites.title, sections: [])
-        let recent = CPListTemplate(title: Tab.recent.title, sections: [])
-        let library = CPListTemplate(title: Tab.library.title, sections: [])
-        for list in [favorites, recent] {
-            list.emptyViewTitleVariants = [String(appLocalized: "Nothing here yet")]
-        }
-        library.emptyViewTitleVariants = [String(appLocalized: "Add a source on your iPhone")]
+        home.emptyViewTitleVariants = [String(appLocalized: "Add a source on your iPhone")]
+        favorites.emptyViewTitleVariants = [String(appLocalized: "Nothing here yet")]
         // The page's video plays in this window, so its row presents itself, then the window comes back.
         let browser = CarPlayBrowserTab(
             interfaceController: interfaceController,
@@ -324,17 +321,21 @@ final class CarPlayWindowSceneDelegate: UIResponder, CPTemplateApplicationSceneD
             onPlay: { [weak self] in self?.backToWindow() },
             openPage: carBrowser == nil ? nil : { [weak self] url in self?.openBrowser(url) }
         )
-        return Lists(favorites: favorites, recent: recent, library: library, browser: browser)
+        return Lists(home: home, favorites: favorites, cast: CarPlayMirror.castTemplate(), browser: browser)
     }
 
     @MainActor
     private func open(_ tab: Tab) {
         guard let lists, let interfaceController else { return }
+        CarPlayTrace.write("tab \(tab)")
+        if tab == .cast, mirror.reveal() {
+            return
+        }
         let template: CPTemplate = switch tab {
+        case .home: lists.home
         case .favorites: lists.favorites
-        case .recent: lists.recent
-        case .library: lists.library
         case .browser: lists.browser.template
+        case .cast: lists.cast
         }
         interfaceController.pushTemplate(template, animated: true) { [logger] _, error in
             if let error {
@@ -350,8 +351,8 @@ final class CarPlayWindowSceneDelegate: UIResponder, CPTemplateApplicationSceneD
         // The car sets how many rows a list may show; more would be cut off or refused.
         let menu = CarPlayMenu.build(from: environment.repository, limit: Int(CPListTemplate.maximumItemCount))
         lists.favorites.updateSections([CPListSection(items: menu.favorites.map { row($0, queue: menu.favorites) })])
-        lists.recent.updateSections([CPListSection(items: menu.recent.map { row($0, queue: menu.recent) })])
-        lists.library.updateSections([CPListSection(items: menu.groups.map(groupRow))])
+        let home = menu.home(limit: Int(CPListTemplate.maximumItemCount))
+        tabs?.fillHome(recent: home.recent.map { row($0, queue: home.recent) }, library: home.groups.map(groupRow))
         lists.browser.fill(menu: menu, environment: environment)
     }
 
@@ -393,6 +394,25 @@ final class CarPlayWindowSceneDelegate: UIResponder, CPTemplateApplicationSceneD
 }
 
 private extension CarPlayWindowSceneDelegate {
+    /// The car browser's field editor and template controls, when this build has the browser.
+    @MainActor
+    func connectBrowser(_ interfaceController: CPInterfaceController) {
+        guard let carBrowser else { return }
+        let editor = CarBrowserFieldEditor(interface: interfaceController)
+        fieldEditor = editor
+        carBrowser.onEditField = { [weak editor] bridge, request in
+            editor?.present(bridge: bridge, request: request)
+        }
+        carBrowser.onInputReset = { [weak editor] in editor?.cancel() }
+        let controls = CarBrowserControls(browser: carBrowser, root: root, interface: interfaceController)
+        controls.onSearch = { [weak self] in self?.lists?.browser.showSearch() }
+        controls.onSiteSearch = { [weak self] url in self?.lists?.browser.showSearch(on: url) }
+        controls.onHome = { [weak self] in self?.showBrowserStartPage() }
+        controls.onClose = { [weak self] in self?.closeBrowser() }
+        controls.onOpen = { [weak self] url in self?.openBrowser(url) }
+        browserControls = controls
+    }
+
     @MainActor
     func showBrowserStartPage() {
         guard let interfaceController, let template = lists?.browser.template else { return }
@@ -406,11 +426,26 @@ private extension CarPlayWindowSceneDelegate {
     @MainActor
     func openBrowser(_ url: URL) {
         guard let carBrowser, let environment = AppEnvironment.current, environment.proAccess.isPro else { return }
-        if environment.playback.origin == .car { environment.playback.stop() }
+        if environment.playback.origin == .car {
+            environment.playback.stop()
+        }
         carBrowser.open(url)
         browserControls?.reset()
         refresh()
         backToWindow()
+    }
+
+    /// A broadcast that starts takes the window: the car's own video and browser make way, as for the browser.
+    @MainActor
+    func mirrorChanged(started: Bool) {
+        if started, let playback = AppEnvironment.current?.playback, playback.origin == .car {
+            playback.stop()
+        }
+        if started, carBrowser?.isOpen == true {
+            return closeBrowser()
+        }
+        shownState = nil
+        refresh()
     }
 
     @MainActor
@@ -452,7 +487,9 @@ extension CarPlayWindowSceneDelegate {
 
     nonisolated func mapTemplate(_ mapTemplate: CPMapTemplate, didEndPanGestureWithVelocity velocity: CGPoint) {
         MainActor.assumeIsolated {
-            if carBrowser?.isOpen != true { Self.perform { screen.scrubEnded(playback: $0) } }
+            if carBrowser?.isOpen != true {
+                Self.perform { screen.scrubEnded(playback: $0) }
+            }
         }
     }
 }

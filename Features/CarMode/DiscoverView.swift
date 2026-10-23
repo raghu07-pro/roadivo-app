@@ -10,6 +10,9 @@ struct DiscoverView: View {
     let onPlayWebVideo: (MediaItem) -> Void
     /// A site picked on the CarPlay screen; opened in the Browser, then cleared (DECISIONS 131).
     @Binding var browserRequest: URL?
+    /// CarPlay is on, and whether Roadivo on the car's screen shows this iPhone, for Cast to Screen.
+    var isCarConnected = false
+    var isCarShowing = false
 
     @State private var path: [Route] = []
     /// The start page's tile width, so the quick sites match it.
@@ -55,7 +58,7 @@ struct DiscoverView: View {
                 case .browser:
                     BrowserView(viewModel: browser, onPlay: onPlayWebVideo)
                 case .castToScreen:
-                    CastToScreenView(isPro: isPro)
+                    CastToScreenView(isCarConnected: isCarConnected, isCarShowing: isCarShowing)
                 }
             }
         }

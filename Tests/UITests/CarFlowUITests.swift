@@ -26,46 +26,34 @@ final class CarFlowUITests: XCTestCase {
         XCTAssertFalse(connected.buttons["car.start"].exists)
     }
 
-    /// Cast to Screen: Start Broadcast, the address for the car screen's browser, the steps behind the ?, and
-    /// Screen Mirroring for AirPlay screens. (The broadcast itself needs a real iPhone.)
+    /// Cast to Screen, as simple as CarTV's: where the iPhone is, and one button, Start mirroring. (The broadcast
+    /// itself needs a real iPhone.)
     func testCastToScreen() throws {
-        let app = XCUIApplication.roadivo(skipOnboarding: true)
+        let app = XCUIApplication.roadivo(skipOnboarding: true, carConnected: true)
         app.tabBars.buttons["Discover"].tap()
         let castToScreen = app.buttons["cast.mirroring"]
         XCTAssertTrue(castToScreen.waitForExistence(timeout: 5))
         castToScreen.tap()
 
-        XCTAssertTrue(app.buttons["broadcast.start"].waitForExistence(timeout: 5))
-        XCTAssertTrue(app.descendants(matching: .any)["broadcast.address"].exists)
+        XCTAssertTrue(app.buttons["cast.start"].waitForExistence(timeout: 5))
+        XCTAssertTrue(app.descendants(matching: .any)["cast.status"].exists)
+        XCTAssertFalse(app.buttons["cast.end"].exists)
         snapshot("47-Cast-To-Screen", app: app)
         try auditIgnoringBottomEdge(app, for: [.dynamicType, .sufficientElementDescription, .hitRegion])
-        try checkStepsHelp(app, identifier: "broadcast", snapshot: "47c-Cast-To-Screen-Steps")
-
-        let mirroring = app.buttons["broadcast.mirroring"]
-        app.swipeUp()
-        XCTAssertTrue(mirroring.waitForExistence(timeout: 5))
-        mirroring.tap()
-        XCTAssertTrue(app.descendants(matching: .any)["guide.mirroring"].waitForExistence(timeout: 5))
     }
 
-    /// Local Network off: the car's screen can't reach the iPhone, so Cast to Screen says so and Open Settings
-    /// goes straight to Roadivo's settings.
-    func testCastToScreenAsksForLocalNetwork() throws {
-        let app = XCUIApplication.roadivo(skipOnboarding: true, localNetworkDenied: true)
+    /// While the iPhone broadcasts, the one button becomes End mirroring.
+    func testCastToScreenWhileMirroring() throws {
+        let app = XCUIApplication.roadivo(skipOnboarding: true, carConnected: true, broadcasting: true)
         app.tabBars.buttons["Discover"].tap()
         let castToScreen = app.buttons["cast.mirroring"]
         XCTAssertTrue(castToScreen.waitForExistence(timeout: 5))
         castToScreen.tap()
 
-        XCTAssertTrue(app.descendants(matching: .any)["broadcast.localNetwork"].waitForExistence(timeout: 5))
-        let openSettings = app.buttons["broadcast.openSettings"]
-        XCTAssertTrue(openSettings.isHittable)
-        snapshot("47b-Cast-To-Screen-Local-Network", app: app)
+        XCTAssertTrue(app.buttons["cast.end"].waitForExistence(timeout: 5))
+        XCTAssertFalse(app.buttons["cast.start"].exists)
+        snapshot("47b-Cast-To-Screen-Mirroring", app: app)
         try auditIgnoringBottomEdge(app, for: [.dynamicType, .sufficientElementDescription, .hitRegion])
-
-        openSettings.tap()
-        let settings = XCUIApplication(bundleIdentifier: "com.apple.Preferences")
-        XCTAssertTrue(settings.wait(for: .runningForeground, timeout: 10), "Open Settings didn't open Settings")
     }
 
     /// Drive View hides the video and keeps three big buttons, is remembered when Car Mode opens again,

@@ -7,28 +7,27 @@ enum SiteIconTile {
     /// In pixels; CarPlay scales the tile to the car's grid.
     static let side: CGFloat = 180
 
-    /// Rounded artwork and a small inset keep every car shortcut the same visual size.
+    /// Edge to edge: CarPlay rounds the corners itself, and any clear margin showed as a grey frame round the icon
+    /// (owner, 2026-10-23).
     static func carTile(from image: UIImage) -> UIImage {
-        carArtwork { context in
-            let rect = CGRect(x: 5, y: 5, width: side - 10, height: side - 10)
-            UIBezierPath(roundedRect: rect, cornerRadius: 34).addClip()
-            (make(from: image) ?? image).draw(in: rect)
-            context.cgContext.resetClip()
+        carArtwork { _ in
+            (make(from: image) ?? image).draw(in: CGRect(x: 0, y: 0, width: side, height: side))
         }
     }
 
     static func carPlaceholder(for name: String) -> UIImage {
-        carArtwork { _ in
-            let rect = CGRect(x: 5, y: 5, width: side - 10, height: side - 10)
+        carArtwork { context in
             UIColor.darkGray.setFill()
-            UIBezierPath(roundedRect: rect, cornerRadius: 34).fill()
+            context.fill(CGRect(x: 0, y: 0, width: side, height: side))
             let letter = String(name.prefix(1)).uppercased() as NSString
             let attributes: [NSAttributedString.Key: Any] = [
                 .font: UIFont.systemFont(ofSize: 72, weight: .semibold), .foregroundColor: UIColor.white
             ]
             let size = letter.size(withAttributes: attributes)
-            letter.draw(at: CGPoint(x: (side - size.width) / 2, y: (side - size.height) / 2),
-                        withAttributes: attributes)
+            letter.draw(
+                at: CGPoint(x: (side - size.width) / 2, y: (side - size.height) / 2),
+                withAttributes: attributes
+            )
         }
     }
 

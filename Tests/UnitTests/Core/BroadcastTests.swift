@@ -110,17 +110,4 @@ struct BroadcastHTTPTests {
         #expect(part.dropFirst(head.utf8.count).prefix(jpeg.count) == jpeg)
         #expect(part.suffix(2) == Data("\r\n".utf8))
     }
-
-    @Test("The car is told the Wi-Fi address first, then the Personal Hotspot's; never cellular or VPN")
-    func address() {
-        typealias Interface = BroadcastAddress.Interface
-        let wifi = Interface(name: "en0", address: "192.168.1.23")
-        let hotspot = Interface(name: "bridge100", address: "172.20.10.1")
-        let cellular = Interface(name: "pdp_ip0", address: "10.44.2.9")
-        let vpn = Interface(name: "utun3", address: "10.8.0.2")
-
-        #expect(BroadcastAddress.best(of: [cellular, hotspot, wifi]) == "192.168.1.23")
-        #expect(BroadcastAddress.best(of: [cellular, vpn, hotspot]) == "172.20.10.1")
-        #expect(BroadcastAddress.best(of: [cellular, vpn]) == nil)
-    }
 }

@@ -26,6 +26,14 @@ struct CarPlayMenu: Equatable {
         return stride(from: 0, to: sites.count, by: perRow).map { Array(sites[$0..<min($0 + perRow, sites.count)]) }
     }
 
+    /// The car's Home list, as in CarTV: a few recent picks above the library's groups, within one list's `limit`.
+    func home(limit: Int) -> (recent: [MediaItem], groups: [Group]) {
+        let limit = max(1, limit)
+        // About one car screen of recent picks, so the library still shows without scrolling far.
+        let recent = Array(recent.prefix(min(6, limit / 2)))
+        return (recent, Array(groups.prefix(limit - recent.count)))
+    }
+
     /// The most rows any list gets; the car may allow fewer (`CPListTemplate.maximumItemCount`), passed as `limit`.
     static let itemLimit = 100
 

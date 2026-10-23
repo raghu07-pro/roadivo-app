@@ -2,8 +2,8 @@ import Foundation
 import Network
 import os
 
-/// Serves `BroadcastHTTP` on the local network: the page to whoever asks, and each new frame to every browser
-/// watching. A browser still receiving the last frame skips the next, so a slow car screen never builds a backlog.
+/// Serves `BroadcastHTTP` on this iPhone's loopback address: the page to whoever asks, and each new frame to
+/// Roadivo's CarPlay window. A viewer still receiving the last frame skips the next, so it never builds a backlog.
 /// Network delivers its events on a dispatch queue, so all of the server's state lives on that one queue.
 final class FrameServer: @unchecked Sendable {
     /// One browser watching the stream; touched only on `queue`. File-private for the extensions below.
@@ -119,7 +119,7 @@ final class FrameServer: @unchecked Sendable {
 
 private extension FrameServer {
     /// TCP that notices a car that drove off: keepalive probes after 5 s of quiet, the connection gone after 10 s.
-    static func parameters() -> NWParameters {
+    static func parameters(port: NWEndpoint.Port) -> NWParameters {
         let tcp = NWProtocolTCP.Options()
         tcp.noDelay = true
         tcp.enableKeepalive = true
@@ -129,8 +129,8 @@ private extension FrameServer {
         tcp.connectionDropTime = 10
         let parameters = NWParameters(tls: nil, tcp: tcp)
         parameters.allowLocalEndpointReuse = true
-        // The car is on the Wi-Fi or the hotspot; the screen is never offered on the cellular network.
-        parameters.prohibitedInterfaceTypes = [.cellular]
+        // Only Roadivo's own CarPlay window reads the screen, on this iPhone: never offered on any network.
+        parameters.requiredLocalEndpoint = .hostPort(host: .ipv4(.loopback), port: port)
         return parameters
     }
 
@@ -138,7 +138,7 @@ private extension FrameServer {
         guard isRunning, listener == nil else { return }
         let newListener: NWListener
         do {
-            newListener = try NWListener(using: Self.parameters(), on: port)
+            newListener = try NWListener(using: Self.parameters(port: port))
         } catch {
             logger.error("Couldn't listen: \(error.localizedDescription, privacy: .public)")
             retryListening()

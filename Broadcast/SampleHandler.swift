@@ -1,7 +1,7 @@
 import ReplayKit
 
-/// Roadivo's Screen Broadcast (DECISIONS 124): while iOS records the screen, each frame is shrunk to a JPEG and
-/// served on the local network, where the car screen's web browser shows it. Nothing is saved or sent elsewhere.
+/// Roadivo's Screen Broadcast (DECISIONS 124, 157): while iOS records the screen, each frame is shrunk to a JPEG and
+/// served on this iPhone's loopback address, where Roadivo's CarPlay window shows it. Nothing is saved or sent.
 /// Unchecked Sendable: ReplayKit calls `processSampleBuffer` on one queue, the only place `lastFrame` changes.
 final class SampleHandler: RPBroadcastSampleHandler, @unchecked Sendable {
     private let server = FrameServer(port: BroadcastHTTP.port, code: BroadcastHTTP.code)
@@ -13,6 +13,7 @@ final class SampleHandler: RPBroadcastSampleHandler, @unchecked Sendable {
     private var lastFrame = Date.distantPast
 
     override func broadcastStarted(withSetupInfo setupInfo: [String: NSObject]?) {
+        listenForStop()
         server.start { [weak self] in
             // iOS shows this as the broadcast ends. The extension has no in-app language, so it follows the system's.
             let message = String(localized: "Screen Broadcast couldn't start on this network. Try again in a moment.")
@@ -26,7 +27,32 @@ final class SampleHandler: RPBroadcastSampleHandler, @unchecked Sendable {
     }
 
     override func broadcastFinished() {
+        CFNotificationCenterRemoveEveryObserver(
+            CFNotificationCenterGetDarwinNotifyCenter(), Unmanaged.passUnretained(self).toOpaque()
+        )
         server.stop()
+    }
+
+    /// End Mirroring in Roadivo, on the car or the iPhone (`BroadcastSignal`): only iOS can end the broadcast.
+    private func listenForStop() {
+        CFNotificationCenterAddObserver(
+            CFNotificationCenterGetDarwinNotifyCenter(),
+            Unmanaged.passUnretained(self).toOpaque(),
+            { _, observer, _, _, _ in
+                guard let observer else { return }
+                Unmanaged<SampleHandler>.fromOpaque(observer).takeUnretainedValue().endMirroring()
+            },
+            BroadcastSignal.stop,
+            nil,
+            .deliverImmediately
+        )
+    }
+
+    private func endMirroring() {
+        let message = String(localized: "You ended mirroring.")
+        finishBroadcastWithError(NSError(
+            domain: "com.roadivo.broadcast", code: 2, userInfo: [NSLocalizedDescriptionKey: message]
+        ))
     }
 
     override func processSampleBuffer(_ sampleBuffer: CMSampleBuffer, with sampleBufferType: RPSampleBufferType) {

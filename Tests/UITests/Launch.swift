@@ -6,7 +6,7 @@ extension XCUIApplication {
     /// `restorable`: a Yearly plan bought earlier, which only Restore brings back.
     /// `carConnected`: the iPhone acts as if plugged into a car (CarPlay audio).
     /// `demoHistory`: the demo library with a film part-watched and a channel played.
-    /// `localNetworkDenied`: Local Network access is off, as iOS reports when it's refused.
+    /// `broadcasting`: Screen Broadcast counts as running, which needs a real iPhone.
     /// `showSplash`: plays the opening splash, which UI tests otherwise skip.
     /// `locationDenied`: Location is off for Roadivo, for Directions.
     static func roadivo(
@@ -16,7 +16,7 @@ extension XCUIApplication {
         pro: Bool = false,
         restorable: Bool = false,
         carConnected: Bool = false,
-        localNetworkDenied: Bool = false,
+        broadcasting: Bool = false,
         showSplash: Bool = false,
         locationDenied: Bool = false
     ) -> XCUIApplication {
@@ -40,8 +40,8 @@ extension XCUIApplication {
         if carConnected {
             app.launchArguments.append("-car-connected")
         }
-        if localNetworkDenied {
-            app.launchArguments.append("-local-network-denied")
+        if broadcasting {
+            app.launchArguments.append("-broadcasting")
         }
         if showSplash {
             app.launchArguments.append("-show-splash")

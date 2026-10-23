@@ -1,8 +1,8 @@
 import CryptoKit
 import Foundation
 
-/// The small web server Screen Broadcast runs on the iPhone (DECISIONS 124): `/<code>` is a page that fills the car
-/// screen's browser with `/<code>/stream`, the iPhone's screen as JPEG frames (MJPEG), which every browser shows.
+/// The small web server Screen Broadcast runs on the iPhone's loopback address (DECISIONS 124, 157): `/<code>` is a
+/// page (`BroadcastProbe` asks for it) and `/<code>/stream` the iPhone's screen as JPEG frames (MJPEG).
 /// Compiled into the app (its address, its tests) and the broadcast extension (the server).
 enum BroadcastHTTP {
     static let port: UInt16 = 8080
@@ -113,6 +113,20 @@ enum BroadcastHTTP {
     }
 }
 
+/// End Mirroring, on the car or the iPhone, asks the extension to end the broadcast. A Darwin notification, as the
+/// app and its extension share no storage; another app could only end the broadcast early.
+enum BroadcastSignal {
+    static var stop: CFString {
+        "com.roadivo.broadcast.stop" as CFString
+    }
+
+    static func requestStop() {
+        CFNotificationCenterPostNotification(
+            CFNotificationCenterGetDarwinNotifyCenter(), CFNotificationName(stop), nil, nil, true
+        )
+    }
+}
+
 /// Who may connect: only a device on the same Wi-Fi or hotspot (a private, link-local or loopback address).
 enum BroadcastPeer {
     /// `address` is an IPv4 (4 bytes) or IPv6 (16 bytes) address as Network gives it; anything else is refused.
@@ -143,42 +157,5 @@ enum BroadcastPeer {
         default:
             false
         }
-    }
-}
-
-/// The address the car screen's browser opens: this iPhone's Wi-Fi address, or its Personal Hotspot's.
-enum BroadcastAddress {
-    struct Interface: Equatable {
-        let name: String
-        let address: String
-    }
-
-    static func current() -> String? {
-        best(of: interfaces()).map { "http://\($0):\(BroadcastHTTP.port)/\(BroadcastHTTP.code)" }
-    }
-
-    /// Wi-Fi (en0) first, then the Personal Hotspot (bridge…): cellular and VPN addresses can't be reached from the
-    /// car.
-    static func best(of interfaces: [Interface]) -> String? {
-        interfaces.first { $0.name == "en0" }?.address ?? interfaces.first { $0.name.hasPrefix("bridge") }?.address
-    }
-
-    /// Every IPv4 address this iPhone has, by interface.
-    private static func interfaces() -> [Interface] {
-        var head: UnsafeMutablePointer<ifaddrs>?
-        guard getifaddrs(&head) == 0, let first = head else { return [] }
-        defer { freeifaddrs(head) }
-        var found: [Interface] = []
-        for entry in sequence(first: first, next: { $0.pointee.ifa_next }).map(\.pointee) {
-            guard let socket = entry.ifa_addr, socket.pointee.sa_family == UInt8(AF_INET) else { continue }
-            var host = [CChar](repeating: 0, count: Int(NI_MAXHOST))
-            let length = socklen_t(socket.pointee.sa_len)
-            guard getnameinfo(socket, length, &host, socklen_t(host.count), nil, 0, NI_NUMERICHOST) == 0
-            else { continue }
-            let bytes = host.prefix { $0 != 0 }.map { UInt8(bitPattern: $0) }
-            guard let address = String(bytes: bytes, encoding: .utf8) else { continue }
-            found.append(Interface(name: String(cString: entry.ifa_name), address: address))
-        }
-        return found
     }
 }

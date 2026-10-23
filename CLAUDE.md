@@ -44,7 +44,7 @@ tabs: **Home · Favorites · Discover · Settings**.
   navigation, scrolling and ordinary-link selection. It requires Pro but no parking or Location evidence in Debug, per the owner's
   request (2026-10-23), and is hard-disabled in Release. Native video parking rules are unchanged. See `Docs/CarBrowserPrototype.md` for limitations and the required Mac/device checks.
   General webpage taps/forms and distribution approval are unverified; do not describe this as a complete browser.
-  Browser shortcuts use four columns, rounded artwork and 256 px icon requests. The More menu adds Start Page,
+  Browser shortcuts fill one row the car wraps across its width, edge-to-edge artwork (CarPlay rounds it) and 256 px icon requests. The More menu adds Start Page,
   Reload, Forward, up to six car-only tabs, session-only saved pages, page zoom and auto-hiding controls.
   YouTube has native search through `CarPlayBrowserTab.showSearch(on:)`; page links stay in native template lists.
   Direct webpage taps are unsupported by CPMapTemplate's base view; these actions do not establish general form input.
@@ -58,8 +58,12 @@ tabs: **Home · Favorites · Discover · Settings**.
 - **`window`, Roadivo's own CarPlay window** (owner, 2026-10-23; DECISIONS 152; `App/CarPlayWindowSceneDelegate.swift`,
   `CarPlayWindowController`, `Core/Car/CarWindowState.swift`). Signed with the navigation entitlement
   (`RoadivoNavigation.entitlements`) for its `CPWindow`, but no map is drawn: the window shows Roadivo's still road
-  (`CarWindowCard`) or the chosen video. Favorites · Recent · Library · Browser are `CPMapTemplate`'s four bar buttons
-  and open the usual lists; a row plays and the lists close. While something plays only **Close** shows (it stops
+  at the hour's light, as on the splash (`CarWindowCard`, `SplashMoment`; DECISIONS 158) or the chosen video. Home · Favorites · Library · Cast · Browser are a
+  centered `CPTabBarTemplate` on the home screen (`CarPlayTabs`; DECISIONS 159), Home a plain list of recent picks; video,
+  casting and the browser switch the root back to the window. Without the bar, `CPMapTemplate`'s four corner buttons
+  (DECISIONS 157); Cast opens a CarPlay list whose empty view gives the steps (drawn by CarPlay, so the tap always shows). A row plays and
+  the lists close. **Cast to the car** (`CarPlayMirror`, `ScreenMirrorReceiver`, `MJPEGParser`): the window reads the
+  iPhone's Screen Broadcast over loopback and shows the whole iPhone while parked, with Home, End mirroring and Fit. While something plays only **Close** shows (it stops
   playback and the tabs return), with previous, play/pause and next as map buttons; the bar hides itself over video.
   **Video only while parked**: `ParkingMonitor` (`ParkingDetector`, `MotionSample`, `LocationMotionSampler`) counts the
   car parked after 30 s of still Core Location readings and unparks at the first moving or unknown one; or at once when
@@ -100,9 +104,9 @@ tabs: **Home · Favorites · Discover · Settings**.
 - The **Discover** tab (`DiscoverView`, once "Cast to Car") has two cards (DECISIONS 118–124, 135–136; the Browser's card links its first four sites):
   **Browser** (`Features/Browser`, `Core/Browser`: full screen, a grid of sites with icons loaded at run time; nothing
   kept, no bookmarks or Recent; pages never open their apps; direct videos offer Play in Roadivo; its menu has only
-  Start Page and Leave Browser) and **Cast to Screen** (`CastToScreenView`: Screen Broadcast, the whole iPhone in a car
-  screen's browser over the local network, served by the `RoadivoBroadcast` extension with `Core/Broadcast`; real
-  iPhone only. Screen Mirroring steps below it). Cast from an app was removed (owner, 2026-10-21). Car Mode has no
+  Start Page and Leave Browser) and **Cast to Screen** (`CastToScreenView`, as simple as CarTV's; DECISIONS 157: where
+  the iPhone is and one Start/End mirroring button; the `RoadivoBroadcast` extension serves loopback only, for
+  Roadivo's CarPlay window; End mirroring is `BroadcastSignal`; real iPhone only). Cast from an app was removed (owner, 2026-10-21). Car Mode has no
   button since DECISIONS 155: it opens when a saved car connects with Open Car Mode When Connected (owner to decide its
   way in). Car Mode shows a progress bar with large times, and Drive View hides the video for the driver (DECISIONS 114).
 - The **CarPlay Browser tab** (`App/CarPlayBrowserTab.swift`, DECISIONS 134): on iOS 27 a search row (`CPSearchTemplate`,

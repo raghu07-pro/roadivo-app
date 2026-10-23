@@ -8,6 +8,8 @@ import Observation
 final class CarConnection {
     /// Set by `CarPlaySceneDelegate` when the CarPlay scene connects.
     var isCarPlayConnected = false
+    /// Roadivo's CarPlay window is showing this iPhone's Screen Broadcast (`CarPlayMirror`).
+    var isMirroringToCar = false
     /// The AirPlay receiver video is going to ("Living Room TV", "Car Display").
     private(set) var airPlayDestination: String?
     /// True when sound goes to the car over CarPlay. iOS reports a Bluetooth car kit like headphones.

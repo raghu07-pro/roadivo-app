@@ -47,8 +47,12 @@ final class CarPlayBrowserTab: NSObject, CPSearchTemplateDelegate {
     // MARK: Search
 
     private var supportsSearch: Bool {
-        if openPage != nil { return true }
-        if #available(iOS 27, *) { return true }
+        if openPage != nil {
+            return true
+        }
+        if #available(iOS 27, *) {
+            return true
+        }
         return false
     }
 
@@ -95,7 +99,8 @@ final class CarPlayBrowserTab: NSObject, CPSearchTemplateDelegate {
         }
         if let url = CarBrowserSiteSearch.url(for: searchText, on: searchScope) {
             let item = CPListItem(
-                text: String(appLocalized: "Search YouTube"), detailText: searchText,
+                text: String(appLocalized: "Search YouTube"),
+                detailText: searchText,
                 image: UIImage(systemName: "play.rectangle")
             )
             item.userInfo = url
@@ -154,12 +159,13 @@ final class CarPlayBrowserTab: NSObject, CPSearchTemplateDelegate {
 
     // MARK: Sites
 
-    /// Each site's icon and name, in rows the car wraps to fit its screen (iOS 26), or one site per row before.
+    /// Each site's icon and name in one row the car wraps across its whole width (iOS 26; up to 24 per row), or one
+    /// site per row before. Rows of four left the right half empty on a wide screen (owner, 2026-10-23).
     private func siteItems(_ menu: CarPlayMenu, icons: SiteIconStore) -> [any CPListTemplateItem] {
         guard #available(iOS 26, *) else {
             return menu.sites.map { siteRow($0, image: tile(for: $0, icons: icons)) }
         }
-        let columns = min(4, CPMaximumNumberOfGridImages)
+        let columns = CPMaximumNumberOfGridImages
         return menu.siteRows(perRow: columns).map { siteGrid($0, icons: icons) }
     }
 

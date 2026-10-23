@@ -170,7 +170,9 @@ private struct MainTabView: View {
                 isPro: isPro,
                 browser: environment.browser,
                 onPlayWebVideo: { item in play(item, queue: [item]) },
-                browserRequest: $router.browserRequest
+                browserRequest: $router.browserRequest,
+                isCarConnected: environment.carConnection.isCarAudio || environment.carConnection.isCarPlayConnected,
+                isCarShowing: environment.carConnection.isMirroringToCar
             )
             .miniPlayer(
                 playback: playback,

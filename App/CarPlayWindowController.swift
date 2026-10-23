@@ -14,7 +14,11 @@ final class CarPlayWindowController: UIViewController {
     private var scrub: CarScrub?
     /// Refreshes the bar while the video shows: pushed, as observed changes didn't redraw it on the car's screen.
     private var ticker: Timer?
+    /// Each minute while the car is connected, for the road's hour (`updateMoment`).
+    private var clock: Timer?
     private var browser: CarBrowserController?
+    /// The whole iPhone from Screen Broadcast, over everything else while parked.
+    private let mirror = UIImageView()
 
     func installBrowser(_ browser: CarBrowserController) {
         loadViewIfNeeded()
@@ -41,6 +45,26 @@ final class CarPlayWindowController: UIViewController {
         }
     }
 
+    /// `keepsFrame`: hidden behind the tabs while the iPhone still casts, so it comes back with a picture.
+    func showMirror(_ isShown: Bool, keepsFrame: Bool = false) {
+        loadViewIfNeeded()
+        mirror.isHidden = !isShown
+        if !isShown, !keepsFrame {
+            mirror.image = nil
+        }
+        view.bringSubviewToFront(mirror)
+    }
+
+    func showMirrorFrame(_ frame: UIImage) {
+        guard !mirror.isHidden else { return }
+        mirror.image = frame
+    }
+
+    /// Fit shows the whole iPhone; Fill crops it to the car's screen, as CarTV's Fit button does.
+    func toggleMirrorFill() {
+        mirror.contentMode = mirror.contentMode == .scaleAspectFit ? .scaleAspectFill : .scaleAspectFit
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .black
@@ -61,6 +85,24 @@ final class CarPlayWindowController: UIViewController {
         }
         card.didMove(toParent: self)
         addProgress()
+        addMirror()
+    }
+
+    /// The iPhone's picture fitted inside the car's screen, black around it.
+    private func addMirror() {
+        mirror.backgroundColor = .black
+        mirror.contentMode = .scaleAspectFit
+        mirror.clipsToBounds = true
+        mirror.isHidden = true
+        mirror.accessibilityIdentifier = "car.mirror"
+        mirror.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(mirror)
+        NSLayoutConstraint.activate([
+            mirror.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            mirror.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            mirror.topAnchor.constraint(equalTo: view.topAnchor),
+            mirror.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+        ])
     }
 
     private func addProgress() {
@@ -111,12 +153,33 @@ final class CarPlayWindowController: UIViewController {
         if card.rootView.content != content {
             card.rootView = CarWindowCard(content: content)
         }
+        startClock()
     }
 
     /// The car's screen went away: nothing more to refresh.
     func stopUpdating() {
         stopTicking()
+        clock?.invalidate()
+        clock = nil
         scrub = nil
+    }
+
+    /// The road changes with the hour; nothing else redraws an idle window, so it's checked each minute.
+    private func startClock() {
+        guard clock == nil else { return }
+        let timer = Timer(timeInterval: 60, repeats: true) { [weak self] _ in
+            MainActor.assumeIsolated { self?.updateMoment() }
+        }
+        RunLoop.main.add(timer, forMode: .common)
+        clock = timer
+    }
+
+    private func updateMoment() {
+        var content = card.rootView.content
+        content.moment = SplashMoment(date: .now)
+        if content != card.rootView.content {
+            card.rootView = CarWindowCard(content: content)
+        }
     }
 
     private func startTicking() {
@@ -233,11 +296,14 @@ struct CarWindowProgress: View, Equatable {
     }
 }
 
-/// The road at night, still, with what's playing and one line underneath; always dark, like the car's screen.
+/// The road at the hour's light, as on the splash, still, with what's playing and one line underneath; its text
+/// always dark-styled, like the car's screen.
 struct CarWindowCard: View {
     struct Content: Equatable {
         var state: CarWindowState = .home
         var title: String?
+        /// Sunrise, midday, sunset or night, by the hour (owner, 2026-10-23).
+        var moment = SplashMoment(date: .now)
 
         /// The line under the title; nil while the video shows.
         var message: String? {
@@ -245,7 +311,7 @@ struct CarWindowCard: View {
             case .upgrade:
                 String(appLocalized: "Watching in the car is part of Roadivo Pro. Unlock it on your iPhone.")
             case .home:
-                String(appLocalized: "Choose what to watch from Favorites, Recent, Library or Browser.")
+                String(appLocalized: "Choose what to watch from Home, Favorites or Browser, or cast your iPhone.")
             case .driving:
                 String(appLocalized: "Video is off while driving. Sound keeps playing.")
             case .needsLocation:
@@ -264,7 +330,7 @@ struct CarWindowCard: View {
 
     var body: some View {
         ZStack(alignment: .bottomLeading) {
-            RoadScene(time: .night, animated: false, sunIsPlayButton: true)
+            RoadScene(time: content.moment.time, animated: false, sunIsPlayButton: true)
                 .ignoresSafeArea()
             LinearGradient(colors: [.clear, Color.roadAsphalt.opacity(0.85)], startPoint: .center, endPoint: .bottom)
                 .ignoresSafeArea()
@@ -294,5 +360,10 @@ struct CarWindowCard: View {
 
 #Preview("Driving") {
     CarWindowCard(content: CarWindowCard.Content(state: .driving, title: "Apple Sample 1"))
+        .frame(width: 800, height: 480)
+}
+
+#Preview("Midday") {
+    CarWindowCard(content: CarWindowCard.Content(moment: .midday))
         .frame(width: 800, height: 480)
 }

@@ -33,10 +33,6 @@
 		<key>NSAllowsArbitraryLoads</key>
 		<true/>
 	</dict>
-	<key>NSBonjourServices</key>
-	<array>
-		<string>_roadivo._tcp</string>
-	</array>
 	<key>NSCameraUsageDescription</key>
 	<string>Roadivo uses the camera only to scan a QR code that contains a playlist link.</string>
 	<key>NSLocalNetworkUsageDescription</key>

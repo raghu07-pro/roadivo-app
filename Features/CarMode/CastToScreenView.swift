@@ -1,37 +1,38 @@
 import SwiftUI
 
-/// Cast to Screen, as in CarTV (owner, 2026-10-19; DECISIONS 124): Screen Broadcast puts the whole iPhone, any
-/// app, on a car screen with a web browser, over the same Wi-Fi or this iPhone's Personal Hotspot. AirPlay screens
-/// use iOS's own Screen Mirroring, linked below.
+/// Cast to Screen, as simple as CarTV's (owner, 2026-10-23): the whole iPhone on Roadivo's CarPlay window through
+/// Screen Broadcast, with one button to start or end mirroring. The car shows it by itself; no address or Wi-Fi.
 struct CastToScreenView: View {
-    let isPro: Bool
+    /// CarPlay is on, so the car's screen is there to show the iPhone.
+    var isCarConnected = false
+    /// Roadivo on the car's screen is showing this iPhone now.
+    var isCarShowing = false
 
     @State private var picker = BroadcastPicker()
-    @State private var localNetwork = LocalNetworkAccess()
-    @State private var address = BroadcastAddress.current()
-    @Environment(\.scenePhase) private var scenePhase
-    @Environment(\.openURL) private var openURL
-    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
-    @ScaledMetric(relativeTo: .largeTitle) private var tileSide: CGFloat = 88
+    @State private var broadcast = BroadcastStatus()
+    @ScaledMetric(relativeTo: .largeTitle) private var displayWidth: CGFloat = 132
+
+    private var state: CastScreenState {
+        .make(isBroadcasting: broadcast.isBroadcasting, isCarConnected: isCarConnected, isCarShowing: isCarShowing)
+    }
 
     var body: some View {
         ScrollView {
-            VStack(alignment: .leading, spacing: Spacing.lg) {
-                hero
-                PrimaryButton(title: "Start Broadcast", systemImage: "record.circle") {
-                    localNetwork.request()
-                    picker.show()
+            VStack(spacing: Spacing.lg) {
+                display
+                status
+                Divider()
+                mirroring
+                if state == .connected {
+                    Label("Rotate your iPhone to watch full screen on the car's screen.", systemImage: "rotate.right")
+                        .font(Typography.caption)
+                        .foregroundStyle(.secondary)
+                        .fixedSize(horizontal: false, vertical: true)
                 }
-                .accessibilityHint(Text("Opens Apple's Screen Broadcast; choose Roadivo, then Start Broadcast"))
-                .accessibilityIdentifier("broadcast.start")
-                if localNetwork.isDenied {
-                    localNetworkCard
-                }
-                addressCard
-                SectionHeader("AirPlay Screens")
-                mirroringLink
             }
+            .multilineTextAlignment(.center)
             .padding(Spacing.md)
+            .padding(.top, Spacing.xl)
             .frame(maxWidth: 640)
             .frame(maxWidth: .infinity)
         }
@@ -45,178 +46,116 @@ struct CastToScreenView: View {
         .clearsBottomAccessory()
         .navigationTitle("Cast to Screen")
         .navigationBarTitleDisplayMode(.inline)
-        .stepsHelp(identifier: "broadcast", steps: Self.steps, note: Self.notes)
-        // Asked on arrival, so iOS's alert comes before the broadcast sheet instead of over it.
-        .task { localNetwork.request() }
-        .task { await refreshAddress() }
-        // The address changes with the network: joining the car's Wi-Fi or turning on the hotspot.
-        .onChange(of: scenePhase) { _, phase in
-            if phase == .active {
-                address = BroadcastAddress.current()
-                localNetwork.request() // Back from Settings or iOS's alert: check the answer again.
-            }
-        }
+        .task { await broadcast.watch() }
+        .accessibilityElement(children: .contain)
         .accessibilityIdentifier("broadcast.screen")
     }
 
-    /// Behind the ? in the navigation bar, so the page stays short (DECISIONS 128).
-    private static let steps: [LocalizedStringResource] = [
-        "Join the car's screen to the same Wi‑Fi as this iPhone, or to this iPhone's Personal Hotspot.",
-        "Tap Start Broadcast, then Start Broadcast again.",
-        "On the car's screen, open its web browser and go to the address above.",
-        "To stop, tap the red indicator at the top of the screen, or Start Broadcast, and choose Stop."
-    ]
-    private static let notes: LocalizedStringResource = """
-    Everything on your iPhone shows, including notifications. Apps that protect their videos, like most paid \
-    streaming apps, show black. Sound stays on your iPhone. For passengers, or while parked.
-    """
-
-    /// Personal Hotspot's interface has an address only once a device joins, so look again while the page is open.
-    private func refreshAddress() async {
-        while !Task.isCancelled {
-            let current = BroadcastAddress.current()
-            if current != address {
-                address = current
+    /// The car's screen in outline, with what it's doing: a check once it shows the iPhone.
+    private var display: some View {
+        let width = min(displayWidth, 180)
+        return Image(systemName: symbol)
+            .font(.largeTitle)
+            .foregroundStyle(.roadAccent)
+            .frame(width: width, height: width * 0.62)
+            .overlay {
+                RoundedRectangle(cornerRadius: Radius.md, style: .continuous)
+                    .strokeBorder(.roadAccent, lineWidth: 2)
             }
-            try? await Task.sleep(for: .seconds(2)) // Throws only when cancelled, and the loop then ends.
+            .accessibilityHidden(true)
+    }
+
+    private var symbol: String {
+        switch state {
+        case .ready: "rectangle.on.rectangle"
+        case .waitingForCar: "info.circle"
+        case .connected: "checkmark"
         }
     }
 
-    /// The iPhone, a stream, the car's screen: side by side, or stacked when larger text won't fit that way.
-    /// Side by side, stacked at accessibility sizes. One set of views in either layout (`AnyLayout`), so nothing is
-    /// rebuilt as text grows, which the accessibility audit would read as text that can't scale.
-    private var hero: some View {
-        let isStacked = dynamicTypeSize.isAccessibilitySize
-        let layout = isStacked ? AnyLayout(VStackLayout(spacing: Spacing.sm)) :
-            AnyLayout(HStackLayout(spacing: Spacing.lg))
-        return layout {
-            endpoint("iphone", label: "iPhone")
-            Image(systemName: "dot.radiowaves.right")
-                .font(.title2.weight(.semibold))
-                .foregroundStyle(.roadAccent)
-                .rotationEffect(.degrees(isStacked ? 90 : 0))
-                .accessibilityHidden(true)
-            endpoint("tv", label: "Car screen")
+    private var status: some View {
+        VStack(spacing: Spacing.xs) {
+            switch state {
+            case .connected:
+                Text("Display connected")
+                    .font(Typography.sectionTitle)
+                hint("Open any app to share your screen", symbol: "checkmark.circle")
+            case let .waitingForCar(isCarConnected):
+                carLine(isCarConnected)
+                hint("Open Roadivo in CarPlay first", symbol: "info.circle")
+            case let .ready(isCarConnected):
+                carLine(isCarConnected)
+                hint(
+                    isCarConnected
+                        ? "Tap Start mirroring to show this iPhone on the car's screen."
+                        : "Connect to CarPlay and open Roadivo on the car's screen.",
+                    symbol: "info.circle"
+                )
+            }
         }
-        .frame(maxWidth: .infinity)
         .accessibilityElement(children: .combine)
+        .accessibilityIdentifier("cast.status")
     }
 
-    private func endpoint(_ symbol: String, label: LocalizedStringKey) -> some View {
-        // Capped so two tiles and the stream still fit side by side on a 320-point-wide iPhone SE.
-        let side = min(tileSide, 100)
-        return VStack(spacing: Spacing.xs) {
-            Image(systemName: symbol)
-                .font(.largeTitle)
-                .foregroundStyle(.roadAccent)
-                .frame(width: side, height: side)
-                .background(.roadSurface, in: RoundedRectangle(cornerRadius: Radius.lg, style: .continuous))
-            Text(label)
-                .font(Typography.secondary)
-                .foregroundStyle(.roadMuted)
-        }
+    private func carLine(_ isConnected: Bool) -> some View {
+        Label(isConnected ? "Car connected" : "No car connected", systemImage: isConnected ? "car.fill" : "car")
+            .font(Typography.cardTitle)
+            .foregroundStyle(isConnected ? AnyShapeStyle(Color.roadAccent) : AnyShapeStyle(.secondary))
     }
 
-    /// iOS reported Local Network off for Roadivo, so the car screen's browser can't load the broadcast.
-    private var localNetworkCard: some View {
-        VStack(alignment: .leading, spacing: Spacing.xs) {
-            Label {
-                Text("Turn on Local Network for Roadivo in Settings, or the car's screen can't reach this iPhone.")
-                    .fixedSize(horizontal: false, vertical: true)
-            } icon: {
-                Image(systemName: "exclamationmark.triangle.fill")
-                    .foregroundStyle(.roadAccent)
-            }
-            .font(Typography.body)
-            Button {
-                if let settings = URL(string: UIApplication.openSettingsURLString) {
-                    openURL(settings)
-                }
-            } label: {
-                Text("Open Settings")
-                    .font(Typography.cardTitle)
-                    .foregroundStyle(.roadAccent)
-                    .frame(minHeight: 44)
-                    .contentShape(Rectangle())
-            }
-            .buttonStyle(PressableStyle())
-            .accessibilityIdentifier("broadcast.openSettings")
-        }
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .cardStyle()
-        .accessibilityElement(children: .contain)
-        .accessibilityIdentifier("broadcast.localNetwork")
+    private func hint(_ text: LocalizedStringKey, symbol: String) -> some View {
+        Label(text, systemImage: symbol)
+            .font(Typography.secondary)
+            .foregroundStyle(.secondary)
+            .fixedSize(horizontal: false, vertical: true)
     }
 
-    /// What to type on the car's screen, or what to do first when there's no Wi-Fi or hotspot.
-    private var addressCard: some View {
-        VStack(alignment: .leading, spacing: Spacing.xs) {
-            if let address {
-                HStack(spacing: Spacing.sm) {
-                    // One element, so VoiceOver reads the address as part of a sentence, not on its own.
-                    VStack(alignment: .leading, spacing: Spacing.xs) {
-                        Text("On the car's screen, open")
-                            .font(Typography.caption)
-                            .foregroundStyle(.secondary)
-                        Text(address) // An address reads the same in every language.
-                            .font(Typography.sectionTitle.monospaced())
-                            .textSelection(.enabled)
-                    }
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .accessibilityElement(children: .combine)
-                    Button {
-                        UIPasteboard.general.string = address
-                    } label: {
-                        Label("Copy", systemImage: "doc.on.doc")
-                            .labelStyle(.iconOnly)
-                            .font(.body.weight(.semibold))
-                            .frame(width: 44, height: 44)
-                    }
-                    .accessibilityIdentifier("broadcast.copy")
-                }
-            } else {
-                Text("On the car's screen, open")
-                    .font(Typography.caption)
-                    .foregroundStyle(.secondary)
-                Text("Join a Wi‑Fi network or turn on Personal Hotspot first.")
-                    .font(Typography.cardTitle)
-            }
-        }
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .cardStyle()
-        .accessibilityElement(children: .contain)
-        .accessibilityIdentifier("broadcast.address")
-    }
-
-    private var mirroringLink: some View {
-        NavigationLink {
-            ConnectGuideView(
-                guide: ConnectGuide(hasCarPlay: CarPlayAvailability.isEnabled),
-                isPro: isPro,
-                focusedSection: "mirroring"
-            )
-        } label: {
-            HStack(spacing: Spacing.sm) {
-                IconTile(systemImage: "airplayvideo", style: .soft, size: 36)
-                VStack(alignment: .leading, spacing: 2) {
-                    Text("Screen Mirroring")
+    /// One button, as in CarTV: Start Mirroring opens Apple's sheet; End Mirroring asks the broadcast to stop.
+    private var mirroring: some View {
+        VStack(spacing: Spacing.sm) {
+            Label("Screen Mirroring", systemImage: "rectangle.on.rectangle")
+                .font(Typography.sectionTitle)
+                .labelStyle(.titleAndIcon)
+            if state.isMirroring {
+                Button(role: .destructive) {
+                    BroadcastSignal.requestStop()
+                } label: {
+                    // Red set here: `PressableStyle` doesn't carry the destructive role's tint.
+                    Label("End mirroring", systemImage: "stop.circle")
                         .font(Typography.cardTitle)
-                        .foregroundStyle(.primary)
-                    Text("For a car display or adapter with AirPlay")
-                        .font(Typography.caption)
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(.red)
+                        .frame(minHeight: 44)
+                        .contentShape(Rectangle())
                 }
-                .frame(maxWidth: .infinity, alignment: .leading)
-                Image(systemName: "chevron.right")
-                    .font(.footnote.weight(.semibold))
-                    .foregroundStyle(.tertiary)
-                    .accessibilityHidden(true)
+                .accessibilityIdentifier("cast.end")
+            } else {
+                Button {
+                    picker.show()
+                } label: {
+                    Label("Start mirroring", systemImage: "play.circle")
+                        .font(Typography.cardTitle)
+                        .foregroundStyle(.roadAccent)
+                        .frame(minHeight: 44)
+                        .contentShape(Rectangle())
+                }
+                .accessibilityHint(Text("Opens Apple's Screen Broadcast; choose Roadivo, then Start Broadcast"))
+                .accessibilityIdentifier("cast.start")
             }
-            .frame(minHeight: 44)
-            .contentShape(Rectangle())
-            .cardStyle()
         }
         .buttonStyle(PressableStyle())
-        .accessibilityIdentifier("broadcast.mirroring")
     }
+}
+
+#Preview("Ready, car connected") {
+    NavigationStack {
+        CastToScreenView(isCarConnected: true)
+    }
+}
+
+#Preview("Connected, dark, large text") {
+    NavigationStack {
+        CastToScreenView(isCarConnected: true, isCarShowing: true)
+    }
+    .preferredColorScheme(.dark)
+    .dynamicTypeSize(.accessibility2)
 }

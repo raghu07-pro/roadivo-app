@@ -20,7 +20,7 @@ final class FrameEncoder {
         // ReplayKit sends portrait frames and says how the iPhone is turned.
         if let raw = CMGetAttachment(sampleBuffer, key: RPVideoSampleOrientationKey as CFString, attachmentModeOut: nil)
             as? NSNumber, let orientation = CGImagePropertyOrientation(rawValue: raw.uint32Value) {
-            image = image.oriented(orientation)
+            image = image.oriented(Self.upright(orientation))
         }
         let longest = max(image.extent.width, image.extent.height)
         if longest > maxDimension {
@@ -29,5 +29,17 @@ final class FrameEncoder {
         }
         let quality = CIImageRepresentationOption(rawValue: kCGImageDestinationLossyCompressionQuality as String)
         return context.jpegRepresentation(of: image, colorSpace: colorSpace, options: [quality: 0.6])
+    }
+
+    /// ReplayKit's left and right turn the picture the other way from Core Image's: used as given, a landscape
+    /// iPhone showed upside down on the car (owner, 2026-10-23). Portrait and upside-down need no swap.
+    private static func upright(_ orientation: CGImagePropertyOrientation) -> CGImagePropertyOrientation {
+        switch orientation {
+        case .left: .right
+        case .right: .left
+        case .leftMirrored: .rightMirrored
+        case .rightMirrored: .leftMirrored
+        default: orientation
+        }
     }
 }

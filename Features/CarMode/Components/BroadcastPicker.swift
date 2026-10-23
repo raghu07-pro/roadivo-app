@@ -1,4 +1,3 @@
-import Network
 import OSLog
 import ReplayKit
 import SwiftUI
@@ -38,57 +37,29 @@ struct BroadcastPickerHost: UIViewRepresentable {
     func updateUIView(_ view: RPSystemBroadcastPickerView, context: Context) {}
 }
 
-/// Asks for local network access, without which the car screen's browser can't reach the iPhone, and notices a
-/// refusal. A short search for Roadivo's own service is what makes iOS ask.
+/// Whether Roadivo's Screen Broadcast is running, so Cast to Screen's one button starts or ends it.
 @MainActor
 @Observable
-final class LocalNetworkAccess {
-    private(set) var isDenied = false
-    @ObservationIgnored private var browser: NWBrowser?
-    /// UI tests force the "off" answer, which simulators never give.
-    private let isDeniedForTests: Bool = {
+final class BroadcastStatus {
+    private(set) var isBroadcasting = false
+    /// UI tests stand in for a running broadcast, which needs a real iPhone.
+    private let isBroadcastingForTests: Bool = {
         #if DEBUG
             let arguments = ProcessInfo.processInfo.arguments
-            return arguments.contains("-ui-testing") && arguments.contains("-local-network-denied")
+            return arguments.contains("-ui-testing") && arguments.contains("-broadcasting")
         #else
             return false
         #endif
     }()
 
-    func request() {
-        if isDeniedForTests {
-            isDenied = true
-            return
-        }
-        guard browser == nil else { return }
-        let search = NWBrowser(for: .bonjour(type: "_roadivo._tcp", domain: nil), using: .tcp)
-        search.stateUpdateHandler = { [weak self] state in
-            guard let denied = state.localNetworkDenial else { return }
-            MainActor.assumeIsolated { // Delivered on .main, the queue the search starts on.
-                guard let self else { return }
-                self.isDenied = denied
+    /// Looks once a second while Cast to Screen is open; the page's task ends it.
+    func watch() async {
+        while !Task.isCancelled {
+            let isRunning = isBroadcastingForTests ? true : await BroadcastProbe.isRunning()
+            if isRunning != isBroadcasting {
+                isBroadcasting = isRunning
             }
-        }
-        search.start(queue: .main)
-        browser = search
-        Task { [weak self] in
-            try? await Task.sleep(for: .seconds(5)) // Long enough for iOS to ask; cancelling just stops sooner.
-            search.cancel()
-            self?.browser = nil
-        }
-    }
-}
-
-private extension NWBrowser.State {
-    /// `true` when iOS blocks the search because Local Network is off for Roadivo, `false` once it runs.
-    var localNetworkDenial: Bool? {
-        switch self {
-        case .ready:
-            return false
-        case let .waiting(error) where error == .dns(DNSServiceErrorType(kDNSServiceErr_PolicyDenied)):
-            return true
-        default:
-            return nil
+            try? await Task.sleep(for: .seconds(1)) // Throws only when cancelled, and the loop then ends.
         }
     }
 }
