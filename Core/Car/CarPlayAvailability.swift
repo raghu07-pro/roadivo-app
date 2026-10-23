@@ -8,7 +8,7 @@ enum CarPlayAvailability {
     }
 
     /// `ROADIVO_CARPLAY_NAVIGATION`: the car shows Roadivo's map and guidance instead of its media lists
-    /// (DECISIONS 147). Simulator builds only until Apple grants CarPlay Navigation.
+    /// (DECISIONS 147). Off since DECISIONS 148, so the car shows the media tabs.
     static var isNavigation: Bool {
         (Bundle.main.object(forInfoDictionaryKey: "ROADIVO_CARPLAY_NAVIGATION") as? String) == "YES"
     }

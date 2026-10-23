@@ -29,11 +29,10 @@ ROADIVO_CARPLAY_ENTITLEMENTS_NO =
 // window shows Roadivo's CarPlay app.
 ROADIVO_CARPLAY_ENTITLEMENTS_NO[sdk=iphonesimulator*] = $(ROADIVO_CARPLAY_FILE_$(ROADIVO_CARPLAY_NAVIGATION))
 
-// CarPlay Navigation, requested from Apple (DECISIONS 147). YES signs with RoadivoNavigation.entitlements and makes
-// the car's screen Roadivo's map with turn-by-turn guidance, in place of the media lists (one CarPlay type per app).
-// Device builds stay NO until Apple grants it, or signing fails; the simulator shows it for Apple's screenshots.
+// CarPlay Navigation (approved 2026-10-22, DECISIONS 147) is off again (owner, 2026-10-23; DECISIONS 148): the car shows
+// Favorites, Recent, Library and Browser. YES swaps in the map, guidance and RoadivoNavigation.entitlements.
 ROADIVO_CARPLAY_NAVIGATION = NO
-ROADIVO_CARPLAY_NAVIGATION[sdk=iphonesimulator*] = YES
+ROADIVO_CARPLAY_NAVIGATION[sdk=iphonesimulator*] = NO
 ROADIVO_CARPLAY_FILE_NO = Resources/Roadivo.entitlements
 ROADIVO_CARPLAY_FILE_YES = Resources/RoadivoNavigation.entitlements
 // The car's scene delegate, named in Info.plist: iOS reads the manifest for CarPlay rather than asking AppDelegate.
