@@ -74,28 +74,14 @@ struct CarBrowserTests {
         #expect(links.first?.url.absoluteString == "https://example.com/article?q=a#section")
     }
 
-    @Test("Keyboard availability alone never authorizes browsing; readings must be still and fresh")
-    func accessRequiresEvidence() {
-        let now = Date(timeIntervalSince1970: 100)
-        func allowed(
-            pro: Bool = true, parked: Bool = true, denied: Bool = false,
-            sample: MotionSample? = .still, age: TimeInterval? = 0
-        ) -> Bool {
-            CarBrowserAccess.isAllowed(
-                isPro: pro, isParked: parked, isLocationDenied: denied, sample: sample,
-                sampledAt: age.map { now.addingTimeInterval(-$0) }, now: now
-            )
-        }
-        #expect(allowed())
-        #expect(allowed(age: 10))
-        #expect(!allowed(age: 10.1))
-        #expect(!allowed(age: -1))
-        #expect(!allowed(age: nil))
-        #expect(!allowed(sample: nil))
-        #expect(!allowed(sample: .unknown))
-        #expect(!allowed(sample: .moving))
-        #expect(!allowed(pro: false))
-        #expect(!allowed(parked: false))
-        #expect(!allowed(denied: true))
+    @Test("Debug browsing requires Pro without relying on parking or location")
+    func browserAccess() {
+        #if DEBUG
+            #expect(CarBrowserAccess.isAllowed(isPro: true))
+        #else
+            #expect(!CarBrowserAccess.isAllowed(isPro: true))
+        #endif
+        #expect(!CarBrowserAccess.isAllowed(isPro: false))
     }
 }
+
