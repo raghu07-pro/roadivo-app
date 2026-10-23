@@ -72,4 +72,18 @@ struct SiteIconTileTests {
         #expect(SiteIconTile.make(from: icon { _ in }) == nil)
         #expect(SiteIconTile.placeholder().size == CGSize(width: SiteIconTile.side, height: SiteIconTile.side))
     }
+
+    @Test("Car artwork has transparent rounded corners and an opaque logo centre")
+    func roundedCarArtwork() throws {
+        let logo = icon { context in
+            context.setFillColor(UIColor.red.cgColor)
+            context.fill(CGRect(x: 0, y: 0, width: 100, height: 100))
+        }
+        for tile in [SiteIconTile.carTile(from: logo), SiteIconTile.carPlaceholder(for: "Example")] {
+            #expect(tile.size == CGSize(width: SiteIconTile.side, height: SiteIconTile.side))
+            #expect(tile.renderingMode == .alwaysOriginal)
+            #expect(try color(of: tile, col: 1, row: 1)[3] == 0)
+            #expect(try color(of: tile, col: 180, row: 180)[3] == 255)
+        }
+    }
 }

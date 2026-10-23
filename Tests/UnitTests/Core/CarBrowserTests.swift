@@ -83,5 +83,64 @@ struct CarBrowserTests {
         #endif
         #expect(!CarBrowserAccess.isAllowed(isPro: false))
     }
-}
 
+    @Test("Switching tabs keeps each document, zoom, and page state independent")
+    func separateTabs() throws {
+        let car = CarBrowserController()
+        car.page.loader = { _, _ in }
+        car.open(try #require(URL(string: "https://first.example.com")))
+        car.setAllowed(true)
+        let first = car.session.selected
+        let firstURL = try #require(URL(string: "https://first.example.com/article"))
+        first.page.onState?(WebPageController.State(url: firstURL, title: "First"))
+        car.setPageZoom(1.5)
+
+        #expect(car.newTab())
+        let second = car.session.selected
+        #expect(first.page.webView !== second.page.webView)
+        let store = first.page.webView.configuration.websiteDataStore
+        #expect(store === second.page.webView.configuration.websiteDataStore)
+        #expect(car.state.url == nil)
+        #expect(second.zoom == 1)
+        first.page.onState?(WebPageController.State(url: firstURL, title: "Updated first"))
+        #expect(car.state.title.isEmpty)
+
+        car.selectTab(first.id)
+        #expect(car.state.title == "Updated first")
+        #expect(car.page.webView.pageZoom == 1.5)
+        car.closeTab()
+        #expect(car.session.selected === second)
+        #expect(car.session.tabs.count == 1)
+    }
+
+    @Test("Car tabs are bounded and closing the browser clears all session data")
+    func tabLimitAndSessionCleanup() throws {
+        let car = CarBrowserController()
+        car.page.loader = { _, _ in }
+        car.open(try #require(URL(string: "https://example.com")))
+        car.setAllowed(true)
+        car.page.onState?(WebPageController.State(url: URL(string: "https://example.com"), title: "Example"))
+        car.session.toggleSavedPage()
+        #expect(car.session.savedPages.count == 1)
+        for _ in 1..<CarBrowserSession.maximumTabs { #expect(car.newTab()) }
+        #expect(car.session.tabs.count == CarBrowserSession.maximumTabs)
+        #expect(!car.newTab())
+        car.close()
+        #expect(car.session.tabs.count == 1)
+        #expect(car.session.savedPages.isEmpty)
+        #expect(car.state.url == nil)
+        #expect(!car.isOpen)
+    }
+
+    @Test("YouTube search preserves punctuation and Unicode without adding URL parameters")
+    func youtubeSearchEncoding() throws {
+        let query = "music & science + తెలుగు? #1"
+        let url = try #require(CarBrowserSiteSearch.url(for: query, on: URL(string: "https://www.youtube.com")))
+        let components = try #require(URLComponents(url: url, resolvingAgainstBaseURL: false))
+        #expect(components.host == "m.youtube.com")
+        #expect(components.path == "/results")
+        #expect(components.queryItems == [URLQueryItem(name: "search_query", value: query)])
+        #expect(CarBrowserSiteSearch.url(for: " ", on: url) == nil)
+        #expect(CarBrowserSiteSearch.url(for: query, on: URL(string: "https://youtube.com.example.org")) == nil)
+    }
+}

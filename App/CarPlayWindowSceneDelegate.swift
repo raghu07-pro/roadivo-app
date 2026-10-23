@@ -47,6 +47,8 @@ final class CarPlayWindowSceneDelegate: UIResponder, CPTemplateApplicationSceneD
             if let carBrowser {
                 let controls = CarBrowserControls(browser: carBrowser, root: root, interface: interfaceController)
                 controls.onSearch = { [weak self] in self?.lists?.browser.showSearch() }
+                controls.onSiteSearch = { [weak self] url in self?.lists?.browser.showSearch(on: url) }
+                controls.onHome = { [weak self] in self?.showBrowserStartPage() }
                 controls.onClose = { [weak self] in self?.closeBrowser() }
                 controls.onOpen = { [weak self] url in self?.openBrowser(url) }
                 browserControls = controls
@@ -382,6 +384,16 @@ final class CarPlayWindowSceneDelegate: UIResponder, CPTemplateApplicationSceneD
 }
 
 private extension CarPlayWindowSceneDelegate {
+    @MainActor
+    func showBrowserStartPage() {
+        guard let interfaceController, let template = lists?.browser.template else { return }
+        interfaceController.popToRootTemplate(animated: false) { [weak self] _, _ in
+            MainActor.assumeIsolated {
+                self?.interfaceController?.pushTemplate(template, animated: true, completion: nil)
+            }
+        }
+    }
+
     @MainActor
     func openBrowser(_ url: URL) {
         guard let carBrowser, let environment = AppEnvironment.current, environment.proAccess.isPro else { return }

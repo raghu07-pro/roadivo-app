@@ -44,6 +44,10 @@ tabs: **Home · Favorites · Discover · Settings**.
   navigation, scrolling and ordinary-link selection. It requires Pro but no parking or Location evidence in Debug, per the owner's
   request (2026-10-23), and is hard-disabled in Release. Native video parking rules are unchanged. See `Docs/CarBrowserPrototype.md` for limitations and the required Mac/device checks.
   General webpage taps/forms and distribution approval are unverified; do not describe this as a complete browser.
+  Browser shortcuts use four columns, rounded artwork and 256 px icon requests. The More menu adds Start Page,
+  Reload, Forward, up to six car-only tabs, session-only saved pages, page zoom and auto-hiding controls.
+  YouTube has native search through `CarPlayBrowserTab.showSearch(on:)`; page links stay in native template lists.
+  Direct webpage taps are unsupported by CPMapTemplate's base view; these actions do not establish general form input.
 
 - **Which CarPlay app the car shows** is `ROADIVO_CARPLAY_APP` in `Config/Shared.xcconfig` (one per app; DECISIONS 152):
   `window` (now), `media` or `map`. `CarPlayAvailability.app` reads it; `AppDelegate` and the Info.plist manifest pick

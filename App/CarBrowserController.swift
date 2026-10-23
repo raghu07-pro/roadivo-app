@@ -4,69 +4,84 @@ import WebKit
 /// An independent, mobile-layout browser for the experimental CarPlay window. No phone browser state is reused.
 @MainActor
 final class CarBrowserController: UIViewController {
-    let page = WebPageController(
-        websiteDataStore: .nonPersistent(), allowsExternalLinks: false, prefersMobileContent: true
-    )
-    private(set) var state = WebPageController.State()
+    let session = CarBrowserSession()
+    var page: WebPageController { session.selected.page }
+    var state: WebPageController.State { session.selected.state }
     private(set) var isOpen = false
     private(set) var isAllowed = false
     var onChange: (() -> Void)?
     private let progress = UIProgressView(progressViewStyle: .bar)
     private let message = UILabel()
-    private var pendingURL: URL?
+    private weak var mountedWebView: WKWebView?
     private var navigationID = UUID()
     private var panStart = CGPoint.zero
 
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
-        page.webView.accessibilityIdentifier = "car.browser.page"
         message.font = .preferredFont(forTextStyle: .body)
         message.adjustsFontForContentSizeCategory = true
         message.numberOfLines = 0
         message.textAlignment = .center
         message.backgroundColor = .systemBackground
-        for child in [page.webView, message, progress] {
+        for child in [message, progress] {
             child.translatesAutoresizingMaskIntoConstraints = false
             view.addSubview(child)
         }
         NSLayoutConstraint.activate([
-            page.webView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            page.webView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            page.webView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            page.webView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
             message.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             message.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             message.topAnchor.constraint(equalTo: view.topAnchor),
             message.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-            progress.leadingAnchor.constraint(equalTo: page.webView.leadingAnchor),
-            progress.trailingAnchor.constraint(equalTo: page.webView.trailingAnchor),
-            progress.topAnchor.constraint(equalTo: page.webView.topAnchor)
+            progress.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            progress.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            progress.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor)
         ])
-        page.onState = { [weak self] state in
-            guard let self, isOpen else { return }
-            self.state = state
-            progress.progress = Float(state.progress)
-            progress.isHidden = !isAllowed || !state.isLoading
-            onChange?()
-        }
-        page.onNavigationStarted = { [weak self] in
-            self?.navigationID = UUID()
-            self?.message.isHidden = self?.isAllowed == true
-        }
-        page.onLoadError = { [weak self] in
-            guard let self, isAllowed, isOpen else { return }
-            message.text = String(appLocalized: "This page couldn't be loaded. Try reloading it.")
-            message.isHidden = false
-        }
+        mountSelectedTab()
         setAllowed(false)
+    }
+
+    private func mountSelectedTab() {
+        mountedWebView?.removeFromSuperview()
+        let tab = session.selected
+        let webView = tab.page.webView
+        mountedWebView = webView
+        webView.accessibilityIdentifier = "car.browser.page"
+        webView.translatesAutoresizingMaskIntoConstraints = false
+        view.insertSubview(webView, at: 0)
+        NSLayoutConstraint.activate([
+            webView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            webView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            webView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            webView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
+        ])
+        page.onState = { [weak self, weak tab] state in
+            guard let self, let tab, self.isOpen else { return }
+            tab.state = state
+            guard tab === self.session.selected else { return }
+            self.progress.progress = Float(state.progress)
+            self.progress.isHidden = !self.isAllowed || !state.isLoading
+            self.onChange?()
+        }
+        page.onNavigationStarted = { [weak self, weak tab] in
+            guard let self, let tab, tab === self.session.selected else { return }
+            self.navigationID = UUID()
+            self.message.isHidden = self.isAllowed
+        }
+        page.onLoadError = { [weak self, weak tab] in
+            guard let self, let tab, tab === self.session.selected, self.isAllowed, self.isOpen else { return }
+            self.message.text = String(appLocalized: "This page couldn't be loaded. Try reloading it.")
+            self.message.isHidden = false
+        }
+        progress.progress = Float(state.progress)
+        page.webView.pageZoom = tab.zoom
     }
 
     func open(_ url: URL) {
         guard WebAddress.isWeb(url) else { return }
         loadViewIfNeeded()
         isOpen = true
-        pendingURL = url
+        session.selected.pendingURL = url
         navigationID = UUID()
         if isAllowed { loadPendingPage() }
     }
@@ -79,7 +94,9 @@ final class CarBrowserController: UIViewController {
         page.webView.isHidden = !allowed
         progress.isHidden = !allowed || !state.isLoading
         if !allowed {
-            message.text = String(appLocalized: "Buy a plan")
+            message.text = String(
+                appLocalized: "Watching in the car is part of Roadivo Pro. Unlock it on your iPhone."
+            )
             message.isHidden = false
         } else if changed {
             message.isHidden = true
@@ -96,20 +113,15 @@ final class CarBrowserController: UIViewController {
 
     func close() {
         isOpen = false
-        pendingURL = nil
         navigationID = UUID()
-        page.pauseMedia()
-        page.stop()
-        page.webView.setAllMediaPlaybackSuspended(true, completionHandler: nil)
+        session.reset()
         isAllowed = false
-        state = WebPageController.State()
-        // Drop the old document so scripts cannot keep running after Close or disconnect.
-        page.webView.loadHTMLString("", baseURL: nil)
+        if isViewLoaded { mountSelectedTab() }
     }
 
     private func loadPendingPage() {
-        guard let url = pendingURL else { return }
-        pendingURL = nil
+        guard let url = session.selected.pendingURL else { return }
+        session.selected.pendingURL = nil
         message.isHidden = true
         page.load(url)
     }
@@ -128,6 +140,40 @@ final class CarBrowserController: UIViewController {
         guard isAllowed else { return }
         message.isHidden = true
         page.reload()
+    }
+
+    @discardableResult
+    func newTab() -> Bool {
+        guard isAllowed, session.addTab() else { return false }
+        activateSelectedTab()
+        return true
+    }
+
+    func selectTab(_ id: UUID) {
+        guard isAllowed, session.select(id) else { return }
+        activateSelectedTab()
+    }
+
+    func closeTab() {
+        guard isAllowed else { return }
+        session.closeSelected()
+        activateSelectedTab()
+    }
+
+    private func activateSelectedTab() {
+        navigationID = UUID()
+        mountSelectedTab()
+        page.webView.setAllMediaPlaybackSuspended(!isAllowed, completionHandler: nil)
+        setAllowed(isAllowed)
+        message.isHidden = isAllowed
+        onChange?()
+    }
+
+    func setPageZoom(_ zoom: CGFloat) {
+        guard isAllowed else { return }
+        session.selected.zoom = min(1.75, max(0.75, zoom))
+        page.webView.pageZoom = session.selected.zoom
+        onChange?()
     }
 
     func scrollPage(by fraction: CGFloat) {

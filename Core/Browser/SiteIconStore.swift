@@ -21,7 +21,7 @@ final class SiteIconStore {
     /// In Caches: iOS may clear it, and the icons are then fetched again.
     static func onDevice() -> SiteIconStore {
         let caches = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first
-        return SiteIconStore(directory: caches?.appending(path: "SiteIcons", directoryHint: .isDirectory))
+        return SiteIconStore(directory: caches?.appending(path: "SiteIcons-v2", directoryHint: .isDirectory))
     }
 
     /// `directory` nil keeps icons in memory only (previews and snapshot tests start with letter tiles).

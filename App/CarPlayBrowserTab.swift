@@ -11,9 +11,9 @@ final class CarPlayBrowserTab: NSObject, CPSearchTemplateDelegate {
     /// After the page's video starts on a row that presents itself, as Roadivo's own window does (DECISIONS 152).
     private let onPlay: () -> Void
     private let openPage: ((URL) -> Void)?
+    private var searchScope: URL?
     /// Each site's solid tile, made once per icon (`SiteIconTile`).
     private var siteTiles: [String: (icon: UIImage, tile: UIImage)] = [:]
-    private lazy var placeholderTile = SiteIconTile.placeholder()
     private let logger = Logger(subsystem: "com.roadivo", category: "CarPlay")
 
     init(
@@ -52,8 +52,9 @@ final class CarPlayBrowserTab: NSObject, CPSearchTemplateDelegate {
         return false
     }
 
-    func showSearch() {
+    func showSearch(on pageURL: URL? = nil) {
         guard supportsSearch else { return }
+        searchScope = pageURL
         let search = CPSearchTemplate()
         search.delegate = self
         interfaceController?.pushTemplate(search, animated: true, completion: nil)
@@ -83,7 +84,7 @@ final class CarPlayBrowserTab: NSObject, CPSearchTemplateDelegate {
     ) {
         let icons = AppEnvironment.current?.siteIcons
         let results = BrowserSearch.results(for: searchText, limit: Int(CPListTemplate.maximumItemCount))
-        completionHandler(results.map { result in
+        var rows = results.map { result in
             let item = CPListItem(
                 text: result.title,
                 detailText: result.detail,
@@ -91,7 +92,16 @@ final class CarPlayBrowserTab: NSObject, CPSearchTemplateDelegate {
             )
             item.userInfo = result.url
             return item
-        })
+        }
+        if let url = CarBrowserSiteSearch.url(for: searchText, on: searchScope) {
+            let item = CPListItem(
+                text: String(appLocalized: "Search YouTube"), detailText: searchText,
+                image: UIImage(systemName: "play.rectangle")
+            )
+            item.userInfo = url
+            rows.insert(item, at: 0)
+        }
+        completionHandler(Array(rows.prefix(Int(CPListTemplate.maximumItemCount))))
     }
 
     func searchTemplate(
@@ -149,7 +159,8 @@ final class CarPlayBrowserTab: NSObject, CPSearchTemplateDelegate {
         guard #available(iOS 26, *) else {
             return menu.sites.map { siteRow($0, image: tile(for: $0, icons: icons)) }
         }
-        return menu.siteRows(perRow: CPMaximumNumberOfGridImages).map { siteGrid($0, icons: icons) }
+        let columns = min(4, CPMaximumNumberOfGridImages)
+        return menu.siteRows(perRow: columns).map { siteGrid($0, icons: icons) }
     }
 
     @available(iOS 26, *)
@@ -158,7 +169,7 @@ final class CarPlayBrowserTab: NSObject, CPSearchTemplateDelegate {
             CPListImageRowItemImageGridElement(
                 image: tile(for: site, icons: icons),
                 imageShape: .roundedRectangle,
-                title: site.name,
+                title: site.carDisplayName,
                 accessorySymbolName: nil
             )
         }
@@ -187,11 +198,11 @@ final class CarPlayBrowserTab: NSObject, CPSearchTemplateDelegate {
 
     /// CarPlay shows a see-through tile behind any clear pixel, so every icon goes in solid.
     private func tile(for site: BrowserSite, icons: SiteIconStore) -> UIImage {
-        guard let icon = icons.icon(for: site) else { return placeholderTile }
+        guard let icon = icons.icon(for: site) else { return SiteIconTile.carPlaceholder(for: site.name) }
         if let made = siteTiles[site.name], made.icon === icon {
             return made.tile
         }
-        let tile = SiteIconTile.make(from: icon) ?? icon
+        let tile = SiteIconTile.carTile(from: icon)
         siteTiles[site.name] = (icon, tile)
         return tile
     }
