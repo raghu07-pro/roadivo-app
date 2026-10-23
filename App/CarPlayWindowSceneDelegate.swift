@@ -13,7 +13,6 @@ final class CarPlayWindowSceneDelegate: UIResponder, CPTemplateApplicationSceneD
     private let artwork = CarPlayArtwork()
     private var carBrowser: CarBrowserController?
     private var browserControls: CarBrowserControls?
-    private var browserTimer: Timer?
     private var lists: Lists?
     private var isWatching = false
     /// What the window and buttons last showed, so the buttons are only rebuilt when that changes.
@@ -103,8 +102,6 @@ final class CarPlayWindowSceneDelegate: UIResponder, CPTemplateApplicationSceneD
             CarPlayTrace.write("window disconnect")
             AppEnvironment.current?.parking.stop()
             carBrowser?.close()
-            browserTimer?.invalidate()
-            browserTimer = nil
             browserControls = nil
             screen.stopUpdating()
             AppEnvironment.current?.carConnection.isCarPlayConnected = false
@@ -178,14 +175,7 @@ final class CarPlayWindowSceneDelegate: UIResponder, CPTemplateApplicationSceneD
         screen.show(state, playback: playback)
         screen.showBrowser(carBrowser?.isOpen == true)
         if let browser = carBrowser, browser.isOpen {
-            let parking = environment.parking
-            browser.setAllowed(CarBrowserAccess.isAllowed(
-                isPro: environment.proAccess.isPro,
-                isParked: parking.isParked,
-                isLocationDenied: parking.isLocationDenied,
-                sample: parking.lastSample,
-                sampledAt: parking.lastSampleAt
-            ))
+            browser.setAllowed(CarBrowserAccess.isAllowed(isPro: environment.proAccess.isPro))
             browserControls?.refresh()
             shownState = nil
             return
@@ -400,21 +390,12 @@ private extension CarPlayWindowSceneDelegate {
         browserControls?.reset()
         refresh()
         backToWindow()
-        if browserTimer == nil {
-            let timer = Timer(timeInterval: 1, repeats: true) { [weak self] _ in
-                MainActor.assumeIsolated { self?.refresh() }
-            }
-            RunLoop.main.add(timer, forMode: .common)
-            browserTimer = timer
-        }
     }
 
     @MainActor
     func closeBrowser() {
         carBrowser?.close()
         browserControls?.reset()
-        browserTimer?.invalidate()
-        browserTimer = nil
         shownState = nil
         refresh()
     }
