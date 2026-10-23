@@ -118,9 +118,9 @@ final class CarBrowserControls {
             let more = CPListItem(text: String(appLocalized: "More links"), detailText: nil)
             more.handler = { [weak self] _, completion in
                 MainActor.assumeIsolated {
-                    guard let self, browser.isAllowed else { return completion() }
-                    let next = makeLinks(links, startingAt: end)
-                    linkList?.updateSections(next.sections)
+                    guard let self, self.browser.isAllowed else { return completion() }
+                    let next = self.makeLinks(links, startingAt: end)
+                    self.linkList?.updateSections(next.sections)
                     completion()
                 }
             }
