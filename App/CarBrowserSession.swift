@@ -7,6 +7,7 @@ final class CarBrowserSession {
     final class Tab: Identifiable {
         let id = UUID()
         let page: WebPageController
+        let input: CarBrowserInputBridge
         var state = WebPageController.State()
         var pendingURL: URL?
         var zoom: CGFloat = 1
@@ -15,6 +16,7 @@ final class CarBrowserSession {
             page = WebPageController(
                 websiteDataStore: websiteDataStore, allowsExternalLinks: false, prefersMobileContent: true
             )
+            input = CarBrowserInputBridge(webView: page.webView)
         }
 
         var title: String {
@@ -98,6 +100,7 @@ final class CarBrowserSession {
     }
 
     private func suspend(_ tab: Tab) {
+        tab.input.isEnabled = false
         tab.page.pauseMedia()
         tab.page.webView.setAllMediaPlaybackSuspended(true, completionHandler: nil)
     }

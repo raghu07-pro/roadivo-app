@@ -48,6 +48,9 @@ tabs: **Home · Favorites · Discover · Settings**.
   Reload, Forward, up to six car-only tabs, session-only saved pages, page zoom and auto-hiding controls.
   YouTube has native search through `CarPlayBrowserTab.showSearch(on:)`; page links stay in native template lists.
   Direct webpage taps are unsupported by CPMapTemplate's base view; these actions do not establish general form input.
+  The Debug input prototype installs `CarBrowserInputBridge` in car tabs only: trusted webpage field clicks open
+  `CarBrowserFieldEditor`, then update the original field/frame through an isolated script world. More → Input test
+  exposes a local form and input counters. This does not provide a new CarPlay tap-delivery API; require device proof.
 
 - **Which CarPlay app the car shows** is `ROADIVO_CARPLAY_APP` in `Config/Shared.xcconfig` (one per app; DECISIONS 152):
   `window` (now), `media` or `map`. `CarPlayAvailability.app` reads it; `AppDelegate` and the Info.plist manifest pick

@@ -65,6 +65,61 @@ CarTV reference images show a separate text-entry screen and a YouTube microphon
 its implementation. General website interaction, authenticated services, protected video and microphone permissions
 remain independent device-validation tasks. Do not claim that every shortcut or arbitrary website is fully functional.
 
+## Debug field-input experiment
+
+The prototype now includes `CarBrowserInputBridge`, `CarBrowserInputScript` and `CarBrowserFieldEditor`.
+If a genuine webpage click reaches an eligible input or textarea, a native CPSearchTemplate editor opens. Its result
+is sent to the exact original field in the original frame, using WebKit arguments rather than interpolated code.
+Search-like fields can submit their standard HTML form; other fields receive text plus input/change events only.
+The keyboard's Search button and the result row both complete the edit. The editor starts empty; it does not preload
+or read the field's previous text. The origin and field label appear in its action row.
+
+The script runs in a separate WKContentWorld in each frame. Website-generated clicks cannot open the editor.
+Password, payment-autocomplete, one-time-code, disabled and readonly fields are excluded. Text is capped at 4096 UTF-16
+units. Navigation, tab switches, Pro loss, Close and disconnect cancel pending edits. Field text, URLs and labels are
+not written to diagnostics or logs. The handler and gesture probe are installed only in DEBUG car-browser tabs.
+
+This deliberately does not replace CPMapTemplate or bypass its event overlay. It cannot open an editor when CarPlay
+does not deliver the webpage click. It is a test of the downstream path and a way to measure the remaining boundary,
+not evidence that CarTV-style touch interaction has been achieved.
+
+### Run the decisive CarPlay check
+
+1. Pull this branch, run `tuist generate --no-open`, then run a signed Debug build.
+2. Open Browser and any website, then More → Input test → Open test page.
+3. Tap the large search field on that local page. If an editor opens, enter `music & తెలుగు`, then press Search.
+   Pass: the local page displays that exact text below the form.
+4. Reopen More → Input test to read the counters. They are snapshots taken when the menu opens, not live counters.
+
+| Counter result | Interpretation |
+| --- | --- |
+| Ready frames is zero | The script has not initialized; investigate page loading or bridge installation first. |
+| Ready frames is positive, taps and editor requests stay zero | No webpage input was observed; this matches the documented CarPlay overlay limitation. |
+| Webpage taps increase, editor requests do not | The click did not target an eligible field, or no click followed the pointer event. |
+| Editor requests increase, editor does not open | Investigate template presentation; the trace records only whether CarPlay accepted it. |
+| Editor opens and Applied edits increases | The field-update path returned success; verify the displayed submitted result too. |
+
+Only after that pass should the same sequence be tried on YouTube and other sites. Custom JavaScript widgets,
+contenteditable editors, login flows, media gestures, voice input and nonstandard forms are not covered. An Applied
+edits count reports the bridge result, not server acceptance or compatibility with every website.
+
+### Browser-layer integration checks
+
+`Tests/BrowserInput/bridge.spec.cjs` loads the production bridge script into an isolated Chromium execution world and
+uses real browser clicks. With Playwright and its Chromium browser installed, run:
+
+```bash
+node Tests/BrowserInput/bridge.spec.cjs
+```
+
+An existing Chromium binary can be supplied through `ROADIVO_CHROMIUM_PATH`. This test covers Unicode and code-like
+text, input/change events and form submission, script-generated click rejection, sensitive/readonly/disabled fields,
+stale targets, length bounds, textarea behavior, iframe targeting and document replacement. Chromium passing is not
+WebKit, Xcode or CarPlay validation.
+
+The ten Chromium integration checks passed in the coding environment. The native CarPlay editor and input counters
+have not been run in Xcode or on CarPlay hardware. Their presence is not a successful CarPlay feasibility result.
+
 ## Validation in the coding environment
 
 Linux cannot run Xcode, Tuist generation, SwiftLint, or the iOS tests here. Added Swift tests cover independent browser ownership/storage, queued-navigation cancellation, safe link selection, Debug-only Pro access, tab isolation/limits/cleanup, encoded YouTube search and rounded artwork. These tests require execution on a Mac. Swift syntax parsing, catalog validation and diff whitespace checks do not establish an Xcode build or visual/device acceptance. This prototype must remain a draft until build, input, lifecycle, and distribution feasibility are verified.

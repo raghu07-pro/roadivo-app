@@ -10,6 +10,8 @@ final class CarBrowserController: UIViewController {
     private(set) var isOpen = false
     private(set) var isAllowed = false
     var onChange: (() -> Void)?
+    var onEditField: ((CarBrowserInputBridge, CarBrowserInputBridge.Request) -> Void)?
+    var onInputReset: (() -> Void)?
     private let progress = UIProgressView(progressViewStyle: .bar)
     private let message = UILabel()
     private weak var mountedWebView: WKWebView?
@@ -44,6 +46,10 @@ final class CarBrowserController: UIViewController {
     private func mountSelectedTab() {
         mountedWebView?.removeFromSuperview()
         let tab = session.selected
+        tab.input.onEdit = { [weak self, weak tab] request in
+            guard let self, let tab, tab === self.session.selected, self.isOpen, self.isAllowed else { return }
+            self.onEditField?(tab.input, request)
+        }
         let webView = tab.page.webView
         mountedWebView = webView
         webView.accessibilityIdentifier = "car.browser.page"
@@ -64,7 +70,9 @@ final class CarBrowserController: UIViewController {
             self.onChange?()
         }
         page.onNavigationStarted = { [weak self, weak tab] in
+            tab?.input.invalidate()
             guard let self, let tab, tab === self.session.selected else { return }
+            self.onInputReset?()
             self.navigationID = UUID()
             self.message.isHidden = self.isAllowed
         }
@@ -81,6 +89,8 @@ final class CarBrowserController: UIViewController {
         guard WebAddress.isWeb(url) else { return }
         loadViewIfNeeded()
         isOpen = true
+        session.selected.input.invalidate()
+        onInputReset?()
         session.selected.pendingURL = url
         navigationID = UUID()
         if isAllowed { loadPendingPage() }
@@ -90,6 +100,8 @@ final class CarBrowserController: UIViewController {
         loadViewIfNeeded()
         let changed = allowed != isAllowed
         isAllowed = allowed
+        session.selected.input.isEnabled = allowed && isOpen
+        if !allowed { onInputReset?() }
         page.webView.isUserInteractionEnabled = allowed
         page.webView.isHidden = !allowed
         progress.isHidden = !allowed || !state.isLoading
@@ -112,6 +124,7 @@ final class CarBrowserController: UIViewController {
     }
 
     func close() {
+        onInputReset?()
         isOpen = false
         navigationID = UUID()
         session.reset()
@@ -161,6 +174,7 @@ final class CarBrowserController: UIViewController {
     }
 
     private func activateSelectedTab() {
+        onInputReset?()
         navigationID = UUID()
         mountSelectedTab()
         page.webView.setAllMediaPlaybackSuspended(!isAllowed, completionHandler: nil)
@@ -174,6 +188,18 @@ final class CarBrowserController: UIViewController {
         session.selected.zoom = min(1.75, max(0.75, zoom))
         page.webView.pageZoom = session.selected.zoom
         onChange?()
+    }
+
+    func openInputTest() {
+        #if DEBUG
+            guard isAllowed else { return }
+            onInputReset?()
+            navigationID = UUID()
+            session.selected.pendingURL = nil
+            session.selected.input.resetDiagnostics()
+            message.isHidden = true
+            page.webView.loadHTMLString(CarBrowserInputFixture.html, baseURL: nil)
+        #endif
     }
 
     func scrollPage(by fraction: CGFloat) {

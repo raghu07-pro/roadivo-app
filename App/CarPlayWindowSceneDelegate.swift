@@ -13,6 +13,7 @@ final class CarPlayWindowSceneDelegate: UIResponder, CPTemplateApplicationSceneD
     private let artwork = CarPlayArtwork()
     private var carBrowser: CarBrowserController?
     private var browserControls: CarBrowserControls?
+    private var fieldEditor: CarBrowserFieldEditor?
     private var lists: Lists?
     private var isWatching = false
     /// What the window and buttons last showed, so the buttons are only rebuilt when that changes.
@@ -45,6 +46,12 @@ final class CarPlayWindowSceneDelegate: UIResponder, CPTemplateApplicationSceneD
             carLimitsChanged(session.limitedUserInterfaces)
             lists = makeLists(interfaceController)
             if let carBrowser {
+                let editor = CarBrowserFieldEditor(interface: interfaceController)
+                fieldEditor = editor
+                carBrowser.onEditField = { [weak editor] bridge, request in
+                    editor?.present(bridge: bridge, request: request)
+                }
+                carBrowser.onInputReset = { [weak editor] in editor?.cancel() }
                 let controls = CarBrowserControls(browser: carBrowser, root: root, interface: interfaceController)
                 controls.onSearch = { [weak self] in self?.lists?.browser.showSearch() }
                 controls.onSiteSearch = { [weak self] url in self?.lists?.browser.showSearch(on: url) }
@@ -104,6 +111,8 @@ final class CarPlayWindowSceneDelegate: UIResponder, CPTemplateApplicationSceneD
             CarPlayTrace.write("window disconnect")
             AppEnvironment.current?.parking.stop()
             carBrowser?.close()
+            fieldEditor?.cancel()
+            fieldEditor = nil
             browserControls = nil
             screen.stopUpdating()
             AppEnvironment.current?.carConnection.isCarPlayConnected = false

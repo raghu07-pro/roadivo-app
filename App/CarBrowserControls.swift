@@ -149,7 +149,29 @@ final class CarBrowserControls {
                 self?.onSiteSearch?(url)
             }, at: 1)
         }
+        #if DEBUG
+            rows.append(row(String(appLocalized: "Input test"), symbol: "hand.tap") { [weak self] in
+                self?.showInputTest()
+            })
+        #endif
         push(String(appLocalized: "Browser"), rows: rows)
+    }
+
+    private func showInputTest() {
+        let counts = browser.session.selected.input.diagnostics
+        let rows = [
+            row(String(appLocalized: "Open test page"), symbol: "hand.tap") { [weak self] in
+                self?.browser.openInputTest()
+                self?.returnToPage()
+            },
+            row(String(appLocalized: "Native taps"), symbol: "hand.tap", detail: String(counts.nativeTaps)) {},
+            row(String(appLocalized: "Ready frames"), symbol: "doc", detail: String(counts.ready)) {},
+            row(String(appLocalized: "Webpage taps"), symbol: "cursorarrow.click",
+                detail: String(counts.webpageTaps)) {},
+            row(String(appLocalized: "Editor requests"), symbol: "keyboard", detail: String(counts.editors)) {},
+            row(String(appLocalized: "Applied edits"), symbol: "checkmark", detail: String(counts.applied)) {}
+        ]
+        push(String(appLocalized: "Input test"), rows: rows)
     }
 
     private func showTabs() {
