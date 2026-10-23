@@ -22,8 +22,10 @@ final class WebPageController: NSObject {
     var onVideo: ((URL) -> Void)?
     /// The page started playing anything, so Roadivo's own playback can make way.
     var onMediaStarted: (() -> Void)?
+    var onLoadError: (() -> Void)?
 
     private var observations: [NSKeyValueObservation] = []
+    private let allowsExternalLinks: Bool
     private static let messageName = "roadivoMedia"
 
     /// Reports every `<video>` or `<audio>` that starts, with the video's address when it has one.
@@ -35,8 +37,15 @@ final class WebPageController: NSObject {
     }, true);
     """
 
-    override init() {
+    init(
+        websiteDataStore: WKWebsiteDataStore = .default(),
+        allowsExternalLinks: Bool = true,
+        prefersMobileContent: Bool = false
+    ) {
+        self.allowsExternalLinks = allowsExternalLinks
         let configuration = WKWebViewConfiguration()
+        configuration.websiteDataStore = websiteDataStore
+        configuration.defaultWebpagePreferences.preferredContentMode = prefersMobileContent ? .mobile : .recommended
         configuration.allowsInlineMediaPlayback = true
         configuration.allowsAirPlayForMediaPlayback = true
         configuration.allowsPictureInPictureMediaPlayback = true
@@ -123,7 +132,7 @@ extension WebPageController: WKNavigationDelegate {
         guard let url = navigationAction.request.url, let scheme = url.scheme?.lowercased() else { return .allow }
         let isTap = navigationAction.navigationType == .linkActivated
         if scheme == "mailto" || scheme == "tel" {
-            if isTap {
+            if isTap, allowsExternalLinks {
                 UIApplication.shared.open(url, options: [:], completionHandler: nil)
             }
             return .cancel
@@ -152,6 +161,18 @@ extension WebPageController: WKNavigationDelegate {
 
     func webView(_ webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation?) {
         onNavigationStarted?()
+    }
+
+    func webView(_ webView: WKWebView, didFail navigation: WKNavigation?, withError error: Error) {
+        if (error as NSError).code != NSURLErrorCancelled {
+            onLoadError?()
+        }
+    }
+
+    func webView(_ webView: WKWebView, didFailProvisionalNavigation navigation: WKNavigation?, withError error: Error) {
+        if (error as NSError).code != NSURLErrorCancelled {
+            onLoadError?()
+        }
     }
 
     /// iOS ended the page's process to free memory: load it again rather than show a blank page.

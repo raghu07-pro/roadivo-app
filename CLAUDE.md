@@ -38,6 +38,13 @@ tabs: **Home · Favorites · Discover · Settings**.
 
 ## Discover and the car
 
+- **Independent car browser prototype** (owner, 2026-10-23): Debug window builds with `ROADIVO_CAR_BROWSER = YES`
+  open sites in `CarBrowserController`, never in the phone browser. It reuses `WebPageController` with isolated,
+  nonpersistent website storage and mobile content preferences. `CarBrowserControls` provides template search,
+  navigation, scrolling and ordinary-link selection. It requires fresh stationary location evidence and is
+  hard-disabled in Release. See `Docs/CarBrowserPrototype.md` for limitations and the required Mac/device checks.
+  General webpage taps/forms and distribution approval are unverified; do not describe this as a complete browser.
+
 - **Which CarPlay app the car shows** is `ROADIVO_CARPLAY_APP` in `Config/Shared.xcconfig` (one per app; DECISIONS 152):
   `window` (now), `media` or `map`. `CarPlayAvailability.app` reads it; `AppDelegate` and the Info.plist manifest pick
   the scene delegate, and the xcconfig picks the entitlements.

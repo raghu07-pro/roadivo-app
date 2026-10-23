@@ -14,6 +14,32 @@ final class CarPlayWindowController: UIViewController {
     private var scrub: CarScrub?
     /// Refreshes the bar while the video shows: pushed, as observed changes didn't redraw it on the car's screen.
     private var ticker: Timer?
+    private var browser: CarBrowserController?
+
+    func installBrowser(_ browser: CarBrowserController) {
+        loadViewIfNeeded()
+        self.browser = browser
+        addChild(browser)
+        browser.view.translatesAutoresizingMaskIntoConstraints = false
+        browser.view.isHidden = true
+        view.addSubview(browser.view)
+        NSLayoutConstraint.activate([
+            browser.view.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            browser.view.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            browser.view.topAnchor.constraint(equalTo: view.topAnchor),
+            browser.view.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+        ])
+        browser.didMove(toParent: self)
+    }
+
+    func showBrowser(_ isShown: Bool) {
+        browser?.view.isHidden = !isShown
+        if isShown {
+            video.player = nil
+            stopTicking()
+            scrub = nil
+        }
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()

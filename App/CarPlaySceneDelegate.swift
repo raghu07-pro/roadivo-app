@@ -117,9 +117,9 @@ final class CarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegat
         library.emptyViewTitleVariants = [String(appLocalized: "Add a source on your iPhone")]
         // Audio apps get four tabs; a car that allows fewer goes without the Browser.
         let browser = CPTabBarTemplate.maximumTabCount > 3
-            ? CarPlayBrowserTab(interfaceController: interfaceController) { [weak self] item in
+            ? CarPlayBrowserTab(interfaceController: interfaceController, markAsVideo: { [weak self] item in
                 self?.playsAsVideo(item, times: (elapsed: 0, duration: 0)) ?? false
-            }
+            })
             : nil
         tabs = Tabs(favorites: favorites, recent: recent, library: library, browser: browser)
         trace("tab bar: \(browser == nil ? 3 : 4) tabs")
