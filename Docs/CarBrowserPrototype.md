@@ -25,7 +25,7 @@ Use an installed simulator name. For actual CarPlay testing use a signed Debug b
 - Top buttons: Back, Forward, Search, Close. Empty search offers the site shortcuts again.
 - Side buttons: scroll up, scroll down, and links. Links lists ordinary HTTP/HTTPS anchors from the current document, plus Reload and More links when necessary. A link opens the full destination in the same car browser.
 - Map pans scroll the document instead of seeking the video while the browser is open.
-- The car browser requires Pro, parked status, Location permission, and a still reading received within ten seconds. A one-second watchdog blocks the page and suspends its media on missing, unknown, moving, denied, or stale readings. The Debug -car-parked switch alone does not bypass this requirement.
+- The Debug car browser requires Pro but does not depend on parked status or Location readings. It stays available with missing, unknown, moving, denied, or stale readings, including in the CarPlay simulator. The browser remains hard-disabled outside DEBUG; native video parking rules are unchanged.
 - Close and disconnect stop loading, suspend media, and drop the document. Starting a library video closes the car browser. Opening the car browser stops only native playback whose origin is car.
 - Car browser telephone/mail links never launch an app on the phone.
 
@@ -34,11 +34,11 @@ Use an installed simulator name. For actual CarPlay testing use a signed Debug b
 1. Open an article from a typed URL and from a web search. Confirm the full document renders with mobile content preferences, including content below the fold. Layout can differ with display dimensions.
 2. Follow links using the native link list; test Back, Forward, Reload, pagination, and map-pan/arrow scrolling on touchscreen and rotary-only cars.
 3. Open a different URL on the phone. Confirm neither browser changes the other's page or history. Sign in to a test site and verify sessions are isolated.
-4. Try unknown location, movement, permission denial, old readings, and a silent location stream. Confirm the page blocks and media suspends. Restore fresh stationary readings and verify recovery.
+4. In the simulator or a stationary test setup, try unknown location, permission denial, old readings, and a silent location stream. Confirm the Debug browser stays available. Verify Pro loss still blocks the page and suspends its media.
 5. Test page failures, redirects, target=_blank links, a renderer process termination, reconnect, phone lock/unlock, and Pro access changes.
 6. Test direct taps, HTML buttons, forms, embedded frames, media, and site logins separately. These are NOT established by adding a WKWebView. CarPlay normally forwards map gestures rather than general-purpose web input. The template link list does not supply arbitrary form entry, iframe navigation, or trusted DOM clicks. Protected media and downloads are not promised.
 7. Archive Release and verify the experimental browser cannot be enabled by plist settings or launch arguments.
 
 ## Validation in the coding environment
 
-Linux cannot run Xcode, Tuist generation, SwiftLint, or the iOS tests here. Added Swift tests cover independent browser ownership/storage, queued-navigation cancellation, safe link selection, and the fresh-stationary access rule. These tests require execution on a Mac. This prototype must remain a draft until build, input, lifecycle, and distribution feasibility are verified.
+Linux cannot run Xcode, Tuist generation, SwiftLint, or the iOS tests here. Added Swift tests cover independent browser ownership/storage, queued-navigation cancellation, safe link selection, and Debug-only Pro access. These tests require execution on a Mac. This prototype must remain a draft until build, input, lifecycle, and distribution feasibility are verified.
