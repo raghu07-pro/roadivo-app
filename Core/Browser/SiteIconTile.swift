@@ -7,12 +7,36 @@ enum SiteIconTile {
     /// In pixels; CarPlay scales the tile to the car's grid.
     static let side: CGFloat = 180
 
-    /// Edge to edge: CarPlay rounds the corners itself, and any clear margin showed as a grey frame round the icon
-    /// (owner, 2026-10-23).
+    /// As on the iPhone's start page (owner, 2026-10-23): the site's own icon inset on Roadivo's surface colour, edge
+    /// to edge so CarPlay adds no see-through tile of its own. Light and dark, for the car's day and night looks.
     static func carTile(from image: UIImage) -> UIImage {
-        carArtwork { _ in
-            (make(from: image) ?? image).draw(in: CGRect(x: 0, y: 0, width: side, height: side))
+        let asset = UIImageAsset()
+        for style in [UIUserInterfaceStyle.light, .dark] {
+            let traits = UITraitCollection(userInterfaceStyle: style)
+            let surface = UIColor(named: "SurfaceBackground", in: .main, compatibleWith: traits)?
+                .resolvedColor(with: traits) ?? (style == .dark ? .darkGray : .white)
+            let tile = carArtwork { context in
+                surface.setFill()
+                context.fill(CGRect(x: 0, y: 0, width: side, height: side))
+                // The phone's 10-point inset on its 60-point tile.
+                let inset = side / 6
+                context.cgContext.interpolationQuality = .high
+                image.draw(in: fit(
+                    image.size,
+                    in: CGRect(x: 0, y: 0, width: side, height: side).insetBy(dx: inset, dy: inset)
+                ))
+            }
+            asset.register(tile, with: traits)
         }
+        return asset.image(with: UITraitCollection(userInterfaceStyle: .light))
+    }
+
+    private static func fit(_ size: CGSize, in rect: CGRect) -> CGRect {
+        guard size.width > 0, size.height > 0 else { return rect }
+        let ratio = min(rect.width / size.width, rect.height / size.height)
+        let width = size.width * ratio
+        let height = size.height * ratio
+        return CGRect(x: rect.midX - width / 2, y: rect.midY - height / 2, width: width, height: height)
     }
 
     static func carPlaceholder(for name: String) -> UIImage {

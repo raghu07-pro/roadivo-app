@@ -44,7 +44,7 @@ tabs: **Home · Favorites · Discover · Settings**.
   navigation, scrolling and ordinary-link selection. It requires Pro but no parking or Location evidence in Debug, per the owner's
   request (2026-10-23), and is hard-disabled in Release. Native video parking rules are unchanged. See `Docs/CarBrowserPrototype.md` for limitations and the required Mac/device checks.
   General webpage taps/forms and distribution approval are unverified; do not describe this as a complete browser.
-  Browser shortcuts fill one row the car wraps across its width, edge-to-edge artwork (CarPlay rounds it) and 256 px icon requests. The More menu adds Start Page,
+  Browser shortcuts fill one row the car wraps across its width, each site's icon inset on Roadivo's surface colour as on the iPhone (light and dark) and 256 px icon requests. The More menu adds Start Page,
   Reload, Forward, up to six car-only tabs, session-only saved pages, page zoom and auto-hiding controls.
   YouTube has native search through `CarPlayBrowserTab.showSearch(on:)`; page links stay in native template lists.
   Direct webpage taps are unsupported by CPMapTemplate's base view; these actions do not establish general form input.
