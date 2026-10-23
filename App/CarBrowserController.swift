@@ -79,7 +79,7 @@ final class CarBrowserController: UIViewController {
         page.webView.isHidden = !allowed
         progress.isHidden = !allowed || !state.isLoading
         if !allowed {
-            message.text = String(appLocalized: "Browsing is available while parked with a current location reading.")
+            message.text = String(appLocalized: "Buy a plan")
             message.isHidden = false
         } else if changed {
             message.isHidden = true
@@ -185,12 +185,11 @@ struct CarBrowserLink: Equatable {
 }
 
 enum CarBrowserAccess {
-    static func isAllowed(
-        isPro: Bool, isParked: Bool, isLocationDenied: Bool,
-        sample: MotionSample?, sampledAt: Date?, now: Date = .now
-    ) -> Bool {
-        guard isPro, isParked, !isLocationDenied, sample == .still, let sampledAt else { return false }
-        let age = now.timeIntervalSince(sampledAt)
-        return age >= 0 && age <= 10
+    static func isAllowed(isPro: Bool) -> Bool {
+        #if DEBUG
+            return isPro
+        #else
+            return false
+        #endif
     }
 }
