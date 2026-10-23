@@ -7,7 +7,6 @@ struct PlayerView: View {
     let onMinimize: () -> Void
     let onClose: () -> Void
     let onFavoriteChanged: () -> Void
-    let onCarMode: () -> Void
 
     @Environment(\.verticalSizeClass) private var verticalSizeClass
     @Environment(\.accessibilityVoiceOverEnabled) private var voiceOver
@@ -117,7 +116,6 @@ struct PlayerView: View {
                     onClose: onClose,
                     onRotationLock: { orientation.toggleLock(isLandscape: isLandscape) },
                     onFullScreen: { orientation.rotate(to: isLandscape ? .portrait : .landscape) },
-                    onCarMode: onCarMode,
                     onInteraction: showControls
                 )
                 .transition(.opacity)

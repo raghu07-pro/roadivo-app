@@ -308,8 +308,7 @@ extension ScreenSnapshotTests {
             viewModel: PlayerViewModel(playback: playback, repository: library.repository),
             onMinimize: {},
             onClose: {},
-            onFavoriteChanged: {},
-            onCarMode: {}
+            onFavoriteChanged: {}
         )
         .environment(\.dynamicTypeSize, .accessibility3)
         let upright = UITraitCollection(traitsFrom: [

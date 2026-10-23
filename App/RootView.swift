@@ -72,8 +72,6 @@ private struct MainTabView: View {
     @State private var updatePrompt: UpdatePromptModel
     /// Set by a purchase or restore, so Home opens once the paywall has closed.
     @State private var goesHomeAfterPaywall = false
-    /// Set by a purchase from the player's Car Mode button, so Car Mode opens once the paywall closes.
-    @State private var startsCarModeAfterPaywall = false
     /// The mini player's measured height, which every screen keeps clear.
     @State private var miniPlayerHeight: CGFloat = 0
     /// The saved car or display last acted on, so a route that drops and comes back (a call, CarPlay
@@ -113,6 +111,11 @@ private struct MainTabView: View {
         environment.directions
     }
 
+    /// The route card over the other tabs, only while Directions is shown (DECISIONS 149).
+    private var routeCard: DirectionsViewModel? {
+        DirectionsAvailability.isEnabled ? directions : nil
+    }
+
     private var isPro: Bool {
         environment.proAccess.isPro
     }
@@ -135,7 +138,7 @@ private struct MainTabView: View {
                 playback: playback,
                 isPlayerOpen: router.playerSurface != nil,
                 height: $miniPlayerHeight,
-                directions: directions,
+                directions: routeCard,
                 onOpenDirections: { router.selectedTab = .directions },
                 onExpand: expandPlayer
             )
@@ -156,7 +159,7 @@ private struct MainTabView: View {
                 playback: playback,
                 isPlayerOpen: router.playerSurface != nil,
                 height: $miniPlayerHeight,
-                directions: directions,
+                directions: routeCard,
                 onOpenDirections: { router.selectedTab = .directions },
                 onExpand: expandPlayer
             )
@@ -173,22 +176,24 @@ private struct MainTabView: View {
                 playback: playback,
                 isPlayerOpen: router.playerSurface != nil,
                 height: $miniPlayerHeight,
-                directions: directions,
+                directions: routeCard,
                 onOpenDirections: { router.selectedTab = .directions },
                 onExpand: expandPlayer
             )
             .tabItem { Label("Discover", systemImage: "sparkles.tv") }
             .tag(AppRouter.Tab.car)
 
-            DirectionsView(viewModel: directions)
-                .miniPlayer(
-                    playback: playback,
-                    isPlayerOpen: router.playerSurface != nil,
-                    height: $miniPlayerHeight,
-                    onExpand: expandPlayer
-                )
-                .tabItem { Label("Directions", systemImage: "map") }
-                .tag(AppRouter.Tab.directions)
+            if DirectionsAvailability.isEnabled {
+                DirectionsView(viewModel: directions)
+                    .miniPlayer(
+                        playback: playback,
+                        isPlayerOpen: router.playerSurface != nil,
+                        height: $miniPlayerHeight,
+                        onExpand: expandPlayer
+                    )
+                    .tabItem { Label("Directions", systemImage: "map") }
+                    .tag(AppRouter.Tab.directions)
+            }
 
             SettingsView(
                 isPro: isPro,
@@ -213,7 +218,7 @@ private struct MainTabView: View {
                 playback: playback,
                 isPlayerOpen: router.playerSurface != nil,
                 height: $miniPlayerHeight,
-                directions: directions,
+                directions: routeCard,
                 onOpenDirections: { router.selectedTab = .directions },
                 onExpand: expandPlayer
             )
@@ -286,6 +291,12 @@ private struct MainTabView: View {
                 }
             )
         }
+        // A video picked on the car plays there only, so the iPhone's player steps aside (DECISIONS 155).
+        .onChange(of: playback.origin) { _, origin in
+            if origin == .car {
+                router.playerSurface = nil
+            }
+        }
         .fullScreenCover(item: $router.playerSurface) { surface in
             switch surface {
             case .player:
@@ -296,20 +307,8 @@ private struct MainTabView: View {
                         router.playerSurface = nil
                         playback.stop()
                     },
-                    onFavoriteChanged: router.libraryDidChange,
-                    onCarMode: startCarModeFromPlayer
+                    onFavoriteChanged: router.libraryDidChange
                 )
-                // Over the player, so a free user stays where they were; buying goes on into Car Mode.
-                .sheet(item: $router.playerPaywall, onDismiss: carModeAfterPlayerPaywall) { reason in
-                    PaywallView(
-                        viewModel: PaywallViewModel(access: environment.proAccess, reason: reason),
-                        onClose: { router.playerPaywall = nil },
-                        onUnlocked: {
-                            startsCarModeAfterPaywall = true
-                            router.playerPaywall = nil
-                        }
-                    )
-                }
             case .carMode:
                 CarModeView(playback: playback, isDriveView: Bindable(environment.preferences).prefersDriveView) {
                     router.playerSurface = .player
@@ -335,21 +334,6 @@ private struct MainTabView: View {
     private func playFromBeginning(_ item: MediaItem, queue: [MediaItem]) {
         router.playerSurface = .player
         playback.play(item, queue: queue, startingOver: true)
-    }
-
-    /// The player's Car Mode button: Pro goes straight in, a free user sees the plans first.
-    private func startCarModeFromPlayer() {
-        if isPro {
-            router.playerSurface = .carMode
-        } else {
-            router.playerPaywall = .carMode
-        }
-    }
-
-    private func carModeAfterPlayerPaywall() {
-        guard startsCarModeAfterPaywall else { return }
-        startsCarModeAfterPaywall = false
-        router.playerSurface = .carMode
     }
 
     /// After buying or restoring, the paywall closes onto Home (the owner's flow).
@@ -399,8 +383,7 @@ extension MainTabView {
         guard let plan = ReceiverConnectPlan.make(
             profile: environment.displayProfiles.savedProfile(for: receiver),
             handledProfileID: handledProfileID,
-            canPresent: scenePhase == .active && router.paywall == nil && router.playerPaywall == nil
-                && !router.isAddingSource,
+            canPresent: scenePhase == .active && router.paywall == nil && !router.isAddingSource,
             isPro: isPro,
             isPlaying: playback.isActive
         ) else { return }
@@ -438,7 +421,8 @@ private extension View {
         onOpenDirections: @escaping () -> Void = {},
         onExpand: @escaping () -> Void
     ) -> some View {
-        let isShown = playback.isActive && !isPlayerOpen
+        // Only what was picked on the iPhone; a video picked on the car stays on the car (DECISIONS 155).
+        let isShown = playback.isActive && playback.origin == .phone && !isPlayerOpen
         let barSpace = isShown ? height.wrappedValue + Spacing.xs * 2 : 0
         return overlay(alignment: .bottom) {
             if isShown {

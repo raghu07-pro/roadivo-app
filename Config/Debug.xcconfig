@@ -4,3 +4,8 @@
 
 SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG
 ENABLE_TESTABILITY = YES
+
+// CarPlay Video on an iPhone run from Xcode, for the CarPlay Simulator's video vehicle (DECISIONS 151). Simulator
+// builds keep Audio, so Xcode's CarPlay window still shows the tabs.
+ROADIVO_CARPLAY_VIDEO = YES
+ROADIVO_CARPLAY_VIDEO[sdk=iphonesimulator*] = NO

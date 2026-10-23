@@ -18,11 +18,13 @@ final class LibraryFlowUITests: XCTestCase {
             "player.close",
             "player.playPause",
             "player.rotationLock",
-            "player.fullScreen",
-            "player.carMode"
+            "player.fullScreen"
         ] {
             XCTAssertTrue(app.buttons[control].exists, control)
         }
+        // Watching in the car starts from the car's screen, so the player has no car or AirPlay button (DECISIONS 155).
+        XCTAssertFalse(app.buttons["player.carMode"].exists)
+        XCTAssertFalse(app.descendants(matching: .any)["player.airplay"].exists)
         XCTAssertTrue(app.buttons["upNext.Football Tonight"].exists)
         snapshot("13-Player", app: app)
         try auditIgnoringBottomEdge(app, for: [.dynamicType, .sufficientElementDescription, .hitRegion])
@@ -30,7 +32,7 @@ final class LibraryFlowUITests: XCTestCase {
         revealPlayerControls(app)
         app.buttons["player.minimize"].tap()
         app.buttons["miniPlayer.close"].tap()
-        app.tabBars.buttons.element(boundBy: 4).tap()
+        app.settingsTab.tap()
         app.buttons["settings.theme"].tap()
         app.buttons["theme.appearance.dark"].tap()
         app.tabBars.buttons.element(boundBy: 0).tap()

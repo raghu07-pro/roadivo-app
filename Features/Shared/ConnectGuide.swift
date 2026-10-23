@@ -39,8 +39,15 @@ struct ConnectGuide {
             Self.plugIn,
             "Find Roadivo on the car's screen. Not there? On your iPhone, open Settings › General › CarPlay, choose your car, tap Customize and add Roadivo.",
             "Open Roadivo on the car's screen and pick from Favorites, Recent or Library.",
-            "Video plays on the car's screen while parked, in cars that support CarPlay video. While driving, you hear the sound only."
+            Self.carVideo
         ])
+    }
+
+    /// Roadivo's own window shows video in any car while parked; the media tabs only where the car offers video.
+    private static var carVideo: LocalizedStringResource {
+        CarPlayAvailability.app == .window
+            ? "Video plays on the car's screen while you're parked. While driving, you hear the sound only."
+            : "Video plays on the car's screen while parked, in cars that support CarPlay video. While driving, you hear the sound only."
     }
 
     private var connect: Section {

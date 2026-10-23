@@ -19,6 +19,7 @@ final class PlaybackController {
 
     let player = AVPlayer()
     private(set) var current: MediaItem?
+    private(set) var origin: PlaybackOrigin = .phone
     private(set) var queue: [MediaItem] = []
     private(set) var status: Status = .idle
     /// Seconds; `nil` for a live stream with no fixed length.
@@ -112,8 +113,9 @@ final class PlaybackController {
     // MARK: Intents
 
     /// Plays `item` from its saved place, or from the beginning when `startingOver`; `queue` is what
-    /// next/previous step through (usually the item's group).
-    func play(_ item: MediaItem, queue: [MediaItem], startingOver: Bool = false) {
+    /// next/previous step through (usually the item's group). `origin` is where it was picked.
+    func play(_ item: MediaItem, queue: [MediaItem], startingOver: Bool = false, from origin: PlaybackOrigin = .phone) {
+        self.origin = origin
         cancelUpNext()
         saveProgress() // The item being left keeps its place.
         activateAudioSession()
@@ -161,7 +163,7 @@ final class PlaybackController {
         cancelUpNext() // Play at the end starts this video again, so the next one waits.
         staysPaused = false
         if case .failed = status {
-            play(current, queue: queue)
+            play(current, queue: queue, from: origin)
         } else if isOpening {
             status = .loading // It plays once the seek to the saved place lands.
             watchForStall()
@@ -186,12 +188,12 @@ final class PlaybackController {
 
     func next() {
         guard let index, index + 1 < queue.count else { return }
-        play(queue[index + 1], queue: queue)
+        play(queue[index + 1], queue: queue, from: origin)
     }
 
     func previous() {
         guard let index, index > 0 else { return }
-        play(queue[index - 1], queue: queue)
+        play(queue[index - 1], queue: queue, from: origin)
     }
 
     /// Jumps to `seconds` into a video with a fixed length (live streams can't seek).
@@ -236,6 +238,7 @@ final class PlaybackController {
         startPoint = nil
         isOpening = false
         current = nil
+        origin = .phone
         queue = []
         status = .idle
         duration = nil

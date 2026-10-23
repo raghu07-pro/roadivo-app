@@ -1,6 +1,6 @@
 import SwiftUI
 
-/// The controls drawn on the video: minimise, title, Car Mode, favourite and close along the top;
+/// The controls drawn on the video: minimise, title, favourite and close along the top;
 /// rotation lock on the left; play/pause, times, scrubber and full screen along the bottom.
 struct PlayerControls: View {
     let playback: PlaybackController
@@ -13,8 +13,6 @@ struct PlayerControls: View {
     let onClose: () -> Void
     let onRotationLock: () -> Void
     let onFullScreen: () -> Void
-    /// Car Mode, reachable without a car connected (the Car tab shows it only once connected).
-    let onCarMode: () -> Void
     /// Any touch on a control keeps the controls up a little longer.
     let onInteraction: () -> Void
 
@@ -60,11 +58,6 @@ struct PlayerControls: View {
                 .lineLimit(2)
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .accessibilityAddTraits(.isHeader)
-            // Apple's AirPlay button: the video alone, full screen, on a car display or adapter, with no mirroring.
-            RoutePickerButton()
-                .frame(width: 44, height: 44)
-                .accessibilityIdentifier("player.airplay")
-            button("car.fill", label: "Car Mode", identifier: "player.carMode", action: onCarMode)
             Button {
                 onFavorite()
                 onInteraction()

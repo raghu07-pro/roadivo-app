@@ -39,7 +39,7 @@ final class DisplayProfilesUITests: XCTestCase {
 
     func testSettingsListsThisIPhoneAndSavedProfiles() throws {
         let app = XCUIApplication.roadivo(skipOnboarding: true, carConnected: true)
-        app.tabBars.buttons.element(boundBy: 4).tap()
+        app.settingsTab.tap()
         app.buttons["settings.displayProfiles"].tap()
         let save = app.buttons["profiles.saveCurrent"]
         XCTAssertTrue(save.waitForExistence(timeout: 5))

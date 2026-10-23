@@ -42,7 +42,7 @@ extension PlaybackController {
         guard let item = upNext?.item else { return }
         cancelUpNext()
         if let target = queue.first(where: { $0.id == item.id }) {
-            play(target, queue: queue)
+            play(target, queue: queue, from: origin)
         }
     }
 

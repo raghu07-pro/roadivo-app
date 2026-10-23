@@ -4,3 +4,7 @@
 
 SWIFT_COMPILATION_MODE = wholemodule
 VALIDATE_PRODUCT = YES
+
+// Archives sign with CarPlay Audio, so Roadivo shows in every car. YES signs them with Video only, which hides it in
+// cars without CarPlay video; switch only once the Debug build shows video (DECISIONS 151).
+ROADIVO_CARPLAY_VIDEO = NO

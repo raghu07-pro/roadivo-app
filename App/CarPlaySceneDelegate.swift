@@ -1,4 +1,5 @@
 import CarPlay
+import CoreMedia
 import Observation
 import OSLog
 
@@ -216,22 +217,11 @@ final class CarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegat
     /// A playable row. From Up Next it goes back to Now Playing, which is already open beneath it.
     @MainActor
     private func row(_ media: MediaItem, queue: [MediaItem], fromNowPlaying: Bool = false) -> CPListItem {
-        let item = CPListItem(
-            text: media.title,
-            detailText: media.groupTitle,
-            image: UIImage(systemName: media.isLocalFile ? "film" : "play.tv")
-        )
-        if let picture = artwork.picture(for: media, ready: { [weak item] in item?.setImage($0) }) {
-            item.setImage(picture)
-        }
-        if let progress = media.progress {
-            item.playbackProgress = progress.fraction
-        }
-        item.isPlaying = media.id == AppEnvironment.current?.playback.current?.id
+        let item = CarPlayRows.item(for: media, artwork: artwork)
         let presentsItself = playsAsVideo(item, media)
         item.handler = { [weak self] _, completion in
             MainActor.assumeIsolated {
-                AppEnvironment.current?.playback.play(media, queue: queue)
+                AppEnvironment.current?.playback.play(media, queue: queue, from: .car)
                 guard !presentsItself, let interfaceController = self?.interfaceController else { return completion() }
                 if fromNowPlaying {
                     interfaceController.popTemplate(animated: true) { _, _ in completion() }
@@ -257,7 +247,8 @@ final class CarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegat
         logger.info("CarPlay connected. Car offers video: \(carSupportsVideo, privacy: .public)")
         trace("""
         connect, iOS \(UIDevice.current.systemVersion), Pro: \(AppEnvironment.current?.proAccess.isPro ?? false), \
-        car video: \(carSupportsVideo), tabs allowed: \(CPTabBarTemplate.maximumTabCount), \
+        signed: \(CarPlayAvailability.isVideoBuild ? "Video" : "Audio"), car video: \(carSupportsVideo), \
+        tabs allowed: \(CPTabBarTemplate.maximumTabCount), \
         rows allowed: \(CPListTemplate.maximumItemCount)
         """)
     }
@@ -276,8 +267,22 @@ final class CarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegat
 
     @MainActor
     private func playsAsVideo(_ item: CPListItem, times: (elapsed: Double, duration: Double)) -> Bool {
-        // Temporarily keep CarPlay audio-only while investigating the blank scene with Video enabled.
-        false
+        // Under Audio (Apple's iOS 27.2 guide lets it mix in video) or Video (Debug test builds); the car says when
+        // it's allowed (DECISIONS 150–151). iOS 27 only: video rows left iOS 26's CarPlay screen blank (DECISIONS 133).
+        #if compiler(>=6.3)
+            guard #available(iOS 27, *), session?.supportsVideoPlayback == true else {
+                return false
+            }
+            item.playbackConfiguration = CPPlaybackConfiguration(
+                preferredPresentation: .video,
+                playbackAction: .play,
+                elapsedTime: CMTime(seconds: times.elapsed, preferredTimescale: 600),
+                duration: CMTime(seconds: times.duration, preferredTimescale: 600)
+            )
+            return true
+        #else
+            return false
+        #endif
     }
 
     @MainActor

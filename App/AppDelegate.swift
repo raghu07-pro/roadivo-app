@@ -2,7 +2,7 @@ import CarPlay
 import UIKit
 
 /// Lets the player's rotation lock and full-screen button decide which way the app turns, and hands the car's
-/// screen to `CarPlaySceneDelegate`.
+/// screen to this build's CarPlay app (`CarPlayAvailability.app`).
 final class AppDelegate: NSObject, UIApplicationDelegate {
     func application(
         _ application: UIApplication,
@@ -23,9 +23,12 @@ final class AppDelegate: NSObject, UIApplicationDelegate {
         let configuration = UISceneConfiguration(name: nil, sessionRole: role)
         if role == .carTemplateApplication {
             configuration.sceneClass = CPTemplateApplicationScene.self
-            configuration.delegateClass = CarPlayAvailability.isNavigation
-                ? CarPlayNavigationSceneDelegate.self
-                : CarPlaySceneDelegate.self
+            let delegate: AnyClass = switch CarPlayAvailability.app {
+            case .window: CarPlayWindowSceneDelegate.self
+            case .media: CarPlaySceneDelegate.self
+            case .map: CarPlayNavigationSceneDelegate.self
+            }
+            configuration.delegateClass = delegate
         }
         return configuration
     }

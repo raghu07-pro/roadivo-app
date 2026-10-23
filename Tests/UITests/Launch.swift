@@ -52,6 +52,20 @@ extension XCUIApplication {
         app.launch()
         return app
     }
+
+    /// Settings is always the last tab, in any language and whether or not Directions shows (DECISIONS 149).
+    var settingsTab: XCUIElement {
+        let tabs = tabBars.buttons
+        _ = tabs.firstMatch.waitForExistence(timeout: 5)
+        return tabs.element(boundBy: max(0, tabs.count - 1))
+    }
+
+    /// Directions is the fourth of five tabs while `ROADIVO_DIRECTIONS` is YES; nil while it's switched off.
+    var directionsTab: XCUIElement? {
+        let tabs = tabBars.buttons
+        _ = tabs.firstMatch.waitForExistence(timeout: 5)
+        return tabs.count == 5 ? tabs.element(boundBy: 3) : nil
+    }
 }
 
 extension XCTestCase {

@@ -18,13 +18,15 @@ TV on the road.
 
 ## First-launch flow & Pro
 
-Onboarding (4 pages) → "Buy a plan" paywall (closable, shown once) → five
-tabs: **Home · Favorites · Discover · Directions · Settings**.
+Onboarding (4 pages) → "Buy a plan" paywall (closable, shown once) → four
+tabs: **Home · Favorites · Discover · Settings**.
 
-- **Directions** (`Features/Directions`, `Core/Directions`; DECISIONS 145, free): search a place (Apple Maps search),
+- **Directions is kept for a later release** (owner, 2026-10-23; DECISIONS 149): `ROADIVO_DIRECTIONS = NO` in
+  `Config/Shared.xcconfig` hides the tab and its route card everywhere, and nothing asks for Location. Don't use the
+  map, Directions or CarPlay navigation anywhere until the owner switches them back on; the code stays.
+  When on (`Features/Directions`, `Core/Directions`; DECISIONS 145, free): search a place (Apple Maps search),
   see the driving routes from the iPhone's location on a map, pick one, and hand off to Apple Maps for guidance.
-  Location is asked the first time the tab opens. Its CarPlay navigation app is built but switched off
-  (DECISIONS 147–148, below). UI tests use `ScriptedPlaceFinder` and `ScriptedLocation` (`-location-denied` for Location off).
+  Location is asked the first time the tab opens. `DirectionsUITests` skip while it's off. UI tests use `ScriptedPlaceFinder` and `ScriptedLocation` (`-location-denied` for Location off).
   An open route follows to the other tabs as an upright window in the bottom-right corner, like Maps' own, above the
   mini player (`RouteMiniCard`, `RouteSnapshot`; DECISIONS 146).
 
@@ -36,21 +38,49 @@ tabs: **Home · Favorites · Discover · Directions · Settings**.
 
 ## Discover and the car
 
-- Roadivo's CarPlay app (`App/CarPlaySceneDelegate.swift`) shows Favorites,
+- **Which CarPlay app the car shows** is `ROADIVO_CARPLAY_APP` in `Config/Shared.xcconfig` (one per app; DECISIONS 152):
+  `window` (now), `media` or `map`. `CarPlayAvailability.app` reads it; `AppDelegate` and the Info.plist manifest pick
+  the scene delegate, and the xcconfig picks the entitlements.
+- **`window`, Roadivo's own CarPlay window** (owner, 2026-10-23; DECISIONS 152; `App/CarPlayWindowSceneDelegate.swift`,
+  `CarPlayWindowController`, `Core/Car/CarWindowState.swift`). Signed with the navigation entitlement
+  (`RoadivoNavigation.entitlements`) for its `CPWindow`, but no map is drawn: the window shows Roadivo's still road
+  (`CarWindowCard`) or the chosen video. Favorites · Recent · Library · Browser are `CPMapTemplate`'s four bar buttons
+  and open the usual lists; a row plays and the lists close. While something plays only **Close** shows (it stops
+  playback and the tabs return), with previous, play/pause and next as map buttons; the bar hides itself over video.
+  **Video only while parked**: `ParkingMonitor` (`ParkingDetector`, `MotionSample`, `LocationMotionSampler`) counts the
+  car parked after 30 s of still Core Location readings and unparks at the first moving or unknown one; or at once when
+  the car stops limiting its keyboard (`CPSessionConfiguration`, the car's own word) with Location on and no moving
+  reading (DECISIONS 153). Any moving reading ends video at once; moving shows
+  "Video is off while driving. Sound keeps playing." and Location off asks for it on the iPhone. Never weaken this.
+  Works in any car (no CarPlay video needed). Apple documents the window as map-only: the App Review notes say what it
+  shows, and Apple may reject it or withdraw the entitlement; `media` is the fallback. The video has Car Mode's
+  progress bar; a drag across it scrubs (`CarScrub`; CarPlay passes window touches only as pans) and the map buttons
+  are ±15 s and play/pause (DECISIONS 154). Debug `-car-parked`, on in the scheme (`Project.swift`), sets
+  `ParkingMonitor.assumesParkedCar` for desk testing; a moving GPS reading still ends video. Untick it to test parking.
+- **The car and the iPhone keep their own videos** (owner, 2026-10-23; DECISIONS 155): `PlaybackController` records a
+  `PlaybackOrigin` (`car` from the CarPlay apps). The iPhone's mini player shows only `phone` picks and its player
+  closes when the car starts something; the CarPlay window plays only `car` picks. One player: the latest pick plays.
+  The iPhone player has no Car Mode or AirPlay button any more.
+- **`media`**: Roadivo's CarPlay template app (`App/CarPlaySceneDelegate.swift`) shows Favorites,
   Recent and Library, then hands playback to the shared player. A fourth **Browser** tab lists the Browser's
   sites; tapping one opens it in Discover › Browser on the iPhone, as CarPlay can't show web pages (DECISIONS 131).
   Now Playing has a ♥ for what's playing and Up Next for the rest of its group (DECISIONS 140); rows show each
   item's logo, still or video frame (`Core/Car/CarPlayArtwork.swift`, DECISIONS 141).
-- **CarPlay Audio only for now** (DECISIONS 139, 143): the combined Audio + Video build left Roadivo's CarPlay scene
-  blank in Device Hub, while Audio-only shows the tabs. Apple's current entitlement documentation says both keys may
-  coexist, so this is being treated as an unresolved signing or runtime issue, not an Apple restriction. CarPlay-side
-  video presentation is temporarily disabled; ordinary audio tabs remain. Test with a real iPhone on USB: Device Hub ›
-  select the iPhone › Device › CarPlay Simulator › vehicle "Standard Video Playback".
-- **CarPlay Navigation: approved by Apple, switched off** (owner, 2026-10-23; DECISIONS 147–148). With
-  `ROADIVO_CARPLAY_NAVIGATION = NO` (device and simulator), the car shows the media tabs above, signed with CarPlay Audio
-  only. YES swaps in `CarPlayNavigationSceneDelegate`: Roadivo's map, place search, route previews and turn-by-turn
-  guidance (`CarPlayGuidance`, `RouteGuide`), signed with `RoadivoNavigation.entitlements`. An app has one CarPlay type,
-  so it's the map or the tabs, never both. The code stays in place.
+- **`media`: video on the car screen, under the Audio entitlement** (DECISIONS 139, 150). The App ID has CarPlay Audio,
+  Navigation and Video enabled, but the app signs with **Audio only** (`Resources/Roadivo.entitlements`): Apple's
+  iOS 27.2 guide says Audio and Video can't be held together and Audio covers apps that mix in video; Audio + Video
+  left the car screen blank, and Video alone hid Roadivo (DECISIONS 133, 142). Navigation is kept for later (149).
+  On iOS 27, in a car whose `CPSessionConfiguration.supportsVideoPlayback` is true, every playable row carries
+  `CPPlaybackConfiguration(preferredPresentation: .video)` (`CarPlaySceneDelegate.playsAsVideo`): CarPlay shows the
+  video while parked and Now Playing with sound while driving; the car decides, Roadivo never checks. Test with a
+  real iPhone on USB: Device Hub › select the iPhone › Device › CarPlay Simulator › vehicle "Standard Video Playback".
+- **`media`: Video-entitlement test builds** (owner, 2026-10-23; DECISIONS 151): `ROADIVO_CARPLAY_VIDEO` picks
+  `Resources/RoadivoVideo.entitlements` (Video only). It's YES for Debug builds on an iPhone, NO for simulator builds
+  and NO in `Config/Release.xcconfig`, so archives stay on Audio. Flip Release only after a Debug build shows video in
+  the CarPlay Simulator; Video alone hides Roadivo in cars without CarPlay video. The trace logs `signed: Video/Audio`.
+- **`map`, CarPlay Navigation: approved by Apple, kept for a later release** (owner, 2026-10-23; DECISIONS 147–149,
+  152). `CarPlayNavigationSceneDelegate`: Roadivo's map, place search, route previews and turn-by-turn guidance
+  (`CarPlayGuidance`, `RouteGuide`), signed with `RoadivoNavigation.entitlements`. Don't use it until the owner says.
 - Video plays over AirPlay, parked only, in cars with CarPlay video. While
   driving, the car plays sound only.
 - The **Discover** tab (`DiscoverView`, once "Cast to Car") has two cards (DECISIONS 118–124, 135–136; the Browser's card links its first four sites):
@@ -58,8 +88,9 @@ tabs: **Home · Favorites · Discover · Directions · Settings**.
   kept, no bookmarks or Recent; pages never open their apps; direct videos offer Play in Roadivo; its menu has only
   Start Page and Leave Browser) and **Cast to Screen** (`CastToScreenView`: Screen Broadcast, the whole iPhone in a car
   screen's browser over the local network, served by the `RoadivoBroadcast` extension with `Core/Broadcast`; real
-  iPhone only. Screen Mirroring steps below it). Cast from an app was removed (owner, 2026-10-21). Car Mode is
-  one tap away from the player's car button (DECISIONS 102). Car Mode shows a progress bar with large times, and Drive View hides the video for the driver (DECISIONS 114).
+  iPhone only. Screen Mirroring steps below it). Cast from an app was removed (owner, 2026-10-21). Car Mode has no
+  button since DECISIONS 155: it opens when a saved car connects with Open Car Mode When Connected (owner to decide its
+  way in). Car Mode shows a progress bar with large times, and Drive View hides the video for the driver (DECISIONS 114).
 - The **CarPlay Browser tab** (`App/CarPlayBrowserTab.swift`, DECISIONS 134): on iOS 27 a search row (`CPSearchTemplate`,
   `BrowserSearch`: the address, matching sites, a web search), "Video on this page" when the iPhone's open page has a
   direct video (played on the car's screen as CarPlay video), then the sites. CarPlay can't show web pages, so sites and
@@ -165,8 +196,9 @@ None in v1 (DECISIONS 6). Everything is stored on the device.
 ## Constraints & non-goals
 
 - **Device:** iPhone only, iOS 17+, portrait and landscape.
-- **CarPlay:** a CarPlay Audio app that shows video where the car allows it, gated on Apple's entitlement (DECISIONS 25, 139).
-  CarPlay Navigation is approved by Apple but switched off; the car shows the media tabs (DECISIONS 147–148).
+- **CarPlay:** Roadivo's own window (navigation entitlement, no map) with the four tabs as buttons and video only
+  while parked (DECISIONS 152); the CarPlay Audio template app is the fallback (`ROADIVO_CARPLAY_APP = media`, DECISIONS
+  139, 150). The navigation map is approved by Apple but kept for a later release (DECISIONS 147–149).
 - **Not in v1:**
   - EPG
   - MKV, raw TS and AC3

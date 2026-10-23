@@ -32,6 +32,8 @@ final class AppEnvironment {
     let location: LocationProviding
     /// The Directions tab, shared with the CarPlay map so both show the same place and routes (DECISIONS 147).
     let directions: DirectionsViewModel
+    /// Whether the car is parked, so Roadivo's CarPlay window shows video only then (DECISIONS 152).
+    let parking: ParkingMonitor
 
     enum DirectionsSetup {
         /// Apple Maps and the iPhone's own location.
@@ -59,6 +61,7 @@ final class AppEnvironment {
         displayProfiles: DisplayProfileStore = DisplayProfileStore(),
         directions: DirectionsSetup = .live
     ) {
+        parking = ParkingMonitor(sampler: LocationMotionSampler())
         switch directions {
         case .live:
             places = MapKitPlaceFinder()
@@ -110,7 +113,7 @@ final class AppEnvironment {
 
     /// Launch arguments for UI tests and screenshots: `-ui-testing` (in-memory, fake App Store, scripted mic),
     /// `-skip-onboarding` (and the intro paywall), `-pro`, `-car-connected`, and Debug-only `-demo-library`
-    /// (with `-demo-history`, a film part-watched and a channel played).
+    /// (with `-demo-history`, a film part-watched and a channel played) and `-car-parked` (DECISIONS 152).
     static func live(arguments: [String]) -> AppEnvironment {
         let switches = TestSwitches(arguments: arguments)
         let isUITesting = switches.isUITesting
@@ -133,13 +136,6 @@ final class AppEnvironment {
             preferences.hasCompletedOnboarding = true
             preferences.hasSeenIntroPaywall = true
         }
-        let storeClient: StoreClient = isUITesting
-            ? FakeStoreClient(
-                isPro: arguments.contains("-pro"),
-                restorable: arguments.contains("-restorable") ? [.yearly] : []
-            )
-            : StoreKitClient()
-
         let environment = AppEnvironment(
             apiClient: (try? AppInfo.apiBaseURL()).map { APIClient(baseURL: $0) },
             store: store,
@@ -149,7 +145,7 @@ final class AppEnvironment {
                 embyCompatible: EmbyCompatibleClient(deviceID: preferences.deviceID),
                 plex: PlexClient(clientID: preferences.deviceID)
             ),
-            storeClient: storeClient,
+            storeClient: storeClient(isUITesting: isUITesting, arguments: arguments),
             preferences: preferences,
             speech: isUITesting && !arguments.contains("-live-voice")
                 ? ScriptedSpeechTranscriber(phrase: voicePhrase(in: arguments))
@@ -163,6 +159,7 @@ final class AppEnvironment {
             displayProfiles: DisplayProfileStore(defaults: defaults),
             directions: isUITesting ? .scripted(isLocationDenied: switches.isLocationDenied) : .live
         )
+        environment.parking.assumesParkedCar = switches.isCarParked
         environment.router.asksForReviews = !isUITesting
         // UI tests tap and audit the Up Next card and the player's controls; real 5 s and 3 s timers could run out
         // mid-step on a busy simulator.
@@ -180,6 +177,15 @@ final class AppEnvironment {
             }
         #endif
         return environment
+    }
+
+    /// UI tests get a fake App Store (`-pro` starts with Pro, `-restorable` has a Yearly plan to restore).
+    private static func storeClient(isUITesting: Bool, arguments: [String]) -> StoreClient {
+        guard isUITesting else { return StoreKitClient() }
+        return FakeStoreClient(
+            isPro: arguments.contains("-pro"),
+            restorable: arguments.contains("-restorable") ? [.yearly] : []
+        )
     }
 
     /// iOS keeps Keychain items after the app is deleted, so a reinstall would inherit old logins. Cleared
@@ -249,6 +255,8 @@ private struct TestSwitches {
     let isCarConnected: Bool
     /// `-location-denied`: Location is off for Roadivo, for Directions' "turn it on" path.
     let isLocationDenied: Bool
+    /// `-car-parked`: the car always says it's stopped, so the CarPlay window shows video at a desk (DECISIONS 154).
+    let isCarParked: Bool
 
     init(arguments: [String]) {
         #if DEBUG
@@ -256,11 +264,13 @@ private struct TestSwitches {
             skipsOnboarding = arguments.contains("-skip-onboarding")
             isCarConnected = isUITesting && arguments.contains("-car-connected")
             isLocationDenied = isUITesting && arguments.contains("-location-denied")
+            isCarParked = arguments.contains("-car-parked")
         #else
             isUITesting = false
             skipsOnboarding = false
             isCarConnected = false
             isLocationDenied = false
+            isCarParked = false
         #endif
     }
 }

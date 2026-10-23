@@ -7,8 +7,12 @@ final class DirectionsUITests: XCTestCase {
         continueAfterFailure = false
     }
 
-    private func openDirections(_ app: XCUIApplication) {
-        app.tabBars.buttons.element(boundBy: 3).tap()
+    /// Skips while `ROADIVO_DIRECTIONS` is NO: the tab is kept for a later release (DECISIONS 149).
+    private func openDirections(_ app: XCUIApplication) throws {
+        guard let tab = app.directionsTab else {
+            throw XCTSkip("Directions is switched off (ROADIVO_DIRECTIONS = NO)")
+        }
+        tab.tap()
         XCTAssertTrue(app.descendants(matching: .any)["directions.screen"].waitForExistence(timeout: 5))
     }
 
@@ -24,16 +28,16 @@ final class DirectionsUITests: XCTestCase {
     }
 
     /// Before a search, a hint says what the tab does.
-    func testOpensWithAHint() {
+    func testOpensWithAHint() throws {
         let app = XCUIApplication.roadivo(skipOnboarding: true)
-        openDirections(app)
+        try openDirections(app)
         XCTAssertTrue(app.descendants(matching: .any)["directions.hint"].waitForExistence(timeout: 5))
     }
 
     /// Typing lists places; picking one shows its route, the other route to pick, and Apple Maps.
-    func testSearchShowsTheRoute() {
+    func testSearchShowsTheRoute() throws {
         let app = XCUIApplication.roadivo(skipOnboarding: true)
-        openDirections(app)
+        try openDirections(app)
         chooseFirstPlace(app)
         XCTAssertTrue(app.descendants(matching: .any)["directions.summary"].waitForExistence(timeout: 5))
         XCTAssertTrue(app.buttons["directions.openMaps"].isEnabled)
@@ -42,9 +46,9 @@ final class DirectionsUITests: XCTestCase {
     }
 
     /// Cancel leaves the search: the text clears, the keyboard closes and the hint comes back.
-    func testCancelClosesTheKeyboard() {
+    func testCancelClosesTheKeyboard() throws {
         let app = XCUIApplication.roadivo(skipOnboarding: true)
-        openDirections(app)
+        try openDirections(app)
         let field = app.textFields["search.field"].firstMatch
         XCTAssertTrue(field.waitForExistence(timeout: 5))
         field.tap()
@@ -58,9 +62,9 @@ final class DirectionsUITests: XCTestCase {
     }
 
     /// The hint sits just above the tab bar, not floating mid-screen.
-    func testHintSitsAtTheBottom() {
+    func testHintSitsAtTheBottom() throws {
         let app = XCUIApplication.roadivo(skipOnboarding: true)
-        openDirections(app)
+        try openDirections(app)
         let hint = app.descendants(matching: .any)["directions.hint"]
         XCTAssertTrue(hint.waitForExistence(timeout: 5))
         let gap = app.tabBars.firstMatch.frame.minY - hint.frame.maxY
@@ -68,9 +72,9 @@ final class DirectionsUITests: XCTestCase {
     }
 
     /// The second route can be picked, and becomes the selected one.
-    func testPickingTheOtherRoute() {
+    func testPickingTheOtherRoute() throws {
         let app = XCUIApplication.roadivo(skipOnboarding: true)
-        openDirections(app)
+        try openDirections(app)
         chooseFirstPlace(app)
         let fastest = app.buttons["directions.choice.0"]
         let other = app.buttons["directions.choice.1"]
@@ -84,7 +88,7 @@ final class DirectionsUITests: XCTestCase {
     /// An open route follows to the other tabs as a small card; a tap goes back to it, ✕ ends it.
     func testRouteCardOnOtherTabs() throws {
         let app = XCUIApplication.roadivo(skipOnboarding: true)
-        openDirections(app)
+        try openDirections(app)
         XCTAssertFalse(app.buttons["directions.miniRoute"].exists)
         chooseFirstPlace(app)
         XCTAssertTrue(app.buttons["directions.openMaps"].waitForExistence(timeout: 5))
@@ -101,14 +105,14 @@ final class DirectionsUITests: XCTestCase {
         XCTAssertTrue(end.waitForExistence(timeout: 5))
         end.tap()
         XCTAssertFalse(card.waitForExistence(timeout: 2))
-        openDirections(app)
+        try openDirections(app)
         XCTAssertTrue(app.descendants(matching: .any)["directions.hint"].waitForExistence(timeout: 5))
     }
 
     /// Close clears the route and brings the hint back.
-    func testCloseClearsTheRoute() {
+    func testCloseClearsTheRoute() throws {
         let app = XCUIApplication.roadivo(skipOnboarding: true)
-        openDirections(app)
+        try openDirections(app)
         chooseFirstPlace(app)
         let close = app.buttons["directions.close"]
         XCTAssertTrue(close.waitForExistence(timeout: 5))
@@ -118,9 +122,9 @@ final class DirectionsUITests: XCTestCase {
     }
 
     /// With Location off, the tab says so and offers Settings, and a chosen place waits for it.
-    func testLocationOffOffersSettings() {
+    func testLocationOffOffersSettings() throws {
         let app = XCUIApplication.roadivo(skipOnboarding: true, locationDenied: true)
-        openDirections(app)
+        try openDirections(app)
         XCTAssertTrue(app.buttons["directions.openSettings"].waitForExistence(timeout: 5))
         chooseFirstPlace(app)
         let route = app.descendants(matching: .any)["directions.route"]
@@ -131,7 +135,7 @@ final class DirectionsUITests: XCTestCase {
 
     func testDirectionsAccessibilityAudit() throws {
         let app = XCUIApplication.roadivo(skipOnboarding: true)
-        openDirections(app)
+        try openDirections(app)
         try app.performAccessibilityAudit(for: .all, Self.ignoringKnownIssues)
         chooseFirstPlace(app)
         XCTAssertTrue(app.buttons["directions.openMaps"].waitForExistence(timeout: 5))

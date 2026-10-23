@@ -143,6 +143,8 @@ let project = Project(
             runAction: .runAction(
                 configuration: "Debug",
                 executable: "Roadivo",
+                // Debug `-car-parked`: CarPlay video at a desk; moving GPS still stops it (DECISIONS 154).
+                arguments: .arguments(launchArguments: [.launchArgument(name: "-car-parked", isEnabled: true)]),
                 options: .options(storeKitConfigurationPath: "StoreKit/Roadivo.storekit")
             )
         )

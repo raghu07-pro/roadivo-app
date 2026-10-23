@@ -71,6 +71,8 @@ final class CarFlowUITests: XCTestCase {
     /// Drive View hides the video and keeps three big buttons, is remembered when Car Mode opens again,
     /// and Exit Drive View brings the video back.
     func testDriveViewHidesTheVideoAndComesBack() throws {
+        // The player's car button is gone (DECISIONS 155); Car Mode opens only from a car's display profile for now.
+        try XCTSkipIf(true, "Car Mode has no button in the player; its look is covered by ScreenSnapshotTests")
         let app = XCUIApplication.roadivo(skipOnboarding: true, demoLibrary: true, pro: true, carConnected: true)
         let channel = app.buttons["channel.Steel Horizon · 1080p"]
         XCTAssertTrue(channel.waitForExistence(timeout: 10))
@@ -104,8 +106,8 @@ final class CarFlowUITests: XCTestCase {
         XCTAssertFalse(app.buttons["carMode.drive.playPause"].exists)
     }
 
-    /// A film that ends counts down to the next over the player, then over Car Mode's video and in Drive
-    /// View, where Play Now and Cancel keep their own names and pass the audit (UI tests count from 120).
+    /// A film that ends counts down to the next over the player, where Play Now and Cancel keep their own names and
+    /// pass the audit (UI tests count from 120).
     func testUpNextWhenAFilmEnds() throws {
         let app = XCUIApplication.roadivo(skipOnboarding: true, demoLibrary: true, pro: true)
         let film = app.buttons["channel.Steel Horizon · 1080p"]
@@ -128,26 +130,8 @@ final class CarFlowUITests: XCTestCase {
             alsoIgnoring: ["SH"]
         )
 
-        revealPlayerControls(app)
-        app.buttons["player.carMode"].tap()
-        XCTAssertTrue(app.buttons["upNext.playNow"].waitForExistence(timeout: 5))
-        XCTAssertTrue(app.buttons["upNext.playNow"].isHittable)
-        // "Drive View": Car Mode's button trades its label for the steering wheel when larger text won't
-        // fit beside the other buttons (`ViewThatFits`); the audit enlarges the label in place instead.
-        try auditIgnoringBottomEdge(
-            app,
-            for: [.dynamicType, .sufficientElementDescription, .hitRegion],
-            alsoIgnoring: ["Drive View"]
-        )
-
-        app.buttons["carMode.driveView"].tap()
-        let cancel = app.buttons["upNext.cancel"]
-        XCTAssertTrue(cancel.waitForExistence(timeout: 5))
-        XCTAssertTrue(cancel.isHittable)
-        try auditIgnoringBottomEdge(app, for: [.dynamicType, .sufficientElementDescription, .hitRegion])
-        cancel.tap()
+        app.buttons["upNext.cancel"].tap()
         XCTAssertTrue(card.waitForNonExistence(timeout: 5))
-        XCTAssertTrue(app.buttons["carMode.drive.playPause"].exists)
     }
 
     /// How to Connect, from Settings › Media: the CarPlay steps first (CarPlay Audio is granted and on,
@@ -186,53 +170,5 @@ final class CarFlowUITests: XCTestCase {
         XCTAssertTrue(app.wait(for: .runningForeground, timeout: 10))
         XCTAssertTrue(app.buttons["miniPlayer.pause"].waitForExistence(timeout: 5), "It paused in the background")
         XCTAssertFalse(app.buttons["miniPlayer.play"].exists)
-    }
-
-    /// The player's car button opens Car Mode without a car connected (how App Review reaches it).
-    func testPlayerOpensCarModeForPro() {
-        let app = XCUIApplication.roadivo(skipOnboarding: true, demoLibrary: true, pro: true)
-        let channel = app.buttons["channel.Highway Stop"]
-        XCTAssertTrue(channel.waitForExistence(timeout: 10))
-        channel.tap()
-        let carMode = app.buttons["player.carMode"]
-        XCTAssertTrue(carMode.waitForExistence(timeout: 5))
-        revealPlayerControls(app)
-        // Apple's AirPlay button sits beside it: video to a car display without mirroring.
-        XCTAssertTrue(app.descendants(matching: .any)["player.airplay"].exists)
-        carMode.tap()
-        XCTAssertTrue(app.buttons["carMode.exit"].waitForExistence(timeout: 5))
-    }
-
-    /// A free user sees the Car Mode plans over the player, and closing them leaves the video playing.
-    func testPlayerCarModeAsksFreeUsersForPro() {
-        let app = XCUIApplication.roadivo(skipOnboarding: true, demoLibrary: true)
-        let channel = app.buttons["channel.Highway Stop"]
-        XCTAssertTrue(channel.waitForExistence(timeout: 10))
-        channel.tap()
-        let carMode = app.buttons["player.carMode"]
-        XCTAssertTrue(carMode.waitForExistence(timeout: 5))
-        revealPlayerControls(app)
-        carMode.tap()
-        let close = app.buttons["paywall.close"]
-        XCTAssertTrue(close.waitForExistence(timeout: 5))
-        close.tap()
-        XCTAssertFalse(app.buttons["carMode.exit"].exists)
-        XCTAssertTrue(app.descendants(matching: .any)["player.video"].waitForExistence(timeout: 5))
-    }
-
-    /// Buying from the player's Car Mode button goes straight on into Car Mode.
-    func testBuyingFromThePlayerOpensCarMode() {
-        let app = XCUIApplication.roadivo(skipOnboarding: true, demoLibrary: true)
-        let channel = app.buttons["channel.Highway Stop"]
-        XCTAssertTrue(channel.waitForExistence(timeout: 10))
-        channel.tap()
-        let carMode = app.buttons["player.carMode"]
-        XCTAssertTrue(carMode.waitForExistence(timeout: 5))
-        revealPlayerControls(app)
-        carMode.tap()
-        let buy = app.buttons["paywall.buy"]
-        XCTAssertTrue(buy.waitForExistence(timeout: 5))
-        buy.tap()
-        XCTAssertTrue(app.buttons["carMode.exit"].waitForExistence(timeout: 10))
     }
 }

@@ -232,67 +232,67 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Roadivo verwendet deinen Standort nur unter Routen, um die Route von deinem Standort zu dem Ort zu zeigen, den du suchst."
+            "value" : "Roadivo verwendet deinen Standort in CarPlay nur, um zu erkennen, wann das Auto parkt, damit Videos nur dann laufen. Er wird weder gespeichert noch geteilt."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Roadivo uses your location only in Directions, to show the route from where you are to the place you search for."
+            "value" : "Roadivo uses your location on CarPlay only to tell when the car is parked, so video plays only then. It isn't stored or shared."
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Roadivo usa tu ubicación solo en Indicaciones, para mostrar la ruta desde donde estás hasta el lugar que buscas."
+            "value" : "Roadivo usa tu ubicación en CarPlay solo para saber cuándo el coche está aparcado, para que el vídeo se reproduzca solo entonces. No se guarda ni se comparte."
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Roadivo utilise votre position uniquement dans Itinéraires, pour afficher l’itinéraire entre l’endroit où vous êtes et le lieu que vous recherchez."
+            "value" : "Roadivo utilise votre position sur CarPlay uniquement pour savoir quand la voiture est garée, afin que la vidéo ne s’affiche qu’à ce moment-là. Elle n’est ni enregistrée ni partagée."
           }
         },
         "hi" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Roadivo आपकी लोकेशन का इस्तेमाल सिर्फ़ दिशा-निर्देश में करता है, ताकि आपकी जगह से खोजी गई जगह तक का रास्ता दिखा सके।"
+            "value" : "Roadivo आपकी लोकेशन का इस्तेमाल सिर्फ़ CarPlay पर यह जानने के लिए करता है कि कार पार्क है या नहीं, ताकि वीडियो सिर्फ़ तभी चले। यह न तो सेव होती है और न ही शेयर की जाती है।"
           }
         },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Roadivo usa la tua posizione solo in Indicazioni, per mostrare il percorso da dove ti trovi al luogo che cerchi."
+            "value" : "Roadivo usa la tua posizione su CarPlay solo per capire quando l’auto è parcheggiata, così il video viene riprodotto solo allora. Non viene salvata né condivisa."
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Roadivoは「経路」でのみ位置情報を使用し、現在地から検索した場所までの経路を表示します。"
+            "value" : "Roadivoは、CarPlayで車が駐車中かどうかを判断するためだけに位置情報を使用し、ビデオは駐車中のみ再生されます。位置情報は保存も共有もされません。"
           }
         },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Roadivo는 '경로'에서만 위치를 사용하여 현재 위치에서 검색한 장소까지의 경로를 보여 줍니다."
+            "value" : "Roadivo는 CarPlay에서 차량이 주차 중인지 확인하는 데만 위치를 사용하며, 비디오는 주차 중에만 재생됩니다. 위치는 저장되거나 공유되지 않습니다."
           }
         },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "O Roadivo usa sua localização apenas em Rotas, para mostrar a rota de onde você está até o local que você busca."
+            "value" : "O Roadivo usa sua localização no CarPlay só para saber quando o carro está estacionado, para que o vídeo passe apenas nesse momento. Ela não é armazenada nem compartilhada."
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Roadivo 仅在“路线”中使用你的位置，用于显示从你所在位置到你搜索的地点的路线。"
+            "value" : "Roadivo 仅在 CarPlay 中使用你的位置来判断汽车是否已停好，视频只会在停车时播放。位置不会被存储或共享。"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Roadivo 僅在「路線」中使用你的位置，用於顯示從你所在位置到你搜尋的地點的路線。"
+            "value" : "Roadivo 僅在 CarPlay 中使用你的位置來判斷汽車是否已停好，影片只會在停車時播放。位置不會被儲存或分享。"
           }
         }
       }

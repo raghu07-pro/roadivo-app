@@ -1443,6 +1443,70 @@
         }
       }
     },
+    "Allow Location for Roadivo on your iPhone, so video can play when you're parked." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Erlaube Roadivo auf deinem iPhone den Zugriff auf deinen Standort, damit das Video im Stand laufen kann."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Permite la ubicación para Roadivo en tu iPhone para que el vídeo pueda reproducirse cuando estés aparcado."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Autorisez la localisation pour Roadivo sur votre iPhone, pour que la vidéo puisse s’afficher quand vous êtes garé."
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "अपने iPhone पर Roadivo के लिए लोकेशन की अनुमति दें, ताकि पार्क होने पर वीडियो चल सके।"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Consenti la posizione a Roadivo sul tuo iPhone, così il video può essere riprodotto quando sei parcheggiato."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "駐車中にビデオを再生できるよう、iPhoneでRoadivoに位置情報を許可してください。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "주차 중에 비디오를 재생할 수 있도록 iPhone에서 Roadivo의 위치 접근을 허용하세요."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Permita a localização para o Roadivo no seu iPhone, para que o vídeo possa passar quando você estiver estacionado."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "请在 iPhone 上允许 Roadivo 使用定位，这样停车时就能播放视频。"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "請在 iPhone 上允許 Roadivo 使用定位，這樣停車時就能播放影片。"
+          }
+        }
+      }
+    },
     "Arrive at %@" : {
       "comment" : "CarPlay guidance: the last maneuver. The argument is the place's name.",
       "localizations" : {
@@ -1504,6 +1568,70 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "抵達%@"
+          }
+        }
+      }
+    },
+    "Choose what to watch from Favorites, Recent, Library or Browser." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wähle unter Favoriten, Zuletzt, Mediathek oder Browser aus, was du sehen möchtest."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Elige qué ver en Favoritos, Recientes, Biblioteca o Navegador."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Choisissez quoi regarder dans Favoris, Récents, Bibliothèque ou Navigateur."
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "पसंदीदा, हाल के, लाइब्रेरी या ब्राउज़र से चुनें कि क्या देखना है।"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Scegli cosa guardare da Preferiti, Recenti, Libreria o Browser."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "お気に入り、最近、ライブラリ、ブラウザから見るものを選んでください。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "즐겨찾기, 최근 항목, 보관함 또는 브라우저에서 볼 항목을 선택하세요."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Escolha o que assistir em Favoritos, Recentes, Biblioteca ou Navegador."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "从“收藏”“最近”“资料库”或“浏览器”中选择要观看的内容。"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "從「收藏」「最近」「資料庫」或「瀏覽器」中選擇要觀看的內容。"
           }
         }
       }
@@ -2852,6 +2980,134 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "途經 %@"
+          }
+        }
+      }
+    },
+    "Video is off while driving. Sound keeps playing." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Während der Fahrt ist das Video aus. Der Ton läuft weiter."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "El vídeo se desactiva mientras conduces. El sonido sigue sonando."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La vidéo est coupée pendant la conduite. Le son continue."
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "गाड़ी चलाते समय वीडियो बंद रहता है। आवाज़ चलती रहती है।"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Il video è disattivato durante la guida. L’audio continua."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "運転中はビデオがオフになります。音声は再生され続けます。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "운전 중에는 비디오가 꺼집니다. 소리는 계속 재생됩니다."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "O vídeo fica desligado enquanto você dirige. O som continua tocando."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "驾驶时视频会关闭，声音继续播放。"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "駕駛時影片會關閉，聲音繼續播放。"
+          }
+        }
+      }
+    },
+    "Video plays on the car's screen while you're parked. While driving, you hear the sound only." : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Im Stand läuft das Video auf dem Bildschirm des Autos. Während der Fahrt hörst du nur den Ton."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "El vídeo se reproduce en la pantalla del coche cuando está aparcado. Mientras conduces, solo oyes el sonido."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La vidéo s’affiche sur l’écran de la voiture à l’arrêt. En roulant, vous n’entendez que le son."
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "पार्क होने पर वीडियो कार की स्क्रीन पर चलता है। गाड़ी चलाते समय आप सिर्फ़ आवाज़ सुनते हैं।"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Il video si vede sullo schermo dell’auto quando sei parcheggiato. Mentre guidi, senti solo l’audio."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "駐車中は車の画面でビデオが再生されます。運転中は音声のみです。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "주차 중에는 차량 화면으로 비디오가 재생됩니다. 운전 중에는 소리만 들립니다."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "O vídeo passa na tela do carro quando estacionado. Enquanto você dirige, só ouve o som."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "停车时视频会在汽车屏幕上播放。驾驶时只播放声音。"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "停車時影片會在汽車螢幕上播放。駕駛時只會播放聲音。"
           }
         }
       }

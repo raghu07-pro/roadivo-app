@@ -23,21 +23,32 @@ APP_STORE_ID = 6824396756
 // CarPlay Audio was granted by Apple on 2026-10-20 (DECISIONS 25, 127). Signing needs CarPlay Audio App enabled on
 // the App ID; NO again hides every CarPlay promise and drops the entitlement from device builds.
 ROADIVO_CARPLAY = YES
-ROADIVO_CARPLAY_ENTITLEMENTS_YES = $(ROADIVO_CARPLAY_FILE_$(ROADIVO_CARPLAY_NAVIGATION))
+ROADIVO_CARPLAY_ENTITLEMENTS_YES = $(ROADIVO_CARPLAY_FILE_$(ROADIVO_CARPLAY_APP))
 ROADIVO_CARPLAY_ENTITLEMENTS_NO =
 // The simulator doesn't check Apple's approval, so its builds carry the entitlement either way and the CarPlay
 // window shows Roadivo's CarPlay app.
-ROADIVO_CARPLAY_ENTITLEMENTS_NO[sdk=iphonesimulator*] = $(ROADIVO_CARPLAY_FILE_$(ROADIVO_CARPLAY_NAVIGATION))
+ROADIVO_CARPLAY_ENTITLEMENTS_NO[sdk=iphonesimulator*] = $(ROADIVO_CARPLAY_FILE_$(ROADIVO_CARPLAY_APP))
 
-// CarPlay Navigation (approved 2026-10-22, DECISIONS 147) is off again (owner, 2026-10-23; DECISIONS 148): the car shows
-// Favorites, Recent, Library and Browser. YES swaps in the map, guidance and RoadivoNavigation.entitlements.
-ROADIVO_CARPLAY_NAVIGATION = NO
-ROADIVO_CARPLAY_NAVIGATION[sdk=iphonesimulator*] = NO
-ROADIVO_CARPLAY_FILE_NO = Resources/Roadivo.entitlements
-ROADIVO_CARPLAY_FILE_YES = Resources/RoadivoNavigation.entitlements
+// Which CarPlay app the car shows; an app has one (owner, 2026-10-23; DECISIONS 152):
+// window: Roadivo's own screen, the four tabs as buttons and video while parked (navigation entitlement, no map).
+// media: CarPlay's template tabs, video only where the car offers it (Audio, or Video per ROADIVO_CARPLAY_VIDEO).
+// map: the navigation map and guidance, kept for a later release (DECISIONS 147–149).
+ROADIVO_CARPLAY_APP = window
+ROADIVO_CARPLAY_FILE_window = Resources/RoadivoNavigation.entitlements
+ROADIVO_CARPLAY_FILE_map = Resources/RoadivoNavigation.entitlements
+ROADIVO_CARPLAY_FILE_media = $(ROADIVO_MEDIA_ENTITLEMENTS_$(ROADIVO_CARPLAY_VIDEO))
+// The media app signs with CarPlay Audio, or Video only where ROADIVO_CARPLAY_VIDEO (Debug/Release.xcconfig) is YES:
+// Apple's iOS 27.2 guide lets an app hold one or the other, never both (DECISIONS 150–151).
+ROADIVO_MEDIA_ENTITLEMENTS_NO = Resources/Roadivo.entitlements
+ROADIVO_MEDIA_ENTITLEMENTS_YES = Resources/RoadivoVideo.entitlements
 // The car's scene delegate, named in Info.plist: iOS reads the manifest for CarPlay rather than asking AppDelegate.
-ROADIVO_CARPLAY_SCENE_DELEGATE = $(ROADIVO_CARPLAY_DELEGATE_$(ROADIVO_CARPLAY_NAVIGATION))
-ROADIVO_CARPLAY_DELEGATE_NO = CarPlaySceneDelegate
-ROADIVO_CARPLAY_DELEGATE_YES = CarPlayNavigationSceneDelegate
+ROADIVO_CARPLAY_SCENE_DELEGATE = $(ROADIVO_CARPLAY_DELEGATE_$(ROADIVO_CARPLAY_APP))
+ROADIVO_CARPLAY_DELEGATE_window = CarPlayWindowSceneDelegate
+ROADIVO_CARPLAY_DELEGATE_media = CarPlaySceneDelegate
+ROADIVO_CARPLAY_DELEGATE_map = CarPlayNavigationSceneDelegate
+
+// The iPhone's Directions tab and its route card (DECISIONS 145–146) are kept for a later release (owner, 2026-10-23;
+// DECISIONS 149). NO hides them everywhere; the code stays. YES brings them back.
+ROADIVO_DIRECTIONS = NO
 
 PRODUCT_NAME = Roadivo

@@ -10,7 +10,7 @@ final class SettingsUITests: XCTestCase {
     /// Manage Sources.
     func testMediaHasSourcesAndHowToConnect() {
         let app = XCUIApplication.roadivo(skipOnboarding: true)
-        app.tabBars.buttons.element(boundBy: 4).tap()
+        app.settingsTab.tap()
         XCTAssertTrue(app.buttons["settings.sources"].waitForExistence(timeout: 5))
         XCTAssertTrue(app.buttons["settings.connectGuide"].exists)
         XCTAssertFalse(app.buttons["settings.addSource"].exists)
@@ -20,7 +20,7 @@ final class SettingsUITests: XCTestCase {
     /// returns to Settings.
     func testHowToConnectOpensFromSettings() {
         let app = XCUIApplication.roadivo(skipOnboarding: true)
-        app.tabBars.buttons.element(boundBy: 4).tap()
+        app.settingsTab.tap()
         let row = app.buttons["settings.connectGuide"]
         XCTAssertTrue(row.waitForExistence(timeout: 5))
         row.tap()
@@ -33,7 +33,7 @@ final class SettingsUITests: XCTestCase {
     /// Share Roadivo opens the system share sheet.
     func testShareOpensTheShareSheet() {
         let app = XCUIApplication.roadivo(skipOnboarding: true)
-        app.tabBars.buttons.element(boundBy: 4).tap()
+        app.settingsTab.tap()
         XCTAssertTrue(app.buttons["settings.theme"].waitForExistence(timeout: 5))
         // About is below the fold, and a List only builds rows on screen.
         app.swipeUp()
@@ -49,7 +49,7 @@ final class SettingsUITests: XCTestCase {
     /// prompt is the system's.
     func testRateIsOffered() {
         let app = XCUIApplication.roadivo(skipOnboarding: true)
-        app.tabBars.buttons.element(boundBy: 4).tap()
+        app.settingsTab.tap()
         XCTAssertTrue(app.buttons["settings.theme"].waitForExistence(timeout: 5))
         app.swipeUp()
         let rate = app.buttons["settings.rate"]
@@ -60,7 +60,7 @@ final class SettingsUITests: XCTestCase {
     /// Pro users can reach their subscription; it isn't tapped, as the App Store sheet is the system's.
     func testProOffersManageSubscription() {
         let app = XCUIApplication.roadivo(skipOnboarding: true, pro: true)
-        app.tabBars.buttons.element(boundBy: 4).tap()
+        app.settingsTab.tap()
         let manage = app.buttons["settings.manageSubscription"]
         XCTAssertTrue(manage.waitForExistence(timeout: 5))
         XCTAssertTrue(manage.isEnabled)
@@ -69,7 +69,7 @@ final class SettingsUITests: XCTestCase {
     /// Free users have nothing to manage; the Pro banner offers the upgrade instead.
     func testFreeUsersHaveNoManageSubscription() {
         let app = XCUIApplication.roadivo(skipOnboarding: true)
-        app.tabBars.buttons.element(boundBy: 4).tap()
+        app.settingsTab.tap()
         XCTAssertTrue(app.buttons["settings.pro"].waitForExistence(timeout: 5))
         XCTAssertFalse(app.buttons["settings.manageSubscription"].exists)
     }
@@ -77,7 +77,7 @@ final class SettingsUITests: XCTestCase {
     /// Help & FAQ ends with Contact Support; not tapped, as Mail opens outside the app.
     func testHelpOffersContactSupport() {
         let app = XCUIApplication.roadivo(skipOnboarding: true)
-        app.tabBars.buttons.element(boundBy: 4).tap()
+        app.settingsTab.tap()
         XCTAssertTrue(app.buttons["settings.theme"].waitForExistence(timeout: 5))
         app.swipeUp()
         let help = app.buttons["settings.help"]
@@ -119,7 +119,7 @@ final class SettingsUITests: XCTestCase {
         snapshot("31-Card-Menu", app: app)
         app.tap()
 
-        app.tabBars.buttons.element(boundBy: 4).tap()
+        app.settingsTab.tap()
         app.buttons["settings.sources"].tap()
         let row = app.descendants(matching: .any)["source.Road Trip"]
         XCTAssertTrue(row.waitForExistence(timeout: 5))

@@ -7,7 +7,7 @@ final class ThemeUITests: XCTestCase {
     }
 
     private func openTheme(_ app: XCUIApplication) {
-        app.tabBars.buttons.element(boundBy: 4).tap()
+        app.settingsTab.tap()
         let row = app.buttons["settings.theme"]
         XCTAssertTrue(row.waitForExistence(timeout: 5))
         row.tap()
@@ -141,7 +141,7 @@ final class ThemeUITests: XCTestCase {
 
     func testSettingsAccessibilityAudit() throws {
         let app = XCUIApplication.roadivo(skipOnboarding: true)
-        app.tabBars.buttons.element(boundBy: 4).tap()
+        app.settingsTab.tap()
         let theme = app.buttons["settings.theme"]
         XCTAssertTrue(theme.waitForExistence(timeout: 5))
         waitUntilSettled(theme, in: app)

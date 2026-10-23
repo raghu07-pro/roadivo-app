@@ -83,6 +83,14 @@
             ReferencedContainer = "container:Roadivo.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
+      <CommandLineArguments>
+         <CommandLineArgument
+            argument = "-car-parked"
+            isEnabled = "YES">
+         </CommandLineArgument>
+      </CommandLineArguments>
+      <EnvironmentVariables>
+      </EnvironmentVariables>
       <StoreKitConfigurationFileReference
          identifier = "../StoreKit/Roadivo.storekit">
       </StoreKitConfigurationFileReference>

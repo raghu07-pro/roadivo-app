@@ -9,14 +9,21 @@ final class CarPlayBrowserTab: NSObject, CPSearchTemplateDelegate {
     private weak var interfaceController: CPInterfaceController?
     /// Marks a row to play as video where the car allows it; true when CarPlay then presents it itself.
     private let markAsVideo: (CPListItem) -> Bool
+    /// After the page's video starts on a row that presents itself, as Roadivo's own window does (DECISIONS 152).
+    private let onPlay: () -> Void
     /// Each site's solid tile, made once per icon (`SiteIconTile`).
     private var siteTiles: [String: (icon: UIImage, tile: UIImage)] = [:]
     private lazy var placeholderTile = SiteIconTile.placeholder()
     private let logger = Logger(subsystem: "com.roadivo", category: "CarPlay")
 
-    init(interfaceController: CPInterfaceController?, markAsVideo: @escaping (CPListItem) -> Bool) {
+    init(
+        interfaceController: CPInterfaceController?,
+        markAsVideo: @escaping (CPListItem) -> Bool,
+        onPlay: @escaping () -> Void = {}
+    ) {
         self.interfaceController = interfaceController
         self.markAsVideo = markAsVideo
+        self.onPlay = onPlay
         template = CPListTemplate(title: String(appLocalized: "Browser"), sections: [])
         template.tabImage = UIImage(systemName: "globe")
         super.init()
@@ -108,8 +115,11 @@ final class CarPlayBrowserTab: NSObject, CPSearchTemplateDelegate {
                 guard let environment = AppEnvironment.current, let media = environment.browser.takeVideo() else {
                     return completion()
                 }
-                environment.playback.play(media, queue: [media])
-                guard !presentsItself else { return completion() }
+                environment.playback.play(media, queue: [media], from: .car)
+                guard !presentsItself else {
+                    self?.onPlay()
+                    return completion()
+                }
                 self?.interfaceController?.pushTemplate(CPNowPlayingTemplate.shared, animated: true) { _, _ in
                     completion()
                 }

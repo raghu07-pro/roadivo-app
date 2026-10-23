@@ -2,7 +2,7 @@ import CarPlay
 import MapKit
 import OSLog
 
-/// Roadivo's CarPlay navigation app, when `ROADIVO_CARPLAY_NAVIGATION` is YES (DECISIONS 147): Apple's map screen
+/// Roadivo's CarPlay navigation app, when `ROADIVO_CARPLAY_APP` is `map` (DECISIONS 147, 152): Apple's map screen
 /// over Roadivo's map, a search for places, Directions' routes as a trip to choose from, then turn-by-turn guidance.
 final class CarPlayNavigationSceneDelegate: UIResponder, CPTemplateApplicationSceneDelegate, CPMapTemplateDelegate {
     private var interfaceController: CPInterfaceController?
