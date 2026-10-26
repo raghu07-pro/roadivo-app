@@ -122,6 +122,19 @@ struct ParkingTests {
         #expect(!monitor.isParked)
     }
 
+    @Test("Debug -car-parked counts from the moment the car connects, again after reconnecting, with no reading")
+    func assumedParkedCarWithoutReadings() {
+        let monitor = ParkingMonitor(sampler: SilentSampler())
+        monitor.assumesParkedCar = true
+        monitor.start()
+        #expect(monitor.isParked)
+        monitor.stop()
+        #expect(!monitor.isParked)
+        monitor.start()
+        #expect(monitor.isParked)
+        monitor.stop()
+    }
+
     @Test("Stopping forgets the car's word too")
     func stopForgetsCarSignal() {
         let monitor = ParkingMonitor(sampler: SilentSampler())

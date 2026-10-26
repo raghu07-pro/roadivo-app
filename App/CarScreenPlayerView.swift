@@ -18,12 +18,12 @@
 
         var body: some View {
             ZStack {
-                // Over the video, nothing; without it, why, on the wallpaper rather than the road.
+                // Over the video, nothing; without it, Roadivo's canvas, with why above the controls.
                 Group {
                     if isVideo {
                         Color.clear
                     } else {
-                        CarScreenNotice(model: model, title: model.playingTitle)
+                        Color.roadCanvas.ignoresSafeArea()
                     }
                 }
                 .contentShape(Rectangle())
@@ -61,17 +61,23 @@
                     .buttonStyle(CarControlStyle())
                 }
                 Spacer()
-                HStack(spacing: Spacing.xl) {
-                    if !model.isLive {
-                        round("gobackward.15", label: "Back 15 seconds") { $0.skip(by: -15) }
+                VStack(spacing: Spacing.xl) {
+                    if !isVideo {
+                        CarScreenNotice(model: model, title: model.playingTitle)
+                            .padding(.horizontal, Spacing.xl)
                     }
-                    round(
-                        model.isPlaying ? "pause.fill" : "play.fill",
-                        label: model.isPlaying ? "Pause" : "Play",
-                        size: 88
-                    ) { $0.togglePlayPause() }
-                    if !model.isLive {
-                        round("goforward.15", label: "Forward 15 seconds") { $0.skip(by: 15) }
+                    HStack(spacing: Spacing.xl) {
+                        if !model.isLive {
+                            round("gobackward.15", label: "Back 15 seconds") { $0.skip(by: -15) }
+                        }
+                        round(
+                            model.isPlaying ? "pause.fill" : "play.fill",
+                            label: model.isPlaying ? "Pause" : "Play",
+                            size: 88
+                        ) { $0.togglePlayPause() }
+                        if !model.isLive {
+                            round("goforward.15", label: "Forward 15 seconds") { $0.skip(by: 15) }
+                        }
                     }
                 }
                 Spacer()

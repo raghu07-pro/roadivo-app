@@ -15,16 +15,21 @@
 
         var body: some View {
             ZStack {
-                // Over the iPhone's screen, nothing; without it, why, on the wallpaper rather than the road.
+                // Over the iPhone's screen, nothing; without it, why, on Roadivo's canvas.
                 Group {
                     if showsPicture {
                         Color.clear
                     } else {
-                        CarScreenNotice(model: model)
+                        Color.roadCanvas.ignoresSafeArea()
                     }
                 }
                 .contentShape(Rectangle())
                 .onTapGesture { reveal(!showsControls) }
+                if !showsPicture {
+                    CarScreenNotice(model: model)
+                        .padding(Spacing.xl)
+                        .allowsHitTesting(false)
+                }
                 if showsControls || !showsPicture {
                     controls
                         .transition(.opacity)

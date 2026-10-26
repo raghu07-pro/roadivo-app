@@ -31,7 +31,11 @@
                 case .tabs: CarScreenTabsView(model: model)
                 case .player: CarScreenPlayerView(model: model)
                 case .mirror: CarScreenMirrorView(model: model)
-                case .upgrade: CarScreenNotice(model: model)
+                case .upgrade:
+                    CarScreenNotice(model: model)
+                        .padding(Spacing.xl)
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                        .background(Color.roadCanvas.ignoresSafeArea())
                 // The page and its bar take their own taps.
                 case .browser: Color.clear
                 }

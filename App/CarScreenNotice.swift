@@ -23,9 +23,6 @@
                 }
             }
             .multilineTextAlignment(.center)
-            .padding(Spacing.xl)
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .background(Color.roadCanvas.ignoresSafeArea())
         }
     }
 #endif

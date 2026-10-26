@@ -279,7 +279,10 @@
 
         func setMode(_ mode: CarScreenModel.Mode) {
             if model.mode != mode {
-                CarPlayTrace.write("screen shows \(mode), \(model.state)")
+                let parking = AppEnvironment.current?.parking
+                let reading = parking?.lastSample.map { "\($0)" } ?? "none"
+                CarPlayTrace.write("screen shows \(mode), \(model.state), reading \(reading), desk parked "
+                    + "\(parking?.assumesParkedCar == true)")
                 model.mode = mode
             }
             showLayers()

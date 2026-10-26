@@ -28,7 +28,13 @@ final class ParkingMonitor {
 
     /// Debug `-car-parked`: as if the car always said it's stopped, for testing at a desk. A moving reading still ends
     /// video, and Release builds never set it (DECISIONS 154).
-    @ObservationIgnored var assumesParkedCar = false
+    @ObservationIgnored var assumesParkedCar = false {
+        didSet {
+            if assumesParkedCar != oldValue {
+                update()
+            }
+        }
+    }
 
     /// The latest reading, for the CarPlay trace and the car's word above.
     @ObservationIgnored private(set) var lastSample: MotionSample?
@@ -64,6 +70,8 @@ final class ParkingMonitor {
             }
             self?.record(.unknown) // The updates ended: parked can't be known any more.
         }
+        // The car's word counts before any reading: a still or locked iPhone may not send one.
+        update()
     }
 
     func stop() {
