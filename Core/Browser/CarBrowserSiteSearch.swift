@@ -6,7 +6,7 @@ enum CarBrowserSiteSearch {
         let query = query.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !query.isEmpty, let host = page?.host()?.lowercased(),
               host == "youtube.com" || host.hasSuffix(".youtube.com") else { return nil }
-        var components = URLComponents(string: "https://m.youtube.com/results")
+        var components = URLComponents(string: "https://www.youtube.com/results")
         components?.queryItems = [URLQueryItem(name: "search_query", value: query)]
         return components?.url
     }

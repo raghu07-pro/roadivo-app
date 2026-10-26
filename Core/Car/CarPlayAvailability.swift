@@ -23,6 +23,8 @@ enum CarPlayAvailability {
         case media
         /// The navigation map and guidance, kept for a later release (DECISIONS 147–149).
         case map
+        /// A plain window that takes the car's taps, for the Debug car browser experiment (DECISIONS 161).
+        case screen
     }
 
     static var app: App {

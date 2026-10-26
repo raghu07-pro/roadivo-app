@@ -10,3 +10,10 @@ ROADIVO_CAR_BROWSER = YES
 // builds keep Audio, so Xcode's CarPlay window still shows the tabs.
 ROADIVO_CARPLAY_VIDEO = YES
 ROADIVO_CARPLAY_VIDEO[sdk=iphonesimulator*] = NO
+
+// The car browser experiment (owner, 2026-10-26; DECISIONS 161): iPhone runs give the car a plain window that takes
+// its taps, through CarPlay's undocumented window role, instead of Roadivo's CarPlay window and tabs. Delete these two
+// lines to bring the CarPlay window back. Simulator builds keep the CarPlay window: Xcode's Simulator can't show the
+// plain one (Cafari Lite's README).
+ROADIVO_CARPLAY_APP = screen
+ROADIVO_CARPLAY_APP[sdk=iphonesimulator*] = window

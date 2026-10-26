@@ -43,7 +43,7 @@ struct CarBrowserTests {
         #expect(car.page.webView !== phone.web.webView)
         #expect(!car.page.webView.configuration.websiteDataStore.isPersistent)
         #expect(phone.web.webView.configuration.websiteDataStore.isPersistent)
-        #expect(car.page.webView.configuration.defaultWebpagePreferences.preferredContentMode == .mobile)
+        #expect(car.page.webView.configuration.defaultWebpagePreferences.preferredContentMode == .desktop)
     }
 
     @Test("Closing cancels a queued URL and late page reports cannot restore the session")
@@ -51,7 +51,7 @@ struct CarBrowserTests {
         let car = CarBrowserController()
         var loads = 0
         car.page.loader = { _, _ in loads += 1 }
-        car.open(try #require(URL(string: "https://example.com")))
+        try car.open(#require(URL(string: "https://example.com")))
         car.close()
         car.page.onState?(WebPageController.State(url: URL(string: "https://late.example.com")))
         car.setAllowed(true)
@@ -88,7 +88,7 @@ struct CarBrowserTests {
     func separateTabs() throws {
         let car = CarBrowserController()
         car.page.loader = { _, _ in }
-        car.open(try #require(URL(string: "https://first.example.com")))
+        try car.open(#require(URL(string: "https://first.example.com")))
         car.setAllowed(true)
         let first = car.session.selected
         let firstURL = try #require(URL(string: "https://first.example.com/article"))
@@ -117,12 +117,14 @@ struct CarBrowserTests {
     func tabLimitAndSessionCleanup() throws {
         let car = CarBrowserController()
         car.page.loader = { _, _ in }
-        car.open(try #require(URL(string: "https://example.com")))
+        try car.open(#require(URL(string: "https://example.com")))
         car.setAllowed(true)
         car.page.onState?(WebPageController.State(url: URL(string: "https://example.com"), title: "Example"))
         car.session.toggleSavedPage()
         #expect(car.session.savedPages.count == 1)
-        for _ in 1..<CarBrowserSession.maximumTabs { #expect(car.newTab()) }
+        for _ in 1..<CarBrowserSession.maximumTabs {
+            #expect(car.newTab())
+        }
         #expect(car.session.tabs.count == CarBrowserSession.maximumTabs)
         #expect(!car.newTab())
         car.close()
@@ -137,7 +139,7 @@ struct CarBrowserTests {
         let query = "music & science + తెలుగు? #1"
         let url = try #require(CarBrowserSiteSearch.url(for: query, on: URL(string: "https://www.youtube.com")))
         let components = try #require(URLComponents(url: url, resolvingAgainstBaseURL: false))
-        #expect(components.host == "m.youtube.com")
+        #expect(components.host == "www.youtube.com")
         #expect(components.path == "/results")
         #expect(components.queryItems == [URLQueryItem(name: "search_query", value: query)])
         #expect(CarBrowserSiteSearch.url(for: " ", on: url) == nil)

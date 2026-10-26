@@ -1,6 +1,6 @@
 # Independent car browser prototype
 
-The window CarPlay app now has its own mobile-content WKWebView. Site shortcuts and search open full webpages in that view, without using AppEnvironment.browser or navigating the phone. Its cookies and website storage are held in a separate, nonpersistent store for the life of the car browser controller. Phone browsing keeps its existing storage and behavior.
+The window CarPlay app now has its own WKWebView, loading desktop sites as CarTV does (DECISIONS 162). Site shortcuts and search open full webpages in that view, without using AppEnvironment.browser or navigating the phone. Its cookies and website storage are held in a separate, nonpersistent store for the life of the car browser controller. Phone browsing keeps its existing storage and behavior.
 
 This is an experiment, enabled by ROADIVO_CAR_BROWSER in Debug and hard-disabled outside DEBUG. It uses the existing navigation-entitled CPWindow. Apple documents that window for maps; rendering a webpage there does not establish distribution approval or complete browser input support. The media-template app retains its existing behavior.
 
@@ -40,6 +40,25 @@ Use an installed simulator name. For actual CarPlay testing use a signed Debug b
 - The Debug car browser requires Pro but does not depend on parked status or Location readings. It stays available with missing, unknown, moving, denied, or stale readings, including in the CarPlay simulator. The browser remains hard-disabled outside DEBUG; native video parking rules are unchanged.
 - Close and disconnect stop loading, suspend media, and drop the document. Starting a library video closes the car browser. Opening the car browser stops only native playback whose origin is car.
 - Car browser telephone/mail links never launch an app on the phone.
+
+## Plain CarPlay window with direct taps (DECISIONS 161–163)
+
+Debug iPhone builds (`ROADIVO_CARPLAY_APP = screen` in `Config/Debug.xcconfig`) give the car a plain window under
+CarPlay's undocumented `UIWindowSceneSessionRoleCarPlay` role, as the open-source Cafari Lite does
+(github.com/rPlayAI/cafari-lite). They sign with CarPlay Audio + Video (`Resources/RoadivoCarScreen.entitlements`),
+and the `carScreenScene` build script puts the role into the built Info.plist. In that window the car's taps reach
+Roadivo's views and the webpage directly:
+
+- `CarScreenController` draws the whole car app: Home, Favorites, Library, Cast and Browser along the top, playback
+  and Cast controls, and the browser.
+- The browser shows pages at 75% under a bar along the top, as in CarTV: Close, Back, Forward, the page's address
+  (tap to search), Reload and Full screen. Full screen leaves one button in the corner to bring the bar back.
+- A tapped text field opens `CarSearchPage`, with Roadivo's keyboard; a tapped dropdown opens `CarChoicesPage`.
+  Password, card and one-time-code fields get no editor.
+
+Verified in the CarPlay Simulator with an iPhone 11 Pro on iOS 27.0.1. The role isn't in Apple's public headers,
+App Review may reject it, and Cafari and CarTV both report the iOS 27.2 beta breaking it. Delete the two
+`ROADIVO_CARPLAY_APP` lines in `Config/Debug.xcconfig` to bring back the template window and its tabs.
 
 ## Required device checks
 

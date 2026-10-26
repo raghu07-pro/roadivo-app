@@ -21,7 +21,9 @@ final class CarBrowserFieldEditor: NSObject, CPSearchTemplateDelegate {
     }
 
     func present(bridge: CarBrowserInputBridge, request: CarBrowserInputBridge.Request) {
-        if let template, interface?.templates.contains(where: { $0 === template }) == true { return }
+        if let template, interface?.templates.contains(where: { $0 === template }) == true {
+            return
+        }
         submissionID = UUID()
         enteredText = ""
         isApplying = false
@@ -48,7 +50,8 @@ final class CarBrowserFieldEditor: NSObject, CPSearchTemplateDelegate {
     }
 
     func searchTemplate(
-        _ searchTemplate: CPSearchTemplate, updatedSearchText searchText: String,
+        _ searchTemplate: CPSearchTemplate,
+        updatedSearchText searchText: String,
         completionHandler: @escaping ([CPListItem]) -> Void
     ) {
         guard searchTemplate === template, let request, bridge?.isEnabled == true else {
@@ -57,15 +60,19 @@ final class CarBrowserFieldEditor: NSObject, CPSearchTemplateDelegate {
         enteredText = searchText
         let title = request.isSearch ? String(appLocalized: "Submit search") : String(appLocalized: "Done")
         let context = [request.frame.securityOrigin.host, request.label, searchText].filter { !$0.isEmpty }
-        let row = CPListItem(text: title, detailText: context.joined(separator: " · "),
-                             image: UIImage(systemName: "arrow.turn.down.left"))
+        let row = CPListItem(
+            text: title,
+            detailText: context.joined(separator: " · "),
+            image: UIImage(systemName: "arrow.turn.down.left")
+        )
         row.userInfo = Entry(text: searchText, submit: request.isSearch)
         row.isEnabled = searchText.utf16.count <= 4096
         completionHandler([row])
     }
 
     func searchTemplate(
-        _ searchTemplate: CPSearchTemplate, selectedResult item: CPListItem,
+        _ searchTemplate: CPSearchTemplate,
+        selectedResult item: CPListItem,
         completionHandler: @escaping () -> Void
     ) {
         guard searchTemplate === template, let request, let bridge, let entry = item.userInfo as? Entry else {
@@ -80,7 +87,9 @@ final class CarBrowserFieldEditor: NSObject, CPSearchTemplateDelegate {
     }
 
     private func apply(
-        _ entry: Entry, request: CarBrowserInputBridge.Request, bridge: CarBrowserInputBridge,
+        _ entry: Entry,
+        request: CarBrowserInputBridge.Request,
+        bridge: CarBrowserInputBridge,
         completion: @escaping () -> Void
     ) {
         guard !isApplying else { return completion() }
@@ -88,9 +97,11 @@ final class CarBrowserFieldEditor: NSObject, CPSearchTemplateDelegate {
         let submission = submissionID
         bridge.apply(entry.text, to: request, submit: entry.submit) { [weak self] success in
             completion()
-            guard let self, self.submissionID == submission else { return }
-            self.cancel()
-            if !success { self.showFailure() }
+            guard let self, submissionID == submission else { return }
+            cancel()
+            if !success {
+                showFailure()
+            }
         }
     }
 
@@ -98,9 +109,10 @@ final class CarBrowserFieldEditor: NSObject, CPSearchTemplateDelegate {
         let done = CPAlertAction(title: String(appLocalized: "OK"), style: .cancel) { [weak self] _ in
             MainActor.assumeIsolated { self?.interface?.dismissTemplate(animated: true, completion: nil) }
         }
-        interface?.presentTemplate(CPAlertTemplate(
+        let alert = CPAlertTemplate(
             titleVariants: [String(appLocalized: "The page changed or this field could not be submitted. Try again.")],
             actions: [done]
-        ), animated: true, completion: nil)
+        )
+        interface?.presentTemplate(alert, animated: true, completion: nil)
     }
 }

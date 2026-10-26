@@ -1,15 +1,25 @@
 import UIKit
 import WebKit
 
-/// Measures the native/DOM input boundary and routes actual field clicks to a car-side editor.
+/// Measures the native/DOM input boundary and routes actual field and dropdown taps to a car-side editor.
 @MainActor
 final class CarBrowserInputBridge: NSObject, WKScriptMessageHandler, UIGestureRecognizerDelegate {
+    struct Option: Equatable {
+        let title: String
+        let isSelected: Bool
+        let isEnabled: Bool
+    }
+
     struct Request {
         let documentID: String
         let fieldID: String
         let label: String
         let isSearch: Bool
+        /// The page's site, for the editor's title when the field has no label.
+        let host: String
         let frame: WKFrameInfo
+        /// A dropdown's choices; empty for a text field.
+        let options: [Option]
     }
 
     struct Diagnostics {
@@ -22,8 +32,13 @@ final class CarBrowserInputBridge: NSObject, WKScriptMessageHandler, UIGestureRe
 
     var onEdit: ((Request) -> Void)?
     var isEnabled = false {
-        didSet { if !isEnabled { invalidate() } }
+        didSet {
+            if !isEnabled {
+                invalidate()
+            }
+        }
     }
+
     private(set) var diagnostics = Diagnostics()
     private weak var webView: WKWebView?
     private var pending: Request?
@@ -36,8 +51,10 @@ final class CarBrowserInputBridge: NSObject, WKScriptMessageHandler, UIGestureRe
             let content = webView.configuration.userContentController
             content.add(self, contentWorld: Self.world, name: "roadivoCarInput")
             content.addUserScript(WKUserScript(
-                source: CarBrowserInputScript.source, injectionTime: .atDocumentStart,
-                forMainFrameOnly: false, in: Self.world
+                source: CarBrowserInputScript.source,
+                injectionTime: .atDocumentStart,
+                forMainFrameOnly: false,
+                in: Self.world
             ))
             let tap = UITapGestureRecognizer(target: self, action: #selector(nativeTap))
             tap.cancelsTouchesInView = false
@@ -55,8 +72,11 @@ final class CarBrowserInputBridge: NSObject, WKScriptMessageHandler, UIGestureRe
         diagnostics = Diagnostics()
     }
 
-    @objc private func nativeTap() {
-        if isEnabled { diagnostics.nativeTaps += 1 }
+    @objc
+    private func nativeTap() {
+        if isEnabled {
+            diagnostics.nativeTaps += 1
+        }
     }
 
     func gestureRecognizer(
@@ -72,11 +92,18 @@ final class CarBrowserInputBridge: NSObject, WKScriptMessageHandler, UIGestureRe
         switch kind {
         case "ready": diagnostics.ready += 1
         case "pointer": diagnostics.webpageTaps += 1
-        case "edit":
+        case "edit", "choose":
             guard let documentID = body["documentID"] as? String, let fieldID = body["requestID"] as? String,
-                  let label = body["label"] as? String, let search = body["search"] as? Bool else { return }
-            let request = Request(documentID: documentID, fieldID: fieldID, label: label,
-                                  isSearch: search, frame: message.frameInfo)
+                  let label = body["label"] as? String else { return }
+            let request = Request(
+                documentID: documentID,
+                fieldID: fieldID,
+                label: label,
+                isSearch: body["search"] as? Bool ?? false,
+                host: message.frameInfo.securityOrigin.host,
+                frame: message.frameInfo,
+                options: Self.options(from: body["options"])
+            )
             pending = request
             diagnostics.editors += 1
             onEdit?(request)
@@ -85,20 +112,57 @@ final class CarBrowserInputBridge: NSObject, WKScriptMessageHandler, UIGestureRe
     }
 
     func apply(_ value: String, to request: Request, submit: Bool, completion: @escaping (Bool) -> Void) {
-        guard isEnabled, let webView, value.utf16.count <= 4096,
-              pending?.documentID == request.documentID, pending?.fieldID == request.fieldID else {
+        guard isEnabled, value.utf16.count <= 4096, matchesPending(request) else { return completion(false) }
+        pending = nil
+        let arguments: [String: Any] = [
+            "documentToken": request.documentID,
+            "fieldToken": request.fieldID,
+            "value": value,
+            "submit": submit && request.isSearch
+        ]
+        finish(CarBrowserInputScript.apply, arguments, frame: request.frame, completion: completion)
+    }
+
+    func choose(_ index: Int, for request: Request, completion: @escaping (Bool) -> Void) {
+        guard isEnabled, request.options.indices.contains(index), matchesPending(request) else {
             return completion(false)
         }
         pending = nil
-        webView.callAsyncJavaScript(
-            CarBrowserInputScript.apply,
-            arguments: ["documentToken": request.documentID, "fieldToken": request.fieldID,
-                        "value": value, "submit": submit && request.isSearch],
-            in: request.frame, in: Self.world
-        ) { [weak self] result in
-            let success = (try? result.get()) as? Bool == true
-            if success { self?.diagnostics.applied += 1 }
+        let arguments: [String: Any] = [
+            "documentToken": request.documentID,
+            "fieldToken": request.fieldID,
+            "index": index
+        ]
+        finish(CarBrowserInputScript.choose, arguments, frame: request.frame, completion: completion)
+    }
+
+    private func matchesPending(_ request: Request) -> Bool {
+        pending?.documentID == request.documentID && pending?.fieldID == request.fieldID
+    }
+
+    private func finish(
+        _ script: String,
+        _ arguments: [String: Any],
+        frame: WKFrameInfo,
+        completion: @escaping (Bool) -> Void
+    ) {
+        guard let webView else { return completion(false) }
+        webView.callAsyncJavaScript(script, arguments: arguments, in: frame, in: Self.world) { [weak self] result in
+            let success = (try? result.get()) as? Bool == true // A failed call means the page moved on.
+            if success {
+                self?.diagnostics.applied += 1
+            }
             completion(success)
+        }
+    }
+
+    private static func options(from value: Any?) -> [Option] {
+        (value as? [[String: Any]] ?? []).map { option in
+            Option(
+                title: option["title"] as? String ?? "",
+                isSelected: option["selected"] as? Bool ?? false,
+                isEnabled: !(option["disabled"] as? Bool ?? false)
+            )
         }
     }
 }

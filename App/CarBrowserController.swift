@@ -1,12 +1,18 @@
 import UIKit
 import WebKit
 
-/// An independent, mobile-layout browser for the experimental CarPlay window. No phone browser state is reused.
+/// An independent, desktop-layout browser for the experimental CarPlay window. No phone browser state is reused.
 @MainActor
 final class CarBrowserController: UIViewController {
-    let session = CarBrowserSession()
-    var page: WebPageController { session.selected.page }
-    var state: WebPageController.State { session.selected.state }
+    let session: CarBrowserSession
+    var page: WebPageController {
+        session.selected.page
+    }
+
+    var state: WebPageController.State {
+        session.selected.state
+    }
+
     private(set) var isOpen = false
     private(set) var isAllowed = false
     var onChange: (() -> Void)?
@@ -17,6 +23,17 @@ final class CarBrowserController: UIViewController {
     private weak var mountedWebView: WKWebView?
     private var navigationID = UUID()
     private var panStart = CGPoint.zero
+
+    /// `defaultZoom`: each new tab's page zoom; Roadivo's plain car window starts smaller (DECISIONS 162).
+    init(defaultZoom: CGFloat = 1) {
+        session = CarBrowserSession(defaultZoom: defaultZoom)
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    @available(*, unavailable)
+    required init?(coder: NSCoder) {
+        nil
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -47,8 +64,8 @@ final class CarBrowserController: UIViewController {
         mountedWebView?.removeFromSuperview()
         let tab = session.selected
         tab.input.onEdit = { [weak self, weak tab] request in
-            guard let self, let tab, tab === self.session.selected, self.isOpen, self.isAllowed else { return }
-            self.onEditField?(tab.input, request)
+            guard let self, let tab, tab === session.selected, isOpen, isAllowed else { return }
+            onEditField?(tab.input, request)
         }
         let webView = tab.page.webView
         mountedWebView = webView
@@ -62,24 +79,24 @@ final class CarBrowserController: UIViewController {
             webView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
         ])
         page.onState = { [weak self, weak tab] state in
-            guard let self, let tab, self.isOpen else { return }
+            guard let self, let tab, isOpen else { return }
             tab.state = state
-            guard tab === self.session.selected else { return }
-            self.progress.progress = Float(state.progress)
-            self.progress.isHidden = !self.isAllowed || !state.isLoading
-            self.onChange?()
+            guard tab === session.selected else { return }
+            progress.progress = Float(state.progress)
+            progress.isHidden = !isAllowed || !state.isLoading
+            onChange?()
         }
         page.onNavigationStarted = { [weak self, weak tab] in
             tab?.input.invalidate()
-            guard let self, let tab, tab === self.session.selected else { return }
-            self.onInputReset?()
-            self.navigationID = UUID()
-            self.message.isHidden = self.isAllowed
+            guard let self, let tab, tab === session.selected else { return }
+            onInputReset?()
+            navigationID = UUID()
+            message.isHidden = isAllowed
         }
         page.onLoadError = { [weak self, weak tab] in
-            guard let self, let tab, tab === self.session.selected, self.isAllowed, self.isOpen else { return }
-            self.message.text = String(appLocalized: "This page couldn't be loaded. Try reloading it.")
-            self.message.isHidden = false
+            guard let self, let tab, tab === session.selected, isAllowed, isOpen else { return }
+            message.text = String(appLocalized: "This page couldn't be loaded. Try reloading it.")
+            message.isHidden = false
         }
         progress.progress = Float(state.progress)
         page.webView.pageZoom = tab.zoom
@@ -93,7 +110,9 @@ final class CarBrowserController: UIViewController {
         onInputReset?()
         session.selected.pendingURL = url
         navigationID = UUID()
-        if isAllowed { loadPendingPage() }
+        if isAllowed {
+            loadPendingPage()
+        }
     }
 
     func setAllowed(_ allowed: Bool) {
@@ -101,7 +120,9 @@ final class CarBrowserController: UIViewController {
         let changed = allowed != isAllowed
         isAllowed = allowed
         session.selected.input.isEnabled = allowed && isOpen
-        if !allowed { onInputReset?() }
+        if !allowed {
+            onInputReset?()
+        }
         page.webView.isUserInteractionEnabled = allowed
         page.webView.isHidden = !allowed
         progress.isHidden = !allowed || !state.isLoading
@@ -120,7 +141,9 @@ final class CarBrowserController: UIViewController {
                 page.stop()
             }
         }
-        if allowed { loadPendingPage() }
+        if allowed {
+            loadPendingPage()
+        }
     }
 
     func close() {
@@ -129,7 +152,9 @@ final class CarBrowserController: UIViewController {
         navigationID = UUID()
         session.reset()
         isAllowed = false
-        if isViewLoaded { mountSelectedTab() }
+        if isViewLoaded {
+            mountSelectedTab()
+        }
     }
 
     private func loadPendingPage() {

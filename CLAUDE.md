@@ -40,17 +40,24 @@ tabs: **Home · Favorites · Discover · Settings**.
 
 - **Independent car browser prototype** (owner, 2026-10-23): Debug window builds with `ROADIVO_CAR_BROWSER = YES`
   open sites in `CarBrowserController`, never in the phone browser. It reuses `WebPageController` with isolated,
-  nonpersistent website storage and mobile content preferences. `CarBrowserControls` provides template search,
-  navigation, scrolling and ordinary-link selection. It requires Pro but no parking or Location evidence in Debug, per the owner's
+  nonpersistent website storage and desktop sites, as CarTV shows youtube.com (DECISIONS 162). `CarBrowserControls`
+  provides template search, navigation, scrolling and ordinary-link selection. It requires Pro but no parking or Location evidence in Debug, per the owner's
   request (2026-10-23), and is hard-disabled in Release. Native video parking rules are unchanged. See `Docs/CarBrowserPrototype.md` for limitations and the required Mac/device checks.
   General webpage taps/forms and distribution approval are unverified; do not describe this as a complete browser.
   Browser shortcuts fill one row the car wraps across its width, each site's icon inset on Roadivo's surface colour as on the iPhone (light and dark) and 256 px icon requests. The More menu adds Start Page,
   Reload, Forward, up to six car-only tabs, session-only saved pages, page zoom and auto-hiding controls.
   YouTube has native search through `CarPlayBrowserTab.showSearch(on:)`; page links stay in native template lists.
   Direct webpage taps are unsupported by CPMapTemplate's base view; these actions do not establish general form input.
-  The Debug input prototype installs `CarBrowserInputBridge` in car tabs only: trusted webpage field clicks open
-  `CarBrowserFieldEditor`, then update the original field/frame through an isolated script world. More → Input test
-  exposes a local form and input counters. This does not provide a new CarPlay tap-delivery API; require device proof.
+  The Debug input prototype installs `CarBrowserInputBridge` in car tabs only: trusted webpage field and dropdown taps
+  reach the car's editor, then update the original field/frame through an isolated script world. More → Input test
+  exposes a local form and input counters.
+  **Direct taps (DECISIONS 161–163):** Debug iPhone builds use `ROADIVO_CARPLAY_APP = screen`: a plain window under
+  CarPlay's undocumented `UIWindowSceneSessionRoleCarPlay` role (Audio + Video signing, `carScreenScene` script in
+  Project.swift), where taps reach Roadivo's own views and the page. `CarScreenController` draws the whole car app
+  there over `CarPlayWindowController`: the five tabs, playback and Cast controls, and the browser at 75% under
+  CarTV's style of bar along the top (Close, Back, Forward, the address, Reload, Full screen). Tapped fields open
+  `CarSearchPage` (Roadivo's keyboard), dropdowns `CarChoicesPage`. Delete the two lines in `Config/Debug.xcconfig`
+  to bring back the CarPlay window and tabs.
 
 - **Which CarPlay app the car shows** is `ROADIVO_CARPLAY_APP` in `Config/Shared.xcconfig` (one per app; DECISIONS 152):
   `window` (now), `media` or `map`. `CarPlayAvailability.app` reads it; `AppDelegate` and the Info.plist manifest pick

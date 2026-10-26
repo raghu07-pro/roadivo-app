@@ -90,14 +90,19 @@ final class CarBrowserControls {
     }
 
     private func row(
-        _ title: String, symbol name: String, detail: String? = nil,
-        enabled: Bool = true, action: @escaping () -> Void
+        _ title: String,
+        symbol name: String,
+        detail: String? = nil,
+        enabled: Bool = true,
+        action: @escaping () -> Void
     ) -> CPListItem {
         let item = CPListItem(text: title, detailText: detail, image: symbol(name))
         item.isEnabled = enabled
         item.handler = { [weak self] _, completion in
             MainActor.assumeIsolated {
-                if self?.browser.isAllowed == true { action() }
+                if self?.browser.isAllowed == true {
+                    action()
+                }
                 completion()
             }
         }
@@ -126,8 +131,9 @@ final class CarBrowserControls {
             ? String(appLocalized: "Show browser controls") : String(appLocalized: "Hide browser controls")
         var rows = [
             row(String(appLocalized: "Start Page"), symbol: "house") { [weak self] in self?.onHome?() },
-            row(String(appLocalized: "Forward"), symbol: "chevron.right", enabled: browser.state.canGoForward) {
-                [weak self] in
+            row(
+                String(appLocalized: "Forward"), symbol: "chevron.right", enabled: browser.state.canGoForward
+            ) { [weak self] in
                 self?.browser.forward()
                 self?.returnToPage()
             },
@@ -135,14 +141,22 @@ final class CarBrowserControls {
                 self?.browser.reload()
                 self?.returnToPage()
             },
-            row(String(appLocalized: "Tabs"), symbol: "square.on.square",
-                detail: String(browser.session.tabs.count)) { [weak self] in self?.showTabs() },
+            row(
+                String(appLocalized: "Tabs"),
+                symbol: "square.on.square",
+                detail: String(browser.session.tabs.count)
+            ) { [weak self] in self?.showTabs() },
             row(String(appLocalized: "Saved pages"), symbol: "star") { [weak self] in self?.showSavedPages() },
-            row(String(appLocalized: "Page size"), symbol: "textformat.size",
-                detail: "\(Int(browser.session.selected.zoom * 100))%") { [weak self] in self?.showPageSize() },
+            row(
+                String(appLocalized: "Page size"),
+                symbol: "textformat.size",
+                detail: "\(Int(browser.session.selected.zoom * 100))%"
+            ) { [weak self] in self?.showPageSize() },
             row(String(appLocalized: "Links on this page"), symbol: "link") { [weak self] in self?.showLinks() },
-            row(controlsTitle,
-                symbol: "arrow.up.left.and.arrow.down.right") { [weak self] in self?.toggleControls() }
+            row(
+                controlsTitle,
+                symbol: "arrow.up.left.and.arrow.down.right"
+            ) { [weak self] in self?.toggleControls() }
         ]
         if let url = browser.state.url, CarBrowserSiteSearch.url(for: "test", on: url) != nil {
             rows.insert(row(String(appLocalized: "Search YouTube"), symbol: "magnifyingglass") { [weak self] in
@@ -166,8 +180,11 @@ final class CarBrowserControls {
             },
             row(String(appLocalized: "Native taps"), symbol: "hand.tap", detail: String(counts.nativeTaps)) {},
             row(String(appLocalized: "Ready frames"), symbol: "doc", detail: String(counts.ready)) {},
-            row(String(appLocalized: "Webpage taps"), symbol: "cursorarrow.click",
-                detail: String(counts.webpageTaps)) {},
+            row(
+                String(appLocalized: "Webpage taps"),
+                symbol: "cursorarrow.click",
+                detail: String(counts.webpageTaps)
+            ) {},
             row(String(appLocalized: "Editor requests"), symbol: "keyboard", detail: String(counts.editors)) {},
             row(String(appLocalized: "Applied edits"), symbol: "checkmark", detail: String(counts.applied)) {}
         ]
@@ -176,20 +193,32 @@ final class CarBrowserControls {
 
     private func showTabs() {
         var rows = browser.session.tabs.map { tab in
-            row(tab.title, symbol: tab === browser.session.selected ? "checkmark.circle.fill" : "globe",
-                detail: tab.state.url.map(WebAddress.displayName(of:))) { [weak self] in
+            row(
+                tab.title,
+                symbol: tab === browser.session.selected ? "checkmark.circle.fill" : "globe",
+                detail: tab.state.url.map(WebAddress.displayName(of:))
+            ) { [weak self] in
                 self?.browser.selectTab(tab.id)
                 self?.returnToPage()
             }
         }
         rows += [
-            row(String(appLocalized: "New tab"), symbol: "plus",
-                enabled: browser.session.tabs.count < CarBrowserSession.maximumTabs) { [weak self] in
-                if self?.browser.newTab() == true { self?.onHome?() }
+            row(
+                String(appLocalized: "New tab"),
+                symbol: "plus",
+                enabled: browser.session.tabs.count < CarBrowserSession.maximumTabs
+            ) { [weak self] in
+                if self?.browser.newTab() == true {
+                    self?.onHome?()
+                }
             },
             row(String(appLocalized: "Close tab"), symbol: "xmark") { [weak self] in
                 self?.browser.closeTab()
-                if self?.browser.state.url == nil { self?.onHome?() } else { self?.returnToPage() }
+                if self?.browser.state.url == nil {
+                    self?.onHome?()
+                } else {
+                    self?.returnToPage()
+                }
             }
         ]
         push(String(appLocalized: "Tabs"), rows: rows)
@@ -199,8 +228,11 @@ final class CarBrowserControls {
         let url = browser.state.url
         let isSaved = browser.session.savedPages.contains { $0.url == url }
         var rows = [
-            row(isSaved ? String(appLocalized: "Remove saved page") : String(appLocalized: "Save this page"),
-                symbol: isSaved ? "star.slash" : "star", enabled: url.map(WebAddress.isWeb) == true) { [weak self] in
+            row(
+                isSaved ? String(appLocalized: "Remove saved page") : String(appLocalized: "Save this page"),
+                symbol: isSaved ? "star.slash" : "star",
+                enabled: url.map(WebAddress.isWeb) == true
+            ) { [weak self] in
                 self?.browser.session.toggleSavedPage()
                 self?.returnToPage()
             }
@@ -216,8 +248,7 @@ final class CarBrowserControls {
     private func showPageSize() {
         let rows = [75, 100, 125, 150, 175].map { percent in
             let selected = Int(browser.session.selected.zoom * 100) == percent
-            return row("\(percent)%", symbol: selected ? "checkmark" : "textformat") {
-                [weak self] in
+            return row("\(percent)%", symbol: selected ? "checkmark" : "textformat") { [weak self] in
                 self?.browser.setPageZoom(CGFloat(percent) / 100)
                 self?.returnToPage()
             }
@@ -229,10 +260,10 @@ final class CarBrowserControls {
         let request = UUID()
         linksRequest = request
         browser.links { [weak self] links in
-            guard let self, self.linksRequest == request, self.browser.isAllowed, self.browser.isOpen else { return }
-            let template = self.makeLinks(links, startingAt: 0)
-            self.linkList = template
-            self.interface?.pushTemplate(template, animated: true, completion: nil)
+            guard let self, linksRequest == request, browser.isAllowed, browser.isOpen else { return }
+            let template = makeLinks(links, startingAt: 0)
+            linkList = template
+            interface?.pushTemplate(template, animated: true, completion: nil)
         }
     }
 
@@ -251,8 +282,8 @@ final class CarBrowserControls {
         if end < links.count {
             rows.append(row(String(appLocalized: "More links"), symbol: "ellipsis") { [weak self] in
                 guard let self else { return }
-                let next = self.makeLinks(links, startingAt: end)
-                self.linkList?.updateSections(next.sections)
+                let next = makeLinks(links, startingAt: end)
+                linkList?.updateSections(next.sections)
             })
         }
         let template = CPListTemplate(

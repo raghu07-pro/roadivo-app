@@ -40,12 +40,12 @@ final class WebPageController: NSObject {
     init(
         websiteDataStore: WKWebsiteDataStore = .default(),
         allowsExternalLinks: Bool = true,
-        prefersMobileContent: Bool = false
+        contentMode: WKWebpagePreferences.ContentMode = .recommended
     ) {
         self.allowsExternalLinks = allowsExternalLinks
         let configuration = WKWebViewConfiguration()
         configuration.websiteDataStore = websiteDataStore
-        configuration.defaultWebpagePreferences.preferredContentMode = prefersMobileContent ? .mobile : .recommended
+        configuration.defaultWebpagePreferences.preferredContentMode = contentMode
         configuration.allowsInlineMediaPlayback = true
         configuration.allowsAirPlayForMediaPlayback = true
         configuration.allowsPictureInPictureMediaPlayback = true

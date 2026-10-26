@@ -21,6 +21,32 @@ private let baseSettings: SettingsDictionary = [
     "LOCALIZATION_PREFERS_STRING_CATALOGS": "YES"
 ]
 
+/// The Debug car browser experiment's car window (DECISIONS 161): CarPlay's plain window role isn't in Apple's headers,
+/// so it replaces the template scene in the built Info.plist only when `ROADIVO_CARPLAY_APP` is `screen`. Every other
+/// build leaves Info.plist as written.
+private let carScreenScene = TargetScript.post(
+    script: """
+    [ "$ROADIVO_CARPLAY_APP" = "screen" ] || exit 0
+    plist="$TARGET_BUILD_DIR/$INFOPLIST_PATH"
+    scenes=":UIApplicationSceneManifest:UISceneConfigurations"
+    role="$scenes:UIWindowSceneSessionRoleCarPlay"
+    template="$scenes:CPTemplateApplicationSceneSessionRoleApplication"
+    # Gone already when an earlier build ran this and Info.plist wasn't rebuilt.
+    /usr/libexec/PlistBuddy -c "Delete $template" "$plist" 2>/dev/null || true
+    /usr/libexec/PlistBuddy -c "Delete $role" "$plist" 2>/dev/null || true
+    /usr/libexec/PlistBuddy \\
+        -c "Add $role array" -c "Add $role:0 dict" \\
+        -c "Add $role:0:UISceneClassName string UIWindowScene" \\
+        -c "Add $role:0:UISceneConfigurationName string CarPlay" \\
+        -c "Add $role:0:UISceneDelegateClassName string $PRODUCT_MODULE_NAME.CarPlayScreenSceneDelegate" \\
+        "$plist"
+    """,
+    name: "CarPlay screen scene",
+    // Runs once Info.plist is built, before signing.
+    inputPaths: ["$(TARGET_BUILD_DIR)/$(INFOPLIST_PATH)"],
+    basedOnDependencyAnalysis: false
+)
+
 let project = Project(
     name: "Roadivo",
     organizationName: "Roadivo",
@@ -65,11 +91,14 @@ let project = Project(
                 // The privacy page: the one file hosted for the App Store is also shown in the app.
                 "Docs/Website/roadivo.html"
             ],
+            scripts: [carScreenScene],
             // Screen Broadcast: Apple's screen recording, streamed to a car screen's browser (DECISIONS 124).
             dependencies: [.target(name: "RoadivoBroadcast")],
             settings: .settings(base: [
                 // Follows the CarPlay switch in Config/Shared.xcconfig.
                 "CODE_SIGN_ENTITLEMENTS": "$(ROADIVO_CARPLAY_ENTITLEMENTS_$(ROADIVO_CARPLAY))",
+                // `carScreenScene` edits the built Info.plist, which a sandboxed script can only read.
+                "ENABLE_USER_SCRIPT_SANDBOXING": "NO",
                 // Primary icon: AppIcon (the car on the road); AppIcon-Classic ships as an alternate,
                 // set with UIApplication.setAlternateIconName("AppIcon-Classic").
                 "ASSETCATALOG_COMPILER_APPICON_NAME": "AppIcon",

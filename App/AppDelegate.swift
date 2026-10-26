@@ -21,10 +21,18 @@ final class AppDelegate: NSObject, UIApplicationDelegate {
         let role = connectingSceneSession.role
         CarPlayTrace.write("scene asked for: \(role.rawValue)")
         let configuration = UISceneConfiguration(name: nil, sessionRole: role)
+        #if DEBUG
+            if role == CarPlayScreenSceneDelegate.role {
+                configuration.sceneClass = UIWindowScene.self
+                configuration.delegateClass = CarPlayScreenSceneDelegate.self
+                return configuration
+            }
+        #endif
         if role == .carTemplateApplication {
             configuration.sceneClass = CPTemplateApplicationScene.self
             let delegate: AnyClass = switch CarPlayAvailability.app {
-            case .window: CarPlayWindowSceneDelegate.self
+            // The screen app declares no template scene; this only answers if CarPlay asks anyway.
+            case .window, .screen: CarPlayWindowSceneDelegate.self
             case .media: CarPlaySceneDelegate.self
             case .map: CarPlayNavigationSceneDelegate.self
             }

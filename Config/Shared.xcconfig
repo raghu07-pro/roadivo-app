@@ -33,9 +33,12 @@ ROADIVO_CARPLAY_ENTITLEMENTS_NO[sdk=iphonesimulator*] = $(ROADIVO_CARPLAY_FILE_$
 // window: Roadivo's own screen, the four tabs as buttons and video while parked (navigation entitlement, no map).
 // media: CarPlay's template tabs, video only where the car offers it (Audio, or Video per ROADIVO_CARPLAY_VIDEO).
 // map: the navigation map and guidance, kept for a later release (DECISIONS 147–149).
+// screen: a plain window that takes the car's taps, for the Debug car browser experiment (Debug.xcconfig, DECISIONS
+// 161). It signs with CarPlay Audio + Video, as the open-source Cafari Lite needs for that window to appear.
 ROADIVO_CARPLAY_APP = window
 ROADIVO_CARPLAY_FILE_window = Resources/RoadivoNavigation.entitlements
 ROADIVO_CARPLAY_FILE_map = Resources/RoadivoNavigation.entitlements
+ROADIVO_CARPLAY_FILE_screen = Resources/RoadivoCarScreen.entitlements
 ROADIVO_CARPLAY_FILE_media = $(ROADIVO_MEDIA_ENTITLEMENTS_$(ROADIVO_CARPLAY_VIDEO))
 // The media app signs with CarPlay Audio, or Video only where ROADIVO_CARPLAY_VIDEO (Debug/Release.xcconfig) is YES:
 // Apple's iOS 27.2 guide lets an app hold one or the other, never both (DECISIONS 150–151).
@@ -46,6 +49,8 @@ ROADIVO_CARPLAY_SCENE_DELEGATE = $(ROADIVO_CARPLAY_DELEGATE_$(ROADIVO_CARPLAY_AP
 ROADIVO_CARPLAY_DELEGATE_window = CarPlayWindowSceneDelegate
 ROADIVO_CARPLAY_DELEGATE_media = CarPlaySceneDelegate
 ROADIVO_CARPLAY_DELEGATE_map = CarPlayNavigationSceneDelegate
+// The screen app has no template scene: the build drops it from Info.plist (Project.swift).
+ROADIVO_CARPLAY_DELEGATE_screen = CarPlayWindowSceneDelegate
 
 // The iPhone's Directions tab and its route card (DECISIONS 145–146) are kept for a later release (owner, 2026-10-23;
 // DECISIONS 149). NO hides them everywhere; the code stays. YES brings them back.

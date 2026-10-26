@@ -210,7 +210,8 @@ final class CarPlayWindowController: UIViewController {
             diag app \(UIApplication.shared.applicationState.rawValue), status \(playback.status), \
             time \(String(format: "%.1f", player.currentTime().seconds)), elapsed \(Int(playback.elapsed)), \
             control \(player.timeControlStatus.rawValue), waiting \(player.reasonForWaitingToPlay?.rawValue ?? "-"), \
-            rate \(player.rate), item \(item?.status.rawValue ?? -1), error \(item?.error?.localizedDescription ?? "-"), \
+            rate \(player.rate), item \(item?.status.rawValue ?? -1), \
+            error \(item?.error?.localizedDescription ?? "-"), \
             layer \(video.playerLayer.player != nil), ready \(video.playerLayer.isReadyForDisplay), \
             external \(player.isExternalPlaybackActive), url \(playback.current?.streamURL.lastPathComponent ?? "-")
             """)

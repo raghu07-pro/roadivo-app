@@ -10,17 +10,21 @@ final class CarBrowserSession {
         let input: CarBrowserInputBridge
         var state = WebPageController.State()
         var pendingURL: URL?
-        var zoom: CGFloat = 1
+        var zoom: CGFloat
 
-        init(websiteDataStore: WKWebsiteDataStore) {
+        init(websiteDataStore: WKWebsiteDataStore, zoom: CGFloat) {
+            self.zoom = zoom
+            // Desktop sites suit the wide car screen, as in CarTV (DECISIONS 162).
             page = WebPageController(
-                websiteDataStore: websiteDataStore, allowsExternalLinks: false, prefersMobileContent: true
+                websiteDataStore: websiteDataStore, allowsExternalLinks: false, contentMode: .desktop
             )
             input = CarBrowserInputBridge(webView: page.webView)
         }
 
         var title: String {
-            if !state.title.isEmpty { return state.title }
+            if !state.title.isEmpty {
+                return state.title
+            }
             return (state.url ?? pendingURL).map(WebAddress.displayName(of:)) ?? String(appLocalized: "New tab")
         }
     }
@@ -35,11 +39,14 @@ final class CarBrowserSession {
     private(set) var selected: Tab
     private(set) var savedPages: [SavedPage] = []
     private var websiteDataStore: WKWebsiteDataStore
+    /// Each new tab's page zoom.
+    let defaultZoom: CGFloat
 
-    init() {
+    init(defaultZoom: CGFloat = 1) {
+        self.defaultZoom = defaultZoom
         let store = WKWebsiteDataStore.nonPersistent()
         websiteDataStore = store
-        let tab = Tab(websiteDataStore: store)
+        let tab = Tab(websiteDataStore: store, zoom: defaultZoom)
         tabs = [tab]
         selected = tab
     }
@@ -48,7 +55,7 @@ final class CarBrowserSession {
     func addTab() -> Bool {
         guard tabs.count < Self.maximumTabs else { return false }
         suspend(selected)
-        let tab = Tab(websiteDataStore: websiteDataStore)
+        let tab = Tab(websiteDataStore: websiteDataStore, zoom: defaultZoom)
         tabs.append(tab)
         selected = tab
         return true
@@ -71,7 +78,7 @@ final class CarBrowserSession {
         if let tab = tabs.last {
             selected = tab
         } else {
-            let tab = Tab(websiteDataStore: websiteDataStore)
+            let tab = Tab(websiteDataStore: websiteDataStore, zoom: defaultZoom)
             tabs = [tab]
             selected = tab
         }
@@ -93,7 +100,7 @@ final class CarBrowserSession {
             tab.page.webView.loadHTMLString("", baseURL: nil)
         }
         websiteDataStore = .nonPersistent()
-        let tab = Tab(websiteDataStore: websiteDataStore)
+        let tab = Tab(websiteDataStore: websiteDataStore, zoom: defaultZoom)
         tabs = [tab]
         selected = tab
         savedPages = []
