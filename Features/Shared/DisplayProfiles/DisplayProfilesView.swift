@@ -16,10 +16,18 @@ struct DisplayProfilesView: View {
                     Button {
                         created = viewModel.saveCurrentReceiver()
                     } label: {
-                        Label {
-                            Text("Save a Profile for \(receiver.name)").foregroundStyle(Color.primary)
-                        } icon: {
-                            IconTile(systemImage: receiver.kind.symbol)
+                        // In the accent with a +, so it reads as the action it is.
+                        HStack {
+                            Label {
+                                Text("Save a Profile for \(receiver.name)").foregroundStyle(.roadAccent)
+                            } icon: {
+                                IconTile(systemImage: receiver.kind.symbol)
+                            }
+                            Spacer(minLength: 0)
+                            Image(systemName: "plus.circle.fill")
+                                .font(.title3)
+                                .foregroundStyle(.roadAccent)
+                                .accessibilityHidden(true)
                         }
                     }
                     .accessibilityIdentifier("profiles.saveCurrent")

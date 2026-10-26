@@ -15,8 +15,9 @@ struct DiscoverView: View {
     var isCarShowing = false
 
     @State private var path: [Route] = []
-    /// The start page's tile width, so the quick sites match it.
-    @ScaledMetric(relativeTo: .body) private var siteColumn: CGFloat = 76
+    /// A little narrower than the start page's, so the card's four sites share one row on every iPhone; larger text
+    /// widens them until they wrap.
+    @ScaledMetric(relativeTo: .body) private var siteColumn: CGFloat = 68
 
     private enum Route: Hashable {
         case browser
@@ -81,7 +82,7 @@ struct DiscoverView: View {
                 identifier: "cast.browser"
             ) { path.append(.browser) }
             // The start page's eager grid: the text-size audit reads a tile LazyVGrid rebuilds as unscaled.
-            TileGrid(minimumWidth: siteColumn, spacing: Spacing.sm, rowSpacing: Spacing.md) {
+            TileGrid(minimumWidth: siteColumn, spacing: Spacing.xs, rowSpacing: Spacing.md) {
                 ForEach(quickSites) { site in
                     SiteTile(site: site, image: browser.icons.icon(for: site)) { open(site.url) }
                 }
@@ -108,7 +109,7 @@ struct DiscoverView: View {
     private var safetyNote: some View {
         Label {
             Text("For passengers, or while parked. Never watch video while driving.")
-                .foregroundStyle(.secondary)
+                .foregroundStyle(.roadMuted)
         } icon: {
             Image(systemName: "exclamationmark.triangle.fill").foregroundStyle(.roadAccent)
         }
@@ -133,7 +134,7 @@ struct DiscoverView: View {
                         .foregroundStyle(.primary)
                     Text(detail)
                         .font(Typography.secondary)
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(.roadMuted)
                 }
                 .multilineTextAlignment(.leading)
                 .fixedSize(horizontal: false, vertical: true)

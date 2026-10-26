@@ -23,7 +23,7 @@ struct EmptyStateView<Actions: View>: View {
                             .accessibilityAddTraits(.isHeader)
                         Text(message)
                             .font(Typography.secondary)
-                            .foregroundStyle(.secondary)
+                            .foregroundStyle(.roadMuted)
                     }
                     .multilineTextAlignment(.center)
                     .fixedSize(horizontal: false, vertical: true)

@@ -33,6 +33,7 @@ final class ScreenshotUITests: XCTestCase {
         XCTAssertTrue(app.buttons["scanner.close"].waitForExistence(timeout: 5))
         snapshot("09-Scanner", app: app)
         app.buttons["scanner.close"].tap()
+        app.buttons["addSource.way.server"].tap()
         app.buttons["addSource.server.jellyfin"].tap()
         XCTAssertTrue(app.textFields["server.address"].waitForExistence(timeout: 5))
         snapshot("10-ServerLogin", app: app)

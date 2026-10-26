@@ -17,7 +17,7 @@ struct PaywallViewModelTests {
         #expect(viewModel.phase == .loaded)
         #expect(viewModel.offers.map(\.plan) == [.weekly, .yearly, .lifetime])
         #expect(viewModel.selected == .lifetime)
-        #expect(viewModel.buyTitle == "₹439 Buy now")
+        #expect(viewModel.buyTitle == "Buy for ₹439")
         #expect(viewModel.terms.contains("No subscription"))
     }
 
@@ -35,7 +35,7 @@ struct PaywallViewModelTests {
         #expect(viewModel.buyTitle == String(appLocalized: "Your current plan"))
         viewModel.selected = .lifetime
         #expect(!viewModel.isSelectedCurrent)
-        #expect(viewModel.buyTitle == "₹439 Buy now")
+        #expect(viewModel.buyTitle == "Buy for ₹439")
     }
 
     @Test("Subscriptions show their renewal terms and intro price")

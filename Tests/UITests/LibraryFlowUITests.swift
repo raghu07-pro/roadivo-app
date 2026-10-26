@@ -238,22 +238,28 @@ final class LibraryFlowUITests: XCTestCase {
     func testMediaServerLoginIsReachable() {
         let app = XCUIApplication.roadivo(skipOnboarding: true)
         app.buttons["library.empty.addSource"].tap()
-        let jellyfin = app.buttons["addSource.server.jellyfin"]
         // A sheet's first appearance on a cold simulator can take longer than 5 s.
-        XCTAssertTrue(jellyfin.waitForExistence(timeout: 10))
+        let servers = app.buttons["addSource.way.server"]
+        XCTAssertTrue(servers.waitForExistence(timeout: 10))
+        servers.tap()
+        let jellyfin = app.buttons["addSource.server.jellyfin"]
+        XCTAssertTrue(jellyfin.waitForExistence(timeout: 5))
         jellyfin.tap()
         XCTAssertTrue(app.textFields["server.address"].waitForExistence(timeout: 10))
         XCTAssertFalse(app.buttons["server.connect"].isEnabled)
     }
 
-    /// All four server types are offered; Plex shows a code for plex.tv/link (a scripted one here).
+    /// A playlist first, with Add Source off until there's a link; all four server types under Media servers; Plex
+    /// shows a code for plex.tv/link (a scripted one here).
     func testAddSourceOffersFourServersAndPlexCode() throws {
         let app = XCUIApplication.roadivo(skipOnboarding: true)
         app.buttons["library.empty.addSource"].tap()
+        XCTAssertTrue(app.buttons["addSource.submit"].waitForExistence(timeout: 5))
+        XCTAssertFalse(app.buttons["addSource.submit"].isEnabled)
+        app.buttons["addSource.way.server"].tap()
         for kind in ["jellyfin", "emby", "xtream", "plex"] {
             XCTAssertTrue(app.buttons["addSource.server.\(kind)"].waitForExistence(timeout: 5), kind)
         }
-        XCTAssertFalse(app.buttons["addSource.submit"].isEnabled)
         snapshot("07-AddSource", app: app)
         app.buttons["addSource.whatIsSource"].tap()
         // Tips for finding the user's own link and a way to Help & FAQ; no web search for playlists.

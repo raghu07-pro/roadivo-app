@@ -22,6 +22,20 @@ struct AddSourceViewModelTests {
         #expect(viewModel.canSubmit)
     }
 
+    @Test("A link still being typed isn't flagged; text that can't become one is")
+    func typingALink() throws {
+        let viewModel = try AddSourceViewModel(repository: TestLibrary().repository)
+        for partial in ["h", "htt", "https:", "https://", "http://"] {
+            viewModel.input = partial
+            #expect(!viewModel.canSubmit, "\(partial)")
+            #expect(!viewModel.showsUnusableWarning, "\(partial)")
+        }
+        viewModel.input = "test"
+        #expect(viewModel.showsUnusableWarning)
+        viewModel.input = "https:// oops"
+        #expect(viewModel.showsUnusableWarning)
+    }
+
     @Test("M3U text counts only with a playable link; a header and junk alone is flagged")
     func m3uDetection() throws {
         let viewModel = try AddSourceViewModel(repository: TestLibrary().repository)

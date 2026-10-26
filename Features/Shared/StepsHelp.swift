@@ -62,7 +62,7 @@ private struct StepsSheet: View {
                     if let note {
                         Text(app: note)
                             .font(Typography.caption)
-                            .foregroundStyle(.secondary)
+                            .foregroundStyle(.roadMuted)
                     }
                 }
                 .padding(Spacing.md)

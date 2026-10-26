@@ -52,7 +52,7 @@ final class PaywallViewModel {
         }
         return offer.plan.isSubscription
             ? String(appLocalized: "Subscribe for \(offer.displayPrice)")
-            : String(appLocalized: "\(offer.displayPrice) Buy now")
+            : String(appLocalized: "Buy for \(offer.displayPrice)")
     }
 
     /// The legal line under the plans; App Review requires the renewal terms.

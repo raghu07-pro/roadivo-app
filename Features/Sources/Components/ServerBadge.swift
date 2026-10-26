@@ -33,12 +33,14 @@ struct ServerBadge: View {
     }
 }
 
-/// One server type under "Or connect a media server": its badge and name.
-struct ServerCard: View {
+/// One server type in Add a Source's list: its badge, name and a chevron to sign in.
+struct ServerRow: View {
     let kind: MediaServerKind
 
+    /// Where the rows' dividers start: past the badge, as iOS lists inset theirs.
+    static let dividerInset: CGFloat = Spacing.md + 40 + Spacing.sm
+
     var body: some View {
-        let shape = RoundedRectangle(cornerRadius: Radius.md, style: .continuous)
         HStack(spacing: Spacing.sm) {
             ServerBadge(kind: kind)
             Text(kind.title)
@@ -46,27 +48,32 @@ struct ServerCard: View {
                 .foregroundStyle(.primary)
                 .fixedSize(horizontal: false, vertical: true)
             Spacer(minLength: 0)
+            Image(systemName: "chevron.forward")
+                .font(.footnote.weight(.semibold))
+                .foregroundStyle(.tertiary)
+                .accessibilityHidden(true)
         }
-        .padding(Spacing.sm)
-        .frame(maxWidth: .infinity, minHeight: 64, alignment: .leading)
-        .background(.roadSurface, in: shape)
-        .overlay { shape.strokeBorder(Color.primary.opacity(0.06), lineWidth: 1) }
-        .contentShape(shape)
+        .padding(.horizontal, Spacing.md)
+        .padding(.vertical, Spacing.sm)
+        .frame(maxWidth: .infinity, minHeight: 60, alignment: .leading)
+        .contentShape(Rectangle())
     }
 }
 
 #Preview("Light") {
-    LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: Spacing.sm) {
-        ForEach(MediaServerKind.allCases) { ServerCard(kind: $0) }
+    VStack(spacing: 0) {
+        ForEach(MediaServerKind.allCases) { ServerRow(kind: $0) }
     }
+    .cardStyle(padding: 0)
     .padding()
     .background(.roadCanvas)
 }
 
 #Preview("Dark, largest text") {
-    VStack {
-        ForEach(MediaServerKind.allCases) { ServerCard(kind: $0) }
+    VStack(spacing: 0) {
+        ForEach(MediaServerKind.allCases) { ServerRow(kind: $0) }
     }
+    .cardStyle(padding: 0)
     .padding()
     .background(.roadCanvas)
     .preferredColorScheme(.dark)

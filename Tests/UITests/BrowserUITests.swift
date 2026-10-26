@@ -28,14 +28,12 @@ final class BrowserUITests: XCTestCase {
         XCTAssertTrue(app.buttons["browser.reload"].exists)
         snapshot("43-Browser-Page", app: app)
 
+        // Back, at a tap: the Start Page.
         app.buttons["browser.menu"].tap()
-        let start = app.buttons["browser.start"]
-        XCTAssertTrue(start.waitForExistence(timeout: 5))
-        start.tap()
         XCTAssertTrue(app.buttons["browser.site.Google"].waitForExistence(timeout: 5))
     }
 
-    /// A site in the grid opens full screen in the Browser, not its app, with CarTV's back menu.
+    /// A site in the grid opens full screen in the Browser, not its app; Back's long press offers Leave Browser.
     func testSiteOpensInTheBrowser() {
         let app = XCUIApplication.roadivo(skipOnboarding: true)
         openBrowser(app)
@@ -48,7 +46,7 @@ final class BrowserUITests: XCTestCase {
         XCTAssertTrue(app.descendants(matching: .any)["browser.web"].waitForExistence(timeout: 10))
         XCTAssertEqual(app.state, .runningForeground) // Still in Roadivo, not the site's app.
         XCTAssertFalse(app.tabBars.firstMatch.isHittable) // The page has the whole screen.
-        app.buttons["browser.menu"].tap()
+        app.buttons["browser.menu"].press(forDuration: 1)
         let leave = app.buttons["browser.leave"]
         XCTAssertTrue(leave.waitForExistence(timeout: 5))
         leave.tap()

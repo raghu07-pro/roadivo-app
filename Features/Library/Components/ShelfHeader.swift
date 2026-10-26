@@ -1,10 +1,11 @@
 import SwiftUI
 
-/// A shelf's header on Home: the title, with its count at the end ("17 channels ›" when it opens
-/// the group), in quiet grey. Large text puts the count under the title.
+/// A shelf's header on Home: the title, with its count at the end, in the accent with a chevron when it opens the
+/// group ("17 channels ›", as App Store's See All), otherwise quiet grey. Large text puts the count under the title.
 struct ShelfHeader: View {
     let title: String
-    let detail: String
+    /// Empty for a shelf whose count says nothing useful (Continue Watching's films aren't "channels").
+    var detail = ""
     var opensGroup = false
 
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
@@ -14,14 +15,18 @@ struct ShelfHeader: View {
             if dynamicTypeSize.isAccessibilitySize {
                 VStack(alignment: .leading, spacing: Spacing.xxs) {
                     titleText
-                    count
+                    if !detail.isEmpty {
+                        count
+                    }
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
             } else {
                 HStack(alignment: .firstTextBaseline, spacing: Spacing.sm) {
                     titleText.layoutPriority(1)
                     Spacer(minLength: Spacing.sm)
-                    count.fixedSize()
+                    if !detail.isEmpty {
+                        count.fixedSize()
+                    }
                 }
             }
         }
@@ -49,7 +54,7 @@ struct ShelfHeader: View {
             }
         }
         .font(Typography.secondary)
-        .foregroundStyle(.secondary)
+        .foregroundStyle(opensGroup ? AnyShapeStyle(.roadAccent) : AnyShapeStyle(.roadMuted))
     }
 }
 

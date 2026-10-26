@@ -110,11 +110,9 @@ struct LibraryView: View {
                 }
                 if !viewModel.isSearching, !viewModel.recent.isEmpty {
                     VStack(alignment: .leading, spacing: Spacing.sm) {
-                        ShelfHeader(
-                            title: String(appLocalized: "Continue Watching"),
-                            detail: String(appLocalized: "\(viewModel.recent.count) channels")
-                        )
-                        .padding(.horizontal, Spacing.md)
+                        // No count: it holds films and episodes as well as channels.
+                        ShelfHeader(title: String(appLocalized: "Continue Watching"))
+                            .padding(.horizontal, Spacing.md)
                         ChannelCarousel(
                             items: viewModel.recent,
                             onPlay: { play($0, nil) },
@@ -253,7 +251,7 @@ private struct EmptyLibraryView: View {
                     .accessibilityIdentifier("library.empty.addSource")
                 Text("M3U · Jellyfin · Emby · Plex · Xtream")
                     .font(Typography.data)
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(.roadMuted)
             }
         }
     }

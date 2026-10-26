@@ -34,9 +34,13 @@ final class AddSourceViewModel {
         }
     }
 
-    /// Shown under the field as soon as the text can't be used.
+    /// Shown under the field once the text can't be used; not while a link is still being typed ("h", "https://").
     var showsUnusableWarning: Bool {
-        parsedInput == .unusable
+        guard parsedInput == .unusable else { return false }
+        let text = input.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
+        let isTypingLink = !text.contains(where: \.isWhitespace)
+            && ["https://", "http://"].contains { $0.hasPrefix(text) || text.hasPrefix($0) }
+        return !isTypingLink
     }
 
     func makeServerLogin(_ kind: MediaServerKind) -> ServerLoginViewModel {

@@ -24,6 +24,12 @@ struct MiniPlayerBar: View {
                         }
                     }
                     .frame(width: min(thumbnailWidth, 140), height: min(thumbnailWidth, 140) * 9 / 16)
+                    .overlay(alignment: .bottom) {
+                        // How far in, as Music's and YouTube's mini players show it.
+                        if let duration = playback.duration, duration > 0 {
+                            WatchProgressBar(fraction: playback.elapsed / duration)
+                        }
+                    }
                     .clipShape(RoundedRectangle(cornerRadius: Radius.sm, style: .continuous))
                     .accessibilityHidden(true)
                     VStack(alignment: .leading, spacing: 2) {
@@ -41,7 +47,7 @@ struct MiniPlayerBar: View {
                             }
                         }
                         .font(Typography.caption)
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(.roadMuted)
                         .lineLimit(1)
                     }
                     Spacer(minLength: 0)

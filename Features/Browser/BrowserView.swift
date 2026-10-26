@@ -36,6 +36,7 @@ struct BrowserView: View {
         }
     }
 
+    /// A tap goes back to the Start Page, as a Back button would; a long press also offers Leave Browser.
     private var pageMenu: some View {
         Menu {
             Button(action: viewModel.closePage) {
@@ -49,8 +50,11 @@ struct BrowserView: View {
             }
             .accessibilityIdentifier("browser.leave")
         } label: {
-            Label("Browser Menu", systemImage: "chevron.backward")
+            Label("Start Page", systemImage: "chevron.backward")
+        } primaryAction: {
+            viewModel.closePage()
         }
+        .tint(.primary)
         .accessibilityIdentifier("browser.menu")
     }
 }

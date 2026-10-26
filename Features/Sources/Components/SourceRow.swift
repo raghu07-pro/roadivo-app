@@ -17,11 +17,11 @@ struct SourceRow: View {
                     // "Jellyfin · demo.jellyfin.org"
                     Text([server.title, source.host].compactMap(\.self).joined(separator: " · "))
                         .font(Typography.caption)
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(.roadMuted)
                 }
                 // "2 minutes ago" moves on while the screen stays open.
                 TimelineView(.everyMinute) { _ in
-                    Text(detail).font(Typography.caption).foregroundStyle(.secondary)
+                    Text(detail).font(Typography.caption).foregroundStyle(.roadMuted)
                 }
                 health
             }

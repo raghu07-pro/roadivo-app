@@ -16,8 +16,7 @@ struct WhatIsASourceView<Help: View>: View {
                         """
                     )
                     kind("list.bullet.rectangle", "An M3U / M3U8 playlist link, also called an IPTV subscription link")
-                    kind("doc.text", "A config file that bundles several playlist links")
-                    kind("server.rack", "A Jellyfin or Emby media server you have an account on")
+                    kind("server.rack", "A Jellyfin, Emby or Plex media server you have an account on")
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .cardStyle(padding: Spacing.lg)

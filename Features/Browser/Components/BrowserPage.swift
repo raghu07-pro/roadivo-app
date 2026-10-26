@@ -103,7 +103,7 @@ private struct FoundVideoBanner: View {
                         .font(Typography.cardTitle)
                     Text("Play it in Roadivo for Car Mode, Picture in Picture and AirPlay.")
                         .font(Typography.caption)
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(.roadMuted)
                 }
                 .fixedSize(horizontal: false, vertical: true)
                 Spacer(minLength: 0)

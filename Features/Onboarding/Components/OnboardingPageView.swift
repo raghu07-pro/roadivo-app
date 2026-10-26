@@ -25,6 +25,8 @@ struct OnboardingPageView: View {
                 }
             }
             .scrollBounceBehavior(.basedOnSize)
+            // The sky runs up to the top edge; the TabView's own setting doesn't reach a page's scroll view.
+            .ignoresSafeArea(edges: .top)
         }
     }
 
@@ -47,7 +49,7 @@ struct OnboardingPageView: View {
                 .accessibilityIdentifier("onboarding.title.\(page.id)")
             Text(app: page.message)
                 .font(Typography.body)
-                .foregroundStyle(.secondary)
+                .foregroundStyle(.roadMuted)
                 .multilineTextAlignment(.center)
                 .fixedSize(horizontal: false, vertical: true)
         }

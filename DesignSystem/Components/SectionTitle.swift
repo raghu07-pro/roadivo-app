@@ -25,7 +25,7 @@ struct SectionTitle: View {
                 if let detail {
                     Text(detail)
                         .font(Typography.caption)
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(.roadMuted)
                 }
             }
         }
@@ -62,7 +62,7 @@ struct CardHeader: View {
                         .accessibilityHidden(true)
                     Text(status)
                         .font(Typography.caption)
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(.roadMuted)
                 }
             }
             Spacer(minLength: 0)

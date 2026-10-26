@@ -17,8 +17,12 @@ struct DisplayProfileEditorView: View {
         List {
             if let receiver {
                 Section {
-                    TextField("Name", text: $viewModel.name)
-                        .accessibilityIdentifier("profile.name")
+                    // Labelled, as the Screen row under it: on its own the name didn't read as editable.
+                    LabeledContent("Name") {
+                        TextField("Name", text: $viewModel.name)
+                            .multilineTextAlignment(.trailing)
+                            .accessibilityIdentifier("profile.name")
+                    }
                     LabeledContent("Screen") {
                         // "CarPlay · CarPlay" says nothing twice: iOS names every car after its kind.
                         let kind = String(appLocalized: receiver.kind.title)

@@ -92,7 +92,7 @@ struct SettingsView<SourcesScreen: View, ProfilesScreen: View>: View {
                     .accessibilityIdentifier("settings.privacy")
                     if let url = LegalLinks.terms {
                         Button { openURL(url) } label: {
-                            row(symbol: "doc.text.fill", title: "Terms of Use (EULA)", detail: nil)
+                            row(symbol: "doc.text.fill", title: "Terms of Use (EULA)", detail: nil, leavesApp: true)
                         }
                     }
                 } header: {
@@ -101,7 +101,7 @@ struct SettingsView<SourcesScreen: View, ProfilesScreen: View>: View {
 
                 Section {
                     Button(action: rate) {
-                        row(symbol: "star.fill", title: "Rate Roadivo", detail: nil)
+                        row(symbol: "star.fill", title: "Rate Roadivo", detail: nil, leavesApp: true)
                     }
                     .accessibilityIdentifier("settings.rate")
                     shareRow
@@ -225,7 +225,7 @@ struct SettingsView<SourcesScreen: View, ProfilesScreen: View>: View {
 
     @ViewBuilder private var shareRow: some View {
         let message = Text(app: Brand.shareMessage)
-        let label = row(symbol: "square.and.arrow.up", title: "Share Roadivo", detail: nil)
+        let label = row(symbol: "square.and.arrow.up", title: "Share Roadivo", detail: nil, leavesApp: true)
         Group {
             if let page = appStore.page {
                 ShareLink(item: page, subject: Text("Roadivo"), message: message) { label }
@@ -238,7 +238,13 @@ struct SettingsView<SourcesScreen: View, ProfilesScreen: View>: View {
 
     // MARK: Rows
 
-    private func row(symbol: String, title: LocalizedStringKey, detail: LocalizedStringKey?) -> some View {
+    /// `leavesApp`: a row that opens Safari, the App Store or the share sheet shows ↗ where the others show ›.
+    private func row(
+        symbol: String,
+        title: LocalizedStringKey,
+        detail: LocalizedStringKey?,
+        leavesApp: Bool = false
+    ) -> some View {
         HStack(spacing: Spacing.sm) {
             IconTile(systemImage: symbol)
             VStack(alignment: .leading, spacing: 2) {
@@ -246,6 +252,13 @@ struct SettingsView<SourcesScreen: View, ProfilesScreen: View>: View {
                 if let detail {
                     Text(detail).font(Typography.caption).foregroundStyle(.roadMuted)
                 }
+            }
+            if leavesApp {
+                Spacer(minLength: 0)
+                Image(systemName: "arrow.up.forward")
+                    .font(.footnote.weight(.semibold))
+                    .foregroundStyle(.roadMuted)
+                    .accessibilityHidden(true)
             }
         }
         .padding(.vertical, 2)

@@ -76,7 +76,7 @@ struct SourceHealthView: View {
                         if let attempt = health.lastRefreshAttemptAt {
                             Text(relative(attempt))
                                 .font(Typography.caption)
-                                .foregroundStyle(.secondary)
+                                .foregroundStyle(.roadMuted)
                         }
                     }
                     .accessibilityElement(children: .combine)
@@ -120,12 +120,12 @@ struct SourceHealthView: View {
                 } else {
                     Text(lastCheckLine(report))
                         .font(Typography.caption)
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(.roadMuted)
                 }
             } else {
                 Text("Check each stream to see which ones answer, which are slow and which have stopped working.")
                     .font(Typography.secondary)
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(.roadMuted)
             }
             if viewModel.isChecking {
                 Button("Stop", role: .destructive, action: viewModel.stop)
@@ -285,7 +285,7 @@ private struct HealthStatusHeader: View {
                     .font(Typography.sectionTitle)
                 Text(summary)
                     .font(Typography.secondary)
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(.roadMuted)
                     .fixedSize(horizontal: false, vertical: true)
             }
         }
@@ -339,7 +339,7 @@ private struct ProblemRow: View {
                     .foregroundStyle(.primary)
                 Text("\(problem.group) · \(SourceHealthView.describe(problem.outcome))")
                     .font(Typography.caption)
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(.roadMuted)
             }
             Spacer(minLength: 0)
             Image(systemName: "play.circle")
@@ -370,14 +370,14 @@ private struct StatRow: View {
             if dynamicTypeSize.isAccessibilitySize {
                 VStack(alignment: .leading, spacing: Spacing.xxs) {
                     Text(title)
-                    Text(value).foregroundStyle(.secondary)
+                    Text(value).foregroundStyle(.roadMuted)
                 }
             } else {
                 HStack(alignment: .firstTextBaseline, spacing: Spacing.sm) {
                     Text(title)
                     Spacer(minLength: Spacing.sm)
                     Text(value)
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(.roadMuted)
                         .multilineTextAlignment(.trailing)
                 }
             }

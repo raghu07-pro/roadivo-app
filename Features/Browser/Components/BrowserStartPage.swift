@@ -20,7 +20,7 @@ struct BrowserStartPage: View {
                 links play in Roadivo.
                 """)
                 .font(Typography.caption)
-                .foregroundStyle(.secondary)
+                .foregroundStyle(.roadMuted)
             }
             .padding(Spacing.md)
             .frame(maxWidth: 640)

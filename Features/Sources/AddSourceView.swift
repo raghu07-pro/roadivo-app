@@ -1,49 +1,41 @@
 import SwiftUI
 
-/// Add a Source: a link or M3U text (typed, pasted or scanned), or a media server. `Help` is
-/// injected by the app, so this feature doesn't depend on Settings.
+/// Add a Source, Roadivo's own way (DECISIONS 166): first how the channels come, a playlist or a media server, then
+/// only that way's controls. `Help` is injected by the app, so this feature doesn't depend on Settings.
 struct AddSourceView<Help: View>: View {
     @State var viewModel: AddSourceViewModel
     let onFinished: () -> Void
     @ViewBuilder let help: () -> Help
 
     @Environment(\.dismiss) private var dismiss
-    /// Two server cards a row; larger text widens the column until one fits, so names never cut off.
-    @ScaledMetric(relativeTo: .body) private var serverColumn: CGFloat = 150
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @State private var isScanning = false
+    @State private var way = Way.playlist
     @FocusState private var focusedField: Field?
 
+    /// The two ways in: a playlist (link, text or QR code) or signing in to a media server.
+    private enum Way { case playlist, server }
     private enum Field { case link }
 
     var body: some View {
         NavigationStack {
             ScrollView {
                 VStack(alignment: .leading, spacing: Spacing.lg) {
-                    intro
-                    playlistCard
-                    if viewModel.showsUnusableWarning {
-                        unusableCard
+                    Text("How do you get your channels?")
+                        .font(Typography.screenTitle)
+                        .fixedSize(horizontal: false, vertical: true)
+                        .accessibilityAddTraits(.isHeader)
+                    ways
+                    switch way {
+                    case .playlist: playlist
+                    case .server: servers
                     }
-                    if let message = viewModel.errorMessage {
-                        Label(message, systemImage: "exclamationmark.triangle.fill")
-                            .font(Typography.secondary)
-                            .foregroundStyle(.roadLive)
-                            .accessibilityIdentifier("addSource.error")
-                    }
-                    PrimaryButton(
-                        title: "Add Source",
-                        systemImage: "plus",
-                        isLoading: viewModel.isWorking,
-                        action: submit
-                    )
-                    .disabled(!viewModel.canSubmit)
-                    .accessibilityIdentifier("addSource.submit")
-                    servers
-                    footer
+                    disclaimer
                 }
                 .padding(Spacing.md)
                 .frame(maxWidth: 600)
                 .frame(maxWidth: .infinity)
+                .animation(reduceMotion ? nil : .snappy(duration: 0.25), value: way)
             }
             .scrollDismissesKeyboard(.interactively)
             .background(.roadCanvas)
@@ -55,6 +47,22 @@ struct AddSourceView<Help: View>: View {
                     Button { dismiss() } label: { Label("Close", systemImage: "xmark") }
                         .disabled(viewModel.isWorking)
                         .accessibilityIdentifier("addSource.close")
+                }
+                ToolbarItem(placement: .primaryAction) {
+                    // Behind a ?, as the app's other explanations (DECISIONS 128).
+                    NavigationLink {
+                        WhatIsASourceView(help: help)
+                    } label: {
+                        Label("What is a source?", systemImage: "questionmark")
+                    }
+                    .accessibilityIdentifier("addSource.whatIsSource")
+                }
+            }
+            .toolbar {
+                // Return adds a line in the box, so the keyboard needs its own way down to Add Source.
+                ToolbarItemGroup(placement: .keyboard) {
+                    Spacer()
+                    Button("Done") { focusedField = nil }
                 }
             }
             .navigationDestination(for: MediaServerKind.self) { kind in
@@ -71,51 +79,128 @@ struct AddSourceView<Help: View>: View {
         }
     }
 
-    private var intro: some View {
-        VStack(alignment: .leading, spacing: Spacing.xxs) {
-            Text("Paste a subscription link or M3U content, or tap the scan icon to read a QR code.")
-                .font(Typography.secondary)
-                .foregroundStyle(.roadMuted)
-            NavigationLink {
-                WhatIsASourceView(help: help)
-            } label: {
-                Text("What is a source?").font(Typography.secondary.weight(.semibold))
-            }
-            .accessibilityIdentifier("addSource.whatIsSource")
+    // MARK: - The two ways in
+
+    /// Side by side; stacked once larger text needs the width.
+    private var ways: some View {
+        ViewThatFits(in: .horizontal) {
+            HStack(alignment: .top, spacing: Spacing.sm) { wayTiles }
+                .fixedSize(horizontal: false, vertical: true)
+            VStack(spacing: Spacing.sm) { wayTiles }
         }
     }
 
-    /// The link or M3U text, with the scan button inside; outlined in the accent while editing.
-    private var playlistCard: some View {
+    @ViewBuilder private var wayTiles: some View {
+        wayTile(.playlist, symbol: "link", title: "Playlist", detail: "A link, M3U text or QR code")
+        wayTile(.server, symbol: "server.rack", title: "Media servers", detail: "Jellyfin, Emby, Plex or Xtream")
+    }
+
+    /// The chosen way is outlined in the theme's gradient, its icon filled.
+    private func wayTile(
+        _ choice: Way,
+        symbol: String,
+        title: LocalizedStringKey,
+        detail: LocalizedStringKey
+    ) -> some View {
+        let isChosen = way == choice
         let shape = RoundedRectangle(cornerRadius: Radius.lg, style: .continuous)
-        return VStack(spacing: 0) {
+        return Button {
+            focusedField = nil
+            way = choice
+        } label: {
+            VStack(alignment: .leading, spacing: Spacing.sm) {
+                IconTile(systemImage: symbol, style: isChosen ? .filled : .soft, size: 40)
+                VStack(alignment: .leading, spacing: 2) {
+                    Text(title)
+                        .font(Typography.sign)
+                        .foregroundStyle(.primary)
+                    Text(detail)
+                        .font(Typography.caption)
+                        .foregroundStyle(.roadMuted)
+                }
+                .fixedSize(horizontal: false, vertical: true)
+            }
+            .padding(Spacing.md)
+            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+            .background(.roadSurface, in: shape)
+            .overlay {
+                shape.strokeBorder(
+                    isChosen ? AnyShapeStyle(.roadBrandGradient) : AnyShapeStyle(Color.primary.opacity(0.06)),
+                    lineWidth: isChosen ? 2 : 1
+                )
+            }
+            .contentShape(shape)
+        }
+        .buttonStyle(PressableStyle())
+        .accessibilityAddTraits(isChosen ? .isSelected : [])
+        .accessibilityIdentifier(choice == .playlist ? "addSource.way.playlist" : "addSource.way.server")
+    }
+
+    // MARK: - Playlist
+
+    private var playlist: some View {
+        VStack(alignment: .leading, spacing: Spacing.sm) {
+            linkCard
+            readiness
+            if viewModel.showsUnusableWarning {
+                unusableCard
+            }
+            if let message = viewModel.errorMessage {
+                Label(message, systemImage: "exclamationmark.triangle.fill")
+                    .font(Typography.secondary)
+                    .foregroundStyle(.roadLive)
+                    .accessibilityIdentifier("addSource.error")
+            }
+            PrimaryButton(
+                title: "Add Source",
+                systemImage: "plus",
+                isLoading: viewModel.isWorking,
+                action: submit
+            )
+            .disabled(!viewModel.canSubmit)
+            .accessibilityIdentifier("addSource.submit")
+            .padding(.top, Spacing.xs)
+        }
+    }
+
+    private var disclaimer: some View {
+        Text("Roadivo doesn't provide, host or endorse any content. Add only sources you have the right to use.")
+            .font(Typography.caption)
+            .foregroundStyle(.roadMuted)
+            .multilineTextAlignment(.center)
+            .frame(maxWidth: .infinity)
+    }
+
+    /// The link or M3U text, with Scan under it (no Paste button: DECISIONS 73); outlined in the accent while editing.
+    private var linkCard: some View {
+        let shape = RoundedRectangle(cornerRadius: Radius.lg, style: .continuous)
+        return VStack(alignment: .leading, spacing: Spacing.sm) {
             TextField("Paste a link or a whole M3U list", text: $viewModel.input, axis: .vertical)
-                .lineLimit(4...8)
+                .lineLimit(3...8)
                 .keyboardType(.URL)
                 .textInputAutocapitalization(.never)
                 .autocorrectionDisabled()
                 .focused($focusedField, equals: .link)
-                .padding(.top, Spacing.sm)
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .accessibilityIdentifier("addSource.link")
-            HStack {
-                Spacer()
+            HStack(spacing: Spacing.xs) {
                 Button {
                     focusedField = nil
                     isScanning = true
                 } label: {
-                    Image(systemName: "qrcode.viewfinder")
-                        .font(.title3.weight(.semibold))
+                    Label("Scan QR code", systemImage: "qrcode.viewfinder")
+                        .font(Typography.cardTitle)
                         .foregroundStyle(.roadAccent)
-                        .frame(width: 44, height: 44)
-                        .background(Color.roadBrand.opacity(0.14), in: Circle())
+                        .padding(.horizontal, Spacing.sm)
+                        .frame(minHeight: 44)
+                        .background(Color.roadBrand.opacity(0.14), in: Capsule())
+                        .contentShape(Capsule())
                 }
-                .accessibilityLabel(Text("Scan QR code"))
                 .accessibilityIdentifier("addSource.scan")
+                Spacer(minLength: 0)
             }
-            .padding(.bottom, Spacing.sm)
         }
-        .padding(.horizontal, Spacing.md)
+        .padding(Spacing.md)
         .background(.roadSurface, in: shape)
         .overlay {
             shape.strokeBorder(
@@ -124,6 +209,31 @@ struct AddSourceView<Help: View>: View {
             )
         }
         .animation(.snappy(duration: 0.2), value: focusedField)
+    }
+
+    /// What Add Source will add, before it's tapped: a link's site only, as the full link can hold a login.
+    @ViewBuilder private var readiness: some View {
+        switch viewModel.parsedInput {
+        case let .link(url):
+            ready(Text("Ready to add: \(url.host() ?? url.absoluteString)"))
+        case .content:
+            ready(Text("M3U list ready to add"))
+        case .empty, .unusable:
+            EmptyView()
+        }
+    }
+
+    private func ready(_ text: Text) -> some View {
+        Label {
+            text
+                .lineLimit(1)
+                .truncationMode(.middle)
+        } icon: {
+            Image(systemName: "checkmark.circle.fill")
+                .foregroundStyle(.roadAccent)
+        }
+        .font(Typography.secondary.weight(.semibold))
+        .accessibilityIdentifier("addSource.ready")
     }
 
     private var unusableCard: some View {
@@ -144,44 +254,23 @@ struct AddSourceView<Help: View>: View {
         .accessibilityIdentifier("addSource.unusable")
     }
 
-    private var servers: some View {
-        VStack(alignment: .leading, spacing: Spacing.sm) {
-            HStack(spacing: Spacing.sm) {
-                VStack { Divider() }
-                Text("Or connect a media server")
-                    .font(Typography.caption)
-                    .foregroundStyle(.roadMuted)
-                    .fixedSize()
-                VStack { Divider() }
-            }
-            // Eager, unlike LazyVGrid: a card rebuilt when larger text changes the columns reads as unscaled.
-            TileGrid(minimumWidth: serverColumn, spacing: Spacing.sm, rowSpacing: Spacing.sm) {
-                ForEach(MediaServerKind.allCases) { kind in
-                    // Name only on screen (owner's choice); VoiceOver also hears what signing in takes.
-                    NavigationLink(value: kind) { ServerCard(kind: kind) }
-                        .buttonStyle(PressableStyle())
-                        .accessibilityHint(Text(app: kind.subtitle))
-                        .accessibilityIdentifier("addSource.server.\(kind.rawValue)")
-                }
-            }
-        }
-    }
+    // MARK: - Media servers
 
-    private var footer: some View {
-        VStack(spacing: Spacing.sm) {
-            NavigationLink {
-                help()
-            } label: {
-                Label("Get Help", systemImage: "bubble.left.and.text.bubble.right.fill")
-                    .font(Typography.cardTitle)
+    /// One list, as iOS Settings': each server's mark and name (owner's choice), then a sign-in.
+    private var servers: some View {
+        VStack(spacing: 0) {
+            ForEach(Array(MediaServerKind.allCases.enumerated()), id: \.element) { index, kind in
+                if index > 0 {
+                    Divider().padding(.leading, ServerRow.dividerInset)
+                }
+                // VoiceOver also hears what signing in takes.
+                NavigationLink(value: kind) { ServerRow(kind: kind) }
+                    .buttonStyle(PressableStyle())
+                    .accessibilityHint(Text(app: kind.subtitle))
+                    .accessibilityIdentifier("addSource.server.\(kind.rawValue)")
             }
-            .accessibilityIdentifier("addSource.help")
-            Text("Roadivo doesn't provide, host or endorse any content. Add only sources you have the right to use.")
-                .font(Typography.caption)
-                .foregroundStyle(.roadMuted)
-                .multilineTextAlignment(.center)
         }
-        .frame(maxWidth: .infinity)
+        .cardStyle(padding: 0)
     }
 
     private func submit() {

@@ -1,7 +1,8 @@
 #if DEBUG
     import SwiftUI
 
-    /// The controls over the iPhone's Cast, as CarTV's: Home, split view (the browser beside it), End mirroring and Fit.
+    /// The controls over the iPhone's Cast, as CarTV's: Home, split view (the browser beside it), End mirroring and
+    /// Fit.
     /// Over the picture they hide after a moment; a tap brings them back.
     struct CarScreenMirrorView: View {
         let model: CarScreenModel

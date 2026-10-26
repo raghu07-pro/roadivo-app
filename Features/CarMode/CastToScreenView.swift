@@ -21,12 +21,11 @@ struct CastToScreenView: View {
             VStack(spacing: Spacing.lg) {
                 display
                 status
-                Divider()
                 mirroring
                 if state == .connected {
-                    Label("Rotate your iPhone to watch full screen on the car's screen.", systemImage: "rotate.right")
+                    Text("Rotate your iPhone to watch full screen on the car's screen.")
                         .font(Typography.caption)
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(.roadMuted)
                         .fixedSize(horizontal: false, vertical: true)
                 }
             }
@@ -68,7 +67,7 @@ struct CastToScreenView: View {
     private var symbol: String {
         switch state {
         case .ready: "rectangle.on.rectangle"
-        case .waitingForCar: "info.circle"
+        case .waitingForCar: "car.fill"
         case .connected: "checkmark"
         }
     }
@@ -79,17 +78,16 @@ struct CastToScreenView: View {
             case .connected:
                 Text("Display connected")
                     .font(Typography.sectionTitle)
-                hint("Open any app to share your screen", symbol: "checkmark.circle")
+                hint("Open any app to share your screen")
             case let .waitingForCar(isCarConnected):
                 carLine(isCarConnected)
-                hint("Open Roadivo in CarPlay first", symbol: "info.circle")
+                hint("Open Roadivo in CarPlay first")
             case let .ready(isCarConnected):
                 carLine(isCarConnected)
                 hint(
                     isCarConnected
                         ? "Tap Start mirroring to show this iPhone on the car's screen."
-                        : "Connect to CarPlay and open Roadivo on the car's screen.",
-                    symbol: "info.circle"
+                        : "Connect to CarPlay and open Roadivo on the car's screen."
                 )
             }
         }
@@ -100,49 +98,39 @@ struct CastToScreenView: View {
     private func carLine(_ isConnected: Bool) -> some View {
         Label(isConnected ? "Car connected" : "No car connected", systemImage: isConnected ? "car.fill" : "car")
             .font(Typography.cardTitle)
-            .foregroundStyle(isConnected ? AnyShapeStyle(Color.roadAccent) : AnyShapeStyle(.secondary))
+            .foregroundStyle(isConnected ? AnyShapeStyle(Color.roadAccent) : AnyShapeStyle(.roadMuted))
     }
 
-    private func hint(_ text: LocalizedStringKey, symbol: String) -> some View {
-        Label(text, systemImage: symbol)
+    /// Plain centred text: a label's icon pulled wrapped lines off the centre.
+    private func hint(_ text: LocalizedStringKey) -> some View {
+        Text(text)
             .font(Typography.secondary)
-            .foregroundStyle(.secondary)
+            .foregroundStyle(.roadMuted)
             .fixedSize(horizontal: false, vertical: true)
     }
 
-    /// One button, as in CarTV: Start Mirroring opens Apple's sheet; End Mirroring asks the broadcast to stop.
-    private var mirroring: some View {
-        VStack(spacing: Spacing.sm) {
-            Label("Screen Mirroring", systemImage: "rectangle.on.rectangle")
-                .font(Typography.sectionTitle)
-                .labelStyle(.titleAndIcon)
-            if state.isMirroring {
-                Button(role: .destructive) {
-                    BroadcastSignal.requestStop()
-                } label: {
-                    // Red set here: `PressableStyle` doesn't carry the destructive role's tint.
-                    Label("End mirroring", systemImage: "stop.circle")
-                        .font(Typography.cardTitle)
-                        .foregroundStyle(.red)
-                        .frame(minHeight: 44)
-                        .contentShape(Rectangle())
-                }
-                .accessibilityIdentifier("cast.end")
-            } else {
-                Button {
-                    picker.show()
-                } label: {
-                    Label("Start mirroring", systemImage: "play.circle")
-                        .font(Typography.cardTitle)
-                        .foregroundStyle(.roadAccent)
-                        .frame(minHeight: 44)
-                        .contentShape(Rectangle())
-                }
-                .accessibilityHint(Text("Opens Apple's Screen Broadcast; choose Roadivo, then Start Broadcast"))
-                .accessibilityIdentifier("cast.start")
+    /// One button, the screen's main action: Start mirroring opens Apple's sheet; End mirroring stops the broadcast.
+    @ViewBuilder private var mirroring: some View {
+        if state.isMirroring {
+            Button(role: .destructive) {
+                BroadcastSignal.requestStop()
+            } label: {
+                Label("End mirroring", systemImage: "stop.circle.fill")
+                    .font(Typography.button)
+                    .frame(maxWidth: .infinity, minHeight: 44)
             }
+            .buttonStyle(.bordered)
+            .buttonBorderShape(.capsule)
+            .controlSize(.large)
+            .tint(.roadLive)
+            .accessibilityIdentifier("cast.end")
+        } else {
+            PrimaryButton(title: "Start mirroring", systemImage: "rectangle.on.rectangle") {
+                picker.show()
+            }
+            .accessibilityHint(Text("Opens Apple's Screen Broadcast; choose Roadivo, then Start Broadcast"))
+            .accessibilityIdentifier("cast.start")
         }
-        .buttonStyle(PressableStyle())
     }
 }
 

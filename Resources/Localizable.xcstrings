@@ -327,70 +327,6 @@
         }
       }
     },
-    "%@ Buy now" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%@ Jetzt kaufen"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%@ Comprar ahora"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%@ Acheter maintenant"
-          }
-        },
-        "hi" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%@ अभी खरीदें"
-          }
-        },
-        "it" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%@ Acquista ora"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%@で購入"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%@에 구입"
-          }
-        },
-        "pt-BR" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%@ Comprar agora"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%@ 立即购买"
-          }
-        },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%@ 立即購買"
-          }
-        }
-      }
-    },
     "%@ is open on your iPhone. For passengers, or while parked." : {
       "localizations" : {
         "de" : {
@@ -1572,130 +1508,130 @@
         }
       }
     },
-    "A config file that bundles several playlist links" : {
+    "A Jellyfin, Emby or Plex media server you have an account on" : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Eine Konfigurationsdatei, die mehrere Playlist-Links bündelt"
+            "value" : "Ein Jellyfin-, Emby- oder Plex-Medienserver, bei dem du ein Konto hast"
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Un archivo de configuración que agrupa varios enlaces de listas"
+            "value" : "Un servidor multimedia Jellyfin, Emby o Plex en el que tengas una cuenta"
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Un fichier de configuration qui regroupe plusieurs liens de playlist"
+            "value" : "Un serveur multimédia Jellyfin, Emby ou Plex sur lequel vous avez un compte"
           }
         },
         "hi" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "एक कॉन्फ़िग फ़ाइल, जिसमें कई प्लेलिस्ट लिंक होते हैं"
+            "value" : "Jellyfin, Emby या Plex मीडिया सर्वर, जिस पर आपका खाता है"
           }
         },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Un file di configurazione che raccoglie più link a playlist"
+            "value" : "Un server multimediale Jellyfin, Emby o Plex su cui hai un account"
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "複数のプレイリストリンクをまとめた設定ファイル"
+            "value" : "アカウントを持っている Jellyfin、Emby、Plex のメディアサーバー"
           }
         },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "여러 재생목록 링크를 묶은 구성 파일"
+            "value" : "계정이 있는 Jellyfin, Emby 또는 Plex 미디어 서버"
           }
         },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Um arquivo de configuração que reúne vários links de playlist"
+            "value" : "Um servidor de mídia Jellyfin, Emby ou Plex em que você tem conta"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "包含多个播放列表链接的配置文件"
+            "value" : "你拥有账户的 Jellyfin、Emby 或 Plex 媒体服务器"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "包含多個播放列表連結的設定檔"
+            "value" : "你擁有帳號的 Jellyfin、Emby 或 Plex 媒體伺服器"
           }
         }
       }
     },
-    "A Jellyfin or Emby media server you have an account on" : {
+    "A link, M3U text or QR code" : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Ein Jellyfin- oder Emby-Medienserver, bei dem du ein Konto hast"
+            "value" : "Link, M3U-Text oder QR-Code"
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Un servidor multimedia Jellyfin o Emby en el que tienes una cuenta"
+            "value" : "Un enlace, texto M3U o código QR"
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Un serveur multimédia Jellyfin ou Emby sur lequel vous avez un compte"
+            "value" : "Un lien, du texte M3U ou un code QR"
           }
         },
         "hi" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Jellyfin या Emby मीडिया सर्वर, जिस पर आपका खाता है"
+            "value" : "लिंक, M3U टेक्स्ट या QR कोड"
           }
         },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Un media server Jellyfin o Emby su cui hai un account"
+            "value" : "Un link, testo M3U o codice QR"
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "アカウントを持っている Jellyfin または Emby のメディアサーバ"
+            "value" : "リンク、M3Uテキスト、QRコード"
           }
         },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "계정이 있는 Jellyfin 또는 Emby 미디어 서버"
+            "value" : "링크, M3U 텍스트 또는 QR 코드"
           }
         },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Um servidor de mídia Jellyfin ou Emby em que você tem conta"
+            "value" : "Um link, texto M3U ou código QR"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "你拥有账户的 Jellyfin 或 Emby 媒体服务器"
+            "value" : "链接、M3U 文本或二维码"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "你擁有帳號的 Jellyfin 或 Emby 媒體伺服器"
+            "value" : "連結、M3U 文字或 QR 碼"
           }
         }
       }
@@ -5036,6 +4972,7 @@
       }
     },
     "Browser Menu" : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -5160,6 +5097,70 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "停車且有最新位置資訊時可以瀏覽。"
+          }
+        }
+      }
+    },
+    "Buy for %@" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kaufen für %@"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Comprar por %@"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Acheter pour %@"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ में खरीदें"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Acquista a %@"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@で購入"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@에 구매"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Comprar por %@"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "以 %@ 购买"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "以 %@ 購買"
           }
         }
       }
@@ -12925,6 +12926,70 @@
         }
       }
     },
+    "How do you get your channels?" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Woher kommen deine Kanäle?"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¿Cómo recibes tus canales?"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Comment recevez-vous vos chaînes ?"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "आपको चैनल कहाँ से मिलते हैं?"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Come ricevi i tuoi canali?"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "チャンネルの入手方法は?"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "채널을 어떻게 받으시나요?"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Como você recebe seus canais?"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "你的频道从哪里来？"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "你的頻道從哪裡來？"
+          }
+        }
+      }
+    },
     "How It Works" : {
       "localizations" : {
         "de" : {
@@ -14074,6 +14139,70 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "其頻道、收藏和觀看記錄會從 Roadivo 移除。如需重新加入，你需要它的連結或登入資料。"
+          }
+        }
+      }
+    },
+    "Jellyfin, Emby, Plex or Xtream" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Jellyfin, Emby, Plex oder Xtream"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Jellyfin, Emby, Plex o Xtream"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Jellyfin, Emby, Plex ou Xtream"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Jellyfin, Emby, Plex या Xtream"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Jellyfin, Emby, Plex o Xtream"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Jellyfin、Emby、Plex、Xtream"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Jellyfin, Emby, Plex 또는 Xtream"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Jellyfin, Emby, Plex ou Xtream"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Jellyfin、Emby、Plex 或 Xtream"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Jellyfin、Emby、Plex 或 Xtream"
           }
         }
       }
@@ -15746,6 +15875,70 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "M3U · Jellyfin · Emby · Plex · Xtream"
+          }
+        }
+      }
+    },
+    "M3U list ready to add" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "M3U-Liste bereit zum Hinzufügen"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lista M3U lista para añadir"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Liste M3U prête à être ajoutée"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "M3U सूची जोड़ने के लिए तैयार"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Elenco M3U pronto da aggiungere"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "M3Uリストを追加できます"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "M3U 목록 추가 준비 완료"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lista M3U pronta para adicionar"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "M3U 列表可以添加"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "M3U 清單可以加入"
           }
         }
       }
@@ -20241,6 +20434,7 @@
       }
     },
     "Or connect a media server" : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -20693,70 +20887,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "貼上連結或完整的 M3U 列表"
-          }
-        }
-      }
-    },
-    "Paste a subscription link or M3U content, or tap the scan icon to read a QR code." : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Füge einen Abo-Link oder M3U-Inhalt ein oder tippe auf das Scan-Symbol, um einen QR-Code zu lesen."
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Pega un enlace de suscripción o contenido M3U, o toca el icono de escaneo para leer un código QR."
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Collez un lien d’abonnement ou du contenu M3U, ou touchez l’icône de scan pour lire un code QR."
-          }
-        },
-        "hi" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "सब्सक्रिप्शन लिंक या M3U कंटेंट पेस्ट करें, या QR कोड पढ़ने के लिए स्कैन आइकन पर टैप करें।"
-          }
-        },
-        "it" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Incolla un link di abbonamento o un contenuto M3U, oppure tocca l’icona di scansione per leggere un codice QR."
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "契約リンクまたは M3U の内容を貼り付けるか、スキャンアイコンをタップして QR コードを読み取ってください。"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "구독 링크나 M3U 내용을 붙여넣거나, 스캔 아이콘을 탭하여 QR 코드를 읽으세요."
-          }
-        },
-        "pt-BR" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Cole um link de assinatura ou conteúdo M3U, ou toque no ícone de leitura para ler um código QR."
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "粘贴订阅链接或 M3U 内容，或轻点扫描图标读取QR 码。"
-          }
-        },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "貼上訂閱連結或 M3U 內容，或點一下掃描圖像來讀取 QR 碼。"
           }
         }
       }
@@ -22108,6 +22238,7 @@
       }
     },
     "Playing" : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -22999,6 +23130,70 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "已就緒的框架"
+          }
+        }
+      }
+    },
+    "Ready to add: %@" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bereit zum Hinzufügen: %@"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Listo para añadir: %@"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Prêt à ajouter : %@"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "जोड़ने के लिए तैयार: %@"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pronto da aggiungere: %@"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "追加できます: %@"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "추가 준비 완료: %@"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pronto para adicionar: %@"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "可以添加：%@"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "可以加入：%@"
           }
         }
       }
@@ -25438,6 +25633,7 @@
       }
     },
     "Screen Mirroring" : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -27674,6 +27870,70 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "來源"
+          }
+        }
+      }
+    },
+    "Split view" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Geteilte Ansicht"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vista dividida"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vue partagée"
+          }
+        },
+        "hi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "स्प्लिट व्यू"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vista divisa"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "分割表示"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "분할 보기"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tela dividida"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "分屏视图"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "分割畫面"
           }
         }
       }
@@ -35166,70 +35426,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "縮小"
-          }
-        }
-      }
-    },
-    "Split view" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Geteilte Ansicht"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Vista dividida"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Vue partagée"
-          }
-        },
-        "hi" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "स्प्लिट व्यू"
-          }
-        },
-        "it" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Vista divisa"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "分割表示"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "분할 보기"
-          }
-        },
-        "pt-BR" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Tela dividida"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "分屏视图"
-          }
-        },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "分割畫面"
           }
         }
       }

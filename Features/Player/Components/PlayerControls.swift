@@ -35,8 +35,9 @@ struct PlayerControls: View {
                 } label: {
                     Label("Play on Car Display", systemImage: "car.fill")
                         .font(Typography.secondary.weight(.semibold))
-                        .padding(.horizontal, Spacing.sm)
+                        .padding(.horizontal, Spacing.md)
                         .frame(minHeight: 44)
+                        .background(.white.opacity(0.2), in: Capsule())
                 }
                 .accessibilityIdentifier("player.playOnCar")
             }
@@ -101,36 +102,42 @@ struct PlayerControls: View {
     /// Where the video is, and the two ways on: bring it to this iPhone, or pause it on the car.
     private var onCar: some View {
         VStack(spacing: Spacing.sm) {
-            Label("Playing on your car display", systemImage: "play.circle")
-                .font(Typography.secondary)
+            Label("Playing on your car display", systemImage: "car.fill")
+                .font(Typography.cardTitle)
                 .accessibilityIdentifier("player.onCar")
             HStack(spacing: Spacing.sm) {
                 Button {
                     onPlayOnPhone()
                     onInteraction()
                 } label: {
-                    Text("Play on iPhone")
+                    Label("Play on iPhone", systemImage: "iphone")
                         .font(Typography.cardTitle)
-                        .foregroundStyle(.black)
+                        .foregroundStyle(.roadOnBrand)
                         .padding(.horizontal, Spacing.md)
                         .frame(minHeight: 44)
-                        .background(.white, in: Capsule())
+                        .background(.roadBrandGradient, in: Capsule())
                 }
                 .accessibilityIdentifier("player.playOnPhone")
                 Button {
                     playback.togglePlayPause()
                     onInteraction()
                 } label: {
-                    Text(playback.isPlaying ? "Pause" : "Play")
-                        .font(Typography.cardTitle)
-                        .padding(.horizontal, Spacing.md)
-                        .frame(minHeight: 44)
-                        .background(.white.opacity(0.2), in: Capsule())
+                    Label(
+                        playback.isPlaying ? "Pause" : "Play",
+                        systemImage: playback.isPlaying ? "pause.fill" : "play.fill"
+                    )
+                    .font(Typography.cardTitle)
+                    .padding(.horizontal, Spacing.md)
+                    .frame(minHeight: 44)
+                    .background(.white.opacity(0.2), in: Capsule())
                 }
                 .accessibilityIdentifier("player.carPlayPause")
             }
         }
         .multilineTextAlignment(.center)
+        // The 16:9 stage is short: these stop growing where they'd overflow it; long-press shows them larger.
+        .dynamicTypeSize(...Self.largestIcon)
+        .accessibilityShowsLargeContentViewer()
     }
 
     private var bottomBar: some View {

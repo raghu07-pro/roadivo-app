@@ -12,6 +12,8 @@ struct OnboardingView: View {
             }
             .tabViewStyle(.page(indexDisplayMode: .never))
             .ignoresSafeArea(edges: .top)
+            // Dark status-bar text would vanish into the dusk and night skies.
+            .statusBarHidden()
 
             VStack(spacing: Spacing.md) {
                 PrimaryButton(
@@ -27,7 +29,7 @@ struct OnboardingView: View {
 
                 Text("Roadivo is a player only. It doesn't include or sell any channels or content.")
                     .font(Typography.caption)
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(.roadMuted)
                     .multilineTextAlignment(.center)
             }
             .padding(.horizontal, Spacing.lg)

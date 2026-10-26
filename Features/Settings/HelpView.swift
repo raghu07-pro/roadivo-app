@@ -14,7 +14,7 @@ struct HelpView: View {
                     DisclosureGroup(isExpanded: binding(for: entry.id)) {
                         Text(app: entry.answer)
                             .font(Typography.secondary)
-                            .foregroundStyle(.secondary)
+                            .foregroundStyle(.roadMuted)
                             .frame(maxWidth: .infinity, alignment: .leading)
                             .padding(.top, Spacing.xs)
                     } label: {

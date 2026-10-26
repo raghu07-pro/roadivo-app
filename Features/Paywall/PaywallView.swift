@@ -82,6 +82,17 @@ struct PaywallView: View {
         .ignoresSafeArea()
     }
 
+    /// A footer link with a whole 44 pt target, not just its word's; one line, so German's "Wiederherstellen" shrinks
+    /// a little rather than breaking.
+    private func footerLink(_ title: LocalizedStringKey) -> some View {
+        Text(title)
+            .lineLimit(1)
+            .minimumScaleFactor(0.75)
+            .padding(.horizontal, Spacing.xs)
+            .frame(minWidth: 44, minHeight: 44)
+            .contentShape(Rectangle())
+    }
+
     private var closeButton: some View {
         Button(action: onClose) {
             Image(systemName: "xmark")
@@ -217,21 +228,25 @@ struct PaywallView: View {
             }
             .disabled(viewModel.selectedOffer == nil || viewModel.isSelectedCurrent)
             .accessibilityIdentifier("paywall.buy")
-            HStack(spacing: Spacing.md) {
-                Button("Terms") {
+            HStack(spacing: Spacing.xs) {
+                Button {
                     if let url = LegalLinks.terms {
                         openURL(url)
                     }
+                } label: {
+                    footerLink("Terms")
                 }
                 Divider().frame(height: 16).overlay(.white.opacity(0.3))
-                Button("Privacy") { isShowingPrivacy = true }
+                Button { isShowingPrivacy = true } label: { footerLink("Privacy") }
                 Divider().frame(height: 16).overlay(.white.opacity(0.3))
-                Button("Restore") {
+                Button {
                     Task {
                         if await viewModel.restore() {
                             unlocked()
                         }
                     }
+                } label: {
+                    footerLink("Restore")
                 }
                 .disabled(viewModel.isPurchasing)
                 .accessibilityIdentifier("paywall.restore")

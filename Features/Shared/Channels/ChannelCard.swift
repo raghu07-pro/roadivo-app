@@ -45,10 +45,11 @@ struct ChannelCard: View {
                         }
                     }
                 VStack(alignment: .leading, spacing: 0) {
+                    // Two lines: IPTV names often differ only at the end ("· 4K", "HD", "+1"); every card keeps both.
                     Text(item.title)
                         .font(Typography.cardTitle)
                         .foregroundStyle(.primary)
-                        .lineLimit(1)
+                        .lineLimit(2, reservesSpace: true)
                         .truncationMode(.tail)
                     if let timeLeft {
                         Text(timeLeft)

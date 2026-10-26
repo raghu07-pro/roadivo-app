@@ -6,7 +6,7 @@ struct LoadingView: View {
     var body: some View {
         VStack(spacing: Spacing.sm) {
             ProgressView().controlSize(.large)
-            Text(message).font(Typography.secondary).foregroundStyle(.secondary)
+            Text(message).font(Typography.secondary).foregroundStyle(.roadMuted)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .accessibilityElement(children: .combine)
