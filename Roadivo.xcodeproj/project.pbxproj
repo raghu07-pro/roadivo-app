@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 55;
+	objectVersion = 56;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -488,7 +488,7 @@
 		15C6521554AB552AFD48A8DF /* OnboardingFlowUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingFlowUITests.swift; sourceTree = "<group>"; };
 		180FEE492C538F55C3A296D9 /* AppStoreUpdateChecker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppStoreUpdateChecker.swift; sourceTree = "<group>"; };
 		18740A92761FEB3C54B764F0 /* Overpass-ExtraBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Overpass-ExtraBold.ttf"; sourceTree = "<group>"; };
-		18D5A1A729D7C203548E4F3E /* Roadivo.storekit */ = {isa = PBXFileReference; path = Roadivo.storekit; sourceTree = "<group>"; };
+		18D5A1A729D7C203548E4F3E /* Roadivo.storekit */ = {isa = PBXFileReference; lastKnownFileType = text; path = Roadivo.storekit; sourceTree = "<group>"; };
 		1A1FBA916F3F010D7AD3216C /* BroadcastHTTP.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BroadcastHTTP.swift; sourceTree = "<group>"; };
 		1AD3DE26090F5100416833BE /* OnboardingViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingViewModelTests.swift; sourceTree = "<group>"; };
 		1CFFB6A94CABC3895F511F70 /* PlaybackProgress.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaybackProgress.swift; sourceTree = "<group>"; };
@@ -625,7 +625,7 @@
 		7BFCAD4EF83F861F70FD2092 /* VideoSurface.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoSurface.swift; sourceTree = "<group>"; };
 		7D193C4E6633C79B9AB3B486 /* ReceiverConnectPlan.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiverConnectPlan.swift; sourceTree = "<group>"; };
 		7D3641F1626DE6C6E2BB0C52 /* ProPlan.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProPlan.swift; sourceTree = "<group>"; };
-		7D8DE2CB681743DADEA3DDD6 /* Localizable.xcstrings */ = {isa = PBXFileReference; path = Localizable.xcstrings; sourceTree = "<group>"; };
+		7D8DE2CB681743DADEA3DDD6 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
 		7E062439C1F9390CAB191BC3 /* RouteOption+Text.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "RouteOption+Text.swift"; sourceTree = "<group>"; };
 		7EA913A39323A6DB88497D19 /* RouteStep.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteStep.swift; sourceTree = "<group>"; };
 		7F7560E091D4C9D089BB7B44 /* String+Initials.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Initials.swift"; sourceTree = "<group>"; };
@@ -666,7 +666,7 @@
 		98E989E8DC95130B4E5D00DC /* VideoThumbnailTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoThumbnailTests.swift; sourceTree = "<group>"; };
 		99854018FB5D8FFF8B6BFF37 /* TuistBundle+Roadivo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TuistBundle+Roadivo.swift"; sourceTree = "<group>"; };
 		9AA567EB1720DBBA9A292DFE /* SourcesViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SourcesViewModelTests.swift; sourceTree = "<group>"; };
-		9ADAA913125C40792D107667 /* InfoPlist.xcstrings */ = {isa = PBXFileReference; path = InfoPlist.xcstrings; sourceTree = "<group>"; };
+		9ADAA913125C40792D107667 /* InfoPlist.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = InfoPlist.xcstrings; sourceTree = "<group>"; };
 		9AE681757390C36DAFF70484 /* ShelfHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShelfHeader.swift; sourceTree = "<group>"; };
 		9BAAC491F3DC595AE4109519 /* DisplayProfilesViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisplayProfilesViewModelTests.swift; sourceTree = "<group>"; };
 		9BAF9013FF0C8E8F340F338A /* CarBrowserPageSizePage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CarBrowserPageSizePage.swift; sourceTree = "<group>"; };
@@ -766,7 +766,7 @@
 		D69F618A6FD3D149A14AB6AD /* CarModeDriveView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CarModeDriveView.swift; sourceTree = "<group>"; };
 		D8A63FEA06484B5F7D0FBEB3 /* BroadcastPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BroadcastPicker.swift; sourceTree = "<group>"; };
 		D8B03263537C9B5D9E39B395 /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
-		D98067D6766C169F9AFFA732 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+		D98067D6766C169F9AFFA732 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		DAAF4CDDBF4FF3699C388E07 /* SourceHealthView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SourceHealthView.swift; sourceTree = "<group>"; };
 		DACB110D9EA859229198F82E /* SkeletonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SkeletonView.swift; sourceTree = "<group>"; };
 		DAEFD4F9BDDDD4025AC2F688 /* CarBrowserControls.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CarBrowserControls.swift; sourceTree = "<group>"; };
@@ -2370,10 +2370,7 @@
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = (
-					"$(inherited)",
-					DEBUG,
-				);
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) DEBUG";
 				SWIFT_COMPILATION_MODE = singlefile;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				TARGETED_DEVICE_FAMILY = 1;
@@ -2457,10 +2454,7 @@
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = (
-					"$(inherited)",
-					DEBUG,
-				);
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) DEBUG";
 				SWIFT_COMPILATION_MODE = singlefile;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				TARGETED_DEVICE_FAMILY = 1;
@@ -2490,10 +2484,7 @@
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = (
-					"$(inherited)",
-					DEBUG,
-				);
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) DEBUG";
 				SWIFT_COMPILATION_MODE = singlefile;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				TARGETED_DEVICE_FAMILY = 1;
@@ -2671,6 +2662,7 @@
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_ENTITLEMENTS = "$(ROADIVO_CARPLAY_ENTITLEMENTS_$(ROADIVO_CARPLAY))";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CURRENT_PROJECT_VERSION = 4;
 				ENABLE_PREVIEWS = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				INFOPLIST_FILE = Resources/Info.plist;
@@ -2704,6 +2696,7 @@
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_ENTITLEMENTS = "$(ROADIVO_CARPLAY_ENTITLEMENTS_$(ROADIVO_CARPLAY))";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CURRENT_PROJECT_VERSION = 4;
 				ENABLE_PREVIEWS = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				INFOPLIST_FILE = Resources/Info.plist;
@@ -2722,10 +2715,7 @@
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = (
-					"$(inherited)",
-					DEBUG,
-				);
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) DEBUG";
 				SWIFT_COMPILATION_MODE = singlefile;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				TARGETED_DEVICE_FAMILY = 1;

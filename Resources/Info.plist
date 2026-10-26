@@ -45,14 +45,14 @@
 	<string>Roadivo turns what you say into search text, on your iPhone when your language allows it.</string>
 	<key>ROADIVO_CARPLAY</key>
 	<string>$(ROADIVO_CARPLAY)</string>
-	<key>ROADIVO_CAR_BROWSER</key>
-	<string>$(ROADIVO_CAR_BROWSER)</string>
 	<key>ROADIVO_CARPLAY_APP</key>
 	<string>$(ROADIVO_CARPLAY_APP)</string>
-	<key>ROADIVO_DIRECTIONS</key>
-	<string>$(ROADIVO_DIRECTIONS)</string>
 	<key>ROADIVO_CARPLAY_VIDEO</key>
 	<string>$(ROADIVO_CARPLAY_VIDEO)</string>
+	<key>ROADIVO_CAR_BROWSER</key>
+	<string>$(ROADIVO_CAR_BROWSER)</string>
+	<key>ROADIVO_DIRECTIONS</key>
+	<string>$(ROADIVO_DIRECTIONS)</string>
 	<key>TERMS_URL</key>
 	<string>$(TERMS_URL)</string>
 	<key>UIAppFonts</key>
