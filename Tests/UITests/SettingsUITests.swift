@@ -6,28 +6,12 @@ final class SettingsUITests: XCTestCase {
         continueAfterFailure = false
     }
 
-    /// Media lists Manage Sources and How to Connect; adding a source lives on Home and in
-    /// Manage Sources.
-    func testMediaHasSourcesAndHowToConnect() {
+    /// Media lists Manage Sources; adding a source lives on Home and in Manage Sources.
+    func testMediaHasSources() {
         let app = XCUIApplication.roadivo(skipOnboarding: true)
         app.settingsTab.tap()
         XCTAssertTrue(app.buttons["settings.sources"].waitForExistence(timeout: 5))
-        XCTAssertTrue(app.buttons["settings.connectGuide"].exists)
         XCTAssertFalse(app.buttons["settings.addSource"].exists)
-    }
-
-    /// How to Connect is in Settings too, to find again after setup or to help someone; Back
-    /// returns to Settings.
-    func testHowToConnectOpensFromSettings() {
-        let app = XCUIApplication.roadivo(skipOnboarding: true)
-        app.settingsTab.tap()
-        let row = app.buttons["settings.connectGuide"]
-        XCTAssertTrue(row.waitForExistence(timeout: 5))
-        row.tap()
-        XCTAssertTrue(app.descendants(matching: .any)["guide.carplay"].waitForExistence(timeout: 5))
-        XCTAssertTrue(app.descendants(matching: .any)["guide.airplay"].exists)
-        app.navigationBars.buttons.element(boundBy: 0).tap()
-        XCTAssertTrue(row.waitForExistence(timeout: 5))
     }
 
     /// Share Roadivo opens the system share sheet.

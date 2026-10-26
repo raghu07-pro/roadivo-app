@@ -1,6 +1,6 @@
 import XCTest
 
-/// Discover (Browser and Cast to Screen; DECISIONS 135), How to Connect, and Car Mode from the player.
+/// Discover (Browser and Cast to Screen; DECISIONS 135) and Car Mode from the player.
 @MainActor
 final class CarFlowUITests: XCTestCase {
     override func setUp() {
@@ -120,26 +120,6 @@ final class CarFlowUITests: XCTestCase {
 
         app.buttons["upNext.cancel"].tap()
         XCTAssertTrue(card.waitForNonExistence(timeout: 5))
-    }
-
-    /// How to Connect, from Settings › Media: the CarPlay steps first (CarPlay Audio is granted and on,
-    /// DECISIONS 127), then AirPlay, Screen Mirroring, Car Mode and the Pro note.
-    func testConnectGuideInSettings() throws {
-        let app = XCUIApplication.roadivo(skipOnboarding: true)
-        app.tabBars.buttons["Settings"].tap()
-        let link = app.buttons["settings.connectGuide"]
-        XCTAssertTrue(link.waitForExistence(timeout: 5))
-        link.tap()
-
-        XCTAssertTrue(app.descendants(matching: .any)["guide.carplay"].waitForExistence(timeout: 5))
-        XCTAssertTrue(app.descendants(matching: .any)["guide.airplay"].exists)
-        XCTAssertFalse(app.descendants(matching: .any)["guide.connect"].exists)
-        snapshot("18c-Car-Guide", app: app)
-        try app.performAccessibilityAudit(for: [.dynamicType, .sufficientElementDescription, .hitRegion])
-        app.swipeUp()
-        XCTAssertTrue(app.descendants(matching: .any)["guide.mirroring"].waitForExistence(timeout: 5))
-        XCTAssertTrue(app.descendants(matching: .any)["guide.carmode"].waitForExistence(timeout: 5))
-        XCTAssertTrue(app.descendants(matching: .any)["guide.pro"].exists)
     }
 
     /// In the car the iPhone is locked: the sound plays on in the background. iOS pauses a player still drawing video

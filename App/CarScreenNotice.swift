@@ -1,9 +1,8 @@
 #if DEBUG
     import SwiftUI
 
-    /// Why there's no picture, on CarPlay's wallpaper rather than Roadivo's road (owner, 2026-10-26; DECISIONS 163):
-    /// watching needs Pro, video is off while driving, or Location is off. The same words as the CarPlay window's
-    /// card, with what's playing above them.
+    /// Why there's no picture, on Roadivo's canvas (DECISIONS 163–164): watching needs Pro, video is off while
+    /// driving, or Location is off, in the CarPlay window card's words under what's playing.
     struct CarScreenNotice: View {
         let model: CarScreenModel
         /// What's playing; none for Pro or the iPhone's screen.
@@ -14,19 +13,19 @@
             VStack(spacing: Spacing.sm) {
                 if let title = content.title {
                     Text(title)
-                        .font(.title2.bold())
+                        .font(Typography.screenTitle)
                         .lineLimit(2)
                 }
                 if let message = content.message {
                     Text(message)
                         .font(.title3)
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(.roadMuted)
                 }
             }
             .multilineTextAlignment(.center)
             .padding(Spacing.xl)
             .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .background { CarScreenWallpaper() }
+            .background(Color.roadCanvas.ignoresSafeArea())
         }
     }
 #endif

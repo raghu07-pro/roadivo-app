@@ -2,19 +2,19 @@
     import SwiftUI
 
     /// The car screen's home, as CarTV's: Home, Favorites, Library, Cast and Browser centred along the top, and the
-    /// chosen list under them, all tapped directly (DECISIONS 162). Drawn as CarPlay drew the template tabs: a glass
-    /// capsule with a grey pill under the chosen tab, on CarPlay's wallpaper (DECISIONS 163).
+    /// chosen list under them, all tapped directly (DECISIONS 162). In Roadivo's theme (owner, 2026-10-26; DECISIONS
+    /// 163): the canvas, a surface bar with the chosen tab on the theme's gradient, and the lists as cards.
     struct CarScreenTabsView: View {
         let model: CarScreenModel
 
         var body: some View {
-            VStack(spacing: Spacing.sm) {
+            VStack(spacing: Spacing.md) {
                 tabBar
                 content
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
             }
             .padding(Spacing.sm)
-            .background { CarScreenWallpaper() }
+            .background(Color.roadCanvas.ignoresSafeArea())
         }
 
         private var tabBar: some View {
@@ -25,11 +25,15 @@
                         model.actions?.select(tab)
                     } label: {
                         Text(app: tab.title)
-                            .font(isChosen ? .body.weight(.semibold) : .body)
-                            .foregroundStyle(.primary)
-                            .padding(.horizontal, Spacing.sm)
-                            .frame(minHeight: 44)
-                            .background(isChosen ? Color.primary.opacity(0.1) : .clear, in: Capsule())
+                            .font(Typography.sign)
+                            .foregroundStyle(isChosen ? AnyShapeStyle(.roadOnBrand) : AnyShapeStyle(.primary))
+                            .padding(.horizontal, Spacing.md)
+                            .frame(minHeight: 48)
+                            .background {
+                                if isChosen {
+                                    Capsule().fill(.roadBrandGradient)
+                                }
+                            }
                             .contentShape(Capsule())
                     }
                     .buttonStyle(.plain)
@@ -37,7 +41,8 @@
                 }
             }
             .padding(Spacing.xxs)
-            .carGlass()
+            .background(.roadSurface, in: Capsule())
+            .shadow(color: .black.opacity(0.08), radius: 8, y: 2)
             .overlay(alignment: .trailing) {
                 // The library's search beside the tabs, as CarTV's.
                 Button {
@@ -45,13 +50,14 @@
                 } label: {
                     Image(systemName: "magnifyingglass")
                         .font(.title3.weight(.semibold))
-                        .foregroundStyle(.primary)
-                        .frame(width: 52, height: 52)
-                        .carGlass(in: Circle())
+                        .foregroundStyle(.roadAccent)
+                        .frame(width: 56, height: 56)
+                        .background(.roadSurface, in: Circle())
+                        .shadow(color: .black.opacity(0.08), radius: 8, y: 2)
                 }
                 .buttonStyle(.plain)
                 .accessibilityLabel(Text(app: "Search channels and titles"))
-                .offset(x: 52 + Spacing.sm)
+                .offset(x: 56 + Spacing.sm)
             }
         }
 
@@ -67,7 +73,8 @@
             case .cast:
                 message(
                     "Cast anything to this screen",
-                    detail: "On your iPhone, open Roadivo and go to Discover › Cast to Screen to get started."
+                    detail: "On your iPhone, open Roadivo and go to Discover › Cast to Screen to get started.",
+                    symbol: "rectangle.on.rectangle"
                 )
             }
         }
@@ -80,10 +87,12 @@
                     } label: {
                         Label {
                             Text(group)
+                                .foregroundStyle(.primary)
                         } icon: {
                             Image(systemName: "chevron.backward")
+                                .foregroundStyle(.roadAccent)
                         }
-                        .font(.headline)
+                        .font(Typography.sectionTitle)
                         .frame(minHeight: 44)
                     }
                     .buttonStyle(.plain)
@@ -91,31 +100,34 @@
                     list(model.items(in: group), empty: "Nothing here yet")
                 }
             } else if model.menu.groups.isEmpty {
-                message("Add a source on your iPhone", detail: nil)
+                message("Add a source on your iPhone", detail: nil, symbol: "antenna.radiowaves.left.and.right")
             } else {
                 ScrollView {
-                    LazyVStack(spacing: Spacing.xs) {
+                    LazyVStack(spacing: Spacing.sm) {
                         ForEach(model.menu.groups, id: \.title) { group in
                             Button {
                                 model.group = group.title
                             } label: {
-                                HStack {
-                                    VStack(alignment: .leading) {
+                                HStack(spacing: Spacing.md) {
+                                    IconTile(systemImage: "rectangle.stack.fill", style: .soft, size: 44)
+                                    VStack(alignment: .leading, spacing: Spacing.xxs) {
                                         Text(group.title)
-                                            .font(.headline)
+                                            .font(Typography.sign)
                                         Text(app: "\(group.items.count) items")
-                                            .font(.subheadline)
-                                            .foregroundStyle(.secondary)
+                                            .font(Typography.secondary)
+                                            .foregroundStyle(.roadMuted)
                                     }
+                                    .lineLimit(1)
                                     Spacer()
                                     Image(systemName: "chevron.forward")
-                                        .foregroundStyle(.secondary)
+                                        .font(.headline)
+                                        .foregroundStyle(.roadAccent)
                                         .accessibilityHidden(true)
                                 }
-                                .padding(Spacing.sm)
-                                .frame(minHeight: 64)
+                                .padding(Spacing.md)
+                                .frame(minHeight: 72)
                             }
-                            .buttonStyle(CarKeyStyle())
+                            .buttonStyle(CarCardStyle())
                         }
                     }
                 }
@@ -125,10 +137,10 @@
         @ViewBuilder
         private func list(_ items: [MediaItem], empty: LocalizedStringResource) -> some View {
             if items.isEmpty {
-                message(empty, detail: nil)
+                message(empty, detail: nil, symbol: "play.rectangle")
             } else {
                 ScrollView {
-                    LazyVStack(spacing: Spacing.xs) {
+                    LazyVStack(spacing: Spacing.sm) {
                         ForEach(items) { media in
                             CarScreenMediaRow(media: media, model: model) {
                                 model.actions?.play(media, queue: items)
@@ -139,14 +151,19 @@
             }
         }
 
-        private func message(_ title: LocalizedStringResource, detail: LocalizedStringResource?) -> some View {
-            VStack(spacing: Spacing.xs) {
+        private func message(
+            _ title: LocalizedStringResource,
+            detail: LocalizedStringResource?,
+            symbol: String
+        ) -> some View {
+            VStack(spacing: Spacing.sm) {
+                IconTile(systemImage: symbol, style: .soft, size: 64)
                 Text(app: title)
-                    .font(.title2.bold())
+                    .font(Typography.sectionTitle)
                 if let detail {
                     Text(app: detail)
-                        .font(.body)
-                        .foregroundStyle(.secondary)
+                        .font(Typography.body)
+                        .foregroundStyle(.roadMuted)
                 }
             }
             .multilineTextAlignment(.center)

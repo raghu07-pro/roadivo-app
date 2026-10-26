@@ -14,6 +14,9 @@
             let request: CarBrowserInputBridge.Request
         }
 
+        /// Roadivo's screen background (`roadCanvas`), light by day and dark by night.
+        static let canvas = UIColor(named: "CanvasBackground") ?? .systemBackground
+
         let model = CarScreenModel()
         let stage = CarPlayWindowController()
         let browser = CarBrowserController()
@@ -182,14 +185,13 @@
         /// The browser's page and bar take their own taps; the overlay covers them only for a page.
         func showLayers() {
             let browsing = model.mode == .browser
-            // CarPlay's dock is see-through: white behind it, as in CarTV, except beside a video or the iPhone's
-            // screen.
             let showsPicture = (model.mode == .player || model.mode == .mirror) && model.state == .video
-            view.backgroundColor = showsPicture ? .black : .systemBackground
+            let pageShown = browsing && model.page == nil
+            // CarPlay's dock is see-through: Roadivo's canvas behind it, the webpage's white, or black by a video.
+            view.backgroundColor = showsPicture ? .black : pageShown ? .systemBackground : Self.canvas
             if !browsing {
                 isFullScreen = false
             }
-            let pageShown = browsing && model.page == nil
             browserArea.isHidden = !browsing
             bar.view.isHidden = !pageShown || isFullScreen
             exitFullScreen.view.isHidden = !pageShown || !isFullScreen

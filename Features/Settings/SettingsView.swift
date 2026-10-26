@@ -46,17 +46,6 @@ struct SettingsView<SourcesScreen: View, ProfilesScreen: View>: View {
                         )
                     }
                     .accessibilityIdentifier("settings.sources")
-                    // Also behind Discover › Cast to Screen; here so it's easy to find again to help someone.
-                    NavigationLink(value: SettingsRoute.connectGuide) {
-                        row(
-                            symbol: "car.fill",
-                            title: "How to Connect",
-                            detail: CarPlayAvailability.isEnabled
-                                ? "CarPlay · AirPlay · Car Mode"
-                                : "AirPlay · Car Mode"
-                        )
-                    }
-                    .accessibilityIdentifier("settings.connectGuide")
                     NavigationLink(value: SettingsRoute.displayProfiles) {
                         row(
                             symbol: "slider.horizontal.below.rectangle",
@@ -142,8 +131,6 @@ struct SettingsView<SourcesScreen: View, ProfilesScreen: View>: View {
             .navigationDestination(for: SettingsRoute.self) { route in
                 switch route {
                 case .sources: sourcesScreen()
-                case .connectGuide:
-                    ConnectGuideView(guide: ConnectGuide(hasCarPlay: CarPlayAvailability.isEnabled), isPro: isPro)
                 case .displayProfiles: profilesScreen()
                 }
             }

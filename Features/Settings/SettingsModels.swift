@@ -3,7 +3,6 @@ import Foundation
 /// The Settings screens reached by value, so screens they push stack in order.
 enum SettingsRoute: Hashable {
     case sources
-    case connectGuide
     case displayProfiles
 }
 
