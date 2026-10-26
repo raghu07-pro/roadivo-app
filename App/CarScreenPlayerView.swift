@@ -15,6 +15,14 @@
             model.state == .video
         }
 
+        /// Opening, or said to be playing while still at its start (DECISIONS 168): a spinner instead of a frozen
+        /// frame.
+        private var isLoading: Bool {
+            guard let playback = model.playback, playback.isActive else { return false }
+            return playback.status == .loading
+                || (playback.status == .playing && !playback.isLive && playback.elapsed < 0.05)
+        }
+
         var body: some View {
             GeometryReader { proxy in
                 let panelWidth = proxy.size.width * CarScreenModel.channelsWidth
@@ -35,6 +43,12 @@
                         if showsControls || !isVideo {
                             controls
                                 .transition(.opacity)
+                        } else if isLoading {
+                            // With the controls hidden the spinner shows by itself; with them, in the play button.
+                            spinner
+                                .padding(Spacing.lg)
+                                .background(.black.opacity(0.5), in: Circle())
+                                .allowsHitTesting(false)
                         }
                     }
                     .padding(.leading, splitWidth)
@@ -92,12 +106,19 @@
                     model.actions?.playback { $0.togglePlayPause() }
                     reveal(true)
                 } label: {
-                    Image(systemName: model.isPlaying ? "pause.fill" : "play.fill")
-                        .font(.largeTitle)
-                        .frame(width: 96, height: 96)
+                    Group {
+                        if isLoading {
+                            spinner
+                        } else {
+                            Image(systemName: model.isPlaying ? "pause.fill" : "play.fill")
+                                .font(.largeTitle)
+                        }
+                    }
+                    .frame(width: 96, height: 96)
                 }
                 .buttonStyle(CarControlStyle(shape: .circle))
                 .accessibilityLabel(Text(app: model.isPlaying ? "Pause" : "Play"))
+                .accessibilityValue(isLoading ? String(appLocalized: "Loading…") : "")
                 Spacer(minLength: 0)
                 if let playback = model.playback {
                     CarScreenProgressBar(playback: playback, onVideo: isVideo) { reveal(true) }
@@ -149,6 +170,13 @@
                     .allowsHitTesting(false)
                 }
             }
+        }
+
+        private var spinner: some View {
+            ProgressView()
+                .controlSize(.large)
+                .tint(.white)
+                .accessibilityHidden(true)
         }
 
         private func reveal(_ shows: Bool) {

@@ -43,9 +43,12 @@ extension PlaybackController {
         // The iOS 27 SDK's activate(options:) doesn't hold the main thread; older SDKs and iOS keep setActive.
         #if compiler(>=6.4)
             if #available(iOS 27, *) {
-                session.activate(options: []) { [logger] _, error in
+                session.activate(options: []) { [weak self, logger] isActive, error in
                     if let error {
                         logger.error("Audio session: \(error.localizedDescription, privacy: .public)")
+                    }
+                    if isActive {
+                        Task { @MainActor [weak self] in self?.restartIfStuckAtStart() }
                     }
                 }
                 return
@@ -64,10 +67,12 @@ extension PlaybackController {
         let session = AVAudioSession.sharedInstance()
         #if compiler(>=6.4)
             if #available(iOS 27, *) {
-                session.deactivate(options: .notifyOthersOnDeactivation) { [logger] _, error in
+                session.deactivate(options: .notifyOthersOnDeactivation) { [weak self, logger] _, error in
                     if let error {
                         logger.error("Audio release: \(error.localizedDescription, privacy: .public)")
                     }
+                    // A pick made while this finished would otherwise play into a released session.
+                    Task { @MainActor [weak self] in self?.reactivateIfPlaying() }
                 }
                 return
             }
@@ -77,5 +82,32 @@ extension PlaybackController {
         } catch {
             logger.error("Audio release: \(error.localizedDescription, privacy: .public)")
         }
+    }
+
+    /// The first play after launch can say it's playing yet sit at 0:00 (the car's trace, 2026-10-26; DECISIONS 168);
+    /// Pause and Play started it every time, so a moment in, and again later, a player still there gets the same.
+    func watchStart() {
+        let item = player.currentItem
+        Task { [weak self] in
+            for delay in [Duration.milliseconds(1500), .milliseconds(2500)] {
+                try? await Task.sleep(for: delay) // Its checks below stand in for cancelling.
+                guard let self, player.currentItem === item else { return }
+                restartIfStuckAtStart()
+            }
+        }
+    }
+
+    /// Only a player claiming to play while still at its start: a stream still buffering says it's waiting instead.
+    func restartIfStuckAtStart() {
+        guard current != nil, !isOpeningAtSavedPlace, player.timeControlStatus == .playing,
+              player.currentItem?.status == .readyToPlay, player.currentTime().seconds < 0.1 else { return }
+        player.pause()
+        player.play()
+    }
+
+    /// The session was released just as something began playing: take it back.
+    func reactivateIfPlaying() {
+        guard current != nil, player.rate > 0 || isOpeningAtSavedPlace else { return }
+        activateAudioSession()
     }
 }

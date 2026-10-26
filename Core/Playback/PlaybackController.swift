@@ -134,12 +134,15 @@ final class PlaybackController {
         status = .loading
         let playerItem = AVPlayerItem(url: item.streamURL)
         observeItem(playerItem)
+        // A file on the iPhone can't stall: waiting to judge its "buffering" held car taps at 0:00 for 10 s.
+        player.automaticallyWaitsToMinimizeStalling = !item.isLocalFile
         if isOpening {
             player.pause() // The rate carries over to the new item; play starts once the seek lands.
         }
         player.replaceCurrentItem(with: playerItem)
         if !isOpening {
             player.play()
+            watchStart()
         }
         watchForStall()
         updateNowPlaying()
