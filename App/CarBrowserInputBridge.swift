@@ -50,18 +50,27 @@ final class CarBrowserInputBridge: NSObject, WKScriptMessageHandler, UIGestureRe
     private var pending: Request?
     private static let world = WKContentWorld.world(name: "RoadivoCarInput")
 
+    /// The page side of the bridge, for a car tab that sets its scripts again (`CarBrowserSession.Tab`).
+    static var userScripts: [WKUserScript] {
+        #if DEBUG
+            [WKUserScript(
+                source: CarBrowserInputScript.source,
+                injectionTime: .atDocumentStart,
+                forMainFrameOnly: false,
+                in: world
+            )]
+        #else
+            []
+        #endif
+    }
+
     init(webView: WKWebView) {
         self.webView = webView
         super.init()
         #if DEBUG
             let content = webView.configuration.userContentController
             content.add(self, contentWorld: Self.world, name: "roadivoCarInput")
-            content.addUserScript(WKUserScript(
-                source: CarBrowserInputScript.source,
-                injectionTime: .atDocumentStart,
-                forMainFrameOnly: false,
-                in: Self.world
-            ))
+            Self.userScripts.forEach(content.addUserScript)
             let tap = UITapGestureRecognizer(target: self, action: #selector(nativeTap))
             tap.cancelsTouchesInView = false
             tap.delegate = self

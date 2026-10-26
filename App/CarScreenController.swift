@@ -3,42 +3,69 @@
     import UIKit
 
     /// Roadivo's own car app on the plain CarPlay window (DECISIONS 161–163). The window's video, road and cast
-    /// picture (`CarPlayWindowController`) lie underneath; the car browser sits under its bar, or alone in full
-    /// screen; `CarScreenView` draws the rest. Every tap lands directly, with no CarPlay template.
+    /// picture (`CarPlayWindowController`) lie underneath; the car browser sits under its bar, beside the iPhone's
+    /// screen in the split view, or alone in full screen; `CarScreenView` draws the rest. Every tap lands directly,
+    /// with no CarPlay template. Taps are answered in `CarScreenController+Actions.swift`, so members are internal.
     @MainActor
     final class CarScreenController: UIViewController {
         /// A webpage field or dropdown the open page is filling.
-        private struct Field {
+        struct Field {
             let bridge: CarBrowserInputBridge
             let request: CarBrowserInputBridge.Request
         }
 
-        private let model = CarScreenModel()
-        private let stage = CarPlayWindowController()
-        private let browser = CarBrowserController()
-        private let mirror = CarScreenMirror()
-        private lazy var overlay = UIHostingController(rootView: CarScreenView(model: model))
-        private lazy var bar = UIHostingController(rootView: CarScreenBrowserBar(model: model))
-        private lazy var exitFullScreen = UIHostingController(rootView: CarScreenExitFullScreen(model: model))
-        private let browserArea = UIView()
+        let model = CarScreenModel()
+        let stage = CarPlayWindowController()
+        let browser = CarBrowserController()
+        let mirror = CarScreenMirror()
+        lazy var overlay = UIHostingController(rootView: CarScreenView(model: model))
+        lazy var bar = UIHostingController(rootView: CarScreenBrowserBar(model: model))
+        lazy var exitFullScreen = UIHostingController(rootView: CarScreenExitFullScreen(model: model))
+        let browserArea = UIView()
         /// The page under the bar, or the whole screen.
-        private lazy var pageUnderBar = browserArea.topAnchor.constraint(equalTo: bar.view.bottomAnchor)
-        private lazy var pageFullScreen = browserArea.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor)
-        private var isFullScreen = false
-        private var field: Field?
-        private var isConnected = false
-        private var isWatching = false
+        lazy var pageUnderBar = browserArea.topAnchor.constraint(equalTo: bar.view.bottomAnchor)
+        lazy var pageFullScreen = browserArea.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor)
+        var isFullScreen = false
+        let bookmarks = CarBookmarks()
+        let history = CarSearchHistory()
+        /// Speech to text for the search page, as the iPhone's voice search.
+        lazy var voice: VoiceSearchModel? = AppEnvironment.current.map {
+            VoiceSearchModel(speech: $0.speech, playback: $0.playback)
+        }
+
+        /// Saved pages and every site, over the page under the bar (`showStartPage`).
+        lazy var startPage = UIHostingController(rootView: CarBrowserStartPage(model: model))
+        /// The iPhone's screen beside the page (`toggleSplit`), or how to cast it while there's none.
+        let splitPanel = UIView()
+        let splitPicture = UIImageView()
+        lazy var splitNote = UIHostingController(rootView: CarSplitPlaceholder(model: model))
+        /// About CarTV's share of the screen for the iPhone's portrait picture.
+        lazy var splitShown = splitPanel.widthAnchor.constraint(
+            equalTo: view.safeAreaLayoutGuide.widthAnchor,
+            multiplier: 0.28
+        )
+        lazy var splitHidden = splitPanel.widthAnchor.constraint(equalToConstant: 0)
+        /// Each tab's page when last on screen, for its card on the Tabs page.
+        var snapshots: [UUID: UIImage] = [:]
+        var field: Field?
+        var isConnected = false
+        var isWatching = false
 
         override func viewDidLoad() {
             super.viewDidLoad()
             view.tintColor = UIColor(Color.roadBrand)
             model.actions = self
             model.icons = AppEnvironment.current?.siteIcons
+            model.voice = voice
+            model.recentSearches = history.searches
             // The video and road stay clear of CarPlay's dock and the screen's corners, as the page does.
             embed(stage, in: view, within: view.safeAreaLayoutGuide)
             stage.showsRoad = false // Roadivo's own screens fill everything but the video.
             view.addSubview(browserArea)
             embed(browser, in: browserArea)
+            embed(startPage, in: browserArea)
+            startPage.view.isHidden = true
+            addSplitPanel()
             overlay.view.backgroundColor = .clear
             bar.view.backgroundColor = .clear
             exitFullScreen.view.backgroundColor = .clear
@@ -66,7 +93,11 @@
                 exitFullScreen.view.heightAnchor.constraint(equalToConstant: 48),
                 // The safe area leaves out CarPlay's dock and the screen's rounded corners, which hid the page's
                 // edges before.
-                browserArea.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+                splitPanel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+                splitPanel.topAnchor.constraint(equalTo: browserArea.topAnchor),
+                splitPanel.bottomAnchor.constraint(equalTo: browserArea.bottomAnchor),
+                splitHidden,
+                browserArea.leadingAnchor.constraint(equalTo: splitPanel.trailingAnchor),
                 browserArea.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
                 pageUnderBar,
                 browserArea.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
@@ -78,7 +109,35 @@
             browser.onChange = { [weak self] in self?.browserChanged() }
             browser.onEditField = { [weak self] bridge, request in self?.edit(request, with: bridge) }
             browser.onInputReset = { [weak self] in self?.closePage() }
+            mirror.onFrame = { [weak self] frame in self?.splitPicture.image = frame }
             showLayers()
+        }
+
+        /// The split view's left side: the iPhone's picture, or how to cast it, with a line beside the page.
+        func addSplitPanel() {
+            splitPanel.translatesAutoresizingMaskIntoConstraints = false
+            splitPanel.clipsToBounds = true
+            splitPanel.backgroundColor = .black
+            splitPanel.isHidden = true
+            view.addSubview(splitPanel)
+            splitPicture.contentMode = .scaleAspectFit
+            splitPicture.translatesAutoresizingMaskIntoConstraints = false
+            splitPanel.addSubview(splitPicture)
+            embed(splitNote, in: splitPanel)
+            let line = UIView()
+            line.backgroundColor = .separator
+            line.translatesAutoresizingMaskIntoConstraints = false
+            splitPanel.addSubview(line)
+            NSLayoutConstraint.activate([
+                splitPicture.leadingAnchor.constraint(equalTo: splitPanel.leadingAnchor),
+                splitPicture.trailingAnchor.constraint(equalTo: splitPanel.trailingAnchor),
+                splitPicture.topAnchor.constraint(equalTo: splitPanel.topAnchor),
+                splitPicture.bottomAnchor.constraint(equalTo: splitPanel.bottomAnchor),
+                line.trailingAnchor.constraint(equalTo: splitPanel.trailingAnchor),
+                line.topAnchor.constraint(equalTo: splitPanel.topAnchor),
+                line.bottomAnchor.constraint(equalTo: splitPanel.bottomAnchor),
+                line.widthAnchor.constraint(equalToConstant: 1)
+            ])
         }
 
         /// The car's screen arrived: what plays, the lists and the Cast receiver start following Roadivo.
@@ -86,8 +145,10 @@
             loadViewIfNeeded()
             isConnected = true
             mirror.start(stage: stage) { [weak self] started in self?.mirrorChanged(started: started) }
-            // The Browser tab's icons, when Discover hasn't fetched them yet.
-            Task { await AppEnvironment.current?.siteIcons.refresh(BrowserSite.all) }
+            model.savedPages = bookmarks.pages
+            // The Browser tab's icons and the saved pages', when Discover hasn't fetched them yet.
+            let sites = BrowserSite.all + bookmarks.pages.map(\.site)
+            Task { await AppEnvironment.current?.siteIcons.refresh(sites) }
             refresh()
             if !isWatching {
                 watch()
@@ -98,13 +159,14 @@
         func close() {
             isConnected = false
             field = nil
+            snapshots = [:]
             browser.close()
             mirror.stop()
             stage.stopUpdating()
         }
 
         /// `guide`: the edges to pin to inside `container`; its own edges when nil.
-        private func embed(_ child: UIViewController, in container: UIView, within guide: UILayoutGuide? = nil) {
+        func embed(_ child: UIViewController, in container: UIView, within guide: UILayoutGuide? = nil) {
             addChild(child)
             child.view.translatesAutoresizingMaskIntoConstraints = false
             container.addSubview(child.view)
@@ -118,7 +180,7 @@
         }
 
         /// The browser's page and bar take their own taps; the overlay covers them only for a page.
-        private func showLayers() {
+        func showLayers() {
             let browsing = model.mode == .browser
             // CarPlay's dock is see-through: white behind it, as in CarTV, except beside a video or the iPhone's
             // screen.
@@ -132,6 +194,12 @@
             bar.view.isHidden = !pageShown || isFullScreen
             exitFullScreen.view.isHidden = !pageShown || !isFullScreen
             overlay.view.isHidden = model.page == nil && browsing
+            startPage.view.isHidden = !(browsing && model.showsStartPage)
+            let splits = browsing && model.isSplit
+            splitPanel.isHidden = !splits
+            let (narrow, wide) = splits ? (splitHidden, splitShown) : (splitShown, splitHidden)
+            narrow.isActive = false
+            wide.isActive = true
             // The old top goes before the new one, so the two never hold at once.
             let (old, new) = isFullScreen ? (pageUnderBar, pageFullScreen) : (pageFullScreen, pageUnderBar)
             old.isActive = false
@@ -141,7 +209,7 @@
         // MARK: - Updates
 
         /// Redraws when Pro, what's playing, the parked state, Location or the library change.
-        private func watch() {
+        func watch() {
             guard let environment = AppEnvironment.current else { return }
             isWatching = true
             withObservationTracking {
@@ -160,14 +228,14 @@
             }
         }
 
-        private func changed() {
+        func changed() {
             isWatching = false
             guard isConnected else { return }
             refresh()
             watch()
         }
 
-        private func refresh() {
+        func refresh() {
             guard isConnected, let environment = AppEnvironment.current else { return }
             let playback = environment.playback
             let parking = environment.parking
@@ -177,6 +245,7 @@
             model.playingTitle = playback.current?.title
             model.isPlaying = playback.isPlaying
             model.isLive = playback.isLive
+            model.isCasting = mirror.isStreaming
             if mirror.isShown {
                 let state = CarWindowState.make(
                     isPro: isPro,
@@ -200,12 +269,13 @@
             stage.show(state, playback: playback)
             if browser.isOpen {
                 browser.setAllowed(CarBrowserAccess.isAllowed(isPro: isPro))
-                return setMode(.browser)
+                setMode(.browser)
+                return showSplitPicture()
             }
             setMode(state == .upgrade ? .upgrade : state.showsTabs ? .tabs : .player)
         }
 
-        private func setMode(_ mode: CarScreenModel.Mode) {
+        func setMode(_ mode: CarScreenModel.Mode) {
             if model.mode != mode {
                 CarPlayTrace.write("screen shows \(mode), \(model.state)")
                 model.mode = mode
@@ -213,14 +283,53 @@
             showLayers()
         }
 
-        private func browserChanged() {
+        func browserChanged() {
             model.canGoBack = browser.state.canGoBack
             model.canGoForward = browser.state.canGoForward
             model.pageURL = browser.state.url
+            let session = browser.session
+            model.tabs = session.tabs.map { tab in
+                .init(id: tab.id, title: tab.title, isSelected: tab === session.selected, snapshot: snapshots[tab.id])
+            }
+            model.canAddTab = session.tabs.count < CarBrowserSession.maximumTabs
+            model.isPageSaved = bookmarks.contains(browser.state.url)
+            model.pageSize = session.selected.zoom
+        }
+
+        /// The iPhone's picture in the split view while it casts and the car is parked, as video; otherwise how to
+        /// cast, or why it's off.
+        func showSplitPicture() {
+            let isParked = AppEnvironment.current?.parking.isParked ?? false
+            let showsPicture = model.isSplit && model.mode == .browser && mirror.isStreaming && isParked
+            splitPicture.isHidden = !showsPicture
+            splitNote.view.isHidden = showsPicture
+            if !mirror.isStreaming {
+                splitPicture.image = nil
+            }
+            if !mirror.isShown {
+                mirror.decodesFrames(showsPicture)
+            }
+        }
+
+        /// The open tab's page as it looks now, for its card on the Tabs page.
+        func snapshotTab(then done: @escaping () -> Void = {}) {
+            let id = browser.session.selected.id
+            guard browser.isOpen, !model.showsStartPage else { return done() }
+            browser.page.webView.takeSnapshot(with: nil) { [weak self] image, _ in
+                if let image {
+                    self?.snapshots[id] = image
+                }
+                done()
+            }
         }
 
         /// A broadcast that starts takes the screen: the car's own video and the browser make way.
-        private func mirrorChanged(started: Bool) {
+        func mirrorChanged(started: Bool) {
+            // In the split view the iPhone's screen stays beside the page rather than taking the screen.
+            if started, model.isSplit, browser.isOpen {
+                mirror.isHidden = true
+                return refresh()
+            }
             if started {
                 if let playback = AppEnvironment.current?.playback, playback.origin == .car {
                     playback.stop()
@@ -232,16 +341,20 @@
             }
             refresh()
         }
+    }
 
-        // MARK: - Webpage fields
+    // MARK: - Webpage fields
 
-        private func edit(_ request: CarBrowserInputBridge.Request, with bridge: CarBrowserInputBridge) {
+    extension CarScreenController {
+        func edit(_ request: CarBrowserInputBridge.Request, with bridge: CarBrowserInputBridge) {
             let kind = request.isSecure ? "password" : request.isSearch ? "search" : "text"
             CarPlayTrace.write("screen field tapped: \(kind), \(request.label)")
             let title = request.label.isEmpty ? request.host : request.label
             if request.options.isEmpty {
-                // What's there already, to edit; a password starts empty.
+                // What's there already, to edit; a password starts empty. Typing starts with the choice of voice,
+                // the iPhone or the keyboard, as in CarTV.
                 model.searchText = request.value
+                model.searchInput = .choose
                 show(.search(.init(
                     title: title,
                     isSearch: request.isSearch,
@@ -257,7 +370,7 @@
         }
 
         /// A search the page's form won't submit still reaches YouTube's results.
-        private func apply(_ text: String, to field: Field) {
+        func apply(_ text: String, to field: Field) {
             field.bridge.apply(text, to: field.request, submit: field.request.isSearch) { [weak self] success in
                 CarPlayTrace.write("screen field applied: \(success)")
                 guard let self, !success, field.request.isSearch,
@@ -266,136 +379,9 @@
             }
         }
 
-        private func show(_ page: CarScreenModel.Page) {
+        func show(_ page: CarScreenModel.Page) {
             model.page = page
             showLayers()
-        }
-    }
-
-    extension CarScreenController: CarScreenActions {
-        func select(_ tab: CarScreenModel.Tab) {
-            model.tab = tab
-            // Cast while the iPhone still casts shows it again, as Home only stepped back to the tabs.
-            if tab == .cast, mirror.isStreaming {
-                mirror.isHidden = false
-                refresh()
-            }
-        }
-
-        func play(_ media: MediaItem, queue: [MediaItem]) {
-            if browser.isOpen {
-                browser.close()
-            }
-            AppEnvironment.current?.playback.play(media, queue: queue, from: .car)
-            refresh()
-        }
-
-        func playback(_ action: (PlaybackController) -> Void) {
-            if let playback = AppEnvironment.current?.playback {
-                action(playback)
-            }
-        }
-
-        func stopPlayback() {
-            AppEnvironment.current?.playback.stop()
-        }
-
-        func scrubBegan() {
-            if let playback = AppEnvironment.current?.playback {
-                stage.scrubBegan(playback: playback)
-            }
-        }
-
-        func scrubMoved(by distance: CGFloat) {
-            stage.scrubMoved(by: distance)
-        }
-
-        func scrubEnded() {
-            if let playback = AppEnvironment.current?.playback {
-                stage.scrubEnded(playback: playback)
-            }
-        }
-
-        func open(_ url: URL) {
-            guard let environment = AppEnvironment.current, environment.proAccess.isPro else { return }
-            closePage()
-            if environment.playback.origin == .car {
-                environment.playback.stop()
-            }
-            browser.open(url)
-            refresh()
-        }
-
-        func closeBrowser() {
-            closePage()
-            browser.close()
-            model.tab = .browser
-            refresh()
-        }
-
-        func browserBack() {
-            browser.back()
-        }
-
-        func browserForward() {
-            browser.forward()
-        }
-
-        func browserReload() {
-            browser.reload()
-        }
-
-        func setBrowserFullScreen(_ isFullScreen: Bool) {
-            self.isFullScreen = isFullScreen
-            showLayers()
-        }
-
-        func showSearch(in page: URL?) {
-            field = nil
-            model.searchText = ""
-            let title = page.map(WebAddress.displayName(of:)) ?? String(appLocalized: "Search or enter website")
-            show(.search(.init(title: title, isSearch: true, isField: false, scope: page)))
-        }
-
-        /// Into the webpage's field; otherwise YouTube's search on YouTube, else the first suggestion.
-        func submitSearch() {
-            let text = model.searchText
-            if let field {
-                closePage()
-                return apply(text, to: field)
-            }
-            let query = text.trimmingCharacters(in: .whitespacesAndNewlines)
-            guard !query.isEmpty, case let .search(search) = model.page,
-                  let url = CarBrowserSiteSearch.url(for: query, on: search.scope)
-                  ?? BrowserSearch.results(for: query, limit: 1).first?.url else { return }
-            open(url)
-        }
-
-        func choose(_ index: Int) {
-            guard let field else { return closePage() }
-            closePage()
-            field.bridge.choose(index, for: field.request) { CarPlayTrace.write("screen dropdown chosen: \($0)") }
-        }
-
-        func closePage() {
-            field = nil
-            guard model.page != nil else { return }
-            model.page = nil
-            showLayers()
-        }
-
-        func hideMirror() {
-            mirror.isHidden = true
-            model.tab = .home
-            refresh()
-        }
-
-        func endMirroring() {
-            BroadcastSignal.requestStop()
-        }
-
-        func toggleMirrorFill() {
-            stage.toggleMirrorFill()
         }
     }
 #endif

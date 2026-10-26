@@ -38,11 +38,27 @@
             }
             .padding(Spacing.xxs)
             .carGlass()
+            .overlay(alignment: .trailing) {
+                // The library's search beside the tabs, as CarTV's.
+                Button {
+                    model.actions?.showLibrarySearch()
+                } label: {
+                    Image(systemName: "magnifyingglass")
+                        .font(.title3.weight(.semibold))
+                        .foregroundStyle(.primary)
+                        .frame(width: 52, height: 52)
+                        .carGlass(in: Circle())
+                }
+                .buttonStyle(.plain)
+                .accessibilityLabel(Text(app: "Search channels and titles"))
+                .offset(x: 52 + Spacing.sm)
+            }
         }
 
         @ViewBuilder private var content: some View {
             switch model.tab {
-            case .home:
+            // Browser opens the browser itself (`CarScreenActions.select`), so its tab never shows a list.
+            case .home, .browser:
                 list(model.menu.home(limit: CarPlayMenu.itemLimit).recent, empty: "Nothing here yet")
             case .favorites:
                 list(model.menu.favorites, empty: "Nothing here yet")
@@ -53,8 +69,6 @@
                     "Cast anything to this screen",
                     detail: "On your iPhone, open Roadivo and go to Discover › Cast to Screen to get started."
                 )
-            case .browser:
-                CarScreenSitesView(model: model)
             }
         }
 

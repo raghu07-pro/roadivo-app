@@ -25,6 +25,8 @@
             let window = UIWindow(windowScene: windowScene)
             window.rootViewController = screen
             window.makeKeyAndVisible()
+            // Settings › Theme's appearance and accent, as on the iPhone; "System" follows the car's day and night.
+            AppTheme.shared.applyToWindows()
             self.screen = screen
             self.window = window
             screen.connect()

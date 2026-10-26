@@ -15,6 +15,7 @@
                     } label: {
                         Image(systemName: "xmark")
                             .font(.title2)
+                            .foregroundStyle(.roadAccent)
                             .frame(width: 64, height: 56)
                     }
                     .buttonStyle(CarKeyStyle())
@@ -34,6 +35,7 @@
                                     Spacer()
                                     if option.isSelected {
                                         Image(systemName: "checkmark")
+                                            .foregroundStyle(.roadAccent)
                                             .accessibilityHidden(true)
                                     }
                                 }

@@ -34,30 +34,34 @@ struct RootView: View {
         }
         .animation(.default, value: preferences.hasCompletedOnboarding)
         .animation(.default, value: preferences.hasSeenIntroPaywall)
-        // Settings › Theme applies at once; the windows carry it to alerts, sheets and system
-        // pickers (and back to the iPhone's setting for "System").
-        .tint(.roadAccent)
-        // Every system font below, sheets included, takes the chosen font style.
-        .fontDesign(theme.font.rootDesign)
-        .preferredColorScheme(theme.appearance.colorScheme)
-        .onChange(of: theme.appearance, initial: true) { theme.applyToWindows() }
-        .onChange(of: theme.accent) { theme.applyToWindows() }
-        // SwiftUI text follows `Typography` by itself; UIKit's navigation titles need telling.
-        .onChange(of: theme.font) { Typography.applyUIKitFonts() }
-        // Pro users never need the intro paywall, even if their plan lapses later.
-        .onChange(of: environment.proAccess.isPro) { _, isPro in
-            if isPro {
-                preferences.hasSeenIntroPaywall = true
+        #if DEBUG
+            // Phone Input from the car's screen (DECISIONS 163).
+            .carPhoneKeyboard()
+        #endif
+            // Settings › Theme applies at once; the windows carry it to alerts, sheets and system
+            // pickers (and back to the iPhone's setting for "System").
+            .tint(.roadAccent)
+            // Every system font below, sheets included, takes the chosen font style.
+            .fontDesign(theme.font.rootDesign)
+            .preferredColorScheme(theme.appearance.colorScheme)
+            .onChange(of: theme.appearance, initial: true) { theme.applyToWindows() }
+            .onChange(of: theme.accent) { theme.applyToWindows() }
+            // SwiftUI text follows `Typography` by itself; UIKit's navigation titles need telling.
+            .onChange(of: theme.font) { Typography.applyUIKitFonts() }
+            // Pro users never need the intro paywall, even if their plan lapses later.
+            .onChange(of: environment.proAccess.isPro) { _, isPro in
+                if isPro {
+                    preferences.hasSeenIntroPaywall = true
+                }
             }
-        }
-        // A subscription can lapse while the app sleeps, and no transaction announces it.
-        .onChange(of: scenePhase) { _, phase in
-            if phase == .active {
-                Task { await environment.proAccess.refresh() }
-                // A car or display may have connected while the app was suspended, unannounced.
-                environment.carConnection.refreshRoute()
+            // A subscription can lapse while the app sleeps, and no transaction announces it.
+            .onChange(of: scenePhase) { _, phase in
+                if phase == .active {
+                    Task { await environment.proAccess.refresh() }
+                    // A car or display may have connected while the app was suspended, unannounced.
+                    environment.carConnection.refreshRoute()
+                }
             }
-        }
     }
 }
 

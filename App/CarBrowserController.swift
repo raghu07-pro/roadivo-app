@@ -88,7 +88,15 @@ final class CarBrowserController: UIViewController {
             message.isHidden = false
         }
         progress.progress = Float(state.progress)
-        page.webView.pageZoom = tab.zoom
+    }
+
+    /// Open with no page yet, for a start page drawn over the browser (Roadivo's car screen, DECISIONS 163).
+    func openBlank() {
+        loadViewIfNeeded()
+        isOpen = true
+        session.selected.input.invalidate()
+        onInputReset?()
+        navigationID = UUID()
     }
 
     func open(_ url: URL) {
@@ -199,8 +207,9 @@ final class CarBrowserController: UIViewController {
 
     func setPageZoom(_ zoom: CGFloat) {
         guard isAllowed else { return }
-        session.selected.zoom = min(1.75, max(0.75, zoom))
-        page.webView.pageZoom = session.selected.zoom
+        // 50–200%, as the car screen's Page size menu offers (DECISIONS 163).
+        session.selected.zoom = min(2, max(0.5, zoom))
+        session.selected.applyPageSize() // Each tab keeps its own size.
         onChange?()
     }
 

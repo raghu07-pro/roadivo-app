@@ -27,8 +27,9 @@ final class VoiceSearchModel {
         state == .listening
     }
 
-    /// Starts listening, or stops if already listening. `onText` gets the transcript as it grows.
-    func toggle(onText: @escaping @MainActor (String) -> Void) {
+    /// Starts listening, or stops if already listening. `onText` gets the transcript as it grows; `onFinish` runs when
+    /// listening ends with the transcript complete, as the car's search uses to run it (DECISIONS 163).
+    func toggle(onText: @escaping @MainActor (String) -> Void, onFinish: @escaping @MainActor () -> Void = {}) {
         if isListening {
             speech.stop()
             return
@@ -48,6 +49,7 @@ final class VoiceSearchModel {
                     onText(text)
                 }
                 state = .idle
+                onFinish()
             } catch {
                 state = .failed
             }

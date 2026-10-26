@@ -109,7 +109,10 @@ struct CarBrowserTests {
 
         car.selectTab(first.id)
         #expect(car.state.title == "Updated first")
-        #expect(car.page.webView.pageZoom == 1.5)
+        // Page size is the tab's layout width now, not WebKit's page zoom (DECISIONS 163): 1280 / 1.5.
+        #expect(first.zoom == 1.5)
+        let scripts = first.page.webView.configuration.userContentController.userScripts
+        #expect(scripts.contains { $0.source.contains("width=853") })
         car.closeTab()
         #expect(car.session.selected === second)
         #expect(car.session.tabs.count == 1)

@@ -20,11 +20,28 @@ final class CarBrowserSession {
                 websiteDataStore: websiteDataStore, allowsExternalLinks: false, contentMode: .mobile
             )
             page.webView.customUserAgent = CarBrowserSession.desktopUserAgent
-            let scripts = page.webView.configuration.userContentController
-            for script in [Self.desktopScreen, Self.desktopViewport, Self.actualTextSize] {
-                scripts.addUserScript(script)
+            // A new tab starts at 100%.
+            for script in [Self.desktopScreen, Self.viewport(width: CarBrowserSession.pageWidth), Self.actualTextSize] {
+                page.webView.configuration.userContentController.addUserScript(script)
             }
             input = CarBrowserInputBridge(webView: page.webView)
+        }
+
+        /// How wide this tab's pages lay out: `pageWidth` at 100%, narrower, so drawn bigger, as `zoom` grows.
+        private var layoutWidth: Int {
+            Int((CGFloat(CarBrowserSession.pageWidth) / zoom).rounded())
+        }
+
+        /// Page size: future pages lay out at the new width, and the open one does at once. WebKit's own page zoom
+        /// would change nothing visible, as it fits each page's width to the screen.
+        func applyPageSize() {
+            let scripts = page.webView.configuration.userContentController
+            scripts.removeAllUserScripts()
+            for script in [Self.desktopScreen, Self.viewport(width: layoutWidth), Self.actualTextSize] {
+                scripts.addUserScript(script)
+            }
+            CarBrowserInputBridge.userScripts.forEach(scripts.addUserScript)
+            page.webView.evaluateJavaScript("window.roadivoViewport?.(\(layoutWidth));", completionHandler: nil)
         }
 
         /// A Mac with no touch and the car's screen: sites treat a touch Mac as an iPad and send tablet pages
@@ -46,35 +63,42 @@ final class CarBrowserSession {
             forMainFrameOnly: false
         )
 
-        /// Every page lays out `pageWidth` wide, in place of its own viewport, and WebKit shrinks it to fit the car's
+        /// Every page lays out `width` wide, in place of its own viewport, and WebKit shrinks it to fit the car's
         /// screen: the same page on every car, scaled to its screen.
-        private static let desktopViewport = WKUserScript(
-            source: """
-            (() => {
-              const content = 'width=\(CarBrowserSession.pageWidth)';
-              let ours = null;
-              const apply = () => {
-                for (const meta of document.querySelectorAll('meta[name="viewport"]')) {
-                  if (meta !== ours) meta.remove();
-                }
-                if (!ours) {
-                  ours = document.createElement('meta');
-                  ours.name = 'viewport';
-                }
-                if (ours.content !== content) ours.content = content;
-                const parent = document.head || document.documentElement;
-                if (ours.parentNode !== parent) parent.appendChild(ours);
-              };
-              apply();
-              document.addEventListener('DOMContentLoaded', () => {
-                apply();
-                new MutationObserver(apply).observe(document.head, {childList: true});
-              });
-            })();
-            """,
-            injectionTime: .atDocumentStart,
-            forMainFrameOnly: true
-        )
+        private static func viewport(width: Int) -> WKUserScript {
+            WKUserScript(
+                source: """
+                (() => {
+                  let content = 'width=\(width)';
+                  let ours = null;
+                  const apply = () => {
+                    for (const meta of document.querySelectorAll('meta[name="viewport"]')) {
+                      if (meta !== ours) meta.remove();
+                    }
+                    if (!ours) {
+                      ours = document.createElement('meta');
+                      ours.name = 'viewport';
+                    }
+                    if (ours.content !== content) ours.content = content;
+                    const parent = document.head || document.documentElement;
+                    if (ours.parentNode !== parent) parent.appendChild(ours);
+                  };
+                  apply();
+                  // A new page size, for the page that's open (`applyPageSize`).
+                  window.roadivoViewport = width => {
+                    content = 'width=' + width;
+                    apply();
+                  };
+                  document.addEventListener('DOMContentLoaded', () => {
+                    apply();
+                    new MutationObserver(apply).observe(document.head, {childList: true});
+                  });
+                })();
+                """,
+                injectionTime: .atDocumentStart,
+                forMainFrameOnly: true
+            )
+        }
 
         /// An iPhone's WebKit enlarges text on a page shrunk to fit, which spilled text out of its columns on the car's
         /// screen (Instagram's); with this, text keeps the page's own size, as on an iPad and in CarTV.

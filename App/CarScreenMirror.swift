@@ -10,8 +10,10 @@
         /// `true` when a broadcast starts; `false` when it ends.
         private var onChange: ((Bool) -> Void)?
         private(set) var isStreaming = false
-        /// Home stepped back to the tabs while the iPhone still casts.
+        /// Home stepped back to the tabs while the iPhone still casts, or the split view shows it beside the page.
         var isHidden = false
+        /// Each picture, for the split view beside the page.
+        var onFrame: ((UIImage) -> Void)?
 
         /// The mirror has the screen.
         var isShown: Bool {
@@ -23,8 +25,9 @@
             self.onChange = onChange
             receiver.start { [weak self] event in
                 self?.received(event)
-            } onFrame: { [weak stage] frame in
+            } onFrame: { [weak self, weak stage] frame in
                 stage?.showMirrorFrame(frame)
+                self?.onFrame?(frame)
             }
         }
 
@@ -49,6 +52,11 @@
         func hide() {
             stage?.showMirror(false, keepsFrame: isStreaming)
             receiver.decodesFrames = false
+        }
+
+        /// Pictures for the split view, which only shows them while parked.
+        func decodesFrames(_ decodes: Bool) {
+            receiver.decodesFrames = decodes
         }
 
         private func received(_ event: ScreenMirrorReceiver.Event) {
