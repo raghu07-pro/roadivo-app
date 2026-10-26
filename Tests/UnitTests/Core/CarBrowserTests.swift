@@ -145,4 +145,13 @@ struct CarBrowserTests {
         #expect(CarBrowserSiteSearch.url(for: " ", on: url) == nil)
         #expect(CarBrowserSiteSearch.url(for: query, on: URL(string: "https://youtube.com.example.org")) == nil)
     }
+
+    @Test("Car pages show the same width on every screen size, never below 50% or above 125%")
+    func pageZoomFitsScreen() {
+        let width = CarScreenController.pageWidth
+        #expect(CarScreenController.pageZoom(forWidth: width) == 1)
+        #expect(CarScreenController.pageZoom(forWidth: width * 0.75) == 0.75)
+        #expect(CarScreenController.pageZoom(forWidth: 300) == 0.5)
+        #expect(CarScreenController.pageZoom(forWidth: width * 3) == 1.25)
+    }
 }

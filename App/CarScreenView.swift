@@ -18,8 +18,9 @@
                 case .tabs: CarScreenTabsView(model: model)
                 case .player: CarScreenPlayerView(model: model)
                 case .mirror: CarScreenMirrorView(model: model)
-                // The window's card shows through: the Pro line, or nothing over the browser.
-                case .upgrade, .browser: Color.clear
+                case .upgrade: CarScreenNotice(model: model)
+                // The page and its bar take their own taps.
+                case .browser: Color.clear
                 }
             }
         }

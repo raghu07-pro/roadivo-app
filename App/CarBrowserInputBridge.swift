@@ -1,7 +1,7 @@
 import UIKit
 import WebKit
 
-/// Measures the native/DOM input boundary and routes actual field and dropdown taps to a car-side editor.
+/// Measures the native/DOM input boundary and routes actual taps on any text box or dropdown to a car-side editor.
 @MainActor
 final class CarBrowserInputBridge: NSObject, WKScriptMessageHandler, UIGestureRecognizerDelegate {
     struct Option: Equatable {
@@ -20,6 +20,12 @@ final class CarBrowserInputBridge: NSObject, WKScriptMessageHandler, UIGestureRe
         let frame: WKFrameInfo
         /// A dropdown's choices; empty for a text field.
         let options: [Option]
+        /// What the field already holds, to edit; always empty for a password, which never leaves the page.
+        let value: String
+        /// A password: shown as dots while it's typed on the car's screen.
+        let isSecure: Bool
+        /// A number or phone field: the keyboard opens on its numbers.
+        let isNumeric: Bool
     }
 
     struct Diagnostics {
@@ -102,7 +108,10 @@ final class CarBrowserInputBridge: NSObject, WKScriptMessageHandler, UIGestureRe
                 isSearch: body["search"] as? Bool ?? false,
                 host: message.frameInfo.securityOrigin.host,
                 frame: message.frameInfo,
-                options: Self.options(from: body["options"])
+                options: Self.options(from: body["options"]),
+                value: String((body["value"] as? String ?? "").prefix(4096)),
+                isSecure: body["secure"] as? Bool ?? false,
+                isNumeric: body["numeric"] as? Bool ?? false
             )
             pending = request
             diagnostics.editors += 1

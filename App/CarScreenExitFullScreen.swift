@@ -10,8 +10,8 @@
                 model.actions?.setBrowserFullScreen(false)
             } label: {
                 Image(systemName: "arrow.down.right.and.arrow.up.left")
-                    .font(.title2)
-                    .frame(width: 56, height: 56)
+                    .font(.title3)
+                    .frame(width: 48, height: 48)
             }
             .buttonStyle(CarControlStyle(shape: .circle))
             .accessibilityLabel(Text(app: "Exit full screen"))

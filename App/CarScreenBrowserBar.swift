@@ -15,7 +15,9 @@
                 tool("arrow.clockwise", label: "Reload") { $0.browserReload() }
                 tool("arrow.up.left.and.arrow.down.right", label: "Full screen") { $0.setBrowserFullScreen(true) }
             }
-            .padding(Spacing.xs)
+            // A slim bar, as CarTV's, with touch targets still 44 points tall.
+            .padding(.horizontal, Spacing.xs)
+            .padding(.vertical, Spacing.xxs)
             .background(Color.roadCanvas.ignoresSafeArea())
         }
 
@@ -32,10 +34,10 @@
                             .foregroundStyle(.secondary)
                     }
                 }
-                .font(.title3)
+                .font(.body)
                 .lineLimit(1)
                 .padding(.horizontal, Spacing.md)
-                .frame(maxWidth: .infinity, minHeight: 52)
+                .frame(maxWidth: .infinity, minHeight: 44)
             }
             .buttonStyle(CarKeyStyle())
             .accessibilityHint(Text(app: "Search or enter website"))
@@ -53,8 +55,8 @@
                 }
             } label: {
                 Image(systemName: symbol)
-                    .font(.title2)
-                    .frame(width: 56, height: 52)
+                    .font(.title3)
+                    .frame(width: 52, height: 44)
             }
             .buttonStyle(CarKeyStyle())
             .disabled(!enabled)

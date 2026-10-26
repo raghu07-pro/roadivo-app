@@ -18,10 +18,17 @@
 
         var body: some View {
             ZStack {
-                Color.clear
-                    .contentShape(Rectangle())
-                    .onTapGesture { reveal(!showsControls) }
-                    .gesture(scrub, isEnabled: isVideo && !model.isLive)
+                // Over the video, nothing; without it, why, on the wallpaper rather than the road.
+                Group {
+                    if isVideo {
+                        Color.clear
+                    } else {
+                        CarScreenNotice(model: model, title: model.playingTitle)
+                    }
+                }
+                .contentShape(Rectangle())
+                .onTapGesture { reveal(!showsControls) }
+                .gesture(scrub, isEnabled: isVideo && !model.isLive)
                 if showsControls || !isVideo {
                     controls
                         .transition(.opacity)

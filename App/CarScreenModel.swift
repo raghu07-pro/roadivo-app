@@ -82,6 +82,10 @@
             let isField: Bool
             /// The page searched from: on YouTube, the first suggestion searches YouTube.
             let scope: URL?
+            /// A password field: what's typed shows as dots.
+            var isSecure = false
+            /// A number or phone field: the keyboard opens on its numbers.
+            var startsWithNumbers = false
         }
 
         /// One suggestion under the search field.
@@ -106,6 +110,7 @@
         var isPlaying = false
         var isLive = false
         var playingID: UUID?
+        var playingTitle: String?
         /// The browser's page, which scopes its search.
         var pageURL: URL?
         var canGoBack = false

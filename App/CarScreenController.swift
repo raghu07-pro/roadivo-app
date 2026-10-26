@@ -13,11 +13,24 @@
             let request: CarBrowserInputBridge.Request
         }
 
+        /// How much page fits across the car's screen, in CSS pixels: 1024, the narrowest width sites lay out as
+        /// desktop,
+        /// which on a 960-point car screen is close to CarTV's 100%. Every car shows this width, scaled to its own
+        /// screen (`pageZoom(forWidth:)`); raise it to fit more, lower it for bigger text (owner, 2026-10-26;
+        /// DECISIONS 163).
+        static let pageWidth: CGFloat = 1024
+        /// The smallest and largest page zoom, so text stays readable on a small screen and pages don't balloon on a
+        /// wide one.
+        static let pageZoomRange: ClosedRange<CGFloat> = 0.5...1.25
+
+        /// The zoom that fits `pageWidth` across `width` points of the car's screen.
+        static func pageZoom(forWidth width: CGFloat) -> CGFloat {
+            min(pageZoomRange.upperBound, max(pageZoomRange.lowerBound, width / pageWidth))
+        }
+
         private let model = CarScreenModel()
         private let stage = CarPlayWindowController()
-        /// Pages show at 75%: about a laptop's width of page on the car's screen, where 100% draws sites too big
-        /// (owner, 2026-10-26).
-        private let browser = CarBrowserController(defaultZoom: 0.75)
+        private let browser = CarBrowserController()
         private let mirror = CarScreenMirror()
         private lazy var overlay = UIHostingController(rootView: CarScreenView(model: model))
         private lazy var bar = UIHostingController(rootView: CarScreenBrowserBar(model: model))
@@ -25,7 +38,7 @@
         private let browserArea = UIView()
         /// The page under the bar, or the whole screen.
         private lazy var pageUnderBar = browserArea.topAnchor.constraint(equalTo: bar.view.bottomAnchor)
-        private lazy var pageFullScreen = browserArea.topAnchor.constraint(equalTo: view.topAnchor)
+        private lazy var pageFullScreen = browserArea.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor)
         private var isFullScreen = false
         private var field: Field?
         private var isConnected = false
@@ -37,7 +50,9 @@
             view.tintColor = UIColor(Color.roadBrand)
             model.actions = self
             model.icons = AppEnvironment.current?.siteIcons
-            embed(stage, in: view)
+            // The video and road stay clear of CarPlay's dock and the screen's corners, as the page does.
+            embed(stage, in: view, within: view.safeAreaLayoutGuide)
+            stage.showsRoad = false // Roadivo's own screens fill everything but the video.
             view.addSubview(browserArea)
             embed(browser, in: browserArea)
             overlay.view.backgroundColor = .clear
@@ -54,7 +69,7 @@
                 bar.view.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
                 bar.view.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
                 bar.view.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-                bar.view.heightAnchor.constraint(equalToConstant: 68),
+                bar.view.heightAnchor.constraint(equalToConstant: 52),
                 exitFullScreen.view.trailingAnchor.constraint(
                     equalTo: view.safeAreaLayoutGuide.trailingAnchor,
                     constant: -Spacing.sm
@@ -63,12 +78,14 @@
                     equalTo: view.safeAreaLayoutGuide.topAnchor,
                     constant: Spacing.sm
                 ),
-                exitFullScreen.view.widthAnchor.constraint(equalToConstant: 56),
-                exitFullScreen.view.heightAnchor.constraint(equalToConstant: 56),
-                browserArea.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-                browserArea.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+                exitFullScreen.view.widthAnchor.constraint(equalToConstant: 48),
+                exitFullScreen.view.heightAnchor.constraint(equalToConstant: 48),
+                // The safe area leaves out CarPlay's dock and the screen's rounded corners, which hid the page's
+                // edges before.
+                browserArea.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+                browserArea.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
                 pageUnderBar,
-                browserArea.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+                browserArea.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
                 overlay.view.leadingAnchor.constraint(equalTo: view.leadingAnchor),
                 overlay.view.trailingAnchor.constraint(equalTo: view.trailingAnchor),
                 overlay.view.topAnchor.constraint(equalTo: view.topAnchor),
@@ -102,15 +119,31 @@
             stage.stopUpdating()
         }
 
-        private func embed(_ child: UIViewController, in container: UIView) {
+        override func viewDidLayoutSubviews() {
+            super.viewDidLayoutSubviews()
+            fitPage()
+        }
+
+        /// Each car's screen is a different size: the page always shows `pageWidth`, scaled to the space it has.
+        private func fitPage() {
+            let width = browserArea.bounds.width
+            guard browser.isOpen, width > 0 else { return }
+            let zoom = Self.pageZoom(forWidth: width)
+            if abs(browser.session.selected.zoom - zoom) > 0.005 {
+                browser.setPageZoom(zoom)
+            }
+        }
+
+        /// `guide`: the edges to pin to inside `container`; its own edges when nil.
+        private func embed(_ child: UIViewController, in container: UIView, within guide: UILayoutGuide? = nil) {
             addChild(child)
             child.view.translatesAutoresizingMaskIntoConstraints = false
             container.addSubview(child.view)
             NSLayoutConstraint.activate([
-                child.view.leadingAnchor.constraint(equalTo: container.leadingAnchor),
-                child.view.trailingAnchor.constraint(equalTo: container.trailingAnchor),
-                child.view.topAnchor.constraint(equalTo: container.topAnchor),
-                child.view.bottomAnchor.constraint(equalTo: container.bottomAnchor)
+                child.view.leadingAnchor.constraint(equalTo: guide?.leadingAnchor ?? container.leadingAnchor),
+                child.view.trailingAnchor.constraint(equalTo: guide?.trailingAnchor ?? container.trailingAnchor),
+                child.view.topAnchor.constraint(equalTo: guide?.topAnchor ?? container.topAnchor),
+                child.view.bottomAnchor.constraint(equalTo: guide?.bottomAnchor ?? container.bottomAnchor)
             ])
             child.didMove(toParent: self)
         }
@@ -125,7 +158,7 @@
             browserArea.isHidden = !browsing
             bar.view.isHidden = !pageShown || isFullScreen
             exitFullScreen.view.isHidden = !pageShown || !isFullScreen
-            overlay.view.isHidden = model.page == nil && (browsing || model.mode == .upgrade)
+            overlay.view.isHidden = model.page == nil && browsing
             // The old top goes before the new one, so the two never hold at once.
             let (old, new) = isFullScreen ? (pageUnderBar, pageFullScreen) : (pageFullScreen, pageUnderBar)
             old.isActive = false
@@ -168,6 +201,7 @@
             let isPro = environment.proAccess.isPro
             model.menu = CarPlayMenu.build(from: environment.repository)
             model.playingID = playback.current?.id
+            model.playingTitle = playback.current?.title
             model.isPlaying = playback.isPlaying
             model.isLive = playback.isLive
             if mirror.isShown {
@@ -193,6 +227,7 @@
             stage.show(state, playback: playback)
             if browser.isOpen {
                 browser.setAllowed(CarBrowserAccess.isAllowed(isPro: isPro))
+                fitPage() // A new page starts at 100% until it's fitted.
                 return setMode(.browser)
             }
             setMode(state == .upgrade ? .upgrade : state.showsTabs ? .tabs : .player)
@@ -229,11 +264,20 @@
         // MARK: - Webpage fields
 
         private func edit(_ request: CarBrowserInputBridge.Request, with bridge: CarBrowserInputBridge) {
-            CarPlayTrace.write("screen field tapped: \(request.isSearch ? "search" : "text"), \(request.label)")
+            let kind = request.isSecure ? "password" : request.isSearch ? "search" : "text"
+            CarPlayTrace.write("screen field tapped: \(kind), \(request.label)")
             let title = request.label.isEmpty ? request.host : request.label
             if request.options.isEmpty {
-                model.searchText = ""
-                show(.search(.init(title: title, isSearch: request.isSearch, isField: true, scope: browser.state.url)))
+                // What's there already, to edit; a password starts empty.
+                model.searchText = request.value
+                show(.search(.init(
+                    title: title,
+                    isSearch: request.isSearch,
+                    isField: true,
+                    scope: browser.state.url,
+                    isSecure: request.isSecure,
+                    startsWithNumbers: request.isNumeric
+                )))
             } else {
                 show(.choices(title: title, options: request.options))
             }

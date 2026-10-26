@@ -4,7 +4,7 @@ import WebKit
 /// An independent, desktop-layout browser for the experimental CarPlay window. No phone browser state is reused.
 @MainActor
 final class CarBrowserController: UIViewController {
-    let session: CarBrowserSession
+    let session = CarBrowserSession()
     var page: WebPageController {
         session.selected.page
     }
@@ -23,17 +23,6 @@ final class CarBrowserController: UIViewController {
     private weak var mountedWebView: WKWebView?
     private var navigationID = UUID()
     private var panStart = CGPoint.zero
-
-    /// `defaultZoom`: each new tab's page zoom; Roadivo's plain car window starts smaller (DECISIONS 162).
-    init(defaultZoom: CGFloat = 1) {
-        session = CarBrowserSession(defaultZoom: defaultZoom)
-        super.init(nibName: nil, bundle: nil)
-    }
-
-    @available(*, unavailable)
-    required init?(coder: NSCoder) {
-        nil
-    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -210,7 +199,8 @@ final class CarBrowserController: UIViewController {
 
     func setPageZoom(_ zoom: CGFloat) {
         guard isAllowed else { return }
-        session.selected.zoom = min(1.75, max(0.75, zoom))
+        // Down to 50% for a small car screen fitting a whole page (`CarScreenController.pageZoomRange`).
+        session.selected.zoom = min(1.75, max(0.5, zoom))
         page.webView.pageZoom = session.selected.zoom
         onChange?()
     }

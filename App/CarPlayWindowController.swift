@@ -17,6 +17,9 @@ final class CarPlayWindowController: UIViewController {
     /// Each minute while the car is connected, for the road's hour (`updateMoment`).
     private var clock: Timer?
     private var browser: CarBrowserController?
+    /// The road and its line behind everything but the video; Roadivo's plain car window draws its own screens and
+    /// never shows them (owner, 2026-10-26; DECISIONS 163).
+    var showsRoad = true
     /// The whole iPhone from Screen Broadcast, over everything else while parked.
     private let mirror = UIImageView()
 
@@ -146,7 +149,7 @@ final class CarPlayWindowController: UIViewController {
             scrub = nil
         }
         updateProgress()
-        card.view.isHidden = showsVideo
+        card.view.isHidden = showsVideo || !showsRoad
         // The title only for what the car is playing; on the tabs or the Pro line, Roadivo's tagline.
         let title = state == .driving || state == .needsLocation ? playback.current?.title : nil
         let content = CarWindowCard.Content(state: state, title: title)

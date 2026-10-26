@@ -15,9 +15,16 @@
 
         var body: some View {
             ZStack {
-                Color.clear
-                    .contentShape(Rectangle())
-                    .onTapGesture { reveal(!showsControls) }
+                // Over the iPhone's screen, nothing; without it, why, on the wallpaper rather than the road.
+                Group {
+                    if showsPicture {
+                        Color.clear
+                    } else {
+                        CarScreenNotice(model: model)
+                    }
+                }
+                .contentShape(Rectangle())
+                .onTapGesture { reveal(!showsControls) }
                 if showsControls || !showsPicture {
                     controls
                         .transition(.opacity)

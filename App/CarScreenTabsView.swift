@@ -2,36 +2,42 @@
     import SwiftUI
 
     /// The car screen's home, as CarTV's: Home, Favorites, Library, Cast and Browser centred along the top, and the
-    /// chosen list under them, all tapped directly (DECISIONS 162).
+    /// chosen list under them, all tapped directly (DECISIONS 162). Drawn as CarPlay drew the template tabs: a glass
+    /// capsule with a grey pill under the chosen tab, on CarPlay's wallpaper (DECISIONS 163).
     struct CarScreenTabsView: View {
         let model: CarScreenModel
 
         var body: some View {
             VStack(spacing: Spacing.sm) {
-                HStack(spacing: Spacing.xs) {
-                    ForEach(CarScreenModel.Tab.allCases, id: \.self) { tab in
-                        Button {
-                            model.actions?.select(tab)
-                        } label: {
-                            Text(app: tab.title)
-                                .font(.headline)
-                                .padding(.horizontal, Spacing.md)
-                                .frame(minHeight: 48)
-                                .foregroundStyle(model.tab == tab ? Color.roadOnBrand : .primary)
-                                .background(model.tab == tab ? Color.roadBrand : .clear, in: Capsule())
-                                .contentShape(Capsule())
-                        }
-                        .buttonStyle(.plain)
-                        .accessibilityAddTraits(model.tab == tab ? .isSelected : [])
-                    }
-                }
-                .padding(Spacing.xxs)
-                .background(.thinMaterial, in: Capsule())
+                tabBar
                 content
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
             }
             .padding(Spacing.sm)
-            .background(.regularMaterial)
+            .background { CarScreenWallpaper() }
+        }
+
+        private var tabBar: some View {
+            HStack(spacing: Spacing.xxs) {
+                ForEach(CarScreenModel.Tab.allCases, id: \.self) { tab in
+                    let isChosen = model.tab == tab
+                    Button {
+                        model.actions?.select(tab)
+                    } label: {
+                        Text(app: tab.title)
+                            .font(isChosen ? .body.weight(.semibold) : .body)
+                            .foregroundStyle(.primary)
+                            .padding(.horizontal, Spacing.sm)
+                            .frame(minHeight: 44)
+                            .background(isChosen ? Color.primary.opacity(0.1) : .clear, in: Capsule())
+                            .contentShape(Capsule())
+                    }
+                    .buttonStyle(.plain)
+                    .accessibilityAddTraits(isChosen ? .isSelected : [])
+                }
+            }
+            .padding(Spacing.xxs)
+            .carGlass()
         }
 
         @ViewBuilder private var content: some View {

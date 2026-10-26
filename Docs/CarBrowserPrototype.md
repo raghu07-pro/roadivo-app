@@ -53,8 +53,9 @@ Roadivo's views and the webpage directly:
   and Cast controls, and the browser.
 - The browser shows pages at 75% under a bar along the top, as in CarTV: Close, Back, Forward, the page's address
   (tap to search), Reload and Full screen. Full screen leaves one button in the corner to bring the bar back.
-- A tapped text field opens `CarSearchPage`, with Roadivo's keyboard; a tapped dropdown opens `CarChoicesPage`.
-  Password, card and one-time-code fields get no editor.
+- Any tapped text box opens `CarSearchPage`, with Roadivo's keyboard: text, search, address, email, phone,
+  password and number fields, text areas and rich editors, including through a field's label. Passwords show as dots
+  and never come back from the page; number fields open on the numbers. A tapped dropdown opens `CarChoicesPage`.
 
 Verified in the CarPlay Simulator with an iPhone 11 Pro on iOS 27.0.1. The role isn't in Apple's public headers,
 App Review may reject it, and Cafari and CarTV both report the iOS 27.2 beta breaking it. Delete the two

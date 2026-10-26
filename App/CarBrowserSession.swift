@@ -10,16 +10,30 @@ final class CarBrowserSession {
         let input: CarBrowserInputBridge
         var state = WebPageController.State()
         var pendingURL: URL?
-        var zoom: CGFloat
+        var zoom: CGFloat = 1
 
-        init(websiteDataStore: WKWebsiteDataStore, zoom: CGFloat) {
-            self.zoom = zoom
+        init(websiteDataStore: WKWebsiteDataStore) {
             // Desktop sites suit the wide car screen, as in CarTV (DECISIONS 162).
             page = WebPageController(
                 websiteDataStore: websiteDataStore, allowsExternalLinks: false, contentMode: .desktop
             )
+            page.webView.configuration.userContentController.addUserScript(Self.actualTextSize)
             input = CarBrowserInputBridge(webView: page.webView)
         }
+
+        /// An iPhone's WebKit enlarges text on a desktop page zoomed out to fit, which spilled text out of its
+        /// columns on the car's screen (Instagram's, at 75%); with this, text follows the page zoom, as on an iPad
+        /// and in CarTV (DECISIONS 163).
+        private static let actualTextSize = WKUserScript(
+            source: """
+            const style = document.createElement('style');
+            style.textContent = 'html { -webkit-text-size-adjust: 100% !important; ' +
+              'text-size-adjust: 100% !important; }';
+            document.documentElement.appendChild(style);
+            """,
+            injectionTime: .atDocumentStart,
+            forMainFrameOnly: false
+        )
 
         var title: String {
             if !state.title.isEmpty {
@@ -39,14 +53,11 @@ final class CarBrowserSession {
     private(set) var selected: Tab
     private(set) var savedPages: [SavedPage] = []
     private var websiteDataStore: WKWebsiteDataStore
-    /// Each new tab's page zoom.
-    let defaultZoom: CGFloat
 
-    init(defaultZoom: CGFloat = 1) {
-        self.defaultZoom = defaultZoom
+    init() {
         let store = WKWebsiteDataStore.nonPersistent()
         websiteDataStore = store
-        let tab = Tab(websiteDataStore: store, zoom: defaultZoom)
+        let tab = Tab(websiteDataStore: store)
         tabs = [tab]
         selected = tab
     }
@@ -55,7 +66,7 @@ final class CarBrowserSession {
     func addTab() -> Bool {
         guard tabs.count < Self.maximumTabs else { return false }
         suspend(selected)
-        let tab = Tab(websiteDataStore: websiteDataStore, zoom: defaultZoom)
+        let tab = Tab(websiteDataStore: websiteDataStore)
         tabs.append(tab)
         selected = tab
         return true
@@ -78,7 +89,7 @@ final class CarBrowserSession {
         if let tab = tabs.last {
             selected = tab
         } else {
-            let tab = Tab(websiteDataStore: websiteDataStore, zoom: defaultZoom)
+            let tab = Tab(websiteDataStore: websiteDataStore)
             tabs = [tab]
             selected = tab
         }
@@ -100,7 +111,7 @@ final class CarBrowserSession {
             tab.page.webView.loadHTMLString("", baseURL: nil)
         }
         websiteDataStore = .nonPersistent()
-        let tab = Tab(websiteDataStore: websiteDataStore, zoom: defaultZoom)
+        let tab = Tab(websiteDataStore: websiteDataStore)
         tabs = [tab]
         selected = tab
         savedPages = []
