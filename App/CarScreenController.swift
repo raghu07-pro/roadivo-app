@@ -13,21 +13,6 @@
             let request: CarBrowserInputBridge.Request
         }
 
-        /// How much page fits across the car's screen, in CSS pixels: 1024, the narrowest width sites lay out as
-        /// desktop,
-        /// which on a 960-point car screen is close to CarTV's 100%. Every car shows this width, scaled to its own
-        /// screen (`pageZoom(forWidth:)`); raise it to fit more, lower it for bigger text (owner, 2026-10-26;
-        /// DECISIONS 163).
-        static let pageWidth: CGFloat = 1024
-        /// The smallest and largest page zoom, so text stays readable on a small screen and pages don't balloon on a
-        /// wide one.
-        static let pageZoomRange: ClosedRange<CGFloat> = 0.5...1.25
-
-        /// The zoom that fits `pageWidth` across `width` points of the car's screen.
-        static func pageZoom(forWidth width: CGFloat) -> CGFloat {
-            min(pageZoomRange.upperBound, max(pageZoomRange.lowerBound, width / pageWidth))
-        }
-
         private let model = CarScreenModel()
         private let stage = CarPlayWindowController()
         private let browser = CarBrowserController()
@@ -46,7 +31,6 @@
 
         override func viewDidLoad() {
             super.viewDidLoad()
-            view.backgroundColor = .black
             view.tintColor = UIColor(Color.roadBrand)
             model.actions = self
             model.icons = AppEnvironment.current?.siteIcons
@@ -69,7 +53,7 @@
                 bar.view.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
                 bar.view.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
                 bar.view.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-                bar.view.heightAnchor.constraint(equalToConstant: 52),
+                bar.view.heightAnchor.constraint(equalToConstant: 40),
                 exitFullScreen.view.trailingAnchor.constraint(
                     equalTo: view.safeAreaLayoutGuide.trailingAnchor,
                     constant: -Spacing.sm
@@ -119,21 +103,6 @@
             stage.stopUpdating()
         }
 
-        override func viewDidLayoutSubviews() {
-            super.viewDidLayoutSubviews()
-            fitPage()
-        }
-
-        /// Each car's screen is a different size: the page always shows `pageWidth`, scaled to the space it has.
-        private func fitPage() {
-            let width = browserArea.bounds.width
-            guard browser.isOpen, width > 0 else { return }
-            let zoom = Self.pageZoom(forWidth: width)
-            if abs(browser.session.selected.zoom - zoom) > 0.005 {
-                browser.setPageZoom(zoom)
-            }
-        }
-
         /// `guide`: the edges to pin to inside `container`; its own edges when nil.
         private func embed(_ child: UIViewController, in container: UIView, within guide: UILayoutGuide? = nil) {
             addChild(child)
@@ -151,6 +120,10 @@
         /// The browser's page and bar take their own taps; the overlay covers them only for a page.
         private func showLayers() {
             let browsing = model.mode == .browser
+            // CarPlay's dock is see-through: white behind it, as in CarTV, except beside a video or the iPhone's
+            // screen.
+            let showsPicture = (model.mode == .player || model.mode == .mirror) && model.state == .video
+            view.backgroundColor = showsPicture ? .black : .systemBackground
             if !browsing {
                 isFullScreen = false
             }
@@ -227,7 +200,6 @@
             stage.show(state, playback: playback)
             if browser.isOpen {
                 browser.setAllowed(CarBrowserAccess.isAllowed(isPro: isPro))
-                fitPage() // A new page starts at 100% until it's fitted.
                 return setMode(.browser)
             }
             setMode(state == .upgrade ? .upgrade : state.showsTabs ? .tabs : .player)

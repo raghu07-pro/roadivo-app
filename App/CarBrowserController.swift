@@ -199,8 +199,7 @@ final class CarBrowserController: UIViewController {
 
     func setPageZoom(_ zoom: CGFloat) {
         guard isAllowed else { return }
-        // Down to 50% for a small car screen fitting a whole page (`CarScreenController.pageZoomRange`).
-        session.selected.zoom = min(1.75, max(0.5, zoom))
+        session.selected.zoom = min(1.75, max(0.75, zoom))
         page.webView.pageZoom = session.selected.zoom
         onChange?()
     }

@@ -43,7 +43,9 @@ struct CarBrowserTests {
         #expect(car.page.webView !== phone.web.webView)
         #expect(!car.page.webView.configuration.websiteDataStore.isPersistent)
         #expect(phone.web.webView.configuration.websiteDataStore.isPersistent)
-        #expect(car.page.webView.configuration.defaultWebpagePreferences.preferredContentMode == .desktop)
+        // Normal mode, so each page's viewport is honoured, but sites see desktop Safari (DECISIONS 163).
+        #expect(car.page.webView.configuration.defaultWebpagePreferences.preferredContentMode == .mobile)
+        #expect(car.page.webView.customUserAgent == CarBrowserSession.desktopUserAgent)
     }
 
     @Test("Closing cancels a queued URL and late page reports cannot restore the session")
@@ -144,14 +146,5 @@ struct CarBrowserTests {
         #expect(components.queryItems == [URLQueryItem(name: "search_query", value: query)])
         #expect(CarBrowserSiteSearch.url(for: " ", on: url) == nil)
         #expect(CarBrowserSiteSearch.url(for: query, on: URL(string: "https://youtube.com.example.org")) == nil)
-    }
-
-    @Test("Car pages show the same width on every screen size, never below 50% or above 125%")
-    func pageZoomFitsScreen() {
-        let width = CarScreenController.pageWidth
-        #expect(CarScreenController.pageZoom(forWidth: width) == 1)
-        #expect(CarScreenController.pageZoom(forWidth: width * 0.75) == 0.75)
-        #expect(CarScreenController.pageZoom(forWidth: 300) == 0.5)
-        #expect(CarScreenController.pageZoom(forWidth: width * 3) == 1.25)
     }
 }
