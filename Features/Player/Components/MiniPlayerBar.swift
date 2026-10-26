@@ -1,7 +1,7 @@
 import SwiftUI
 
 /// Floating now-playing bar above the tab bar: live video thumbnail, title and
-/// controls. Tap to return to the full player.
+/// controls. Tap to return to the full player. A video on the car shows a car instead of its picture (DECISIONS 165).
 struct MiniPlayerBar: View {
     let playback: PlaybackController
     let onExpand: () -> Void
@@ -12,10 +12,20 @@ struct MiniPlayerBar: View {
         HStack(spacing: Spacing.sm) {
             Button(action: onExpand) {
                 HStack(spacing: Spacing.sm) {
-                    VideoSurface(player: playback.player, gravity: .resizeAspectFill)
-                        .frame(width: min(thumbnailWidth, 140), height: min(thumbnailWidth, 140) * 9 / 16)
-                        .clipShape(RoundedRectangle(cornerRadius: Radius.sm, style: .continuous))
-                        .accessibilityHidden(true)
+                    Group {
+                        if playback.origin == .car {
+                            Image(systemName: "car.fill")
+                                .font(.title3)
+                                .foregroundStyle(.roadOnBrand)
+                                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                                .background(.roadBrandGradient)
+                        } else {
+                            VideoSurface(player: playback.player, gravity: .resizeAspectFill)
+                        }
+                    }
+                    .frame(width: min(thumbnailWidth, 140), height: min(thumbnailWidth, 140) * 9 / 16)
+                    .clipShape(RoundedRectangle(cornerRadius: Radius.sm, style: .continuous))
+                    .accessibilityHidden(true)
                     VStack(alignment: .leading, spacing: 2) {
                         Text(playback.current?.title ?? "")
                             .font(Typography.cardTitle)
@@ -24,6 +34,8 @@ struct MiniPlayerBar: View {
                         Group {
                             if let upNext = playback.upNext {
                                 Text("Up next in \(upNext.secondsLeft)")
+                            } else if playback.origin == .car {
+                                Text("Playing on your car display")
                             } else {
                                 Text(playback.current?.groupTitle ?? "")
                             }

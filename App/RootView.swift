@@ -297,17 +297,15 @@ private struct MainTabView: View {
                 }
             )
         }
-        // A video picked on the car plays there only, so the iPhone's player steps aside (DECISIONS 155).
-        .onChange(of: playback.origin) { _, origin in
-            if origin == .car {
-                router.playerSurface = nil
-            }
-        }
         .fullScreenCover(item: $router.playerSurface) { surface in
             switch surface {
             case .player:
                 PlayerView(
-                    viewModel: PlayerViewModel(playback: playback, repository: environment.repository),
+                    viewModel: PlayerViewModel(
+                        playback: playback,
+                        repository: environment.repository,
+                        carConnection: environment.carConnection
+                    ),
                     onMinimize: { router.playerSurface = nil },
                     onClose: {
                         router.playerSurface = nil
@@ -427,8 +425,8 @@ private extension View {
         onOpenDirections: @escaping () -> Void = {},
         onExpand: @escaping () -> Void
     ) -> some View {
-        // Only what was picked on the iPhone; a video picked on the car stays on the car (DECISIONS 155).
-        let isShown = playback.isActive && playback.origin == .phone && !isPlayerOpen
+        // Also what plays on the car, as its remote: with a car for a picture (DECISIONS 165).
+        let isShown = playback.isActive && !isPlayerOpen
         let barSpace = isShown ? height.wrappedValue + Spacing.xs * 2 : 0
         return overlay(alignment: .bottom) {
             if isShown {

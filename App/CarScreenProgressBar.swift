@@ -1,10 +1,12 @@
 #if DEBUG
     import SwiftUI
 
-    /// The car player's progress, as CarTV's: the time so far, a bar to tap or drag anywhere along, and the length.
-    /// Follows the player as it plays; the video moves when the finger lifts. LIVE for a live stream.
+    /// The car player's progress, as CarTV's: the time so far, a bar with a large handle to tap or drag anywhere
+    /// along, and the length. Follows the player; the video moves when the finger lifts. LIVE for a live stream.
     struct CarScreenProgressBar: View {
         let playback: PlaybackController
+        /// White over the video; the theme's text colour on the canvas, with no picture.
+        var onVideo = true
         /// A touch on the bar, so the controls stay up while it's used.
         let onTouch: () -> Void
         /// Where the finger is, while dragging.
@@ -12,8 +14,9 @@
         /// Ends with the drag, also when it's cancelled, so the bar never sticks at a dropped drag.
         @GestureState private var isDragging = false
 
-        private static let trackHeight: CGFloat = 8
-        private static let knob: CGFloat = 24
+        private static let trackHeight: CGFloat = 10
+        private static let knobWidth: CGFloat = 60
+        private static let knobHeight: CGFloat = 36
 
         var body: some View {
             Group {
@@ -37,10 +40,10 @@
                     LiveBadge()
                 }
             }
-            .foregroundStyle(.white)
-            .padding(.horizontal, Spacing.lg)
+            .foregroundStyle(onVideo ? Color.white : .primary)
+            .shadow(color: .black.opacity(onVideo ? 0.5 : 0), radius: 3)
+            .padding(.horizontal, Spacing.sm)
             .frame(minHeight: 56)
-            .background(.black.opacity(0.55), in: Capsule())
             .onChange(of: isDragging) {
                 if !isDragging {
                     target = nil
@@ -54,16 +57,16 @@
                 let fraction = shown / duration
                 ZStack(alignment: .leading) {
                     Capsule()
-                        .fill(.white.opacity(0.25))
+                        .fill(onVideo ? Color.white.opacity(0.3) : Color.primary.opacity(0.15))
                         .frame(height: Self.trackHeight)
                     Capsule()
                         .fill(.roadBrandGradient)
                         .frame(width: max(Self.trackHeight, width * fraction), height: Self.trackHeight)
-                    Circle()
+                    Capsule()
                         .fill(.white)
-                        .frame(width: Self.knob, height: Self.knob)
-                        .shadow(color: .black.opacity(0.3), radius: 2, y: 1)
-                        .offset(x: min(max(width * fraction - Self.knob / 2, 0), width - Self.knob))
+                        .frame(width: Self.knobWidth, height: Self.knobHeight)
+                        .shadow(color: .black.opacity(0.3), radius: 3, y: 1)
+                        .offset(x: min(max(width * fraction - Self.knobWidth / 2, 0), width - Self.knobWidth))
                 }
                 .frame(maxHeight: .infinity)
                 .contentShape(Rectangle())

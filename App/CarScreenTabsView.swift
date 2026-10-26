@@ -21,23 +21,35 @@
             HStack(spacing: Spacing.xxs) {
                 ForEach(CarScreenModel.Tab.allCases, id: \.self) { tab in
                     let isChosen = model.tab == tab
+                    // The iPhone still casts behind the other tabs, as CarTV's red dot shows.
+                    let isCasting = tab == .cast && model.isCasting
                     Button {
                         model.actions?.select(tab)
                     } label: {
-                        Text(app: tab.title)
-                            .font(Typography.sign)
-                            .foregroundStyle(isChosen ? AnyShapeStyle(.roadOnBrand) : AnyShapeStyle(.primary))
-                            .padding(.horizontal, Spacing.md)
-                            .frame(minHeight: 48)
-                            .background {
-                                if isChosen {
-                                    Capsule().fill(.roadBrandGradient)
-                                }
+                        HStack(spacing: Spacing.xs) {
+                            Text(app: tab.title)
+                            if isCasting {
+                                Circle()
+                                    .fill(.roadLive)
+                                    .overlay { Circle().strokeBorder(.white, lineWidth: 1.5) }
+                                    .frame(width: 12, height: 12)
+                                    .accessibilityHidden(true)
                             }
-                            .contentShape(Capsule())
+                        }
+                        .font(Typography.sign)
+                        .foregroundStyle(isChosen ? AnyShapeStyle(.roadOnBrand) : AnyShapeStyle(.primary))
+                        .padding(.horizontal, Spacing.md)
+                        .frame(minHeight: 48)
+                        .background {
+                            if isChosen {
+                                Capsule().fill(.roadBrandGradient)
+                            }
+                        }
+                        .contentShape(Capsule())
                     }
                     .buttonStyle(.plain)
                     .accessibilityAddTraits(isChosen ? .isSelected : [])
+                    .accessibilityValue(isCasting ? String(appLocalized: "Casting") : "")
                 }
             }
             .padding(Spacing.xxs)

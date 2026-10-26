@@ -1,10 +1,9 @@
 #if DEBUG
     import SwiftUI
 
-    /// The controls over what the car is playing, tapped directly: previous, next and Close along the top; back 15
-    /// seconds, play or pause, and forward 15 in the middle; the progress bar along the bottom. Over the video they
-    /// hide
-    /// after a moment and a tap brings them back (DECISIONS 162, 164).
+    /// The controls over what the car is playing, laid out as CarTV's player (DECISIONS 162, 164): split view, back,
+    /// the title and the heart along the top; play or pause in the middle; the progress bar, Channels and the screen
+    /// layout along the bottom. Over the video they hide after a moment and a tap brings them back.
     struct CarScreenPlayerView: View {
         let model: CarScreenModel
         @State private var showsControls = true
@@ -17,23 +16,39 @@
         }
 
         var body: some View {
-            ZStack {
-                // Over the video, nothing; without it, Roadivo's canvas, with why above the controls.
-                Group {
-                    if isVideo {
-                        Color.clear
-                    } else {
-                        Color.roadCanvas.ignoresSafeArea()
+            GeometryReader { proxy in
+                let panelWidth = proxy.size.width * CarScreenModel.channelsWidth
+                // In the split view the Cast panel (the controller's) takes the left; everything here moves aside.
+                let splitWidth = model.isPlayerSplit ? proxy.size.width * CarScreenModel.splitWidth : 0
+                ZStack(alignment: .leading) {
+                    ZStack {
+                        // Over the video, nothing; without it, Roadivo's canvas, with why above play.
+                        Group {
+                            if isVideo {
+                                Color.clear
+                            } else {
+                                Color.roadCanvas.ignoresSafeArea(edges: [.top, .bottom, .trailing])
+                            }
+                        }
+                        .contentShape(Rectangle())
+                        .onTapGesture { reveal(!showsControls) }
+                        if showsControls || !isVideo {
+                            controls
+                                .transition(.opacity)
+                        }
                     }
-                }
-                .contentShape(Rectangle())
-                .onTapGesture { reveal(!showsControls) }
-                if showsControls || !isVideo {
-                    controls
-                        .transition(.opacity)
+                    .padding(.leading, splitWidth)
+                    if model.showsChannels {
+                        CarScreenChannelsPanel(model: model)
+                            .frame(width: panelWidth)
+                            .frame(maxHeight: .infinity)
+                            .transition(.move(edge: .leading))
+                    }
                 }
             }
             .animation(reduceMotion ? nil : .easeInOut(duration: 0.2), value: showsControls)
+            .animation(reduceMotion ? nil : .easeInOut(duration: 0.25), value: model.showsChannels)
+            .animation(reduceMotion ? nil : .easeInOut(duration: 0.25), value: model.isPlayerSplit)
             .task(id: touches) {
                 guard showsControls, isVideo else { return }
                 try? await Task.sleep(for: .seconds(4)) // Cancelled when the controls change first.
@@ -44,47 +59,96 @@
         }
 
         private var controls: some View {
-            VStack {
+            VStack(spacing: Spacing.md) {
                 HStack(spacing: Spacing.sm) {
-                    round("backward.end.fill", label: "Previous channel") { $0.previous() }
-                    round("forward.end.fill", label: "Next channel") { $0.next() }
+                    circle(
+                        model.isPlayerSplit ? "rectangle.split.2x1.fill" : "rectangle.split.2x1",
+                        label: "Split view"
+                    ) {
+                        model.actions?.setPlayerSplit(!model.isPlayerSplit)
+                    }
+                    circle("chevron.backward", label: "Back") { model.actions?.stopPlayback() }
+                    Text(model.playingTitle ?? "")
+                        .font(Typography.screenTitle)
+                        .foregroundStyle(isVideo ? Color.white : .primary)
+                        .shadow(color: .black.opacity(isVideo ? 0.5 : 0), radius: 3)
+                        .lineLimit(1)
+                        .padding(.leading, Spacing.xs)
+                    Spacer(minLength: 0)
+                    circle(
+                        model.isPlayingFavorite ? "heart.fill" : "heart",
+                        label: model.isPlayingFavorite ? "Remove from Favorites" : "Add to Favorites",
+                        tint: model.isPlayingFavorite ? .roadLive : .white
+                    ) {
+                        model.actions?.toggleFavorite()
+                    }
+                }
+                Spacer(minLength: 0)
+                if !isVideo {
+                    CarScreenNotice(model: model)
+                        .padding(.horizontal, Spacing.xl)
+                }
+                Button {
+                    model.actions?.playback { $0.togglePlayPause() }
+                    reveal(true)
+                } label: {
+                    Image(systemName: model.isPlaying ? "pause.fill" : "play.fill")
+                        .font(.largeTitle)
+                        .frame(width: 96, height: 96)
+                }
+                .buttonStyle(CarControlStyle(shape: .circle))
+                .accessibilityLabel(Text(app: model.isPlaying ? "Pause" : "Play"))
+                Spacer(minLength: 0)
+                if let playback = model.playback {
+                    CarScreenProgressBar(playback: playback, onVideo: isVideo) { reveal(true) }
+                }
+                HStack {
+                    Button {
+                        model.showsChannels = true
+                        reveal(true)
+                    } label: {
+                        Label {
+                            Text(app: "Channels")
+                        } icon: {
+                            Image(systemName: "list.bullet")
+                        }
+                        .font(Typography.sign)
+                        .padding(.horizontal, Spacing.lg)
+                        .frame(minHeight: 56)
+                    }
+                    .buttonStyle(CarControlStyle())
                     Spacer()
                     Button {
-                        model.actions?.stopPlayback()
+                        model.actions?.cycleAspect()
+                        reveal(true)
                     } label: {
-                        Text(app: "Close")
-                            .font(.headline)
-                            .padding(.horizontal, Spacing.lg)
-                            .frame(minHeight: 56)
+                        Label {
+                            Text(app: model.aspect.title)
+                        } icon: {
+                            Image(systemName: "rectangle.inset.filled")
+                        }
+                        .font(Typography.sign)
+                        .padding(.horizontal, Spacing.lg)
+                        .frame(minHeight: 56)
                     }
                     .buttonStyle(CarControlStyle())
                 }
-                Spacer()
-                VStack(spacing: Spacing.xl) {
-                    if !isVideo {
-                        CarScreenNotice(model: model, title: model.playingTitle)
-                            .padding(.horizontal, Spacing.xl)
-                    }
-                    HStack(spacing: Spacing.xl) {
-                        if !model.isLive {
-                            round("gobackward.15", label: "Back 15 seconds") { $0.skip(by: -15) }
-                        }
-                        round(
-                            model.isPlaying ? "pause.fill" : "play.fill",
-                            label: model.isPlaying ? "Pause" : "Play",
-                            size: 88
-                        ) { $0.togglePlayPause() }
-                        if !model.isLive {
-                            round("goforward.15", label: "Forward 15 seconds") { $0.skip(by: 15) }
-                        }
-                    }
-                }
-                Spacer()
-                if let playback = model.playback {
-                    CarScreenProgressBar(playback: playback) { reveal(true) }
-                }
             }
             .padding(Spacing.md)
+            .background {
+                // Shade at the top and bottom so the title and times read over any picture.
+                if isVideo {
+                    VStack(spacing: 0) {
+                        LinearGradient(colors: [.black.opacity(0.55), .clear], startPoint: .top, endPoint: .bottom)
+                            .frame(height: 160)
+                        Spacer(minLength: 0)
+                        LinearGradient(colors: [.clear, .black.opacity(0.6)], startPoint: .top, endPoint: .bottom)
+                            .frame(height: 240)
+                    }
+                    .ignoresSafeArea()
+                    .allowsHitTesting(false)
+                }
+            }
         }
 
         private func reveal(_ shows: Bool) {
@@ -92,19 +156,20 @@
             touches += 1
         }
 
-        private func round(
+        private func circle(
             _ symbol: String,
             label: LocalizedStringResource,
-            size: CGFloat = 64,
-            action: @escaping (PlaybackController) -> Void
+            tint: Color = .white,
+            action: @escaping () -> Void
         ) -> some View {
             Button {
-                model.actions?.playback(action)
+                action()
                 reveal(true)
             } label: {
                 Image(systemName: symbol)
-                    .font(size > 64 ? .largeTitle : .title2)
-                    .frame(width: size, height: size)
+                    .font(.title2.weight(.semibold))
+                    .foregroundStyle(tint)
+                    .frame(width: 64, height: 64)
             }
             .buttonStyle(CarControlStyle(shape: .circle))
             .accessibilityLabel(Text(app: label))

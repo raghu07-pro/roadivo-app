@@ -9,6 +9,13 @@
         func play(_ media: MediaItem, queue: [MediaItem])
         func playback(_ action: (PlaybackController) -> Void)
         func stopPlayback()
+        /// The player's heart, for what's playing.
+        func toggleFavorite()
+        /// Fit, Fill, Stretch, and round again, as CarTV's.
+        func cycleAspect()
+        /// The iPhone's Cast picture beside a smaller video, or the video alone again.
+        func setPlayerSplit(_ isSplit: Bool)
+        func closeChannels()
         func open(_ url: URL)
         func closeBrowser()
         func browserBack()
@@ -26,6 +33,8 @@
         func showPageSize()
         func setPageSize(_ size: CGFloat)
         func toggleSplit()
+        /// The casting screen's split button: the browser beside the iPhone's Cast picture.
+        func showBrowserBesideCast()
         /// The library's search, from the round button beside the tabs.
         func showLibrarySearch()
         /// How to type on a search page: speak, or Roadivo's keyboard.
@@ -170,6 +179,18 @@
         var menu = CarPlayMenu(favorites: [], recent: [], groups: [], sites: [])
         var state = CarWindowState.home
         var isPlaying = false
+        /// What's playing is a favourite: the player's heart is filled.
+        var isPlayingFavorite = false
+        /// What next and previous step through, usually the playing item's group, for the channels panel.
+        var playingQueue: [MediaItem] = []
+        var playingGroup: String?
+        /// How the car's video fills the screen (owner, 2026-10-26; DECISIONS 164).
+        var aspect = VideoAspect.fit
+        /// The channels panel over the video, as CarTV's Channels button opens it.
+        var showsChannels = false
+        /// The iPhone's Cast picture beside a smaller video, from the player's split button, as the browser's split.
+        var isPlayerSplit = false
+        var channelList = ChannelList.group
         var isLive = false
         var playingID: UUID?
         var playingTitle: String?

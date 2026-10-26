@@ -83,8 +83,10 @@ tabs: **Home · Favorites · Discover · Settings**.
   are ±15 s and play/pause (DECISIONS 154). Debug `-car-parked`, on in the scheme (`Project.swift`), sets
   `ParkingMonitor.assumesParkedCar` for desk testing; a moving GPS reading still ends video. Untick it to test parking.
 - **The car and the iPhone keep their own videos** (owner, 2026-10-23; DECISIONS 155): `PlaybackController` records a
-  `PlaybackOrigin` (`car` from the CarPlay apps). The iPhone's mini player shows only `phone` picks and its player
-  closes when the car starts something; the CarPlay window plays only `car` picks. One player: the latest pick plays.
+  `PlaybackOrigin` (`car` from the CarPlay apps); the CarPlay window shows only `car` picks. One player: the latest pick
+  plays. **Play on iPhone / Play on Car Display** (DECISIONS 165) move it between the screens from the same place
+  (`PlaybackController.move(to:)`): with the video on the car, the iPhone's player and mini player show its controls but
+  no picture; Play on Car Display shows while Roadivo is on the car's screen.
   The iPhone player has no Car Mode or AirPlay button any more.
 - **`media`**: Roadivo's CarPlay template app (`App/CarPlaySceneDelegate.swift`) shows Favorites,
   Recent and Library, then hands playback to the shared player. A fourth **Browser** tab lists the Browser's

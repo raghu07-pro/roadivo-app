@@ -19,7 +19,8 @@ final class PlaybackController {
 
     let player = AVPlayer()
     private(set) var current: MediaItem?
-    private(set) var origin: PlaybackOrigin = .phone
+    /// Set by `play(_:queue:from:)` and `move(to:)` (`+Screens`).
+    var origin: PlaybackOrigin = .phone
     private(set) var queue: [MediaItem] = []
     private(set) var status: Status = .idle
     /// Seconds; `nil` for a live stream with no fixed length.

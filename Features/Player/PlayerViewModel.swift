@@ -6,6 +6,8 @@ import Observation
 final class PlayerViewModel {
     let playback: PlaybackController
     private let repository: LibraryRepository
+    /// Whether Roadivo is on the car's screen, for Play on Car Display.
+    private let carConnection: CarConnection?
 
     /// The playing item's whole source, for browsing its groups while watching. Empty until read.
     private(set) var sourceItems: [MediaItem] = []
@@ -23,13 +25,32 @@ final class PlayerViewModel {
     /// The chosen group's items, stored so a big source isn't sifted on every redraw.
     private var groupItems: [MediaItem] = []
 
-    init(playback: PlaybackController, repository: LibraryRepository) {
+    init(playback: PlaybackController, repository: LibraryRepository, carConnection: CarConnection? = nil) {
         self.playback = playback
         self.repository = repository
+        self.carConnection = carConnection
     }
 
     var current: MediaItem? {
         playback.current
+    }
+
+    /// The video is on the car's screen: the iPhone shows its controls but not the picture, as CarTV's.
+    var isOnCar: Bool {
+        playback.origin == .car && playback.isActive
+    }
+
+    /// Play on Car Display, while Roadivo is on the car's screen and the video is on the iPhone (owner, 2026-10-26).
+    var canPlayOnCar: Bool {
+        carConnection?.isCarPlayConnected == true && playback.isActive && !isOnCar
+    }
+
+    func playOnPhone() {
+        playback.move(to: .phone)
+    }
+
+    func playOnCar() {
+        playback.move(to: .car)
     }
 
     /// Chips only help when the source has more than one group.
@@ -71,12 +92,13 @@ final class PlayerViewModel {
         guard item.id != current?.id else { return }
         // Picked from a chip: next and previous step through that group.
         let queue = sourceItems.isEmpty ? playback.queue : groupItems
-        playback.play(item, queue: queue)
+        // On the car, the iPhone is its remote: the pick plays there too.
+        playback.play(item, queue: queue, from: playback.origin)
     }
 
     func retry() {
         guard let current else { return }
-        playback.play(current, queue: playback.queue)
+        playback.play(current, queue: playback.queue, from: playback.origin)
     }
 
     private func rebuildGrid() {

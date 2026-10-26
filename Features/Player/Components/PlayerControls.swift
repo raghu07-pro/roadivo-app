@@ -1,7 +1,8 @@
 import SwiftUI
 
 /// The controls drawn on the video: minimise, title, favourite and close along the top;
-/// rotation lock on the left; play/pause, times, scrubber and full screen along the bottom.
+/// rotation lock on the left; play/pause, times, scrubber and full screen along the bottom. While the video is on the
+/// car, CarTV's "Playing on your car display" with Play on iPhone and play/pause instead (DECISIONS 165).
 struct PlayerControls: View {
     let playback: PlaybackController
     let title: String
@@ -15,6 +16,11 @@ struct PlayerControls: View {
     let onFullScreen: () -> Void
     /// Any touch on a control keeps the controls up a little longer.
     let onInteraction: () -> Void
+    /// The video is on the car's screen, not this one.
+    var isOnCar = false
+    var onPlayOnPhone: () -> Void = {}
+    /// Play on Car Display, while Roadivo is on the car's screen; nil hides it.
+    var onPlayOnCar: (() -> Void)?
 
     @State private var scrubbing: Double?
     @State private var isDragging = false
@@ -22,16 +28,32 @@ struct PlayerControls: View {
     var body: some View {
         VStack(spacing: 0) {
             topBar
+            if let onPlayOnCar {
+                Button {
+                    onPlayOnCar()
+                    onInteraction()
+                } label: {
+                    Label("Play on Car Display", systemImage: "car.fill")
+                        .font(Typography.secondary.weight(.semibold))
+                        .padding(.horizontal, Spacing.sm)
+                        .frame(minHeight: 44)
+                }
+                .accessibilityIdentifier("player.playOnCar")
+            }
             Spacer(minLength: 0)
-            HStack {
-                button(
-                    isRotationLocked ? "lock.rotation" : "lock.rotation.open",
-                    label: isRotationLocked ? "Unlock rotation" : "Lock rotation",
-                    identifier: "player.rotationLock",
-                    isOn: isRotationLocked,
-                    action: onRotationLock
-                )
-                Spacer()
+            if isOnCar {
+                onCar
+            } else {
+                HStack {
+                    button(
+                        isRotationLocked ? "lock.rotation" : "lock.rotation.open",
+                        label: isRotationLocked ? "Unlock rotation" : "Lock rotation",
+                        identifier: "player.rotationLock",
+                        isOn: isRotationLocked,
+                        action: onRotationLock
+                    )
+                    Spacer()
+                }
             }
             Spacer(minLength: 0)
             bottomBar
@@ -76,14 +98,52 @@ struct PlayerControls: View {
         }
     }
 
+    /// Where the video is, and the two ways on: bring it to this iPhone, or pause it on the car.
+    private var onCar: some View {
+        VStack(spacing: Spacing.sm) {
+            Label("Playing on your car display", systemImage: "play.circle")
+                .font(Typography.secondary)
+                .accessibilityIdentifier("player.onCar")
+            HStack(spacing: Spacing.sm) {
+                Button {
+                    onPlayOnPhone()
+                    onInteraction()
+                } label: {
+                    Text("Play on iPhone")
+                        .font(Typography.cardTitle)
+                        .foregroundStyle(.black)
+                        .padding(.horizontal, Spacing.md)
+                        .frame(minHeight: 44)
+                        .background(.white, in: Capsule())
+                }
+                .accessibilityIdentifier("player.playOnPhone")
+                Button {
+                    playback.togglePlayPause()
+                    onInteraction()
+                } label: {
+                    Text(playback.isPlaying ? "Pause" : "Play")
+                        .font(Typography.cardTitle)
+                        .padding(.horizontal, Spacing.md)
+                        .frame(minHeight: 44)
+                        .background(.white.opacity(0.2), in: Capsule())
+                }
+                .accessibilityIdentifier("player.carPlayPause")
+            }
+        }
+        .multilineTextAlignment(.center)
+    }
+
     private var bottomBar: some View {
         HStack(spacing: Spacing.xs) {
-            button(
-                playback.isPlaying ? "pause.fill" : "play.fill",
-                label: playback.isPlaying ? "Pause" : "Play",
-                identifier: "player.playPause",
-                action: playback.togglePlayPause
-            )
+            // On the car, play/pause sits beside Play on iPhone.
+            if !isOnCar {
+                button(
+                    playback.isPlaying ? "pause.fill" : "play.fill",
+                    label: playback.isPlaying ? "Pause" : "Play",
+                    identifier: "player.playPause",
+                    action: playback.togglePlayPause
+                )
+            }
             if let duration = playback.duration {
                 let position = scrubbing ?? playback.elapsed
                 Text(Self.clock(position))
@@ -110,12 +170,14 @@ struct PlayerControls: View {
                 }
                 Spacer(minLength: 0)
             }
-            button(
-                isLandscape ? "rectangle.portrait.rotate" : "rectangle.landscape.rotate",
-                label: isLandscape ? "Exit full screen" : "Full screen",
-                identifier: "player.fullScreen",
-                action: onFullScreen
-            )
+            if !isOnCar {
+                button(
+                    isLandscape ? "rectangle.portrait.rotate" : "rectangle.landscape.rotate",
+                    label: isLandscape ? "Exit full screen" : "Full screen",
+                    identifier: "player.fullScreen",
+                    action: onFullScreen
+                )
+            }
         }
     }
 

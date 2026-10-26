@@ -22,6 +22,7 @@ final class CarPlayWindowController: UIViewController {
     var showsRoad = true
     /// Car Mode's bar along the video; Roadivo's plain car window draws one to tap and drag in its controls instead.
     var showsProgress = true
+    private var gravity: AVLayerVideoGravity?
     /// The whole iPhone from Screen Broadcast, over everything else while parked.
     private let mirror = UIImageView()
 
@@ -66,6 +67,13 @@ final class CarPlayWindowController: UIViewController {
     }
 
     /// Fit shows the whole iPhone; Fill crops it to the car's screen, as CarTV's Fit button does.
+    /// How the video fills the window, chosen on the car; the playback's own (its display profile) until then.
+    func setVideoGravity(_ gravity: AVLayerVideoGravity) {
+        loadViewIfNeeded()
+        self.gravity = gravity
+        video.playerLayer.videoGravity = gravity
+    }
+
     func toggleMirrorFill() {
         mirror.contentMode = mirror.contentMode == .scaleAspectFit ? .scaleAspectFill : .scaleAspectFit
     }
@@ -141,7 +149,7 @@ final class CarPlayWindowController: UIViewController {
         self.playback = playback
         let showsVideo = state == .video
         video.player = showsVideo ? playback.player : nil
-        video.playerLayer.videoGravity = playback.videoGravity
+        video.playerLayer.videoGravity = gravity ?? playback.videoGravity
         video.isHidden = !showsVideo
         progress.view.isHidden = !showsVideo || !showsProgress
         if showsVideo {

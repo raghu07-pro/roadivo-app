@@ -60,15 +60,19 @@
             }
             .frame(width: Self.side, height: Self.side)
             .clipShape(RoundedRectangle(cornerRadius: Radius.lg, style: .continuous))
-            .overlay(alignment: .topTrailing) {
+            .overlay(alignment: .topLeading) {
+                // As CarTV's "Playing" on the channel that's on.
                 if model.playingID == media.id {
-                    Image(systemName: "speaker.wave.2.fill")
-                        .font(.headline)
+                    Text(app: "Playing")
+                        .font(Typography.cardTitle)
                         .foregroundStyle(.roadOnBrand)
+                        .padding(.horizontal, Spacing.xs)
+                        .padding(.vertical, Spacing.xxs)
+                        .background(
+                            .roadBrandGradient,
+                            in: RoundedRectangle(cornerRadius: Radius.sm, style: .continuous)
+                        )
                         .padding(Spacing.xs)
-                        .background(.roadBrandGradient, in: Circle())
-                        .padding(Spacing.xs)
-                        .accessibilityLabel(Text(app: "Now playing: \(media.title)"))
                 }
             }
         }

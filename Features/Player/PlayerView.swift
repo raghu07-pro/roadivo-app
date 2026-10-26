@@ -52,6 +52,8 @@ struct PlayerView: View {
             hideTask?.cancel()
             orientation.reset()
         }
+        // Moved to the car or back: the controls come up for the screen's new job.
+        .onChange(of: viewModel.isOnCar) { showControls() }
         // Paused, loading or failed keeps the controls up; once playing they hide after a moment.
         .onChange(of: viewModel.playback.status) { _, status in
             if status == .playing {
@@ -70,11 +72,14 @@ struct PlayerView: View {
             // The video fills the screen edge to edge; the controls stay clear of the notch and corners.
             ZStack {
                 Color.black
-                SystemVideoPlayer(
-                    player: viewModel.playback.player,
-                    showsControls: false,
-                    gravity: viewModel.playback.videoGravity
-                )
+                // On the car, the picture is the car's alone (DECISIONS 165).
+                if !viewModel.isOnCar {
+                    SystemVideoPlayer(
+                        player: viewModel.playback.player,
+                        showsControls: false,
+                        gravity: viewModel.playback.videoGravity
+                    )
+                }
                 // Catches taps over the video to show or hide the controls.
                 Color.clear
                     .contentShape(Rectangle())
@@ -104,23 +109,32 @@ struct PlayerView: View {
                     .controlSize(.large)
                     .tint(.white)
             }
-            if controlsShown {
-                PlayerControls(
-                    playback: viewModel.playback,
-                    title: viewModel.current?.title ?? "",
-                    isFavorite: viewModel.current?.isFavorite ?? false,
-                    isLandscape: isLandscape,
-                    isRotationLocked: orientation.isLocked,
-                    onMinimize: onMinimize,
-                    onFavorite: toggleFavorite,
-                    onClose: onClose,
-                    onRotationLock: { orientation.toggleLock(isLandscape: isLandscape) },
-                    onFullScreen: { orientation.rotate(to: isLandscape ? .portrait : .landscape) },
-                    onInteraction: showControls
-                )
-                .transition(.opacity)
+            if controlsShown || viewModel.isOnCar {
+                controls
+                    .transition(.opacity)
             }
         }
+    }
+
+    private var controls: some View {
+        let viewModel = viewModel
+        let playOnCar: (() -> Void)? = viewModel.canPlayOnCar ? { viewModel.playOnCar() } : nil
+        return PlayerControls(
+            playback: viewModel.playback,
+            title: viewModel.current?.title ?? "",
+            isFavorite: viewModel.current?.isFavorite ?? false,
+            isLandscape: isLandscape,
+            isRotationLocked: orientation.isLocked,
+            onMinimize: onMinimize,
+            onFavorite: toggleFavorite,
+            onClose: onClose,
+            onRotationLock: { orientation.toggleLock(isLandscape: isLandscape) },
+            onFullScreen: { orientation.rotate(to: isLandscape ? .portrait : .landscape) },
+            onInteraction: showControls,
+            isOnCar: viewModel.isOnCar,
+            onPlayOnPhone: { viewModel.playOnPhone() },
+            onPlayOnCar: playOnCar
+        )
     }
 
     /// Once a video ends: over the picture full screen; upright, along the bottom over the grid, clear of
@@ -209,7 +223,8 @@ struct PlayerView: View {
 
     private func scheduleHide() {
         hideTask?.cancel()
-        guard !voiceOver else { return }
+        // With no picture on the car's, the controls are all this screen shows.
+        guard !voiceOver, !viewModel.isOnCar else { return }
         hideTask = Task {
             try? await Task.sleep(for: viewModel.playback.controlsHideDelay) // Cancelled by the next touch.
             guard !Task.isCancelled, viewModel.playback.status == .playing else { return }

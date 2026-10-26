@@ -1,8 +1,8 @@
 #if DEBUG
     import SwiftUI
 
-    /// The controls over the iPhone's screen from Cast, as in CarTV: Home steps back to the tabs, End mirroring stops
-    /// the broadcast, and Fit fills the screen. Over the picture they hide after a moment; a tap brings them back.
+    /// The controls over the iPhone's Cast, as CarTV's: Home, split view (the browser beside it), End mirroring and Fit.
+    /// Over the picture they hide after a moment; a tap brings them back.
     struct CarScreenMirrorView: View {
         let model: CarScreenModel
         @State private var showsControls = true
@@ -59,6 +59,16 @@
                         }
                         .buttonStyle(CarControlStyle())
                         .accessibilityLabel(Text(app: "Home"))
+                        // The browser beside the cast, as CarTV's split button (DECISIONS 164).
+                        Button {
+                            model.actions?.showBrowserBesideCast()
+                        } label: {
+                            Image(systemName: "rectangle.split.2x1")
+                                .font(.title2)
+                                .frame(width: 64, height: 56)
+                        }
+                        .buttonStyle(CarControlStyle())
+                        .accessibilityLabel(Text(app: "Split view"))
                         Spacer()
                         Button {
                             model.actions?.endMirroring()

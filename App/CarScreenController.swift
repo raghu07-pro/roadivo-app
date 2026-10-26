@@ -45,9 +45,14 @@
         /// About CarTV's share of the screen for the iPhone's portrait picture.
         lazy var splitShown = splitPanel.widthAnchor.constraint(
             equalTo: view.safeAreaLayoutGuide.widthAnchor,
-            multiplier: 0.28
+            multiplier: CarScreenModel.splitWidth
         )
         lazy var splitHidden = splitPanel.widthAnchor.constraint(equalToConstant: 0)
+        /// The video beside the split panel in the player's split view, as the page beside it in the browser's.
+        lazy var stageFull = stage.view.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor)
+        lazy var stageSplit = stage.view.leadingAnchor.constraint(equalTo: splitPanel.trailingAnchor)
+        lazy var splitUnderBar = splitPanel.topAnchor.constraint(equalTo: browserArea.topAnchor)
+        lazy var splitFullHeight = splitPanel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor)
         /// Each tab's page when last on screen, for its card on the Tabs page.
         var snapshots: [UUID: UIImage] = [:]
         var field: Field?
@@ -60,10 +65,13 @@
             model.actions = self
             model.icons = AppEnvironment.current?.siteIcons
             model.playback = AppEnvironment.current?.playback
+            // The car's layout starts from the playback's own, its display profile's aspect.
+            let gravity = AppEnvironment.current?.playback.videoGravity
+            model.aspect = VideoAspect.allCases.first { $0.gravity == gravity } ?? .fit
             model.voice = voice
             model.recentSearches = history.searches
             // The video and road stay clear of CarPlay's dock and the screen's corners, as the page does.
-            embed(stage, in: view, within: view.safeAreaLayoutGuide)
+            addStage()
             stage.showsRoad = false // Roadivo's own screens fill everything but the video.
             stage.showsProgress = false // The player's controls carry a bar to tap and drag.
             view.addSubview(browserArea)
@@ -99,7 +107,7 @@
                 // The safe area leaves out CarPlay's dock and the screen's rounded corners, which hid the page's
                 // edges before.
                 splitPanel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
-                splitPanel.topAnchor.constraint(equalTo: browserArea.topAnchor),
+                splitUnderBar,
                 splitPanel.bottomAnchor.constraint(equalTo: browserArea.bottomAnchor),
                 splitHidden,
                 browserArea.leadingAnchor.constraint(equalTo: splitPanel.trailingAnchor),
@@ -170,19 +178,7 @@
             stage.stopUpdating()
         }
 
-        /// `guide`: the edges to pin to inside `container`; its own edges when nil.
-        func embed(_ child: UIViewController, in container: UIView, within guide: UILayoutGuide? = nil) {
-            addChild(child)
-            child.view.translatesAutoresizingMaskIntoConstraints = false
-            container.addSubview(child.view)
-            NSLayoutConstraint.activate([
-                child.view.leadingAnchor.constraint(equalTo: guide?.leadingAnchor ?? container.leadingAnchor),
-                child.view.trailingAnchor.constraint(equalTo: guide?.trailingAnchor ?? container.trailingAnchor),
-                child.view.topAnchor.constraint(equalTo: guide?.topAnchor ?? container.topAnchor),
-                child.view.bottomAnchor.constraint(equalTo: guide?.bottomAnchor ?? container.bottomAnchor)
-            ])
-            child.didMove(toParent: self)
-        }
+        // `guide`: the edges to pin to inside `container`; its own edges when nil.
 
         /// The browser's page and bar take their own taps; the overlay covers them only for a page.
         func showLayers() {
@@ -199,11 +195,7 @@
             exitFullScreen.view.isHidden = !pageShown || !isFullScreen
             overlay.view.isHidden = model.page == nil && browsing
             startPage.view.isHidden = !(browsing && model.showsStartPage)
-            let splits = browsing && model.isSplit
-            splitPanel.isHidden = !splits
-            let (narrow, wide) = splits ? (splitHidden, splitShown) : (splitShown, splitHidden)
-            narrow.isActive = false
-            wide.isActive = true
+            layOutSplitPanel(browsing: browsing)
             // The old top goes before the new one, so the two never hold at once.
             let (old, new) = isFullScreen ? (pageUnderBar, pageFullScreen) : (pageFullScreen, pageUnderBar)
             old.isActive = false
@@ -249,6 +241,9 @@
             model.playingTitle = playback.current?.title
             model.isPlaying = playback.isPlaying
             model.isLive = playback.isLive
+            model.isPlayingFavorite = playback.current?.isFavorite ?? false
+            model.playingQueue = playback.queue
+            model.playingGroup = playback.current?.groupTitle
             model.isCasting = mirror.isStreaming
             if mirror.isShown {
                 let state = CarWindowState.make(
@@ -286,6 +281,10 @@
                 CarPlayTrace.write("screen shows \(mode), \(model.state), reading \(reading), desk parked "
                     + "\(parking?.assumesParkedCar == true)")
                 model.mode = mode
+                if mode != .player {
+                    model.showsChannels = false
+                    setPlayerSplit(false)
+                }
             }
             showLayers()
         }
@@ -307,7 +306,8 @@
         /// cast, or why it's off.
         func showSplitPicture() {
             let isParked = AppEnvironment.current?.parking.isParked ?? false
-            let showsPicture = model.isSplit && model.mode == .browser && mirror.isStreaming && isParked
+            let splits = (model.isSplit && model.mode == .browser) || (model.isPlayerSplit && model.mode == .player)
+            let showsPicture = splits && mirror.isStreaming && isParked
             splitPicture.isHidden = !showsPicture
             splitNote.view.isHidden = showsPicture
             if !mirror.isStreaming {
@@ -332,8 +332,8 @@
 
         /// A broadcast that starts takes the screen: the car's own video and the browser make way.
         func mirrorChanged(started: Bool) {
-            // In the split view the iPhone's screen stays beside the page rather than taking the screen.
-            if started, model.isSplit, browser.isOpen {
+            // In the split view the iPhone's screen stays beside the page or video rather than taking the screen.
+            if started, (model.isSplit && browser.isOpen) || (model.isPlayerSplit && model.mode == .player) {
                 mirror.isHidden = true
                 return refresh()
             }

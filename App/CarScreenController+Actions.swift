@@ -222,6 +222,20 @@
             showSplitPicture()
         }
 
+        /// From the casting screen's split button: the iPhone's Cast picture moves into the split panel and the
+        /// browser opens beside it, as the browser's own split view (owner, 2026-10-26).
+        func showBrowserBesideCast() {
+            guard AppEnvironment.current?.proAccess.isPro == true else { return }
+            model.isSplit = true
+            mirror.isHidden = true
+            if browser.isOpen {
+                refresh()
+                browserChanged()
+            } else {
+                openBrowserStartPage()
+            }
+        }
+
         func showSearch(in page: URL?) {
             field = nil
             model.searchText = ""

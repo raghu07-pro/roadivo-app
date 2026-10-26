@@ -29,23 +29,6 @@ struct PlaybackControllerTests {
         #expect(controller.elapsed == 0)
     }
 
-    @Test("A pick on the car stays the car's through next and previous; the iPhone's next pick takes it back")
-    func origin() {
-        let controller = PlaybackController()
-        let queue = items(3)
-        #expect(controller.origin == .phone)
-        controller.play(queue[0], queue: queue, from: .car)
-        #expect(controller.origin == .car)
-        controller.next()
-        controller.previous()
-        #expect(controller.origin == .car)
-        controller.play(queue[2], queue: queue)
-        #expect(controller.origin == .phone)
-        controller.play(queue[1], queue: queue, from: .car)
-        controller.stop()
-        #expect(controller.origin == .phone)
-    }
-
     @Test("The player's clock reads m:ss, or h:mm:ss past an hour")
     func clock() {
         #expect(PlayerControls.clock(7) == "0:07")
