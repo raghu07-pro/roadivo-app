@@ -36,22 +36,6 @@
             AppEnvironment.current?.playback.stop()
         }
 
-        func scrubBegan() {
-            if let playback = AppEnvironment.current?.playback {
-                stage.scrubBegan(playback: playback)
-            }
-        }
-
-        func scrubMoved(by distance: CGFloat) {
-            stage.scrubMoved(by: distance)
-        }
-
-        func scrubEnded() {
-            if let playback = AppEnvironment.current?.playback {
-                stage.scrubEnded(playback: playback)
-            }
-        }
-
         func open(_ url: URL) {
             guard let environment = AppEnvironment.current, environment.proAccess.isPro else { return }
             closePage()

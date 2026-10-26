@@ -9,9 +9,6 @@
         func play(_ media: MediaItem, queue: [MediaItem])
         func playback(_ action: (PlaybackController) -> Void)
         func stopPlayback()
-        func scrubBegan()
-        func scrubMoved(by distance: CGFloat)
-        func scrubEnded()
         func open(_ url: URL)
         func closeBrowser()
         func browserBack()
@@ -203,6 +200,8 @@
         /// Speech to text for the search page; its state shows while it listens.
         @ObservationIgnored var voice: VoiceSearchModel?
         @ObservationIgnored weak var actions: CarScreenActions?
+        /// What's playing, for the player's progress bar, which follows it as it plays.
+        @ObservationIgnored var playback: PlaybackController?
         /// The Browser tab's icons, and each row's artwork.
         @ObservationIgnored var icons: SiteIconStore?
         @ObservationIgnored let artwork = CarPlayArtwork()

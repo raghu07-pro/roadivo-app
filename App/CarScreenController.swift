@@ -59,11 +59,13 @@
             view.tintColor = UIColor(Color.roadBrand)
             model.actions = self
             model.icons = AppEnvironment.current?.siteIcons
+            model.playback = AppEnvironment.current?.playback
             model.voice = voice
             model.recentSearches = history.searches
             // The video and road stay clear of CarPlay's dock and the screen's corners, as the page does.
             embed(stage, in: view, within: view.safeAreaLayoutGuide)
             stage.showsRoad = false // Roadivo's own screens fill everything but the video.
+            stage.showsProgress = false // The player's controls carry a bar to tap and drag.
             view.addSubview(browserArea)
             embed(browser, in: browserArea)
             embed(startPage, in: browserArea)

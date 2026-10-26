@@ -20,6 +20,8 @@ final class CarPlayWindowController: UIViewController {
     /// The road and its line behind everything but the video; Roadivo's plain car window draws its own screens and
     /// never shows them (owner, 2026-10-26; DECISIONS 163).
     var showsRoad = true
+    /// Car Mode's bar along the video; Roadivo's plain car window draws one to tap and drag in its controls instead.
+    var showsProgress = true
     /// The whole iPhone from Screen Broadcast, over everything else while parked.
     private let mirror = UIImageView()
 
@@ -141,7 +143,7 @@ final class CarPlayWindowController: UIViewController {
         video.player = showsVideo ? playback.player : nil
         video.playerLayer.videoGravity = playback.videoGravity
         video.isHidden = !showsVideo
-        progress.view.isHidden = !showsVideo
+        progress.view.isHidden = !showsVideo || !showsProgress
         if showsVideo {
             startTicking()
         } else {

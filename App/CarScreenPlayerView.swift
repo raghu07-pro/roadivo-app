@@ -1,15 +1,15 @@
 #if DEBUG
     import SwiftUI
 
-    /// The controls over what the car is playing, tapped directly: previous, next and Close along the top, and back
-    /// 15 seconds, play or pause, and forward 15 in the middle. Over the video they hide after a moment and a tap
-    /// brings them back; a drag across moves the video's place (DECISIONS 162).
+    /// The controls over what the car is playing, tapped directly: previous, next and Close along the top; back 15
+    /// seconds, play or pause, and forward 15 in the middle; the progress bar along the bottom. Over the video they
+    /// hide
+    /// after a moment and a tap brings them back (DECISIONS 162, 164).
     struct CarScreenPlayerView: View {
         let model: CarScreenModel
         @State private var showsControls = true
         /// Each tap restarts the wait before the controls hide.
         @State private var touches = 0
-        @State private var scrubbing = false
         @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
         private var isVideo: Bool {
@@ -28,7 +28,6 @@
                 }
                 .contentShape(Rectangle())
                 .onTapGesture { reveal(!showsControls) }
-                .gesture(scrub, isEnabled: isVideo && !model.isLive)
                 if showsControls || !isVideo {
                     controls
                         .transition(.opacity)
@@ -81,23 +80,11 @@
                     }
                 }
                 Spacer()
+                if let playback = model.playback {
+                    CarScreenProgressBar(playback: playback) { reveal(true) }
+                }
             }
             .padding(Spacing.md)
-        }
-
-        private var scrub: some Gesture {
-            DragGesture(minimumDistance: 24)
-                .onChanged { drag in
-                    if !scrubbing {
-                        scrubbing = true
-                        model.actions?.scrubBegan()
-                    }
-                    model.actions?.scrubMoved(by: drag.translation.width)
-                }
-                .onEnded { _ in
-                    scrubbing = false
-                    model.actions?.scrubEnded()
-                }
         }
 
         private func reveal(_ shows: Bool) {
