@@ -266,11 +266,11 @@ private struct TestSwitches {
             isLocationDenied = isUITesting && arguments.contains("-location-denied")
             isCarParked = arguments.contains("-car-parked")
         #else
-            isUITesting = false
-            skipsOnboarding = false
-            isCarConnected = false
-            isLocationDenied = false
-            isCarParked = false
+           isUITesting = arguments.contains("-ui-testing")
+            skipsOnboarding = arguments.contains("-skip-onboarding")
+            isCarConnected = isUITesting && arguments.contains("-car-connected")
+            isLocationDenied = isUITesting && arguments.contains("-location-denied")
+            isCarParked = arguments.contains("-car-parked")
         #endif
     }
 }
