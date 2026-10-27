@@ -36,6 +36,9 @@ final class LibraryFlowUITests: XCTestCase {
         app.buttons["settings.theme"].tap()
         app.buttons["theme.appearance.dark"].tap()
         app.tabBars.buttons.element(boundBy: 0).tap()
+        // Home is still scrolled to Sports: back to the top, or the first card's tap lands on the pinned search field.
+        app.swipeDown()
+        app.swipeDown()
         // Now also under Continue Watching, so take the first card.
         channel.firstMatch.tap()
         XCTAssertTrue(app.buttons["player.favorite"].waitForExistence(timeout: 5))
