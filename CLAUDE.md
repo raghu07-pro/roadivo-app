@@ -239,7 +239,7 @@ None in v1 (DECISIONS 6). Everything is stored on the device.
 - **Debug mode in Release, for TestFlight testing** (owner, 2026-10-27; DECISIONS 170): the block at the end of
   `Config/Release.xcconfig` puts the touch car screen and all `#if DEBUG` code in archives. Delete it before an App Store
   archive; Apple is likely to reject it.
-- **Uploads:** the next upload of 1.0.0 is build 5 (owner, 2026-10-27). Raise `buildNumber` in `Project.swift` by one for every upload
+- **Uploads:** the next upload of 1.0.0 is build 6 (owner, 2026-10-27). Raise `buildNumber` in `Project.swift` by one for every upload
   (App Store Connect refuses a number it has seen), keep `marketingVersion` until 1.0.0 is released, run
   `tuist generate`, and archive with the `Roadivo` scheme (DECISIONS 126).
 
