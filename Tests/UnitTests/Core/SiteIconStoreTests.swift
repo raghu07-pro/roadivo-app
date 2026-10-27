@@ -27,6 +27,8 @@ struct SiteIconStoreTests {
         func loader(returning data: Data?) -> @Sendable (URL) async throws -> Data {
             { _ in
                 self.count.withLock { $0 += 1 }
+                // As URLSession's: a cancelled download fails.
+                try Task.checkCancellation()
                 guard let data else { throw URLError(.notConnectedToInternet) }
                 return data
             }
@@ -76,6 +78,29 @@ struct SiteIconStoreTests {
         #expect(sites.allSatisfy { store.icon(for: $0) == nil })
         await store.refresh(sites)
         #expect(downloads.total == sites.count * 2)
+    }
+
+    @Test("A screen that closes mid-download still gets its icons, as Discover opening the Browser")
+    func closedMidDownload() async {
+        let store = SiteIconStore(directory: nil, load: Downloads().loader(returning: png))
+        let discover = Task { await store.refresh(sites) }
+        discover.cancel()
+        let browser = Task { await store.refresh(sites) }
+        await discover.value
+        await browser.value
+        #expect(sites.allSatisfy { store.icon(for: $0) != nil })
+    }
+
+    @Test("A screen asking mid-download gets its own icons too, each fetched once")
+    func askedMidDownload() async {
+        let downloads = Downloads()
+        let store = SiteIconStore(directory: nil, load: downloads.loader(returning: png))
+        let discover = Task { await store.refresh(Array(sites.prefix(2))) }
+        let car = Task { await store.refresh(sites) }
+        await discover.value
+        await car.value
+        #expect(sites.allSatisfy { store.icon(for: $0) != nil })
+        #expect(downloads.total == sites.count)
     }
 
     @Test("Without a folder, icons live in memory only")

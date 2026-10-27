@@ -13,7 +13,8 @@ final class SiteIconStore {
     @ObservationIgnored private let now: @Sendable () -> Date
     /// When each icon was fetched, kept in our own file: reading the files' dates would be a required-reason API.
     @ObservationIgnored private var fetched: [String: Date] = [:]
-    @ObservationIgnored private var isRefreshing = false
+    /// The download under way, in its own task so a closing screen (Discover opening the Browser) can't cancel it.
+    @ObservationIgnored private var running: Task<Void, Never>?
     @ObservationIgnored private let logger = Logger(subsystem: "com.roadivo", category: "SiteIcons")
 
     nonisolated static let maxAge: TimeInterval = 30 * 24 * 60 * 60
@@ -40,16 +41,26 @@ final class SiteIconStore {
         icons[site.name]
     }
 
-    /// Fetches the icons that are missing or a month old, together; the others stay as they are.
+    /// Fetches the icons that are missing or a month old, together; the others stay as they are. A caller during a
+    /// download waits for it, then fetches what's still missing: it was skipped, leaving names until a relaunch.
     func refresh(_ sites: [BrowserSite]) async {
-        guard !isRefreshing else { return }
-        isRefreshing = true
-        defer { isRefreshing = false }
+        while let running {
+            await running.value
+        }
         let due = sites.filter { site in
             guard icons[site.name] != nil, let date = fetched[site.name] else { return true }
             return now().timeIntervalSince(date) > Self.maxAge
         }
         guard !due.isEmpty else { return }
+        let download = Task {
+            await fetch(due)
+            running = nil
+        }
+        running = download
+        await download.value
+    }
+
+    private func fetch(_ due: [BrowserSite]) async {
         let load = load
         let results = await withTaskGroup(of: (String, Data?).self) { group in
             for site in due {

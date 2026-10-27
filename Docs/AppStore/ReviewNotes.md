@@ -2,6 +2,8 @@
 
 Paste the text below into App Store Connect › App Review Information › Notes (it is under the
 4,000-character limit). No sign-in is needed, so leave the demo account fields empty.
+It describes the App Store build: archive without the Debug block at the end of `Config/Release.xcconfig`, and with
+parking as the real check (non-Debug builds must not assume a parked car, `AppEnvironment.swift` `isCarParked`).
 
 ---
 
@@ -21,10 +23,11 @@ https://devstreaming-cdn.apple.com/videos/streaming/examples/img_bipbop_adv_exam
 https://devstreaming-cdn.apple.com/videos/streaming/examples/bipbop_16x9/bipbop_16x9_variant.m3u8
 
 3. Tap a sample to play it: favourites, next/previous within the group, Picture in Picture when you
-   leave the app, and "Up next in 5" when a video ends. "Media servers" signs in to a server instead.
+   leave the app, and "Up next in 5" when a video ends. The same box takes a
+   single stream link. "Media servers" signs in to a server instead.
 
 IN-APP PURCHASES (Roadivo Pro)
-- Free: one source, unlimited imported videos, AirPlay and Picture in Picture.
+- Free: one source, unlimited imported videos, AirPlay, Picture in Picture, Maps and the Browser.
 - Pro (Weekly or Yearly auto-renewable subscription, or Lifetime one-time purchase): unlimited
   sources, Car Mode and CarPlay.
 - Plans show after onboarding, on a second source and in Settings › Roadivo Pro, with price, period,
@@ -34,26 +37,25 @@ CAR MODE AND CARPLAY (Pro)
 Car Mode (large landscape controls for a dashboard mount) opens when a saved car connects with
 Settings › Car & Display Profiles › Open Car Mode When Connected on.
 On CarPlay, Roadivo uses the navigation entitlement for its window but draws no map. Home, Favorites,
-Library, Cast and Browser are CarPlay template tabs. A chosen item plays; while the car is parked the
-window shows its video, and Close stops it. Cast shows the iPhone's own screen there while parked.
+Library, Cast and Browser are CarPlay template tabs. While the car is parked the window shows a chosen
+item's video; Close stops it. Cast shows the iPhone's own screen there while parked.
 Parked means CarPlay stops limiting its keyboard, or Core Location reports the car still for 30 seconds;
 any movement turns the picture off at once, leaving the sound. Play on iPhone / Play on Car Display move
-a video between the two. No web page is ever shown on the car's screen:
-a site picked there opens in the Browser on the iPhone. Test it in the CarPlay Simulator after buying Pro
-in the sandbox.
+a video between the two. No web page shows on the car: a site picked there opens in the iPhone's
+Browser. Test it in the CarPlay Simulator after buying Pro in the sandbox.
 
 DISCOVER TAB
-- Browser: a general web browser whose start page links to popular video websites (opened as websites,
-  never their apps). Roadivo provides no content. Page videos play in the page; a direct video link can
-  play in Roadivo's player.
-- Cast to Screen: Start mirroring opens Apple's broadcast sheet with Roadivo's Broadcast Upload
-  Extension. With Roadivo open on CarPlay and the car parked, the car's screen shows the iPhone's screen;
-  frames stay on the device (loopback only), nothing is recorded or uploaded. Needs a real iPhone.
+- Browser: a web browser whose start page links to popular video websites (as websites, never their
+  apps); a direct video link can play in Roadivo's player.
+- Cast to Screen: Start mirroring opens Apple's broadcast sheet (Roadivo's Broadcast Upload Extension).
+  With Roadivo on CarPlay and the car parked, the car's screen shows the iPhone's; frames stay on the
+  device (loopback only), never recorded or uploaded. Real iPhone only.
 
-MAPS TAB
-Search a place to see the driving routes from the iPhone's location on Apple's map, on the iPhone or the car.
+MAPS TAB (free)
+Tap the search icon, type a place and pick a suggestion: the driving routes from the iPhone's location
+show on Apple's map. Routes only, no turn-by-turn guidance. In the Simulator, set Features › Location.
 
-PERMISSIONS (each asked only when the feature is used)
+PERMISSIONS (each asked on first use)
 - Camera: scanning a playlist's QR code.
 - Microphone and Speech Recognition: voice search on Home.
 - Local Network: media servers or playlists on the home network.
@@ -61,10 +63,9 @@ PERMISSIONS (each asked only when the feature is used)
 
 APP TRANSPORT SECURITY
 NSAllowsArbitraryLoads is set because users' playlists and servers are often plain http on hosts we
-cannot list in advance, including home servers.
-NSAllowsArbitraryLoadsForMedia would not cover the playlist download or the Jellyfin, Emby, Plex and
-Xtream APIs, which use URLSession. Roadivo connects only to addresses the user enters, Apple's App Store
-lookup for update notices and plex.tv for Plex sign-in.
+cannot list in advance, including home servers. NSAllowsArbitraryLoadsForMedia alone would not cover
+playlist downloads or the server APIs, which use URLSession. Roadivo connects
+only to addresses the user enters, Apple's App Store lookup for update notices and plex.tv for Plex sign-in.
 
 PRIVACY
 No account, ads, analytics, third-party SDKs or tracking. Playlists, logins (Keychain) and history stay
