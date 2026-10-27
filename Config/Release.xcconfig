@@ -9,3 +9,11 @@ ROADIVO_CAR_BROWSER = NO
 // Archives sign with CarPlay Audio, so Roadivo shows in every car. YES signs them with Video only, which hides it in
 // cars without CarPlay video; switch only once the Debug build shows video (DECISIONS 151).
 ROADIVO_CARPLAY_VIDEO = NO
+
+// Debug mode in every build (owner, 2026-10-27; DECISIONS 170): TestFlight builds carry the touch car screen, the car
+// browser and everything else behind `#if DEBUG`, through CarPlay's undocumented window (Audio + Video signing).
+// Apple is likely to reject that: delete from here to the end of the file before archiving for the App Store.
+SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG
+ROADIVO_CAR_BROWSER = YES
+ROADIVO_CARPLAY_APP = screen
+ROADIVO_CARPLAY_APP[sdk=iphonesimulator*] = window
