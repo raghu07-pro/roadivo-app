@@ -31,14 +31,11 @@
 
         // MARK: - Along the top
 
-        /// The mark and the search hold the corners; the tabs stay centred, dropping their icons on a narrow screen.
+        /// The mark and the search hold the corners; the tabs, names only (owner, 2026-10-27), stay centred.
         private var topBar: some View {
             ZStack {
-                ViewThatFits(in: .horizontal) {
-                    tabBar(showsIcons: true)
-                    tabBar(showsIcons: false)
-                }
-                .padding(.horizontal, Self.corner + Spacing.sm)
+                tabBar
+                    .padding(.horizontal, Self.corner + Spacing.sm)
                 HStack {
                     CarBrandMark(side: Self.corner)
                     Spacer(minLength: 0)
@@ -49,10 +46,10 @@
 
         private static let corner: CGFloat = 56
 
-        private func tabBar(showsIcons: Bool) -> some View {
+        private var tabBar: some View {
             HStack(spacing: Spacing.xxs) {
                 ForEach(CarScreenModel.Tab.allCases, id: \.self) { tab in
-                    tabButton(tab, showsIcon: showsIcons)
+                    tabButton(tab)
                 }
             }
             .padding(Spacing.xxs)
@@ -61,7 +58,7 @@
             .fixedSize()
         }
 
-        private func tabButton(_ tab: CarScreenModel.Tab, showsIcon: Bool) -> some View {
+        private func tabButton(_ tab: CarScreenModel.Tab) -> some View {
             let isChosen = model.tab == tab
             // The iPhone still casts behind the other tabs, as CarTV's red dot shows.
             let isCasting = tab == .cast && model.isCasting
@@ -69,12 +66,10 @@
                 model.actions?.select(tab)
             } label: {
                 HStack(spacing: Spacing.xs) {
-                    if showsIcon {
-                        Image(systemName: Self.symbol(of: tab))
-                            .imageScale(.medium)
-                            .accessibilityHidden(true)
-                    }
+                    // One line always: "Library" broke in two when the bar ran short.
                     Text(app: tab.title)
+                        .lineLimit(1)
+                        .fixedSize()
                     if isCasting {
                         Circle()
                             .fill(.roadLive)
@@ -97,16 +92,6 @@
             .buttonStyle(.plain)
             .accessibilityAddTraits(isChosen ? .isSelected : [])
             .accessibilityValue(isCasting ? String(appLocalized: "Casting") : "")
-        }
-
-        private static func symbol(of tab: CarScreenModel.Tab) -> String {
-            switch tab {
-            case .home: "house.fill"
-            case .favorites: "heart.fill"
-            case .library: "rectangle.stack.fill"
-            case .cast: "rectangle.on.rectangle"
-            case .browser: "globe"
-            }
         }
 
         /// The library's search, as CarTV's beside the tabs.
