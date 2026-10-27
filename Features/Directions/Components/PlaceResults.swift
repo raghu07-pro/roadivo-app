@@ -3,7 +3,7 @@ import SwiftUI
 /// Under the search field: the places found, or why there are none. Nothing while the field is empty.
 struct PlaceResults: View {
     let search: DirectionsViewModel.Search
-    let onChoose: (Place) -> Void
+    let onChoose: (PlaceSuggestion) -> Void
     let onRetry: () -> Void
 
     var body: some View {
@@ -15,11 +15,11 @@ struct PlaceResults: View {
                 .frame(maxWidth: .infinity, minHeight: 44)
                 .cardStyle()
                 .accessibilityIdentifier("directions.searching")
-        case let .found(places):
+        case let .found(suggestions):
             // Scrolls only when the list is taller than its space (large text, a short screen).
             ViewThatFits(in: .vertical) {
-                list(places)
-                ScrollView { list(places) }
+                list(suggestions)
+                ScrollView { list(suggestions) }
             }
             .cardStyle(padding: 0)
         case .nothingFound:
@@ -43,19 +43,19 @@ struct PlaceResults: View {
         }
     }
 
-    private func list(_ places: [Place]) -> some View {
+    private func list(_ suggestions: [PlaceSuggestion]) -> some View {
         VStack(spacing: 0) {
-            ForEach(Array(places.enumerated()), id: \.element.id) { index, place in
+            ForEach(Array(suggestions.enumerated()), id: \.element.id) { index, suggestion in
                 if index > 0 {
                     Divider().padding(.leading, Spacing.md)
                 }
-                row(place)
+                row(suggestion)
                     .accessibilityIdentifier("directions.place.\(index)")
             }
         }
     }
 
-    private func row(_ place: Place) -> some View {
+    private func row(_ place: PlaceSuggestion) -> some View {
         Button {
             onChoose(place)
         } label: {
@@ -65,11 +65,11 @@ struct PlaceResults: View {
                     .foregroundStyle(.roadAccent)
                     .accessibilityHidden(true)
                 VStack(alignment: .leading, spacing: 2) {
-                    Text(place.name)
+                    Text(place.title)
                         .font(Typography.body)
                         .foregroundStyle(.primary)
-                    if !place.address.isEmpty, place.address != place.name {
-                        Text(place.address)
+                    if !place.subtitle.isEmpty {
+                        Text(place.subtitle)
                             .font(Typography.caption)
                             .foregroundStyle(.secondary)
                     }

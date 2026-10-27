@@ -90,6 +90,11 @@
          </CommandLineArgument>
       </CommandLineArguments>
       <EnvironmentVariables>
+         <EnvironmentVariable
+            key = "MTL_DEBUG_LAYER_ERROR_MODE"
+            value = "nslog"
+            isEnabled = "YES">
+         </EnvironmentVariable>
       </EnvironmentVariables>
       <StoreKitConfigurationFileReference
          identifier = "../StoreKit/Roadivo.storekit">

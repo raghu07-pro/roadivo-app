@@ -1,9 +1,9 @@
 #if DEBUG
     import SwiftUI
 
-    /// The car screen's home (DECISIONS 162–164, 167), all tapped directly in Roadivo's theme: its mark, the five tabs
-    /// with their icons and the search along the top; Home's shelves, Favorites' and Library's grids of pictures, and
-    /// Cast's three steps under them.
+    /// The car screen's home (DECISIONS 162–164, 167, 172), all tapped directly in Roadivo's theme: its mark, the tabs
+    /// and the search along the top; Home's shelves, Favorites' and Library's grids of pictures, Maps, and Cast's
+    /// three steps under them.
     struct CarScreenTabsView: View {
         let model: CarScreenModel
 
@@ -12,6 +12,13 @@
                 topBar
                 content
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .overlay(alignment: .bottomTrailing) {
+                        // An open route stays in sight on the other tabs, as on the iPhone (owner, 2026-10-27).
+                        if model.tab != .maps, let directions = model.directions {
+                            CarRouteMiniMap(model: model, directions: directions)
+                                .padding(Spacing.xs)
+                        }
+                    }
             }
             .padding(Spacing.sm)
             .background {
@@ -48,7 +55,7 @@
 
         private var tabBar: some View {
             HStack(spacing: Spacing.xxs) {
-                ForEach(CarScreenModel.Tab.allCases, id: \.self) { tab in
+                ForEach(CarScreenModel.Tab.shown, id: \.self) { tab in
                     tabButton(tab)
                 }
             }
@@ -121,6 +128,10 @@
                 grid(model.menu.favorites, empty: "Nothing here yet", symbol: "heart")
             case .library:
                 library
+            case .maps:
+                if let directions = model.directions {
+                    CarScreenMapView(model: model, directions: directions)
+                }
             case .cast:
                 cast
             }

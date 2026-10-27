@@ -251,6 +251,9 @@
                 closePage()
                 return apply(text, to: field)
             }
+            if case let .search(search) = model.page, search.isPlace {
+                return submitPlaceSearch()
+            }
             let query = text.trimmingCharacters(in: .whitespacesAndNewlines)
             // The library's search is remembered and its results fill the screen, as CarTV's.
             if case let .search(search) = model.page, search.isLibrary {

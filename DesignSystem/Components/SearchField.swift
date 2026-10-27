@@ -9,6 +9,8 @@ struct SearchField: View {
     var onMic: (() -> Void)?
     /// Told when the field gains or loses the keyboard, so a screen can offer its own Cancel.
     var onFocusChange: ((Bool) -> Void)?
+    /// Takes the keyboard as it appears: a field that a search button shows, as Maps' (DECISIONS 172).
+    var focusesOnAppear = false
 
     @FocusState private var isFocused: Bool
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
@@ -55,6 +57,11 @@ struct SearchField: View {
         .animation(reduceMotion ? nil : .snappy(duration: 0.2), value: isListening)
         .onChange(of: isFocused) { _, focused in
             onFocusChange?(focused)
+        }
+        .onAppear {
+            if focusesOnAppear {
+                isFocused = true
+            }
         }
     }
 

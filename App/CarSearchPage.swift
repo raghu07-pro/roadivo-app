@@ -38,6 +38,11 @@
             // Always the whole screen.
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .background(Color.roadCanvas.ignoresSafeArea())
+            .task(id: model.searchText) {
+                if search.isPlace {
+                    await findPlaces()
+                }
+            }
         }
 
         // MARK: - The field
@@ -196,9 +201,15 @@
             }
         }
 
-        /// Channels and titles from the library, or sites and searches for the browser.
+        /// Channels and titles from the library, places for Maps, or sites and searches for the browser.
         @ViewBuilder private var results: some View {
-            if search.isLibrary, !model.libraryResults.isEmpty {
+            if search.isPlace {
+                PlaceResults(search: model.placeSearch) { place in
+                    model.actions?.choosePlace(place)
+                } onRetry: {
+                    Task { await findPlaces() }
+                }
+            } else if search.isLibrary, !model.libraryResults.isEmpty {
                 let items = model.libraryResults
                 ScrollView {
                     LazyVStack(spacing: Spacing.xs) {
@@ -237,6 +248,11 @@
                     }
                 }
             }
+        }
+
+        /// Run for each change of what's typed, as the iPhone's Maps search runs; a newer change cancels it.
+        private func findPlaces() async {
+            await model.directions?.lookUp(model.searchText) { model.placeSearch = $0 }
         }
 
         // MARK: - Voice, the iPhone, or the keyboard

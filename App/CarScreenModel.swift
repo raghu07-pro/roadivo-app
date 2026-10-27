@@ -37,6 +37,11 @@
         func showBrowserBesideCast()
         /// The library's search, from the round button beside the tabs.
         func showLibrarySearch()
+        /// Maps' search for a place, and a place found there, whose routes then show on both screens.
+        func showPlaceSearch()
+        func choosePlace(_ suggestion: PlaceSuggestion)
+        /// Show on iPhone, from the car's route card.
+        func showRouteOnPhone()
         /// How to type on a search page: speak, or Roadivo's keyboard.
         func chooseKeyboard()
         func startVoice()
@@ -70,6 +75,7 @@
             case home
             case favorites
             case library
+            case maps
             case cast
             case browser
 
@@ -78,9 +84,15 @@
                 case .home: "Home"
                 case .favorites: "Favorites"
                 case .library: "Library"
+                case .maps: "Maps"
                 case .cast: "Cast"
                 case .browser: "Browser"
                 }
+            }
+
+            /// Maps only while the iPhone shows it too (`ROADIVO_DIRECTIONS`).
+            static var shown: [Tab] {
+                allCases.filter { $0 != .maps || DirectionsAvailability.isEnabled }
             }
         }
 
@@ -147,6 +159,8 @@
             var startsWithNumbers = false
             /// Roadivo's own channels and titles rather than the web: results play, and searches are remembered.
             var isLibrary = false
+            /// Maps' place search: a place found opens its routes (DECISIONS 172).
+            var isPlace = false
         }
 
         /// How a search page is being typed into: first a choice of voice, the iPhone or Roadivo's keyboard, as in
@@ -218,6 +232,10 @@
         /// Each source's name, for the results' sections.
         var sourceNames: [UUID: String] = [:]
         var recentSearches: [String] = []
+        /// Places for what's typed on Maps' search, apart from the iPhone's own search.
+        var placeSearch = DirectionsViewModel.Search.idle
+        /// The iPhone's Maps: the same place and routes on both screens.
+        @ObservationIgnored var directions: DirectionsViewModel?
         /// Speech to text for the search page; its state shows while it listens.
         @ObservationIgnored var voice: VoiceSearchModel?
         @ObservationIgnored weak var actions: CarScreenActions?
@@ -229,7 +247,9 @@
 
         /// Sites, an address or a web search for what's typed; on YouTube, YouTube's search first.
         var suggestions: [Suggestion] {
-            guard case let .search(search) = page, !search.isField, !search.isLibrary else { return [] }
+            guard case let .search(search) = page, !search.isField, !search.isLibrary, !search.isPlace else {
+                return []
+            }
             let text = searchText.trimmingCharacters(in: .whitespacesAndNewlines)
             guard !text.isEmpty else { return [] }
             var rows = BrowserSearch.results(for: text, limit: 6).map { result in

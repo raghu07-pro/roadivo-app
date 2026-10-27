@@ -60,19 +60,14 @@
         var snapshots: [UUID: UIImage] = [:]
         var field: Field?
         var isConnected = false
+        /// Where Maps' route was at the last refresh, so one sent from the iPhone opens Maps here.
+        var routeScreen = PlaybackOrigin.phone
         var isWatching = false
 
         override func viewDidLoad() {
             super.viewDidLoad()
             view.tintColor = UIColor(Color.roadBrand)
-            model.actions = self
-            model.icons = AppEnvironment.current?.siteIcons
-            model.playback = AppEnvironment.current?.playback
-            // The car's layout starts from the playback's own, its display profile's aspect.
-            let gravity = AppEnvironment.current?.playback.videoGravity
-            model.aspect = VideoAspect.allCases.first { $0.gravity == gravity } ?? .fit
-            model.voice = voice
-            model.recentSearches = history.searches
+            setUpModel()
             // The video and road stay clear of CarPlay's dock and the screen's corners, as the page does.
             addStage()
             stage.showsRoad = false // Roadivo's own screens fill everything but the video.
@@ -227,6 +222,7 @@
                 _ = environment.parking.isParked
                 _ = environment.parking.isLocationDenied
                 _ = environment.router.libraryRevision
+                _ = environment.directions.screen
             } onChange: { [weak self] in
                 Task { @MainActor [weak self] in self?.changed() }
             }
@@ -241,6 +237,7 @@
 
         func refresh() {
             guard isConnected, let environment = AppEnvironment.current else { return }
+            followRoute()
             let playback = environment.playback
             let parking = environment.parking
             let isPro = environment.proAccess.isPro
@@ -355,6 +352,23 @@
                 }
             }
             refresh()
+        }
+    }
+
+    // MARK: - Setup
+
+    fileprivate extension CarScreenController {
+        /// What the car's screen draws from: the iPhone's player, Maps, site icons, voice search and recent searches.
+        func setUpModel() {
+            model.actions = self
+            model.icons = AppEnvironment.current?.siteIcons
+            model.playback = AppEnvironment.current?.playback
+            model.directions = AppEnvironment.current?.directions
+            // The car's layout starts from the playback's own, its display profile's aspect.
+            let gravity = AppEnvironment.current?.playback.videoGravity
+            model.aspect = VideoAspect.allCases.first { $0.gravity == gravity } ?? .fit
+            model.voice = voice
+            model.recentSearches = history.searches
         }
     }
 

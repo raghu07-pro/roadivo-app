@@ -36,7 +36,7 @@
 	<key>NSLocalNetworkUsageDescription</key>
 	<string>Roadivo connects to playlists and video servers on your local network, and shows your iPhone on your car's screen when you broadcast.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Roadivo uses your location on CarPlay only to tell when the car is parked, so video plays only then. It isn't stored or shared.</string>
+	<string>Roadivo uses your location to show routes from where you are in Maps, and on CarPlay to tell when the car is parked, so video plays only then. Roadivo doesn't store it; routes come from Apple Maps.</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>Roadivo uses the microphone only while you search by voice.</string>
 	<key>NSSpeechRecognitionUsageDescription</key>

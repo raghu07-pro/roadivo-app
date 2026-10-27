@@ -46,8 +46,8 @@ ROADIVO_CARPLAY_DELEGATE_map = CarPlayNavigationSceneDelegate
 // The screen app has no template scene: the build drops it from Info.plist (Project.swift).
 ROADIVO_CARPLAY_DELEGATE_screen = CarPlayWindowSceneDelegate
 
-// The iPhone's Directions tab and its route card (DECISIONS 145–146) are kept for a later release (owner, 2026-10-23;
-// DECISIONS 149). NO hides them everywhere; the code stays. YES brings them back.
-ROADIVO_DIRECTIONS = NO
+// Maps, the iPhone's Directions tab, its route card and the car screen's Maps tab (DECISIONS 145–146, 172): on again
+// (owner, 2026-10-27). NO hides them everywhere, as from 149; the code stays.
+ROADIVO_DIRECTIONS = YES
 
 PRODUCT_NAME = Roadivo

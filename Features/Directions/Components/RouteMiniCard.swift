@@ -1,7 +1,7 @@
 import SwiftUI
 
 /// Over the other tabs while a route is open: a small upright window in the bottom-right corner, like Maps' own,
-/// with a map of the route and the drive time. A tap goes back to Directions; ✕ ends the route (DECISIONS 146).
+/// with a map of the route and the drive time. A tap goes back to Maps; ✕ ends the route (DECISIONS 146).
 struct RouteMiniCard: View {
     let viewModel: DirectionsViewModel
     let onOpen: () -> Void
@@ -55,7 +55,7 @@ struct RouteMiniCard: View {
         .buttonStyle(PressableStyle())
         .accessibilityLabel(Text("Route to \(destination.name)"))
         .accessibilityValue(Text("\(time) · \(distance)"))
-        .accessibilityHint(Text("Opens Directions"))
+        .accessibilityHint(Text("Opens Maps"))
         .accessibilityIdentifier("directions.miniRoute")
     }
 

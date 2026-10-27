@@ -8,7 +8,7 @@ private let bundleID = "com.disolutions.roadivo"
 private let deploymentTarget = "17.0"
 private let marketingVersion = "1.0.0"
 // One higher for every upload: App Store Connect refuses a build number it has seen (1 and 2 are on TestFlight).
-private let buildNumber = "8"
+private let buildNumber = "9"
 
 private let baseSettings: SettingsDictionary = [
     "SWIFT_VERSION": "6.0",
@@ -173,7 +173,14 @@ let project = Project(
                 configuration: "Debug",
                 executable: "Roadivo",
                 // Debug `-car-parked`: CarPlay video at a desk; moving GPS still stops it (DECISIONS 154).
-                arguments: .arguments(launchArguments: [.launchArgument(name: "-car-parked", isEnabled: true)]),
+                // Metal API Validation logs rather than stops the app: MapKit's own textures tripped its assert in
+                // Xcode runs, a check that never runs in TestFlight or the App Store (DECISIONS 173).
+                arguments: .arguments(
+                    environmentVariables: [
+                        "MTL_DEBUG_LAYER_ERROR_MODE": .environmentVariable(value: "nslog", isEnabled: true)
+                    ],
+                    launchArguments: [.launchArgument(name: "-car-parked", isEnabled: true)]
+                ),
                 options: .options(storeKitConfigurationPath: "StoreKit/Roadivo.storekit")
             )
         )

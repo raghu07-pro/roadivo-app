@@ -10,7 +10,7 @@ final class DirectionsViewModel {
     enum Search: Equatable {
         case idle
         case searching
-        case found([Place])
+        case found([PlaceSuggestion])
         case nothingFound
         case failed
     }
@@ -30,6 +30,9 @@ final class DirectionsViewModel {
     private(set) var routeState: RouteState = .loading
     private(set) var routes: [RouteOption] = []
     var selectedRouteID: RouteOption.ID?
+    /// The screen showing the route, as a video's `PlaybackOrigin`: the one it was chosen on, until it's moved
+    /// (owner, 2026-10-27; DECISIONS 172). The other screen's Maps shows no route.
+    private(set) var screen = PlaybackOrigin.phone
     let location: LocationProviding
 
     private let finder: PlaceFinding
@@ -59,6 +62,16 @@ final class DirectionsViewModel {
         destination != nil && routeState == .ready && selectedRoute != nil
     }
 
+    /// The route is open on `screen`: its map, card and the small window over the other tabs show it there.
+    func isShown(on screen: PlaybackOrigin) -> Bool {
+        destination != nil && self.screen == screen
+    }
+
+    /// Show on iPhone / Show on Car Display, as Play on iPhone / Play on Car Display move a video.
+    func move(to screen: PlaybackOrigin) {
+        self.screen = screen
+    }
+
     /// Makes the still once per route, look and size; every tab's card shares it.
     func makeSnapshot(size: CGSize, isDark: Bool, line: UIColor) async {
         guard let destination, let route = selectedRoute else { return }
@@ -78,28 +91,53 @@ final class DirectionsViewModel {
 
     /// Run for each change of `query`; a newer change cancels it during the pause.
     func findPlaces() async {
-        let text = query.trimmingCharacters(in: .whitespacesAndNewlines)
+        await lookUp(query) { search = $0 }
+    }
+
+    /// Searches `text` after the typing pause, reporting each step; the car's Maps tab runs its own, so typing there
+    /// leaves the iPhone's field alone (DECISIONS 172).
+    func lookUp(_ text: String, report: (Search) -> Void) async {
+        let text = text.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !text.isEmpty else {
-            search = .idle
-            return
+            return report(.idle)
         }
         do {
             try await Task.sleep(for: pause)
         } catch {
             return // A newer query replaced this one.
         }
-        search = .searching
+        report(.searching)
         do {
-            let places = try await finder.places(matching: text, near: location.lastCoordinate)
+            let found = try await finder.suggestions(matching: text, near: location.lastCoordinate)
             guard !Task.isCancelled else { return }
-            search = places.isEmpty ? .nothingFound : .found(places)
+            report(found.isEmpty ? .nothingFound : .found(found))
         } catch {
             guard !Task.isCancelled else { return }
-            search = .failed
+            report(.failed)
         }
     }
 
-    func choose(_ place: Place) async {
+    /// A suggestion from the list: found on the map, then its routes, as `choose(_ place:)`.
+    func choose(_ suggestion: PlaceSuggestion) async {
+        await choose(suggestion) { search = $0 }
+    }
+
+    /// The same for the car's own search, whose list `report` keeps: searching while it's found, idle once it is.
+    func choose(_ suggestion: PlaceSuggestion, on screen: PlaybackOrigin = .phone, report: (Search) -> Void) async {
+        report(.searching)
+        do {
+            guard let place = try await finder.place(for: suggestion, near: location.lastCoordinate) else {
+                return report(.nothingFound)
+            }
+            report(.idle)
+            await choose(place, on: screen)
+        } catch {
+            report(.failed)
+        }
+    }
+
+    func choose(_ place: Place, on screen: PlaybackOrigin = .phone) async {
+        self.screen = screen
         destination = place
         query = ""
         search = .idle

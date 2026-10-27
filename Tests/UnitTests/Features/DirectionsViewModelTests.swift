@@ -31,9 +31,47 @@ struct DirectionsViewModelTests {
         let (viewModel, _) = model(finder: finder)
         viewModel.query = "cabo"
         await viewModel.findPlaces()
-        #expect(viewModel.search == .found([cabo]))
+        #expect(viewModel.search == .found([PlaceSuggestion(cabo)]))
         #expect(await finder.searches == ["cabo"])
         #expect(await finder.searchedNear == [here])
+    }
+
+    @Test("Choosing a suggestion finds its place on the map, then loads its routes")
+    func chooseSuggestion() async {
+        let finder = FakePlaceFinder(places: .success([cabo]), routes: .success([fast]))
+        let (viewModel, _) = model(finder: finder)
+        viewModel.query = "cabo"
+        await viewModel.choose(PlaceSuggestion(cabo))
+        #expect(await finder.searches == ["Cabo da Roca, Sintra"])
+        #expect(viewModel.destination == cabo)
+        #expect(viewModel.search == .idle)
+        #expect(viewModel.query.isEmpty)
+        #expect(viewModel.routes == [fast])
+    }
+
+    @Test("A route shows only on the screen it was chosen on, until it's moved to the other one")
+    func routeScreen() async {
+        let (viewModel, _) = model(finder: FakePlaceFinder(routes: .success([fast])))
+        #expect(!viewModel.isShown(on: .phone))
+        await viewModel.choose(cabo, on: .car)
+        #expect(viewModel.isShown(on: .car))
+        #expect(!viewModel.isShown(on: .phone))
+        viewModel.move(to: .phone)
+        #expect(viewModel.isShown(on: .phone))
+        #expect(!viewModel.isShown(on: .car))
+        viewModel.move(to: .car)
+        await viewModel.choose(cabo)
+        #expect(viewModel.screen == .phone, "A place chosen on the iPhone is the iPhone's")
+    }
+
+    @Test("A suggestion Maps can't find on the map says nothing was found, and keeps the search")
+    func suggestionNotFound() async {
+        let (viewModel, _) = model(finder: FakePlaceFinder(places: .success([])))
+        viewModel.query = "cabo"
+        await viewModel.choose(PlaceSuggestion(cabo))
+        #expect(viewModel.search == .nothingFound)
+        #expect(viewModel.destination == nil)
+        #expect(viewModel.query == "cabo")
     }
 
     @Test("A blank search shows nothing and asks Maps nothing")

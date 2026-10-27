@@ -6,6 +6,23 @@ struct MapKitPlaceFinder: PlaceFinding {
     static let resultLimit = 8
     /// How far around the iPhone a search prefers, in metres.
     private static let searchRadius: CLLocationDistance = 50000
+    private let completer: PlaceCompleter
+
+    @MainActor
+    init() {
+        completer = PlaceCompleter(limit: Self.resultLimit)
+    }
+
+    func suggestions(matching query: String, near: Coordinate?) async throws -> [PlaceSuggestion] {
+        try await completer.suggestions(matching: query, near: near, radius: Self.searchRadius)
+    }
+
+    /// Found by its name and where it is, the name kept as Maps suggested it.
+    func place(for suggestion: PlaceSuggestion, near: Coordinate?) async throws -> Place? {
+        let found = try await places(matching: suggestion.query, near: near)
+        guard let match = found.first(where: { $0.name == suggestion.title }) ?? found.first else { return nil }
+        return Place(name: suggestion.title, address: match.address, coordinate: match.coordinate)
+    }
 
     func places(matching query: String, near: Coordinate?) async throws -> [Place] {
         let request = MKLocalSearch.Request()

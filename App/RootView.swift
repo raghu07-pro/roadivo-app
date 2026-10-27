@@ -115,6 +115,12 @@ private struct MainTabView: View {
         environment.directions
     }
 
+    /// Show on Car Display for the iPhone's route, while CarPlay is connected (DECISIONS 172).
+    private var showRouteOnCar: (() -> Void)? {
+        guard environment.carConnection.isCarPlayConnected else { return nil }
+        return { [directions] in directions.move(to: .car) }
+    }
+
     /// The route card over the other tabs, only while Directions is shown (DECISIONS 149).
     private var routeCard: DirectionsViewModel? {
         DirectionsAvailability.isEnabled ? directions : nil
@@ -190,15 +196,19 @@ private struct MainTabView: View {
             .tag(AppRouter.Tab.car)
 
             if DirectionsAvailability.isEnabled {
-                DirectionsView(viewModel: directions)
-                    .miniPlayer(
-                        playback: playback,
-                        isPlayerOpen: router.playerSurface != nil,
-                        height: $miniPlayerHeight,
-                        onExpand: expandPlayer
-                    )
-                    .tabItem { Label("Directions", systemImage: "map") }
-                    .tag(AppRouter.Tab.directions)
+                DirectionsView(
+                    viewModel: directions,
+                    onShowOnCar: showRouteOnCar,
+                    sceneTime: SplashMoment(date: .now).time
+                )
+                .miniPlayer(
+                    playback: playback,
+                    isPlayerOpen: router.playerSurface != nil,
+                    height: $miniPlayerHeight,
+                    onExpand: expandPlayer
+                )
+                .tabItem { Label("Maps", systemImage: "map") }
+                .tag(AppRouter.Tab.directions)
             }
 
             SettingsView(
@@ -438,7 +448,7 @@ private extension View {
             }
         }
         .overlay(alignment: .bottomTrailing) {
-            if !isPlayerOpen, let directions, directions.hasActiveRoute {
+            if !isPlayerOpen, let directions, directions.hasActiveRoute, directions.isShown(on: .phone) {
                 RouteMiniCard(viewModel: directions, onOpen: onOpenDirections)
                     .padding(.trailing, Spacing.sm)
                     .padding(.bottom, barSpace + Spacing.xs)

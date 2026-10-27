@@ -12,8 +12,7 @@ or Files.
 
 HOW TO TEST WITH SAMPLE CONTENT (Apple's public HLS test streams)
 1. Finish onboarding. Close the "Buy a plan" screen with its Close (X) button.
-2. On Home, tap + to open "Add a Source". Keep "Playlist" chosen, paste this text into the box, then tap
-   Add Source:
+2. On Home, tap + to open "Add a Source". Keep "Playlist", paste this text, then tap Add Source:
 
 #EXTM3U
 #EXTINF:-1 group-title="Samples",Apple Sample 1
@@ -32,15 +31,14 @@ IN-APP PURCHASES (Roadivo Pro)
   first-week offer, renewal terms, Terms of Use (Apple's standard EULA), Privacy Policy and Restore.
 
 CAR MODE AND CARPLAY (Pro)
-Car Mode (large landscape controls for a dashboard mount; Drive View hides the video) opens
-when a saved car connects with Settings › Car & Display Profiles › Open Car Mode When Connected on.
+Car Mode (large landscape controls for a dashboard mount) opens when a saved car connects with
+Settings › Car & Display Profiles › Open Car Mode When Connected on.
 On CarPlay, Roadivo uses the navigation entitlement for its window but draws no map. Home, Favorites,
 Library, Cast and Browser are CarPlay template tabs. A chosen item plays; while the car is parked the
 window shows its video, and Close stops it. Cast shows the iPhone's own screen there while parked.
-Parked means CarPlay reports the car isn't limiting its
-keyboard (as cars do when stopped), or Core Location reports it still for 30 seconds; any movement turns
-the picture off at once, leaving only the sound. The iPhone's player can move a video between the
-iPhone and the car (Play on iPhone / Play on Car Display). No web page is ever shown on the car's screen:
+Parked means CarPlay stops limiting its keyboard, or Core Location reports the car still for 30 seconds;
+any movement turns the picture off at once, leaving the sound. Play on iPhone / Play on Car Display move
+a video between the two. No web page is ever shown on the car's screen:
 a site picked there opens in the Browser on the iPhone. Test it in the CarPlay Simulator after buying Pro
 in the sandbox.
 
@@ -52,11 +50,14 @@ DISCOVER TAB
   Extension. With Roadivo open on CarPlay and the car parked, the car's screen shows the iPhone's screen;
   frames stay on the device (loopback only), nothing is recorded or uploaded. Needs a real iPhone.
 
+MAPS TAB
+Search a place to see the driving routes from the iPhone's location on Apple's map, on the iPhone or the car.
+
 PERMISSIONS (each asked only when the feature is used)
 - Camera: scanning a playlist's QR code.
 - Microphone and Speech Recognition: voice search on Home.
 - Local Network: media servers or playlists on the home network.
-- Location (While Using): only on CarPlay, to tell when the car is parked. Never stored or sent.
+- Location (While Using): routes in Maps, and on CarPlay to tell when the car is parked. Not stored.
 
 APP TRANSPORT SECURITY
 NSAllowsArbitraryLoads is set because users' playlists and servers are often plain http on hosts we

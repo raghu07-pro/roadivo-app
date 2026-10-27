@@ -18,14 +18,18 @@ TV on the road.
 
 ## First-launch flow & Pro
 
-Onboarding (4 pages) → "Buy a plan" paywall (closable, shown once) → four
-tabs: **Home · Favorites · Discover · Settings**.
+Onboarding (4 pages) → "Buy a plan" paywall (closable, shown once) → five
+tabs: **Home · Favorites · Discover · Maps · Settings**.
 
-- **Directions is kept for a later release** (owner, 2026-10-23; DECISIONS 149): `ROADIVO_DIRECTIONS = NO` in
-  `Config/Shared.xcconfig` hides the tab and its route card everywhere, and nothing asks for Location. Don't use the
-  map, Directions or CarPlay navigation anywhere until the owner switches them back on; the code stays.
-  When on (`Features/Directions`, `Core/Directions`; DECISIONS 145, free): search a place (Apple Maps search),
-  see the driving routes from the iPhone's location on a map, pick one, and hand off to Apple Maps for guidance.
+- **Maps is on** (owner, 2026-10-27; DECISIONS 172, reversing 149's pause): `ROADIVO_DIRECTIONS = YES` in
+  `Config/Shared.xcconfig` shows the iPhone's **Maps** tab (the Directions feature, renamed), its route card, and a
+  **Maps** tab on the touch car screen (`CarScreenMapView`, after Library). A route shows on the screen it was
+  chosen on and moves like a video: Show on Car Display / Show on iPhone beside ✕ (`DirectionsViewModel.screen`). The car
+  types its own search on `CarSearchPage` (`CarSearch.isPlace`, `DirectionsViewModel.lookUp`). Both draw `RouteMap`.
+  NO hides all of it. CarPlay's navigation app (`map`) stays kept for later.
+  The feature (`Features/Directions`, `Core/Directions`; DECISIONS 145, free): search a place (Apple Maps' autocomplete, `PlaceCompleter`, several suggestions as you type),
+  see the driving routes from the iPhone's location on a map and pick one. No Apple Maps button on either screen
+  (owner, 2026-10-27): Roadivo shows routes, not turn-by-turn guidance.
   Location is asked the first time the tab opens. `DirectionsUITests` skip while it's off. UI tests use `ScriptedPlaceFinder` and `ScriptedLocation` (`-location-denied` for Location off).
   An open route follows to the other tabs as an upright window in the bottom-right corner, like Maps' own, above the
   mini player (`RouteMiniCard`, `RouteSnapshot`; DECISIONS 146).
@@ -241,7 +245,7 @@ None in v1 (DECISIONS 6). Everything is stored on the device.
 - **Debug mode in Release, for TestFlight testing** (owner, 2026-10-27; DECISIONS 170): the block at the end of
   `Config/Release.xcconfig` puts the touch car screen and all `#if DEBUG` code in archives. Delete it before an App Store
   archive; Apple is likely to reject it.
-- **Uploads:** the next upload of 1.0.0 is build 8 (owner, 2026-10-27). Raise `buildNumber` in `Project.swift` by one for every upload
+- **Uploads:** the next upload of 1.0.0 is build 9 (owner, 2026-10-27). Raise `buildNumber` in `Project.swift` by one for every upload
   (App Store Connect refuses a number it has seen), keep `marketingVersion` until 1.0.0 is released, run
   `tuist generate`, and archive with the `Roadivo` scheme (DECISIONS 126).
 

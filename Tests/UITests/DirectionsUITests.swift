@@ -18,6 +18,7 @@ final class DirectionsUITests: XCTestCase {
 
     /// Searches "cabo" and picks the first place.
     private func chooseFirstPlace(_ app: XCUIApplication) {
+        openSearch(app)
         let field = app.textFields["search.field"].firstMatch
         XCTAssertTrue(field.waitForExistence(timeout: 5))
         field.tap()
@@ -27,6 +28,15 @@ final class DirectionsUITests: XCTestCase {
         place.tap()
     }
 
+    /// The search field shows only from the search button above the location arrow (DECISIONS 172).
+    private func openSearch(_ app: XCUIApplication) {
+        let search = app.buttons["directions.search"]
+        XCTAssertTrue(search.waitForExistence(timeout: 5))
+        XCTAssertTrue(app.buttons["directions.locate"].exists, "The location arrow sits under the search button")
+        XCTAssertFalse(app.textFields["search.field"].exists, "The field waits for the search button")
+        search.tap()
+    }
+
     /// Before a search, a hint says what the tab does.
     func testOpensWithAHint() throws {
         let app = XCUIApplication.roadivo(skipOnboarding: true)
@@ -34,30 +44,34 @@ final class DirectionsUITests: XCTestCase {
         XCTAssertTrue(app.descendants(matching: .any)["directions.hint"].waitForExistence(timeout: 5))
     }
 
-    /// Typing lists places; picking one shows its route, the other route to pick, and Apple Maps.
+    /// Typing lists places; picking one shows its route and the other route to pick, with no Apple Maps button.
     func testSearchShowsTheRoute() throws {
         let app = XCUIApplication.roadivo(skipOnboarding: true)
         try openDirections(app)
         chooseFirstPlace(app)
         XCTAssertTrue(app.descendants(matching: .any)["directions.summary"].waitForExistence(timeout: 5))
-        XCTAssertTrue(app.buttons["directions.openMaps"].isEnabled)
+        XCTAssertFalse(app.buttons["directions.openMaps"].exists, "Apple Maps' button was removed (DECISIONS 172)")
         XCTAssertFalse(app.buttons["directions.place.0"].exists, "The list should close once a place is chosen")
         XCTAssertFalse(app.keyboards.firstMatch.exists, "The keyboard should close so the map has the screen")
     }
 
-    /// Cancel leaves the search: the text clears, the keyboard closes and the hint comes back.
+    /// The search button opens the field; Cancel leaves it: the text clears, the keyboard closes and the button and
+    /// hint come back.
     func testCancelClosesTheKeyboard() throws {
         let app = XCUIApplication.roadivo(skipOnboarding: true)
         try openDirections(app)
+        openSearch(app)
         let field = app.textFields["search.field"].firstMatch
         XCTAssertTrue(field.waitForExistence(timeout: 5))
-        field.tap()
+        XCTAssertTrue(app.keyboards.firstMatch.waitForExistence(timeout: 5), "The button opens the field ready to type")
         field.typeText("ca")
         let cancel = app.buttons["directions.cancel"]
         XCTAssertTrue(cancel.waitForExistence(timeout: 5))
         cancel.tap()
         XCTAssertFalse(app.keyboards.firstMatch.waitForExistence(timeout: 2))
         XCTAssertFalse(cancel.exists)
+        XCTAssertFalse(field.exists, "Cancel puts the search button back")
+        XCTAssertTrue(app.buttons["directions.search"].waitForExistence(timeout: 5))
         XCTAssertTrue(app.descendants(matching: .any)["directions.hint"].waitForExistence(timeout: 5))
     }
 
@@ -71,7 +85,7 @@ final class DirectionsUITests: XCTestCase {
         XCTAssertLessThan(gap, 60, "The hint is \(gap) pt above the tab bar")
     }
 
-    /// The second route can be picked, and becomes the selected one.
+    /// The second route can be picked, which folds the card, and becomes the selected one.
     func testPickingTheOtherRoute() throws {
         let app = XCUIApplication.roadivo(skipOnboarding: true)
         try openDirections(app)
@@ -81,6 +95,12 @@ final class DirectionsUITests: XCTestCase {
         XCTAssertTrue(other.waitForExistence(timeout: 5))
         XCTAssertTrue(fastest.isSelected)
         other.tap()
+        // Picking a route folds the card so the map shows it; opening the card shows the pick (DECISIONS 172).
+        let expand = app.buttons["directions.expand"]
+        XCTAssertTrue(expand.waitForExistence(timeout: 5), "Picking a route should fold the card")
+        XCTAssertFalse(other.exists)
+        expand.tap()
+        XCTAssertTrue(other.waitForExistence(timeout: 5))
         XCTAssertTrue(other.isSelected)
         XCTAssertFalse(fastest.isSelected)
     }
@@ -91,14 +111,15 @@ final class DirectionsUITests: XCTestCase {
         try openDirections(app)
         XCTAssertFalse(app.buttons["directions.miniRoute"].exists)
         chooseFirstPlace(app)
-        XCTAssertTrue(app.buttons["directions.openMaps"].waitForExistence(timeout: 5))
+        let summary = app.descendants(matching: .any)["directions.summary"]
+        XCTAssertTrue(summary.waitForExistence(timeout: 5))
 
         app.tabBars.buttons.element(boundBy: 0).tap()
         let card = app.buttons["directions.miniRoute"]
         XCTAssertTrue(card.waitForExistence(timeout: 5))
         try app.performAccessibilityAudit(for: [.sufficientElementDescription, .hitRegion])
         card.tap()
-        XCTAssertTrue(app.buttons["directions.openMaps"].waitForExistence(timeout: 5), "The tap should open the route")
+        XCTAssertTrue(summary.waitForExistence(timeout: 5), "The tap should open the route")
 
         app.tabBars.buttons.element(boundBy: 2).tap()
         let end = app.buttons["directions.miniRoute.end"]
@@ -130,7 +151,7 @@ final class DirectionsUITests: XCTestCase {
         let route = app.descendants(matching: .any)["directions.route"]
         XCTAssertTrue(route.waitForExistence(timeout: 5))
         XCTAssertTrue(route.descendants(matching: .any)["directions.locationOff"].exists)
-        XCTAssertFalse(app.buttons["directions.openMaps"].exists)
+        XCTAssertFalse(app.descendants(matching: .any)["directions.summary"].exists)
     }
 
     func testDirectionsAccessibilityAudit() throws {
@@ -138,7 +159,7 @@ final class DirectionsUITests: XCTestCase {
         try openDirections(app)
         try app.performAccessibilityAudit(for: .all, Self.ignoringKnownIssues)
         chooseFirstPlace(app)
-        XCTAssertTrue(app.buttons["directions.openMaps"].waitForExistence(timeout: 5))
+        XCTAssertTrue(app.descendants(matching: .any)["directions.summary"].waitForExistence(timeout: 5))
         try app.performAccessibilityAudit(for: .all, Self.ignoringKnownIssues)
     }
 

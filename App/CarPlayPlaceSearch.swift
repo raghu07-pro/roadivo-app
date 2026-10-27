@@ -46,7 +46,7 @@ final class CarPlayPlaceSearch: NSObject, CPSearchTemplateDelegate {
     ) {
         if let place = item.userInfo as? Place {
             onChoose()
-            Task { [directions] in await directions.choose(place) }
+            Task { [directions] in await directions.choose(place, on: .car) }
         }
         completionHandler()
     }
