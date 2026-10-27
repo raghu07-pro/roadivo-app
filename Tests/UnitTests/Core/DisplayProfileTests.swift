@@ -231,7 +231,6 @@ struct DisplayProfileTests {
         profile.playsNextAutomatically = false
         store.update(profile)
         let environment = try AppEnvironment(
-            apiClient: nil,
             store: SwiftDataStore(inMemory: true),
             secureStore: InMemorySecureStore(),
             fetcher: library.fetcher,

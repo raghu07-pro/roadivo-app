@@ -15,7 +15,6 @@ struct ReviewAndDeleteTests {
     func countsOpens() throws {
         let defaults = try #require(UserDefaults(suiteName: "roadivo.tests.\(UUID().uuidString)"))
         let environment = try AppEnvironment(
-            apiClient: nil,
             store: SwiftDataStore(inMemory: true),
             secureStore: InMemorySecureStore(),
             fetcher: StubFetcher(),

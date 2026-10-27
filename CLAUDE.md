@@ -216,7 +216,9 @@ DECISIONS 33, 37 and 53–57.
 ## Backend / API
 
 None in v1 (DECISIONS 6). Everything is stored on the device.
-- `Core/Networking/APIClient` is the seam for a future service. It reads `API_BASE_URL` from `Config/*.xcconfig` (placeholder `https://api.example.com`). Nothing calls it yet.
+- `Core/Networking/APIClient` is the seam for a future service: it takes the service's base URL, and nothing creates
+  one yet. The `api.example.com` placeholder and the `API_BASE_URL` setting were removed (DECISIONS 171); add a real
+  address back in `Config/Shared.xcconfig` and Info.plist when a service exists.
 - Playlists are fetched directly from the user's provider by `URLSessionPlaylistFetcher`.
 
 ## Constraints & non-goals

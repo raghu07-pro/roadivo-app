@@ -7,7 +7,6 @@ import SwiftData
 @Observable
 @MainActor
 final class AppEnvironment {
-    let apiClient: APIClient?
     let store: SwiftDataStore
     let repository: LibraryRepository
     let playback: PlaybackController
@@ -47,7 +46,6 @@ final class AppEnvironment {
     private(set) static var current: AppEnvironment?
 
     init(
-        apiClient: APIClient?,
         store: SwiftDataStore,
         secureStore: SecureStore,
         fetcher: PlaylistFetching,
@@ -71,7 +69,6 @@ final class AppEnvironment {
             location = ScriptedLocation(status: isLocationDenied ? .denied : .allowed)
         }
         self.directions = DirectionsViewModel(finder: places, location: location)
-        self.apiClient = apiClient
         self.streamChecker = streamChecker
         self.displayProfiles = displayProfiles
         self.speech = speech
@@ -137,7 +134,6 @@ final class AppEnvironment {
             preferences.hasSeenIntroPaywall = true
         }
         let environment = AppEnvironment(
-            apiClient: (try? AppInfo.apiBaseURL()).map { APIClient(baseURL: $0) },
             store: store,
             secureStore: secureStore,
             fetcher: URLSessionPlaylistFetcher(),

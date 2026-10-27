@@ -7,7 +7,7 @@ enum HTTPMethod: String, Sendable {
     case delete = "DELETE"
 }
 
-/// A request against the app's own HTTPS API, relative to `API_BASE_URL`.
+/// A request against the app's own HTTPS API, relative to `APIClient.baseURL`.
 struct Endpoint: Sendable {
     var path: String
     var method: HTTPMethod = .get

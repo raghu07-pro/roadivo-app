@@ -1,7 +1,7 @@
 import Foundation
 
-/// The seam for a future backend (none in v1, DECISIONS 6); the base URL comes from
-/// `API_BASE_URL` in the build's xcconfig.
+/// The seam for a future backend (none in v1, DECISIONS 6); it takes the service's base URL once there is one
+/// (DECISIONS 171).
 struct APIClient: Sendable {
     let baseURL: URL
     let session: URLSession
@@ -34,13 +34,6 @@ struct APIClient: Sendable {
 }
 
 enum AppInfo {
-    /// `API_BASE_URL` from Info.plist (set per configuration in Config/*.xcconfig).
-    static func apiBaseURL(bundle: Bundle = .main) throws -> URL {
-        guard let value = bundle.object(forInfoDictionaryKey: "API_BASE_URL") as? String,
-              let url = URL(string: value), url.host() != nil else { throw NetworkError.missingBaseURL }
-        return url
-    }
-
     static var version: String {
         let short = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "1.0"
         let build = Bundle.main.object(forInfoDictionaryKey: "CFBundleVersion") as? String ?? "1"
