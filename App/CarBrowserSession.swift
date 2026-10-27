@@ -1,6 +1,7 @@
 import WebKit
 
-/// Car-only tabs and saved pages live in memory and are discarded when the browser closes.
+/// Car-only tabs and saved pages live in memory and are discarded when the browser closes; websites' own data
+/// (cookies, history, logins) stays, in the car's own store, apart from the iPhone browser's (`carWebsiteData`).
 @MainActor
 final class CarBrowserSession {
     @MainActor
@@ -8,6 +9,8 @@ final class CarBrowserSession {
         let id = UUID()
         let page: WebPageController
         let input: CarBrowserInputBridge
+        /// A page's own full-screen button (YouTube's) fills the screen; nothing does by itself (`inlineVideo`).
+        let fullscreen = CarPageFullscreen()
         var state = WebPageController.State()
         var pendingURL: URL?
         var zoom: CGFloat = 1
@@ -21,10 +24,11 @@ final class CarBrowserSession {
             )
             page.webView.customUserAgent = CarBrowserSession.desktopUserAgent
             // A new tab starts at 100%.
-            for script in [Self.desktopScreen, Self.viewport(width: CarBrowserSession.pageWidth), Self.actualTextSize] {
+            for script in Self.pageScripts(width: CarBrowserSession.pageWidth) {
                 page.webView.configuration.userContentController.addUserScript(script)
             }
             input = CarBrowserInputBridge(webView: page.webView)
+            page.webView.configuration.userContentController.add(fullscreen, name: CarPageFullscreen.messageName)
         }
 
         /// How wide this tab's pages lay out: `pageWidth` at 100%, narrower, so drawn bigger, as `zoom` grows.
@@ -37,7 +41,7 @@ final class CarBrowserSession {
         func applyPageSize() {
             let scripts = page.webView.configuration.userContentController
             scripts.removeAllUserScripts()
-            for script in [Self.desktopScreen, Self.viewport(width: layoutWidth), Self.actualTextSize] {
+            for script in Self.pageScripts(width: layoutWidth) {
                 scripts.addUserScript(script)
             }
             CarBrowserInputBridge.userScripts.forEach(scripts.addUserScript)
@@ -122,6 +126,51 @@ final class CarBrowserSession {
 
         /// An iPhone's WebKit enlarges text on a page shrunk to fit, which spilled text out of its columns on the car's
         /// screen (Instagram's); with this, text keeps the page's own size, as on an iPad and in CarTV.
+        /// Every car tab's own scripts, laid out `width` wide.
+        private static func pageScripts(width: Int) -> [WKUserScript] {
+            [desktopScreen, viewport(width: width), actualTextSize, inlineVideo, noScrollbars, CarPageFullscreen.script]
+        }
+
+        /// Videos play in the page, filling the screen only from its own full-screen button (owner, 2026-10-27): an
+        /// iPhone plays inline only a `playsinline` video, which desktop sites (YouTube's) leave out.
+        private static let inlineVideo = WKUserScript(
+            source: """
+            (() => {
+              const inline = video => {
+                if (video.playsInline) return;
+                video.playsInline = true;
+                video.setAttribute('playsinline', '');
+                video.setAttribute('webkit-playsinline', '');
+              };
+              const scan = node => {
+                if (node instanceof HTMLVideoElement) inline(node);
+                else if (node.querySelectorAll) node.querySelectorAll('video').forEach(inline);
+              };
+              new MutationObserver(records => {
+                for (const record of records) record.addedNodes.forEach(scan);
+              }).observe(document, {childList: true, subtree: true});
+              // One that slipped past the observer is marked before it plays.
+              document.addEventListener('play', event => scan(event.target), true);
+              document.addEventListener('DOMContentLoaded', () => scan(document));
+            })();
+            """,
+            injectionTime: .atDocumentStart,
+            forMainFrameOnly: false
+        )
+
+        /// No scroll bars, which the car's screen draws as two arrows at a page's side (owner, 2026-10-27): as page
+        /// style, which WebKit keeps for the page and its scrolling panels, where the web view's setting is reset.
+        private static let noScrollbars = WKUserScript(
+            source: """
+            const noScrollbars = document.createElement('style');
+            noScrollbars.textContent = '* { scrollbar-width: none !important; } ' +
+              '::-webkit-scrollbar { display: none !important; }';
+            document.documentElement.appendChild(noScrollbars);
+            """,
+            injectionTime: .atDocumentStart,
+            forMainFrameOnly: false
+        )
+
         private static let actualTextSize = WKUserScript(
             source: """
             const style = document.createElement('style');
@@ -157,12 +206,17 @@ final class CarBrowserSession {
     private(set) var tabs: [Tab]
     private(set) var selected: Tab
     private(set) var savedPages: [SavedPage] = []
-    private var websiteDataStore: WKWebsiteDataStore
+    private let websiteDataStore = carWebsiteData
+
+    /// Kept between drives, as CarTV keeps it, so YouTube's home recommends from what was watched instead of standing
+    /// empty for a new visitor every time, and sign-ins stay (owner, 2026-10-27; was discarded, DECISIONS 162).
+    static let carWebsiteDataID = UUID(uuid: (
+        0x52, 0x6F, 0x61, 0x64, 0x69, 0x76, 0x6F, 0x43, 0x61, 0x72, 0x57, 0x65, 0x62, 0x44, 0x61, 0x74
+    ))
+    private static let carWebsiteData = WKWebsiteDataStore(forIdentifier: carWebsiteDataID)
 
     init() {
-        let store = WKWebsiteDataStore.nonPersistent()
-        websiteDataStore = store
-        let tab = Tab(websiteDataStore: store)
+        let tab = Tab(websiteDataStore: websiteDataStore)
         tabs = [tab]
         selected = tab
     }
@@ -215,7 +269,6 @@ final class CarBrowserSession {
             tab.page.stop()
             tab.page.webView.loadHTMLString("", baseURL: nil)
         }
-        websiteDataStore = .nonPersistent()
         let tab = Tab(websiteDataStore: websiteDataStore)
         tabs = [tab]
         selected = tab

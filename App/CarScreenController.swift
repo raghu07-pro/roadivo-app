@@ -120,6 +120,7 @@
             browser.onChange = { [weak self] in self?.browserChanged() }
             browser.onEditField = { [weak self] bridge, request in self?.edit(request, with: bridge) }
             browser.onInputReset = { [weak self] in self?.closePage() }
+            browser.onPageFullscreen = { [weak self] isOn in self?.pageFullscreenChanged(isOn) }
             mirror.onFrame = { [weak self] frame in self?.splitPicture.image = frame }
             showLayers()
         }

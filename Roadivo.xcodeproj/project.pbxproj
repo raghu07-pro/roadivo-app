@@ -316,6 +316,7 @@
 		C867AFEF3A797ABA0A928792 /* CarScreenMediaTile.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0E8C9C2DA7AAAD3AAFCEF0 /* CarScreenMediaTile.swift */; };
 		C96D5897C5A9DE2BC16B69CC /* CarBrowserInputFixture.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A52F8510FA8C7B034779F82 /* CarBrowserInputFixture.swift */; };
 		C99DC8376026D573760FD0C7 /* CarBrowserController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53DB1F35346E1BE9BF0EA7F5 /* CarBrowserController.swift */; };
+		C9D324AB872D41641EB06F5E /* CarPageFullscreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = D989182AA744576F6979671D /* CarPageFullscreen.swift */; };
 		CA3D86D9132ABCA4B394A091 /* SettingsModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 553D136E7697E6D496116515 /* SettingsModels.swift */; };
 		D17595F78B8F807C7079C570 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = D98067D6766C169F9AFFA732 /* PrivacyInfo.xcprivacy */; };
 		D1D42940E5811354522728A9 /* SplashCar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 350BE30B68D12FC2F9BA5633 /* SplashCar.swift */; };
@@ -802,6 +803,7 @@
 		D8A63FEA06484B5F7D0FBEB3 /* BroadcastPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BroadcastPicker.swift; sourceTree = "<group>"; };
 		D8B03263537C9B5D9E39B395 /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
 		D98067D6766C169F9AFFA732 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+		D989182AA744576F6979671D /* CarPageFullscreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CarPageFullscreen.swift; sourceTree = "<group>"; };
 		DAAF4CDDBF4FF3699C388E07 /* SourceHealthView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SourceHealthView.swift; sourceTree = "<group>"; };
 		DACB110D9EA859229198F82E /* SkeletonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SkeletonView.swift; sourceTree = "<group>"; };
 		DAEFD4F9BDDDD4025AC2F688 /* CarBrowserControls.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CarBrowserControls.swift; sourceTree = "<group>"; };
@@ -1128,6 +1130,7 @@
 				4E0D37AE54407045E1A693B0 /* CarKeyboard.swift */,
 				618EB419BD75CC25538F7B28 /* CarKeyCapStyle.swift */,
 				592748E12A62A3E97BC2CBA5 /* CarKeyStyle.swift */,
+				D989182AA744576F6979671D /* CarPageFullscreen.swift */,
 				48626E1DD0A42BC602A07FB2 /* CarPageHeader.swift */,
 				017A5ED99BF6C76E56418ABB /* CarPhoneInput.swift */,
 				313DF54E976B01C7BF1DECFD /* CarPhoneKeyboardSheet.swift */,
@@ -2062,6 +2065,7 @@
 				9BF3ADE4CCFBB4D3B91C3D9D /* CarKeyCapStyle.swift in Sources */,
 				FE56B33317D4C74CEAB21894 /* CarKeyStyle.swift in Sources */,
 				3728153C5487C85855BA188E /* CarKeyboard.swift in Sources */,
+				C9D324AB872D41641EB06F5E /* CarPageFullscreen.swift in Sources */,
 				C3C9ED4FAAACC535DDA77BC5 /* CarPageHeader.swift in Sources */,
 				5990500967996D18D0531DF4 /* CarPhoneInput.swift in Sources */,
 				584794714D6402FCDE713F97 /* CarPhoneKeyboardSheet.swift in Sources */,
@@ -2641,7 +2645,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 9;
+				CURRENT_PROJECT_VERSION = 10;
 				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -2709,7 +2713,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 9;
+				CURRENT_PROJECT_VERSION = 10;
 				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;

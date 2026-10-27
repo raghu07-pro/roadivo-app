@@ -71,6 +71,17 @@
         func setBrowserFullScreen(_ isFullScreen: Bool) {
             self.isFullScreen = isFullScreen
             showLayers()
+            // A page in its own full screen (YouTube's) leaves it with the car's.
+            if !isFullScreen {
+                browser.exitPageFullscreen()
+            }
+        }
+
+        /// The page's full-screen button: the bar hides so its player fills the car's screen, as CarTV's does.
+        func pageFullscreenChanged(_ isOn: Bool) {
+            guard isOn != isFullScreen else { return }
+            isFullScreen = isOn
+            showLayers()
         }
 
         /// The browser on its Start Page, from the Browser tab.

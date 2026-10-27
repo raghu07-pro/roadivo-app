@@ -18,6 +18,8 @@ final class CarBrowserController: UIViewController {
     var onChange: (() -> Void)?
     var onEditField: ((CarBrowserInputBridge, CarBrowserInputBridge.Request) -> Void)?
     var onInputReset: (() -> Void)?
+    /// The page went full screen from its own button, or left it.
+    var onPageFullscreen: ((Bool) -> Void)?
     private let progress = UIProgressView(progressViewStyle: .bar)
     private let message = UILabel()
     private weak var mountedWebView: WKWebView?
@@ -26,6 +28,8 @@ final class CarBrowserController: UIViewController {
     /// The page's width and address when it was last fitted to them.
     private var fittedWidth: CGFloat = 0
     private var fittedURL: URL?
+    /// The page's scroll view, watched to keep CarPlay's scroll bar hidden (`hideScrollBars`).
+    private var scrollObservations: [NSKeyValueObservation] = []
 
     /// Split view and full screen change the page's width: fit the page to it again, or WebKit keeps the old zoom and
     /// the page's left side runs off the screen (owner, 2026-10-27).
@@ -83,6 +87,20 @@ final class CarBrowserController: UIViewController {
         let webView = tab.page.webView
         mountedWebView = webView
         webView.accessibilityIdentifier = "car.browser.page"
+        hideScrollBars(of: webView)
+        // UIKit adds CarPlay's scroll bar back as the page moves or grows.
+        scrollObservations = [
+            webView.scrollView.observe(\.contentOffset) { scrollView, _ in
+                MainActor.assumeIsolated { Self.hideStaticScrollBars(in: scrollView) }
+            },
+            webView.scrollView.observe(\.contentSize) { scrollView, _ in
+                MainActor.assumeIsolated { Self.hideStaticScrollBars(in: scrollView) }
+            }
+        ]
+        tab.fullscreen.onChange = { [weak self, weak tab] isOn in
+            guard let self, let tab, tab === session.selected, isOpen else { return }
+            onPageFullscreen?(isOn)
+        }
         webView.translatesAutoresizingMaskIntoConstraints = false
         view.insertSubview(webView, at: 0)
         NSLayoutConstraint.activate([
@@ -95,6 +113,7 @@ final class CarBrowserController: UIViewController {
             guard let self, let tab, isOpen else { return }
             tab.state = state
             guard tab === session.selected else { return }
+            hideScrollBars(of: tab.page.webView)
             // A new address, YouTube's results too, which change the page without loading it: each starts whole.
             if state.url != fittedURL {
                 fittedURL = state.url
@@ -117,6 +136,27 @@ final class CarBrowserController: UIViewController {
             message.isHidden = false
         }
         progress.progress = Float(state.progress)
+    }
+
+    /// No scroll bars: pages scroll by dragging (owner, 2026-10-27: "remove these 2 yellow buttons"). Again on every
+    /// change, as WebKit sets the bars from each page's own style.
+    private func hideScrollBars(of webView: WKWebView) {
+        webView.scrollView.showsVerticalScrollIndicator = false
+        webView.scrollView.showsHorizontalScrollIndicator = false
+        Self.hideStaticScrollBars(in: webView.scrollView)
+    }
+
+    /// CarPlay's always-on scroll bar, two arrows at the page's side that the indicator settings don't reach (UIKit's
+    /// `_UIStaticScrollBar`, as the car's trace showed); no public switch turns it off, so it's hidden.
+    private static func hideStaticScrollBars(in scrollView: UIScrollView) {
+        for view in scrollView.subviews where String(describing: type(of: view)).contains("StaticScrollBar") {
+            view.isHidden = true
+        }
+    }
+
+    /// Ends the page's own full screen, when the car leaves its own.
+    func exitPageFullscreen() {
+        page.webView.evaluateJavaScript(CarPageFullscreen.exit, completionHandler: nil)
     }
 
     /// Open with no page yet, for a start page drawn over the browser (Roadivo's car screen, DECISIONS 163).

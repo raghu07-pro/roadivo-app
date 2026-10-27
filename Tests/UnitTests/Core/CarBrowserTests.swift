@@ -41,8 +41,18 @@ struct CarBrowserTests {
         #expect(phoneLoads.count == 1)
         #expect(phone.pageURL?.host() == "phone.example.com")
         #expect(car.page.webView !== phone.web.webView)
-        #expect(!car.page.webView.configuration.websiteDataStore.isPersistent)
+        // The car keeps its own website data between drives, never the iPhone browser's (owner, 2026-10-27).
+        let carData = car.page.webView.configuration.websiteDataStore
+        #expect(carData.isPersistent)
+        #expect(carData.identifier == CarBrowserSession.carWebsiteDataID)
+        #expect(carData !== phone.web.webView.configuration.websiteDataStore)
         #expect(phone.web.webView.configuration.websiteDataStore.isPersistent)
+        // A page's own full-screen button works in the car, through Roadivo's script; the iPhone's browser has none.
+        let carScripts = car.page.webView.configuration.userContentController.userScripts
+        #expect(carScripts.contains { $0.source.contains(CarPageFullscreen.messageName) })
+        #expect(!phone.web.webView.configuration.userContentController.userScripts.contains {
+            $0.source.contains(CarPageFullscreen.messageName)
+        })
         // Normal mode, so each page's viewport is honoured, but sites see desktop Safari (DECISIONS 163).
         #expect(car.page.webView.configuration.defaultWebpagePreferences.preferredContentMode == .mobile)
         #expect(car.page.webView.customUserAgent == CarBrowserSession.desktopUserAgent)

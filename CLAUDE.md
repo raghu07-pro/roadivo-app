@@ -44,7 +44,8 @@ tabs: **Home · Favorites · Discover · Maps · Settings**.
 
 - **Independent car browser prototype** (owner, 2026-10-23): Debug window builds with `ROADIVO_CAR_BROWSER = YES`
   open sites in `CarBrowserController`, never in the phone browser. It reuses `WebPageController` with isolated,
-  nonpersistent website storage and desktop sites, as CarTV shows youtube.com (DECISIONS 162). `CarBrowserControls`
+  website storage of its own that persists between drives (cookies, history, sign-ins; DECISIONS 164) and desktop sites,
+  as CarTV shows youtube.com (DECISIONS 162). `CarBrowserControls`
   provides template search, navigation, scrolling and ordinary-link selection. It requires Pro but no parking or Location evidence in Debug, per the owner's
   request (2026-10-23), and is hard-disabled in Release. Native video parking rules are unchanged. See `Docs/CarBrowserPrototype.md` for limitations and the required Mac/device checks.
   General webpage taps/forms and distribution approval are unverified; do not describe this as a complete browser.
@@ -245,7 +246,7 @@ None in v1 (DECISIONS 6). Everything is stored on the device.
 - **Debug mode in Release, for TestFlight testing** (owner, 2026-10-27; DECISIONS 170): the block at the end of
   `Config/Release.xcconfig` puts the touch car screen and all `#if DEBUG` code in archives. Delete it before an App Store
   archive; Apple is likely to reject it.
-- **Uploads:** the next upload of 1.0.0 is build 9 (owner, 2026-10-27). Raise `buildNumber` in `Project.swift` by one for every upload
+- **Uploads:** the next upload of 1.0.0 is build 10 (owner, 2026-10-27). Raise `buildNumber` in `Project.swift` by one for every upload
   (App Store Connect refuses a number it has seen), keep `marketingVersion` until 1.0.0 is released, run
   `tuist generate`, and archive with the `Roadivo` scheme (DECISIONS 126).
 

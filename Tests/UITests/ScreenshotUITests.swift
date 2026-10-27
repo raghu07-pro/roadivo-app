@@ -94,4 +94,26 @@ final class ScreenshotUITests: XCTestCase {
         XCTAssertTrue(app.buttons["paywall.close"].waitForExistence(timeout: 5))
         snapshot("24-Paywall-Settings", app: app)
     }
+
+    /// Maps with a place chosen: the route drawn as Roadivo's road, and its sign (scripted Maps, DECISIONS 172).
+    func testCaptureMaps() throws {
+        let app = XCUIApplication.roadivo(skipOnboarding: true, demoLibrary: true)
+        guard let maps = app.directionsTab else {
+            throw XCTSkip("Maps is switched off (ROADIVO_DIRECTIONS = NO)")
+        }
+        maps.tap()
+        let search = app.buttons["directions.search"]
+        XCTAssertTrue(search.waitForExistence(timeout: 5))
+        search.tap()
+        let field = app.textFields["search.field"].firstMatch
+        XCTAssertTrue(field.waitForExistence(timeout: 5))
+        field.typeText("cabo")
+        let place = app.buttons["directions.place.0"]
+        XCTAssertTrue(place.waitForExistence(timeout: 5))
+        place.tap()
+        let sign = app.descendants(matching: .any)["directions.summary"]
+        XCTAssertTrue(sign.waitForExistence(timeout: 10))
+        waitUntilSettled(sign, in: app)
+        snapshot("25-Maps", app: app)
+    }
 }
