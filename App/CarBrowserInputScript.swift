@@ -91,6 +91,8 @@ enum CarBrowserInputScript {
             search: Boolean(searchField(field)), secure: secure(field), numeric: numeric(field),
             value: currentValue(field)
           }));
+          // YouTube focuses its own box on click; Roadivo's keyboard types instead, so nothing zooms in to it.
+          setTimeout(() => field.blur(), 0);
           return;
         }
         const dropdown = path.find(choosable);

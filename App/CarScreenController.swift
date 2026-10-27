@@ -53,6 +53,9 @@
         lazy var stageSplit = stage.view.leadingAnchor.constraint(equalTo: splitPanel.trailingAnchor)
         lazy var splitUnderBar = splitPanel.topAnchor.constraint(equalTo: browserArea.topAnchor)
         lazy var splitFullHeight = splitPanel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor)
+        /// Roadivo's pages over the whole screen, or over the browser's side only, the iPhone's screen kept beside it.
+        lazy var overlayFull = overlay.view.leadingAnchor.constraint(equalTo: view.leadingAnchor)
+        lazy var overlayBeside = overlay.view.leadingAnchor.constraint(equalTo: splitPanel.trailingAnchor)
         /// Each tab's page when last on screen, for its card on the Tabs page.
         var snapshots: [UUID: UIImage] = [:]
         var field: Field?
@@ -114,7 +117,7 @@
                 browserArea.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
                 pageUnderBar,
                 browserArea.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
-                overlay.view.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+                overlayFull,
                 overlay.view.trailingAnchor.constraint(equalTo: view.trailingAnchor),
                 overlay.view.topAnchor.constraint(equalTo: view.topAnchor),
                 overlay.view.bottomAnchor.constraint(equalTo: view.bottomAnchor)
@@ -196,6 +199,11 @@
             overlay.view.isHidden = model.page == nil && browsing
             startPage.view.isHidden = !(browsing && model.showsStartPage)
             layOutSplitPanel(browsing: browsing)
+            // The keyboard and the browser's pages cover the page's side only, as CarTV's (owner, 2026-10-27).
+            let (oldEdge, newEdge) = browsing && model.isSplit
+                ? (overlayFull, overlayBeside) : (overlayBeside, overlayFull)
+            oldEdge.isActive = false
+            newEdge.isActive = true
             // The old top goes before the new one, so the two never hold at once.
             let (old, new) = isFullScreen ? (pageUnderBar, pageFullScreen) : (pageFullScreen, pageUnderBar)
             old.isActive = false

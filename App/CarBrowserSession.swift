@@ -64,14 +64,19 @@ final class CarBrowserSession {
         )
 
         /// Every page lays out `width` wide, in place of its own viewport, and WebKit shrinks it to fit the car's
-        /// screen: the same page on every car, scaled to its screen.
+        /// screen: the same page on every car, scaled to its screen. No zoom: a page zoomed into its search field
+        /// stayed zoomed on the results, cut at both sides until Reload (owner, 2026-10-27).
         private static func viewport(width: Int) -> WKUserScript {
             WKUserScript(
                 source: """
                 (() => {
-                  let content = 'width=\(width)';
+                  let base = \(width);
+                  let current = base;
+                  let widened = 0;
+                  let content = 'width=\(width), user-scalable=no';
                   let ours = null;
                   const apply = () => {
+                    content = 'width=' + current + ', user-scalable=no';
                     for (const meta of document.querySelectorAll('meta[name="viewport"]')) {
                       if (meta !== ours) meta.remove();
                     }
@@ -84,15 +89,30 @@ final class CarBrowserSession {
                     if (ours.parentNode !== parent) parent.appendChild(ours);
                   };
                   apply();
+                  // A page wider than its layout (YouTube's results beside the split view's Cast) is cut at the sides:
+                  // lay it out that wide, so it fits the screen whole. Three times at most, as some grow with it.
+                  const fit = () => {
+                    const wide = Math.ceil(document.documentElement.scrollWidth);
+                    if (wide > current + 8 && widened < 3 && wide <= base * 3) {
+                      current = wide;
+                      widened += 1;
+                      apply();
+                    }
+                  };
                   // A new page size, for the page that's open (`applyPageSize`).
                   window.roadivoViewport = width => {
-                    content = 'width=' + width;
+                    base = width;
+                    current = width;
+                    widened = 0;
                     apply();
                   };
                   document.addEventListener('DOMContentLoaded', () => {
                     apply();
                     new MutationObserver(apply).observe(document.head, {childList: true});
                   });
+                  // Pages that change without loading again (YouTube's search) are checked every second too.
+                  window.addEventListener('load', fit);
+                  setInterval(fit, 1000);
                 })();
                 """,
                 injectionTime: .atDocumentStart,

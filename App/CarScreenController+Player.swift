@@ -46,7 +46,9 @@
             let (narrow, wide) = splits ? (splitHidden, splitShown) : (splitShown, splitHidden)
             narrow.isActive = false
             wide.isActive = true
-            let (oldTop, newTop) = browsing ? (splitFullHeight, splitUnderBar) : (splitUnderBar, splitFullHeight)
+            // Under the bar beside the page; the full height beside the keyboard, which hides the bar.
+            let underBar = browsing && model.page == nil
+            let (oldTop, newTop) = underBar ? (splitFullHeight, splitUnderBar) : (splitUnderBar, splitFullHeight)
             oldTop.isActive = false
             newTop.isActive = true
             if model.mode == .player {

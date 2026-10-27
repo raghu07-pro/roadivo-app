@@ -15,7 +15,7 @@ protocol MotionSampling: AnyObject {
 @Observable
 @MainActor
 final class ParkingMonitor {
-    private(set) var isParked = false
+    private(set) var isParked = true
     /// The car's own word: CarPlay isn't limiting its keyboard, as cars do while moving. With Location on and no moving
     /// reading, that counts as parked at once; a moving reading still wins (DECISIONS 153).
     @ObservationIgnored var carAllowsFullInterface = false {
@@ -56,8 +56,9 @@ final class ParkingMonitor {
         detector = ParkingDetector(parkedAfter: parkedAfter)
     }
 
+    /// Never with the desk switch: it has no road to watch, so it doesn't need Location (DECISIONS 170).
     var isLocationDenied: Bool {
-        sampler.isLocationDenied
+        !assumesParkedCar && sampler.isLocationDenied
     }
 
     func start() {
@@ -83,7 +84,7 @@ final class ParkingMonitor {
         lastSample = nil
         lastSampleAt = nil
         carAllowsFullInterface = false
-        isParked = false
+        isParked = true
     }
 
     func record(_ sample: MotionSample) {
@@ -95,7 +96,7 @@ final class ParkingMonitor {
 
     private func update() {
         let carSaysParked = (carAllowsFullInterface || assumesParkedCar) && lastSample != .moving
-            && !sampler.isLocationDenied
+            && !isLocationDenied
         let parked = carSaysParked || detector.isParked(at: now())
         if parked != isParked {
             isParked = parked

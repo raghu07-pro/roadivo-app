@@ -23,6 +23,30 @@ final class CarBrowserController: UIViewController {
     private weak var mountedWebView: WKWebView?
     private var navigationID = UUID()
     private var panStart = CGPoint.zero
+    /// The page's width and address when it was last fitted to them.
+    private var fittedWidth: CGFloat = 0
+    private var fittedURL: URL?
+
+    /// Split view and full screen change the page's width: fit the page to it again, or WebKit keeps the old zoom and
+    /// the page's left side runs off the screen (owner, 2026-10-27).
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        guard let webView = mountedWebView, abs(webView.bounds.width - fittedWidth) > 1 else { return }
+        fittedWidth = webView.bounds.width
+        fitPage(after: [.milliseconds(150)])
+    }
+
+    /// The whole width at its smallest zoom, as Reload shows it, once WebKit has laid out the page's new size.
+    private func fitPage(after delays: [Duration]) {
+        Task { [weak webView = mountedWebView] in
+            for delay in delays {
+                try? await Task.sleep(for: delay) // Throws only if cancelled, which this task never is.
+                guard let scrollView = webView?.scrollView else { return }
+                scrollView.setZoomScale(scrollView.minimumZoomScale, animated: false)
+                scrollView.contentOffset.x = -scrollView.adjustedContentInset.left
+            }
+        }
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -71,6 +95,11 @@ final class CarBrowserController: UIViewController {
             guard let self, let tab, isOpen else { return }
             tab.state = state
             guard tab === session.selected else { return }
+            // A new address, YouTube's results too, which change the page without loading it: each starts whole.
+            if state.url != fittedURL {
+                fittedURL = state.url
+                fitPage(after: [.milliseconds(300), .seconds(1)])
+            }
             progress.progress = Float(state.progress)
             progress.isHidden = !isAllowed || !state.isLoading
             onChange?()

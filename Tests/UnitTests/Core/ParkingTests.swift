@@ -135,6 +135,18 @@ struct ParkingTests {
         monitor.stop()
     }
 
+    @Test("The desk switch shows video without Location too; a moving reading still ends it")
+    func assumedParkedCarWithoutLocation() {
+        let monitor = ParkingMonitor(sampler: SilentSampler(isLocationDenied: true))
+        monitor.assumesParkedCar = true
+        monitor.start()
+        #expect(!monitor.isLocationDenied)
+        #expect(monitor.isParked)
+        monitor.record(.moving)
+        #expect(!monitor.isParked)
+        monitor.stop()
+    }
+
     @Test("Stopping forgets the car's word too")
     func stopForgetsCarSignal() {
         let monitor = ParkingMonitor(sampler: SilentSampler())

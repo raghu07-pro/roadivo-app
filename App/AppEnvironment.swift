@@ -264,13 +264,14 @@ private struct TestSwitches {
             skipsOnboarding = arguments.contains("-skip-onboarding")
             isCarConnected = isUITesting && arguments.contains("-car-connected")
             isLocationDenied = isUITesting && arguments.contains("-location-denied")
-            isCarParked = arguments.contains("-car-parked")
+            // Debug mode, TestFlight too, which can't pass launch arguments: always parked (DECISIONS 170).
+            isCarParked = isUITesting ? arguments.contains("-car-parked") : true
         #else
-           isUITesting = arguments.contains("-ui-testing")
+            isUITesting = arguments.contains("-ui-testing")
             skipsOnboarding = arguments.contains("-skip-onboarding")
             isCarConnected = isUITesting && arguments.contains("-car-connected")
             isLocationDenied = isUITesting && arguments.contains("-location-denied")
-            isCarParked = arguments.contains("-car-parked")
+            isCarParked = true
         #endif
     }
 }
