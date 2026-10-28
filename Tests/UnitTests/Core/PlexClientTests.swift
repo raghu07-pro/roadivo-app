@@ -1,6 +1,6 @@
 import Foundation
 import Testing
-@testable import Roadivo
+@testable import PlayCarTV
 
 /// Answers Plex requests by URL; its own class, so it never races the other server tests.
 final class PlexMockURLProtocol: URLProtocol, @unchecked Sendable {
@@ -48,7 +48,7 @@ struct PlexClientTests {
             #expect(request.httpMethod == "POST")
             #expect(request.url?.absoluteString == "https://plex.tv/api/v2/pins?strong=false")
             #expect(request.value(forHTTPHeaderField: "X-Plex-Client-Identifier") == "dev-1")
-            #expect(request.value(forHTTPHeaderField: "X-Plex-Product") == "Roadivo")
+            #expect(request.value(forHTTPHeaderField: "X-Plex-Product") == "PlayCarTV")
             return (201, Data(#"{"id":42,"code":"ABCD","expiresIn":900,"authToken":null}"#.utf8))
         }
         let pin = try await client().createPin()

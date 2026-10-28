@@ -1,7 +1,7 @@
 import Foundation
 import Testing
 import UIKit
-@testable import Roadivo
+@testable import PlayCarTV
 
 @Suite("CarPlay window's screen mirror")
 @MainActor

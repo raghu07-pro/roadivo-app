@@ -16,7 +16,7 @@ struct KeychainError: Error, Equatable {
 }
 
 struct KeychainStore: SecureStore {
-    var service = "com.roadivo.secure"
+    var service = "com.playcartv.secure"
 
     func set(_ value: String, for key: String) throws {
         let data = Data(value.utf8)

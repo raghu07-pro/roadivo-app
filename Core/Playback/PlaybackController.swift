@@ -94,7 +94,7 @@ final class PlaybackController {
     @ObservationIgnored private var keepsProgress = true
     /// How often the place is kept while playing.
     private static let saveInterval: Double = 10
-    @ObservationIgnored let logger = Logger(subsystem: "com.roadivo", category: "Playback")
+    @ObservationIgnored let logger = Logger(subsystem: "com.playcartv", category: "Playback")
 
     private var index: Int? {
         guard let current else { return nil }

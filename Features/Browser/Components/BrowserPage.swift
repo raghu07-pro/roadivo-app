@@ -1,7 +1,7 @@
 import SwiftUI
 
-/// An open page: the page under a thin loading line, and Roadivo's bar at the bottom with back, forward,
-/// the address and reload, plus "Play in Roadivo" when the page has a video Roadivo can take.
+/// An open page: the page under a thin loading line, and PlayCarTV's bar at the bottom with back, forward,
+/// the address and reload, plus "Play in PlayCarTV" when the page has a video PlayCarTV can take.
 struct BrowserPage: View {
     let viewModel: BrowserViewModel
     let onPlay: (MediaItem) -> Void
@@ -89,7 +89,7 @@ struct BrowserPage: View {
     }
 }
 
-/// "Video on this page": plays it in Roadivo's player, where Car Mode, Picture in Picture and AirPlay work.
+/// "Video on this page": plays it in PlayCarTV's player, where Car Mode, Picture in Picture and AirPlay work.
 private struct FoundVideoBanner: View {
     let onPlay: () -> Void
     let onDismiss: () -> Void
@@ -101,7 +101,7 @@ private struct FoundVideoBanner: View {
                 VStack(alignment: .leading, spacing: 2) {
                     Text("Video on this page")
                         .font(Typography.cardTitle)
-                    Text("Play it in Roadivo for Car Mode, Picture in Picture and AirPlay.")
+                    Text("Play it in PlayCarTV for Car Mode, Picture in Picture and AirPlay.")
                         .font(Typography.caption)
                         .foregroundStyle(.roadMuted)
                 }
@@ -117,7 +117,7 @@ private struct FoundVideoBanner: View {
                 .accessibilityLabel(Text("Close"))
                 .accessibilityIdentifier("browser.video.close")
             }
-            PrimaryButton(title: "Play in Roadivo", systemImage: "play.fill", action: onPlay)
+            PrimaryButton(title: "Play in PlayCarTV", systemImage: "play.fill", action: onPlay)
                 .accessibilityIdentifier("browser.video.play")
         }
         .padding(Spacing.sm)

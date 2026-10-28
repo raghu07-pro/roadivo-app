@@ -1,7 +1,7 @@
 import XCTest
 
 /// The Browser, from Discover: the grid of sites, typing a site, links that stay in the Browser, and a direct video
-/// playing in Roadivo's player. Uses example.com and Apple's public HLS
+/// playing in PlayCarTV's player. Uses example.com and Apple's public HLS
 /// test stream, like the other flows.
 @MainActor
 final class BrowserUITests: XCTestCase {
@@ -12,7 +12,7 @@ final class BrowserUITests: XCTestCase {
     /// A typed site opens with its name in the address bar and Back, Forward and Reload under it, and the
     /// round menu's Start Page goes back to the grid.
     func testTypedAddressOpensAndReturns() throws {
-        let app = XCUIApplication.roadivo(skipOnboarding: true)
+        let app = XCUIApplication.playcartv(skipOnboarding: true)
         openBrowser(app)
         let address = app.textFields["browser.address"]
         XCTAssertTrue(address.waitForExistence(timeout: 5))
@@ -35,7 +35,7 @@ final class BrowserUITests: XCTestCase {
 
     /// A site in the grid opens full screen in the Browser, not its app; Back's long press offers Leave Browser.
     func testSiteOpensInTheBrowser() {
-        let app = XCUIApplication.roadivo(skipOnboarding: true)
+        let app = XCUIApplication.playcartv(skipOnboarding: true)
         openBrowser(app)
         let site = app.buttons["browser.site.Vimeo"]
         XCTAssertTrue(site.waitForExistence(timeout: 5))
@@ -44,7 +44,7 @@ final class BrowserUITests: XCTestCase {
         site.tap()
 
         XCTAssertTrue(app.descendants(matching: .any)["browser.web"].waitForExistence(timeout: 10))
-        XCTAssertEqual(app.state, .runningForeground) // Still in Roadivo, not the site's app.
+        XCTAssertEqual(app.state, .runningForeground) // Still in PlayCarTV, not the site's app.
         XCTAssertFalse(app.tabBars.firstMatch.isHittable) // The page has the whole screen.
         app.buttons["browser.menu"].press(forDuration: 1)
         let leave = app.buttons["browser.leave"]
@@ -53,9 +53,9 @@ final class BrowserUITests: XCTestCase {
         XCTAssertTrue(app.buttons["cast.browser"].waitForExistence(timeout: 5))
     }
 
-    /// A link straight to a video offers "Play in Roadivo", which opens Roadivo's own player.
-    func testDirectVideoPlaysInRoadivo() {
-        let app = XCUIApplication.roadivo(skipOnboarding: true)
+    /// A link straight to a video offers "Play in PlayCarTV", which opens PlayCarTV's own player.
+    func testDirectVideoPlaysInPlayCarTV() {
+        let app = XCUIApplication.playcartv(skipOnboarding: true)
         openBrowser(app)
         let address = app.textFields["browser.address"]
         XCTAssertTrue(address.waitForExistence(timeout: 5))

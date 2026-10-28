@@ -41,7 +41,7 @@ final class AppLanguage {
 /// Thread-safe access to the chosen language for code that isn't on the main
 /// actor (error descriptions, models).
 enum AppLocale {
-    static let overrideKey = "roadivo.languageOverride"
+    static let overrideKey = "playcartv.languageOverride"
 
     private static let storage = LockedValue<String?>(UserDefaults.standard.string(forKey: overrideKey))
     /// Set by Follow System; until then `Locale.current` is already the iPhone's language.

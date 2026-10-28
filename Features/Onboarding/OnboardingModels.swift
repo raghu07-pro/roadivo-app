@@ -18,8 +18,8 @@ struct OnboardingPage: Identifiable, Equatable {
             id: 0,
             symbol: "car.side",
             secondarySymbol: "play.fill",
-            title: "Meet Roadivo",
-            message: "Let the Journey Play. Your playlists and videos, in a player made for the road.",
+            title: "Meet PlayCarTV",
+            message: "TV for the Road. Your playlists and videos, in a player made for every trip.",
             time: .goldenHour,
             screen: .brand
         ),

@@ -3,7 +3,7 @@ import CoreMedia
 import Observation
 import OSLog
 
-/// Roadivo on CarPlay: Favorites, Recent and Library lists, played through the shared player, and a Browser
+/// PlayCarTV on CarPlay: Favorites, Recent and Library lists, played through the shared player, and a Browser
 /// tab of sites. Where the car offers video, items play as video when parked, else as sound (DECISIONS 132, 139).
 final class CarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegate, CPSessionConfigurationDelegate,
     CPNowPlayingTemplateObserver {
@@ -14,7 +14,7 @@ final class CarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegat
     private var tabs: Tabs?
     private var isWatching = false
     private let artwork = CarPlayArtwork()
-    private let logger = Logger(subsystem: "com.roadivo", category: "CarPlay")
+    private let logger = Logger(subsystem: "com.playcartv", category: "CarPlay")
 
     func templateApplicationScene(
         _ templateApplicationScene: CPTemplateApplicationScene,
@@ -103,12 +103,12 @@ final class CarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegat
         tabs = nil
         guard let environment = AppEnvironment.current else {
             trace("no app environment yet")
-            return message(String(appLocalized: "Open Roadivo on your iPhone to get started."))
+            return message(String(appLocalized: "Open PlayCarTV on your iPhone to get started."))
         }
         guard environment.proAccess.isPro else {
             trace("not Pro: message screen")
             return message(
-                String(appLocalized: "Watching in the car is part of Roadivo Pro. Unlock it on your iPhone.")
+                String(appLocalized: "Watching in the car is part of PlayCarTV Pro. Unlock it on your iPhone.")
             )
         }
         let favorites = list(String(appLocalized: "Favorites"), items: [], symbol: "heart.fill")
@@ -287,7 +287,7 @@ final class CarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegat
 
     @MainActor
     private func message(_ text: String) -> CPTemplate {
-        let template = CPListTemplate(title: "Roadivo", sections: [])
+        let template = CPListTemplate(title: "PlayCarTV", sections: [])
         template.emptyViewTitleVariants = [text]
         return template
     }

@@ -1,10 +1,10 @@
 import Foundation
 
-/// What Roadivo's own CarPlay window shows (DECISIONS 152). Pure, so every case is unit-tested.
+/// What PlayCarTV's own CarPlay window shows (DECISIONS 152). Pure, so every case is unit-tested.
 enum CarWindowState: Equatable, Sendable {
     /// Not Pro: watching in the car is part of Pro.
     case upgrade
-    /// Nothing playing: Roadivo's screen under the four tab buttons.
+    /// Nothing playing: PlayCarTV's screen under the four tab buttons.
     case home
     /// Playing and parked: the video, full screen.
     case video

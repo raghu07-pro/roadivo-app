@@ -1,6 +1,6 @@
 import SwiftUI
 
-/// The player: the video with Roadivo's own controls on it, and the rest of the group below as a
+/// The player: the video with PlayCarTV's own controls on it, and the rest of the group below as a
 /// grid. Landscape (by turning the iPhone or the full-screen button) is the video alone.
 struct PlayerView: View {
     @State var viewModel: PlayerViewModel

@@ -1,6 +1,6 @@
 import Foundation
 import Testing
-@testable import Roadivo
+@testable import PlayCarTV
 
 /// Serves canned, chunked responses keyed by URL, so the fetcher's streaming limits are tested
 /// without a network and parallel suites never see each other's responses.

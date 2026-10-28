@@ -1,7 +1,7 @@
 #if DEBUG
     import UIKit
 
-    /// The iPhone's screen from Roadivo's Screen Broadcast on the plain car window: `CarPlayMirror`'s receiver
+    /// The iPhone's screen from PlayCarTV's Screen Broadcast on the plain car window: `CarPlayMirror`'s receiver
     /// without its templates. Shown only while parked, as video is.
     @MainActor
     final class CarScreenMirror {

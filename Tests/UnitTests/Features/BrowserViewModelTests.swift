@@ -1,6 +1,6 @@
 import Foundation
 import Testing
-@testable import Roadivo
+@testable import PlayCarTV
 
 @Suite("Browser")
 @MainActor
@@ -38,7 +38,7 @@ struct BrowserViewModelTests {
         #expect(viewModel.address == "example.com")
     }
 
-    @Test("A video on the page plays in Roadivo, named after the page and grouped under its site")
+    @Test("A video on the page plays in PlayCarTV, named after the page and grouped under its site")
     func takeVideo() throws {
         let viewModel = makeViewModel()
         let page = try #require(URL(string: "https://www.example.com/watch"))
@@ -58,7 +58,7 @@ struct BrowserViewModelTests {
         #expect(viewModel.foundVideo == nil)
     }
 
-    @Test("A new page drops the last page's video, and a page that starts playing tells Roadivo")
+    @Test("A new page drops the last page's video, and a page that starts playing tells PlayCarTV")
     func navigationAndMedia() throws {
         var mediaStarts = 0
         let viewModel = try makeViewModel { mediaStarts += 1 }

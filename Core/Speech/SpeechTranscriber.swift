@@ -14,7 +14,7 @@ final class SpeechTranscriber: SpeechTranscribing {
     private var restoreSession: (() -> Void)?
     private var isStopping = false
     private var hasTap = false
-    private let logger = Logger(subsystem: "com.roadivo", category: "Speech")
+    private let logger = Logger(subsystem: "com.playcartv", category: "Speech")
 
     func requestAccess() async -> Bool {
         guard await SystemCallbacks.speechAuthorized() else { return false }

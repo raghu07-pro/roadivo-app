@@ -1,11 +1,11 @@
 import SwiftUI
 
-/// Cast to Screen, as simple as CarTV's (owner, 2026-10-23): the whole iPhone on Roadivo's CarPlay window through
+/// Cast to Screen, as simple as CarTV's (owner, 2026-10-23): the whole iPhone on PlayCarTV's CarPlay window through
 /// Screen Broadcast, with one button to start or end mirroring. The car shows it by itself; no address or Wi-Fi.
 struct CastToScreenView: View {
     /// CarPlay is on, so the car's screen is there to show the iPhone.
     var isCarConnected = false
-    /// Roadivo on the car's screen is showing this iPhone now.
+    /// PlayCarTV on the car's screen is showing this iPhone now.
     var isCarShowing = false
 
     @State private var picker = BroadcastPicker()
@@ -81,13 +81,13 @@ struct CastToScreenView: View {
                 hint("Open any app to share your screen")
             case let .waitingForCar(isCarConnected):
                 carLine(isCarConnected)
-                hint("Open Roadivo in CarPlay first")
+                hint("Open PlayCarTV in CarPlay first")
             case let .ready(isCarConnected):
                 carLine(isCarConnected)
                 hint(
                     isCarConnected
                         ? "Tap Start mirroring to show this iPhone on the car's screen."
-                        : "Connect to CarPlay and open Roadivo on the car's screen."
+                        : "Connect to CarPlay and open PlayCarTV on the car's screen."
                 )
             }
         }
@@ -128,7 +128,7 @@ struct CastToScreenView: View {
             PrimaryButton(title: "Start mirroring", systemImage: "rectangle.on.rectangle") {
                 picker.show()
             }
-            .accessibilityHint(Text("Opens Apple's Screen Broadcast; choose Roadivo, then Start Broadcast"))
+            .accessibilityHint(Text("Opens Apple's Screen Broadcast; choose PlayCarTV, then Start Broadcast"))
             .accessibilityIdentifier("cast.start")
         }
     }

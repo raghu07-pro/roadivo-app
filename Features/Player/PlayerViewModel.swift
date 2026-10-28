@@ -6,7 +6,7 @@ import Observation
 final class PlayerViewModel {
     let playback: PlaybackController
     private let repository: LibraryRepository
-    /// Whether Roadivo is on the car's screen, for Play on Car Display.
+    /// Whether PlayCarTV is on the car's screen, for Play on Car Display.
     private let carConnection: CarConnection?
 
     /// The playing item's whole source, for browsing its groups while watching. Empty until read.
@@ -40,7 +40,7 @@ final class PlayerViewModel {
         playback.origin == .car && playback.isActive
     }
 
-    /// Play on Car Display, while Roadivo is on the car's screen and the video is on the iPhone (owner, 2026-10-26).
+    /// Play on Car Display, while PlayCarTV is on the car's screen and the video is on the iPhone (owner, 2026-10-26).
     var canPlayOnCar: Bool {
         carConnection?.isCarPlayConnected == true && playback.isActive && !isOnCar
     }

@@ -99,7 +99,7 @@ final class LocalVideosViewModel {
         guard !videos.isEmpty else {
             problem = Problem(
                 kind: .importing,
-                message: String(appLocalized: "That folder has no videos Roadivo can play.")
+                message: String(appLocalized: "That folder has no videos PlayCarTV can play.")
             )
             return false
         }

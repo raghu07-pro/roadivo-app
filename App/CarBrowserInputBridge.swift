@@ -48,7 +48,7 @@ final class CarBrowserInputBridge: NSObject, WKScriptMessageHandler, UIGestureRe
     private(set) var diagnostics = Diagnostics()
     private weak var webView: WKWebView?
     private var pending: Request?
-    private static let world = WKContentWorld.world(name: "RoadivoCarInput")
+    private static let world = WKContentWorld.world(name: "PlayCarTVCarInput")
 
     /// The page side of the bridge, for a car tab that sets its scripts again (`CarBrowserSession.Tab`).
     static var userScripts: [WKUserScript] {
@@ -69,7 +69,7 @@ final class CarBrowserInputBridge: NSObject, WKScriptMessageHandler, UIGestureRe
         super.init()
         #if DEBUG
             let content = webView.configuration.userContentController
-            content.add(self, contentWorld: Self.world, name: "roadivoCarInput")
+            content.add(self, contentWorld: Self.world, name: "playcartvCarInput")
             Self.userScripts.forEach(content.addUserScript)
             let tap = UITapGestureRecognizer(target: self, action: #selector(nativeTap))
             tap.cancelsTouchesInView = false

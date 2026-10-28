@@ -11,12 +11,12 @@ import Foundation
 // MARK: - Swift Bundle Accessor for Frameworks
 private class BundleFinder {}
 extension Foundation.Bundle {
-/// Since Roadivo is a application, the bundle for classes within this module can be used directly.
+/// Since PlayCarTVBroadcast is a app extension, the bundle for classes within this module can be used directly.
     nonisolated static let module = Bundle(for: BundleFinder.self)
 }
 // MARK: - Objective-C Bundle Accessor
 @objc
-public final class RoadivoResources: NSObject {
+public final class PlayCarTVBroadcastResources: NSObject {
 @objc public nonisolated class var bundle: Bundle {
     return .module
 }

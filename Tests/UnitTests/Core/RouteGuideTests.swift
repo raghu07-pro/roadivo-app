@@ -1,6 +1,6 @@
 import Foundation
 import Testing
-@testable import Roadivo
+@testable import PlayCarTV
 
 /// An L-shaped drive: 500 m north from the start, then right for 400 m to the place, 90 s in all.
 @Suite("Route guide")

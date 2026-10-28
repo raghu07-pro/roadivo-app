@@ -2,7 +2,7 @@
 
 The window CarPlay app now has its own WKWebView, loading desktop sites as CarTV does (DECISIONS 162). Site shortcuts and search open full webpages in that view, without using AppEnvironment.browser or navigating the phone. Its cookies and website storage are held in a separate, nonpersistent store for the life of the car browser controller. Phone browsing keeps its existing storage and behavior.
 
-This is an experiment, enabled by ROADIVO_CAR_BROWSER in Debug and hard-disabled outside DEBUG. It uses the existing navigation-entitled CPWindow. Apple documents that window for maps; rendering a webpage there does not establish distribution approval or complete browser input support. The media-template app retains its existing behavior.
+This is an experiment, enabled by PLAYCARTV_CAR_BROWSER in Debug and hard-disabled outside DEBUG. It uses the existing navigation-entitled CPWindow. Apple documents that window for maps; rendering a webpage there does not establish distribution approval or complete browser input support. The media-template app retains its existing behavior.
 
 ## Build on a Mac
 
@@ -10,14 +10,14 @@ New source and test files are included by Project.swift's source globs. Regenera
 
 ```bash
 tuist generate --no-open
-xcodebuild -workspace Roadivo.xcworkspace -scheme Roadivo \
+xcodebuild -workspace PlayCarTV.xcworkspace -scheme PlayCarTV \
   -destination 'platform=iOS Simulator,name=iPhone 17' \
   -derivedDataPath .build/DerivedData test
 swiftlint --strict
 swiftformat . --lint
 ```
 
-Use an installed simulator name. For actual CarPlay testing use a signed Debug build on an iPhone with ROADIVO_CARPLAY_APP = window. This branch does not change the entitlement files. A simulator result is not evidence that the real car accepts the view or forwards webpage input.
+Use an installed simulator name. For actual CarPlay testing use a signed Debug build on an iPhone with PLAYCARTV_CARPLAY_APP = window. This branch does not change the entitlement files. A simulator result is not evidence that the real car accepts the view or forwards webpage input.
 
 ## Controls and behavior
 
@@ -43,23 +43,23 @@ Use an installed simulator name. For actual CarPlay testing use a signed Debug b
 
 ## Plain CarPlay window with direct taps (DECISIONS 161–163)
 
-Debug iPhone builds (`ROADIVO_CARPLAY_APP = screen` in `Config/Debug.xcconfig`) give the car a plain window under
+Debug iPhone builds (`PLAYCARTV_CARPLAY_APP = screen` in `Config/Debug.xcconfig`) give the car a plain window under
 CarPlay's undocumented `UIWindowSceneSessionRoleCarPlay` role, as the open-source Cafari Lite does
-(github.com/rPlayAI/cafari-lite). They sign with CarPlay Audio + Video (`Resources/RoadivoCarScreen.entitlements`),
+(github.com/rPlayAI/cafari-lite). They sign with CarPlay Audio + Video (`Resources/PlayCarTVCarScreen.entitlements`),
 and the `carScreenScene` build script puts the role into the built Info.plist. In that window the car's taps reach
-Roadivo's views and the webpage directly:
+PlayCarTV's views and the webpage directly:
 
 - `CarScreenController` draws the whole car app: Home, Favorites, Library, Cast and Browser along the top, playback
   and Cast controls, and the browser.
 - The browser shows pages at 75% under a bar along the top, as in CarTV: Close, Back, Forward, the page's address
   (tap to search), Reload and Full screen. Full screen leaves one button in the corner to bring the bar back.
-- Any tapped text box opens `CarSearchPage`, with Roadivo's keyboard: text, search, address, email, phone,
+- Any tapped text box opens `CarSearchPage`, with PlayCarTV's keyboard: text, search, address, email, phone,
   password and number fields, text areas and rich editors, including through a field's label. Passwords show as dots
   and never come back from the page; number fields open on the numbers. A tapped dropdown opens `CarChoicesPage`.
 
 Verified in the CarPlay Simulator with an iPhone 11 Pro on iOS 27.0.1. The role isn't in Apple's public headers,
 App Review may reject it, and Cafari and CarTV both report the iOS 27.2 beta breaking it. Delete the two
-`ROADIVO_CARPLAY_APP` lines in `Config/Debug.xcconfig` to bring back the template window and its tabs.
+`PLAYCARTV_CARPLAY_APP` lines in `Config/Debug.xcconfig` to bring back the template window and its tabs.
 
 ## Required device checks
 
@@ -132,7 +132,7 @@ uses real browser clicks. With Playwright and its Chromium browser installed, ru
 node Tests/BrowserInput/bridge.spec.cjs
 ```
 
-An existing Chromium binary can be supplied through `ROADIVO_CHROMIUM_PATH`. This test covers Unicode and code-like
+An existing Chromium binary can be supplied through `PLAYCARTV_CHROMIUM_PATH`. This test covers Unicode and code-like
 text, input/change events and form submission, script-generated click rejection, sensitive/readonly/disabled fields,
 stale targets, length bounds, textarea behavior, iframe targeting and document replacement. Chromium passing is not
 WebKit, Xcode or CarPlay validation.

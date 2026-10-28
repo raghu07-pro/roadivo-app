@@ -2,7 +2,7 @@ import Foundation
 import os
 import Testing
 import UIKit
-@testable import Roadivo
+@testable import PlayCarTV
 
 @MainActor
 @Suite("Browser site icons")

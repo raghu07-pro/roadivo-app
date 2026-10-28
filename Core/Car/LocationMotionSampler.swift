@@ -1,7 +1,7 @@
 import CoreLocation
 import Observation
 
-/// The car's motion from the iPhone's location while CarPlay shows Roadivo. Nothing is stored or sent (DECISIONS 152).
+/// The car's motion from the iPhone's location while CarPlay shows PlayCarTV. Nothing is stored or sent (DECISIONS 152).
 @Observable
 @MainActor
 final class LocationMotionSampler: NSObject, MotionSampling {

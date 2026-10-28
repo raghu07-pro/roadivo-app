@@ -5,7 +5,7 @@ import XCTest
 @MainActor
 final class ScreenshotUITests: XCTestCase {
     func testCaptureFirstLaunch() {
-        let app = XCUIApplication.roadivo()
+        let app = XCUIApplication.playcartv()
         let next = app.buttons["onboarding.continue"]
         XCTAssertTrue(next.waitForExistence(timeout: 5))
         for page in 1...4 {
@@ -40,7 +40,7 @@ final class ScreenshotUITests: XCTestCase {
     }
 
     func testCaptureMainScreens() {
-        let app = XCUIApplication.roadivo(skipOnboarding: true, demoLibrary: true)
+        let app = XCUIApplication.playcartv(skipOnboarding: true, demoLibrary: true)
         XCTAssertTrue(app.buttons["channel.Football Tonight"].waitForExistence(timeout: 10))
         snapshot("11-Home", app: app)
 
@@ -80,7 +80,7 @@ final class ScreenshotUITests: XCTestCase {
         app.navigationBars.buttons.element(boundBy: 0).tap()
         app.buttons["settings.privacy"].tap()
         // The bundled policy page has loaded once its heading is readable.
-        XCTAssertTrue(app.webViews.staticTexts["Roadivo Privacy Policy"].waitForExistence(timeout: 10))
+        XCTAssertTrue(app.webViews.staticTexts["PlayCarTV Privacy Policy"].waitForExistence(timeout: 10))
         snapshot("22-Privacy", app: app)
         app.navigationBars.buttons.element(boundBy: 0).tap()
         app.swipeUp() // Help sits below the fold, and list rows only exist once on screen.
@@ -95,11 +95,11 @@ final class ScreenshotUITests: XCTestCase {
         snapshot("24-Paywall-Settings", app: app)
     }
 
-    /// Maps with a place chosen: the route drawn as Roadivo's road, and its sign (scripted Maps, DECISIONS 172).
+    /// Maps with a place chosen: the route drawn as PlayCarTV's road, and its sign (scripted Maps, DECISIONS 172).
     func testCaptureMaps() throws {
-        let app = XCUIApplication.roadivo(skipOnboarding: true, demoLibrary: true)
+        let app = XCUIApplication.playcartv(skipOnboarding: true, demoLibrary: true)
         guard let maps = app.directionsTab else {
-            throw XCTSkip("Maps is switched off (ROADIVO_DIRECTIONS = NO)")
+            throw XCTSkip("Maps is switched off (PLAYCARTV_DIRECTIONS = NO)")
         }
         maps.tap()
         let search = app.buttons["directions.search"]

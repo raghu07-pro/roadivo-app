@@ -13,9 +13,9 @@ enum PaywallReason: String, Identifiable {
 
     var subtitle: LocalizedStringResource {
         switch self {
-        case .intro, .settings: "Let the Journey Play. Everything unlocked."
+        case .intro, .settings: "TV for the Road. Everything unlocked."
         case .sources: "The free plan includes one source. Go Pro for as many as you like."
-        case .carMode: "Car Mode is part of Roadivo Pro."
+        case .carMode: "Car Mode is part of PlayCarTV Pro."
         }
     }
 }

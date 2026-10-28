@@ -11,12 +11,12 @@ import Foundation
 // MARK: - Swift Bundle Accessor for Frameworks
 private class BundleFinder {}
 extension Foundation.Bundle {
-/// Since RoadivoTests is a unit tests, the bundle for classes within this module can be used directly.
+/// Since PlayCarTV is a application, the bundle for classes within this module can be used directly.
     nonisolated static let module = Bundle(for: BundleFinder.self)
 }
 // MARK: - Objective-C Bundle Accessor
 @objc
-public final class RoadivoTestsResources: NSObject {
+public final class PlayCarTVResources: NSObject {
 @objc public nonisolated class var bundle: Bundle {
     return .module
 }

@@ -96,7 +96,7 @@ struct DisplayProfilesView: View {
 
     private var explanation: some View {
         SectionFooter("""
-        Connect to a car or an AirPlay display to save a profile for it. Roadivo switches to it \
+        Connect to a car or an AirPlay display to save a profile for it. PlayCarTV switches to it \
         whenever that screen connects.
         """)
     }

@@ -8,7 +8,7 @@ final class LibraryFlowUITests: XCTestCase {
 
     /// The player shows only its own controls on the video, and the group as a grid below.
     func testPlayerShowsNowPlaying() throws {
-        let app = XCUIApplication.roadivo(skipOnboarding: true, demoLibrary: true)
+        let app = XCUIApplication.playcartv(skipOnboarding: true, demoLibrary: true)
         let channel = app.buttons["channel.Football Tonight"]
         XCTAssertTrue(channel.waitForExistence(timeout: 10))
         channel.tap()
@@ -47,7 +47,7 @@ final class LibraryFlowUITests: XCTestCase {
 
     /// Chips under the video browse the source's other groups while one plays.
     func testPlayerChipsBrowseOtherGroups() {
-        let app = XCUIApplication.roadivo(skipOnboarding: true, demoLibrary: true)
+        let app = XCUIApplication.playcartv(skipOnboarding: true, demoLibrary: true)
         let channel = app.buttons["channel.Steel Horizon · 1080p"]
         XCTAssertTrue(channel.waitForExistence(timeout: 10))
         channel.tap()
@@ -67,7 +67,7 @@ final class LibraryFlowUITests: XCTestCase {
 
     /// Home's one button filters by source (with each source's count) and holds Add Source.
     func testHomeFiltersBySource() {
-        let app = XCUIApplication.roadivo(skipOnboarding: true, demoLibrary: true)
+        let app = XCUIApplication.playcartv(skipOnboarding: true, demoLibrary: true)
         XCTAssertTrue(app.buttons["channel.Football Tonight"].waitForExistence(timeout: 10))
         let menu = app.buttons["library.sourceFilter"]
         XCTAssertTrue(menu.exists)
@@ -86,7 +86,7 @@ final class LibraryFlowUITests: XCTestCase {
 
     /// See All opens a group as a grid, with chips to move to another group.
     func testSeeAllSwitchesGroups() throws {
-        let app = XCUIApplication.roadivo(skipOnboarding: true, demoLibrary: true)
+        let app = XCUIApplication.playcartv(skipOnboarding: true, demoLibrary: true)
         let seeAll = app.buttons["library.seeAll.Movies"]
         XCTAssertTrue(seeAll.waitForExistence(timeout: 10))
         seeAll.tap()
@@ -111,7 +111,7 @@ final class LibraryFlowUITests: XCTestCase {
     /// The mini player floats over every tab, so each screen keeps its content clear of it: the Car
     /// tab's safety note, and the last Settings row once scrolled to the end.
     func testMiniPlayerNeverCoversContent() {
-        let app = XCUIApplication.roadivo(skipOnboarding: true, demoLibrary: true)
+        let app = XCUIApplication.playcartv(skipOnboarding: true, demoLibrary: true)
         let channel = app.buttons["channel.Football Tonight"]
         XCTAssertTrue(channel.waitForExistence(timeout: 10))
         channel.tap()
@@ -138,7 +138,7 @@ final class LibraryFlowUITests: XCTestCase {
 
     /// Minimise keeps playing in the mini player; close stops it.
     func testPlayMinimizeAndClose() {
-        let app = XCUIApplication.roadivo(skipOnboarding: true, demoLibrary: true)
+        let app = XCUIApplication.playcartv(skipOnboarding: true, demoLibrary: true)
         let channel = app.buttons["channel.Football Tonight"]
         XCTAssertTrue(channel.waitForExistence(timeout: 10))
         channel.tap()
@@ -158,7 +158,7 @@ final class LibraryFlowUITests: XCTestCase {
     }
 
     func testSearchFiltersHome() {
-        let app = XCUIApplication.roadivo(skipOnboarding: true, demoLibrary: true)
+        let app = XCUIApplication.playcartv(skipOnboarding: true, demoLibrary: true)
         XCTAssertTrue(app.buttons["channel.Football Tonight"].waitForExistence(timeout: 10))
         let search = app.textFields["search.field"]
         search.tap()
@@ -202,7 +202,7 @@ final class LibraryFlowUITests: XCTestCase {
 
     /// The mic in the search bar fills the search with what's said (a scripted "Football" here).
     func testVoiceSearchFillsTheSearch() {
-        let app = XCUIApplication.roadivo(skipOnboarding: true, demoLibrary: true)
+        let app = XCUIApplication.playcartv(skipOnboarding: true, demoLibrary: true)
         XCTAssertTrue(app.buttons["channel.Coastal Echoes"].waitForExistence(timeout: 10))
         app.buttons["search.mic"].tap()
         let search = app.textFields["search.field"]
@@ -214,7 +214,7 @@ final class LibraryFlowUITests: XCTestCase {
     }
 
     func testAddSourceRejectsABadLink() {
-        let app = XCUIApplication.roadivo(skipOnboarding: true)
+        let app = XCUIApplication.playcartv(skipOnboarding: true)
         let add = app.buttons["library.empty.addSource"]
         XCTAssertTrue(add.waitForExistence(timeout: 5))
         add.tap()
@@ -227,7 +227,7 @@ final class LibraryFlowUITests: XCTestCase {
     }
 
     func testSecondSourceAsksFreeUsersForPro() {
-        let app = XCUIApplication.roadivo(skipOnboarding: true, demoLibrary: true)
+        let app = XCUIApplication.playcartv(skipOnboarding: true, demoLibrary: true)
         XCTAssertTrue(app.buttons["channel.Football Tonight"].waitForExistence(timeout: 10))
         // With a source, Home's one button is the source menu, which holds Add Source.
         XCTAssertFalse(app.buttons["library.addSource"].exists)
@@ -239,7 +239,7 @@ final class LibraryFlowUITests: XCTestCase {
     }
 
     func testMediaServerLoginIsReachable() {
-        let app = XCUIApplication.roadivo(skipOnboarding: true)
+        let app = XCUIApplication.playcartv(skipOnboarding: true)
         app.buttons["library.empty.addSource"].tap()
         // A sheet's first appearance on a cold simulator can take longer than 5 s.
         let servers = app.buttons["addSource.way.server"]
@@ -255,7 +255,7 @@ final class LibraryFlowUITests: XCTestCase {
     /// A playlist first, with Add Source off until there's a link; all four server types under Media servers; Plex
     /// shows a code for plex.tv/link (a scripted one here).
     func testAddSourceOffersFourServersAndPlexCode() throws {
-        let app = XCUIApplication.roadivo(skipOnboarding: true)
+        let app = XCUIApplication.playcartv(skipOnboarding: true)
         app.buttons["library.empty.addSource"].tap()
         XCTAssertTrue(app.buttons["addSource.submit"].waitForExistence(timeout: 5))
         XCTAssertFalse(app.buttons["addSource.submit"].isEnabled)
@@ -303,7 +303,7 @@ final class LibraryFlowUITests: XCTestCase {
     }
 
     func testHomeAccessibilityAudit() throws {
-        let app = XCUIApplication.roadivo(skipOnboarding: true, demoLibrary: true)
+        let app = XCUIApplication.playcartv(skipOnboarding: true, demoLibrary: true)
         XCTAssertTrue(app.buttons["channel.Football Tonight"].waitForExistence(timeout: 10))
         try app.performAccessibilityAudit(for: [.dynamicType, .sufficientElementDescription, .hitRegion])
     }

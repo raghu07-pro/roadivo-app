@@ -2,13 +2,13 @@ import Foundation
 import SwiftUI
 import Testing
 import UIKit
-@testable import Roadivo
+@testable import PlayCarTV
 
 @Suite("Theme", .serialized)
 @MainActor
 struct ThemeTests {
     private func defaults() -> UserDefaults {
-        UserDefaults(suiteName: "roadivo.tests.\(UUID().uuidString)") ?? .standard
+        UserDefaults(suiteName: "playcartv.tests.\(UUID().uuidString)") ?? .standard
     }
 
     @Test("A new install follows the iPhone, in Golden Hour")

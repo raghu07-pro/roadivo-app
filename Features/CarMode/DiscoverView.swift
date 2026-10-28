@@ -10,7 +10,7 @@ struct DiscoverView: View {
     let onPlayWebVideo: (MediaItem) -> Void
     /// A site picked on the CarPlay screen; opened in the Browser, then cleared (DECISIONS 131).
     @Binding var browserRequest: URL?
-    /// CarPlay is on, and whether Roadivo on the car's screen shows this iPhone, for Cast to Screen.
+    /// CarPlay is on, and whether PlayCarTV on the car's screen shows this iPhone, for Cast to Screen.
     var isCarConnected = false
     var isCarShowing = false
 

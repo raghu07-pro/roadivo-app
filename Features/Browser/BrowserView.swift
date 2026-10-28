@@ -3,7 +3,7 @@ import SwiftUI
 /// The Browser, opened from Discover like CarTV's: a start page with a grid of sites, then the page
 /// itself, full screen so a mirrored car display shows the whole page. Pages
 /// stay in the Browser rather than opening their apps; a page's own video player has AirPlay, and a
-/// direct video can play in Roadivo, with Car Mode, instead (DECISIONS 118).
+/// direct video can play in PlayCarTV, with Car Mode, instead (DECISIONS 118).
 struct BrowserView: View {
     let viewModel: BrowserViewModel
     let onPlay: (MediaItem) -> Void

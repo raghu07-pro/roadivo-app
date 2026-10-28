@@ -55,6 +55,9 @@ struct SourceHealthView: View {
 
     // MARK: Sections
 
+    private static let unsupportedLinkNote: LocalizedStringKey =
+        "PlayCarTV plays http, https, rtmp and rtsp links; entries with udp or file links are skipped."
+
     @ViewBuilder private var playlistSection: some View {
         if let health = viewModel.health {
             Section {
@@ -84,14 +87,14 @@ struct SourceHealthView: View {
                 }
                 if let issues = health.issues {
                     StatRow(title: "Entries without a link", value: issues.withoutLink.counted)
-                    StatRow(title: "Links Roadivo can't play", value: issues.unsupportedLink.counted)
+                    StatRow(title: "Links PlayCarTV can't play", value: issues.unsupportedLink.counted)
                         .accessibilityIdentifier("health.unsupported")
                 }
             } header: {
                 Text("Playlist")
             } footer: {
                 if (health.issues?.unsupportedLink ?? 0) > 0 {
-                    Text("Roadivo plays http, https, rtmp and rtsp links; entries with udp or file links are skipped.")
+                    Text(Self.unsupportedLinkNote)
                 }
             }
         }
@@ -139,7 +142,7 @@ struct SourceHealthView: View {
             Text("Streams")
         } footer: {
             Text("""
-            Roadivo checks two streams at a time, so your provider's connection limit isn't hit. Live \
+            PlayCarTV checks two streams at a time, so your provider's connection limit isn't hit. Live \
             streams come and go, so check again later if many fail.
             """)
         }
@@ -187,7 +190,7 @@ struct SourceHealthView: View {
         } header: {
             Text("Server")
         } footer: {
-            Text("Roadivo checks the server rather than each video, so it doesn't start a transcode for every item.")
+            Text("PlayCarTV checks the server rather than each video, so it doesn't start a transcode for every item.")
         }
     }
 
@@ -389,7 +392,7 @@ private struct StatRow: View {
 
 #Preview("Largest text") {
     List {
-        StatRow(title: "Links Roadivo can't play", value: "12")
+        StatRow(title: "Links PlayCarTV can't play", value: "12")
         StatRow(title: "Last refreshed", value: "5 minutes ago")
     }
     .environment(\.dynamicTypeSize, .accessibility5)

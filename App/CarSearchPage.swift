@@ -1,10 +1,10 @@
 #if DEBUG
     import SwiftUI
 
-    /// The full-screen search page, laid out like CarTV's in Roadivo's theme (DECISIONS 162–163). First the field,
+    /// The full-screen search page, laid out like CarTV's in PlayCarTV's theme (DECISIONS 162–163). First the field,
     /// recent library searches or results, and a choice of Voice Input or Phone Input, with Keyboard below; on
     /// Keyboard,
-    /// the field sits just above Roadivo's keyboard with the phone and microphone beside it. The accent button
+    /// the field sits just above PlayCarTV's keyboard with the phone and microphone beside it. The accent button
     /// searches.
     struct CarSearchPage: View {
         @Bindable var model: CarScreenModel
@@ -299,9 +299,9 @@
             switch model.voice?.state {
             case .listening: return "Listening…"
             case .denied:
-                return "Turn on Microphone and Speech Recognition for Roadivo in Settings to search by voice."
+                return "Turn on Microphone and Speech Recognition for PlayCarTV in Settings to search by voice."
             case .failed: return "Voice search isn't available right now."
-            default: return model.searchInput == .phone ? "Open Roadivo on your iPhone to type." : nil
+            default: return model.searchInput == .phone ? "Open PlayCarTV on your iPhone to type." : nil
             }
         }
 

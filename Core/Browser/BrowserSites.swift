@@ -2,7 +2,7 @@ import Foundation
 
 /// A site on the Browser's start page, like CarTV's grid (owner, 2026-10-19). Tapping it opens the website
 /// in the Browser, never its app. Its icon comes from the site at run time, as Safari's Favorites do, so
-/// no other company's logo ships inside Roadivo (App Review 5.2.1; DECISIONS 118).
+/// no other company's logo ships inside PlayCarTV (App Review 5.2.1; DECISIONS 118).
 struct BrowserSite: Identifiable, Hashable, Sendable {
     let name: String
     let url: URL

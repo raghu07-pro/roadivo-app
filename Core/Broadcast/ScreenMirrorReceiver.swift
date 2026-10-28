@@ -8,17 +8,17 @@ final class ScreenMirrorReceiver: @unchecked Sendable {
     enum Event: Sendable {
         /// The first frame of a broadcast arrived.
         case started
-        /// The broadcast ended, or Roadivo's extension stopped answering.
+        /// The broadcast ended, or PlayCarTV's extension stopped answering.
         case ended
     }
 
     /// A broadcast that hasn't started yet, or the extension binding its port, is looked for again this often.
     private static let retryInterval = DispatchTimeInterval.seconds(2)
 
-    private let queue = DispatchQueue(label: "com.roadivo.mirror")
+    private let queue = DispatchQueue(label: "com.playcartv.mirror")
     private let port: NWEndpoint.Port
     private let path: String
-    private let logger = Logger(subsystem: "com.roadivo", category: "Mirror")
+    private let logger = Logger(subsystem: "com.playcartv", category: "Mirror")
     private var isRunning = false
     private var isStreaming = false
     private var connection: NWConnection?

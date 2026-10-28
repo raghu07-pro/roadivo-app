@@ -8,13 +8,13 @@ final class CarPlayBrowserTab: NSObject, CPSearchTemplateDelegate {
     private weak var interfaceController: CPInterfaceController?
     /// Marks a row to play as video where the car allows it; true when CarPlay then presents it itself.
     private let markAsVideo: (CPListItem) -> Bool
-    /// After the page's video starts on a row that presents itself, as Roadivo's own window does (DECISIONS 152).
+    /// After the page's video starts on a row that presents itself, as PlayCarTV's own window does (DECISIONS 152).
     private let onPlay: () -> Void
     private let openPage: ((URL) -> Void)?
     private var searchScope: URL?
     /// Each site's solid tile, made once per icon (`SiteIconTile`).
     private var siteTiles: [String: (icon: UIImage, tile: UIImage)] = [:]
-    private let logger = Logger(subsystem: "com.roadivo", category: "CarPlay")
+    private let logger = Logger(subsystem: "com.playcartv", category: "CarPlay")
 
     init(
         interfaceController: CPInterfaceController?,
@@ -130,7 +130,7 @@ final class CarPlayBrowserTab: NSObject, CPSearchTemplateDelegate {
 
     // MARK: The page's video
 
-    /// A video Roadivo can play on the iPhone's open page, played on this screen by Roadivo's player.
+    /// A video PlayCarTV can play on the iPhone's open page, played on this screen by PlayCarTV's player.
     private func videoRow(_ browser: BrowserViewModel) -> CPListItem {
         let title = browser.page?.title.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
         let item = CPListItem(

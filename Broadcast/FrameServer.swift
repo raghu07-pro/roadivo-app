@@ -3,7 +3,7 @@ import Network
 import os
 
 /// Serves `BroadcastHTTP` on this iPhone's loopback address: the page to whoever asks, and each new frame to
-/// Roadivo's CarPlay window. A viewer still receiving the last frame skips the next, so it never builds a backlog.
+/// PlayCarTV's CarPlay window. A viewer still receiving the last frame skips the next, so it never builds a backlog.
 /// Network delivers its events on a dispatch queue, so all of the server's state lives on that one queue.
 final class FrameServer: @unchecked Sendable {
     /// One browser watching the stream; touched only on `queue`. File-private for the extensions below.
@@ -39,11 +39,11 @@ final class FrameServer: @unchecked Sendable {
     /// guessed. Distinct paths, because a tab left on an old code retries the same one every second.
     private static let missLimit = 10
 
-    private let queue = DispatchQueue(label: "com.roadivo.broadcast.server")
+    private let queue = DispatchQueue(label: "com.playcartv.broadcast.server")
     private let port: NWEndpoint.Port
     private let code: String
     private let readiness = OSAllocatedUnfairLock(initialState: false)
-    private let logger = Logger(subsystem: "com.roadivo.broadcast", category: "Server")
+    private let logger = Logger(subsystem: "com.playcartv.broadcast", category: "Server")
     private var isRunning = false
     private var onFailure: (@Sendable () -> Void)?
     private var listener: NWListener?
@@ -129,7 +129,7 @@ private extension FrameServer {
         tcp.connectionDropTime = 10
         let parameters = NWParameters(tls: nil, tcp: tcp)
         parameters.allowLocalEndpointReuse = true
-        // Only Roadivo's own CarPlay window reads the screen, on this iPhone: never offered on any network.
+        // Only PlayCarTV's own CarPlay window reads the screen, on this iPhone: never offered on any network.
         parameters.requiredLocalEndpoint = .hostPort(host: .ipv4(.loopback), port: port)
         return parameters
     }

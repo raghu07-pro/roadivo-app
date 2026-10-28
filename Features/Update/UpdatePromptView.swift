@@ -33,7 +33,7 @@ struct UpdatePromptView: View {
                 Text("New Version Available")
                     .font(Typography.screenTitle)
                     .accessibilityAddTraits(.isHeader)
-                Text("Roadivo \(release.version) is now available.")
+                Text("PlayCarTV \(release.version) is now available.")
                     .font(Typography.sign)
                 if !release.notes.isEmpty {
                     Text(release.notes)

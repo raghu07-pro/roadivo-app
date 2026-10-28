@@ -19,7 +19,7 @@ struct PlayerControls: View {
     /// The video is on the car's screen, not this one.
     var isOnCar = false
     var onPlayOnPhone: () -> Void = {}
-    /// Play on Car Display, while Roadivo is on the car's screen; nil hides it.
+    /// Play on Car Display, while PlayCarTV is on the car's screen; nil hides it.
     var onPlayOnCar: (() -> Void)?
 
     @State private var scrubbing: Double?

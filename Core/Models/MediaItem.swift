@@ -33,7 +33,7 @@ enum ArtworkStyle: String, Sendable {
 /// Where an imported video lives. Stored as a file name, not an absolute path:
 /// the app container's path changes between installs and updates.
 enum MediaLocation {
-    static let localScheme = "roadivo-local:"
+    static let localScheme = "playcartv-local:"
 
     static var videosDirectory: URL {
         URL.applicationSupportDirectory.appending(path: "Videos", directoryHint: .isDirectory)

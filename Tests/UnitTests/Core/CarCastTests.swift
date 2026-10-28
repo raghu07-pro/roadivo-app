@@ -1,6 +1,6 @@
 import Foundation
 import Testing
-@testable import Roadivo
+@testable import PlayCarTV
 
 @Suite("Cast to the car")
 struct CarCastTests {

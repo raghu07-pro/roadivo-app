@@ -1,9 +1,9 @@
 import SwiftUI
 
-/// The privacy policy: the same single-file page as the website (Docs/Website/roadivo-policy.html, bundled),
+/// The privacy policy: the same single-file page as the website (Docs/Website/playcartv-policy.html, bundled),
 /// so the App Store link and the app always match. Keep it in step with PrivacyInfo.xcprivacy.
 struct PrivacyPolicyView: View {
-    static let pageURL = Bundle.main.url(forResource: "roadivo-policy", withExtension: "html")
+    static let pageURL = Bundle.main.url(forResource: "playcartv-policy", withExtension: "html")
 
     var body: some View {
         Group {

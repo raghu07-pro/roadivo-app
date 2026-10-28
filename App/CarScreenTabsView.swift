@@ -1,7 +1,7 @@
 #if DEBUG
     import SwiftUI
 
-    /// The car screen's home (DECISIONS 162–164, 167, 172), all tapped directly in Roadivo's theme: its mark, the tabs
+    /// The car screen's home (DECISIONS 162–164, 167, 172), all tapped directly in PlayCarTV's theme: its mark, the tabs
     /// and the search along the top; Home's shelves, Favorites' and Library's grids of pictures, Maps, and Cast's
     /// three steps under them.
     struct CarScreenTabsView: View {
@@ -292,7 +292,7 @@
                             .font(Typography.sectionTitle)
                     }
                     HStack(alignment: .top, spacing: Spacing.md) {
-                        step(1, symbol: "iphone", text: "Open Roadivo on your iPhone")
+                        step(1, symbol: "iphone", text: "Open PlayCarTV on your iPhone")
                         step(2, symbol: "sparkles.tv", text: "Go to Discover › Cast to Screen")
                         step(3, symbol: "play.fill", text: "Tap Start mirroring")
                     }
@@ -349,7 +349,7 @@
         }
     }
 
-    /// Roadivo's mark in the corner: the road at the hour's light with the sun as a play button, as on its icon.
+    /// PlayCarTV's mark in the corner: the road at the hour's light with the sun as a play button, as on its icon.
     private struct CarBrandMark: View {
         let side: CGFloat
 

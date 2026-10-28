@@ -1,6 +1,6 @@
 import Foundation
 
-/// A drag across Roadivo's CarPlay window moving the video's place: the window's full width is the whole video, as on
+/// A drag across PlayCarTV's CarPlay window moving the video's place: the window's full width is the whole video, as on
 /// the iPhone's progress bar (DECISIONS 154). Pure, so it's unit-tested.
 struct CarScrub: Equatable, Sendable {
     /// Where the video was when the drag began, in seconds.

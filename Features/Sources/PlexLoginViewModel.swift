@@ -22,7 +22,7 @@ final class PlexLoginViewModel {
     private let plex: PlexLinking
     private let repository: LibraryRepository
     private let pollInterval: Duration
-    private let logger = Logger(subsystem: "com.roadivo", category: "Plex")
+    private let logger = Logger(subsystem: "com.playcartv", category: "Plex")
 
     init(plex: PlexLinking, repository: LibraryRepository, pollInterval: Duration = .seconds(2)) {
         self.plex = plex

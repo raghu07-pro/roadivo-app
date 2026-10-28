@@ -90,11 +90,14 @@ private struct CentreScreen: View {
         switch content {
         case .brand:
             HStack(spacing: Spacing.sm) {
-                RoadScene(time: .goldenHour, horizon: 0.55, animated: false, sunIsPlayButton: true)
+                // The app icon itself, drawn by Scripts/generate-app-icon.swift (DECISIONS 177).
+                Image("AppLogo")
+                    .resizable()
                     .frame(width: 64, height: 64)
                     .clipShape(RoundedRectangle(cornerRadius: 14, style: .continuous))
+                    .accessibilityHidden(true)
                 VStack(alignment: .leading, spacing: 2) {
-                    Text("Roadivo").font(Typography.sectionTitle).foregroundStyle(.white)
+                    Text("PlayCarTV").font(Typography.sectionTitle).foregroundStyle(.white)
                     Text(app: Brand.tagline).font(Typography.data).foregroundStyle(.roadAccent)
                 }
             }

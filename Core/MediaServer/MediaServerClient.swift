@@ -129,7 +129,7 @@ struct EmbyCompatibleClient: MediaServerConnecting {
 
     /// Jellyfin 10.12 only accepts a token here or as `ApiKey`; Emby reads `X-Emby-Authorization`.
     private func authorization(token: String? = nil) -> String {
-        let base = #"MediaBrowser Client="Roadivo", Device="iPhone", DeviceId="\#(deviceID)", Version="1.0.0""#
+        let base = #"MediaBrowser Client="PlayCarTV", Device="iPhone", DeviceId="\#(deviceID)", Version="1.0.0""#
         return token.map { base + #", Token="\#($0)""# } ?? base
     }
 

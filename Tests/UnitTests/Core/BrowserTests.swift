@@ -1,6 +1,6 @@
 import Foundation
 import Testing
-@testable import Roadivo
+@testable import PlayCarTV
 
 @Suite("Browser addresses and videos")
 struct WebAddressTests {
@@ -20,7 +20,7 @@ struct WebAddressTests {
         #expect(WebAddress.url(for: input)?.absoluteString == expected)
     }
 
-    @Test("Words, a bare name and a file name are searched", arguments: ["road trip movies", "roadivo", "clip.mp4"])
+    @Test("Words, a bare name and a file name are searched", arguments: ["road trip movies", "playcartv", "clip.mp4"])
     func searches(input: String) throws {
         let url = try #require(WebAddress.url(for: input))
         let query = URLComponents(url: url, resolvingAgainstBaseURL: false)?.queryItems?.first { $0.name == "q" }
@@ -39,7 +39,7 @@ struct WebAddressTests {
         #expect(try WebAddress.displayName(of: #require(URL(string: "http://192.168.1.10:8096/web"))) == "192.168.1.10")
     }
 
-    @Test("A page is a video Roadivo can play by its type or its file name, never a channel list")
+    @Test("A page is a video PlayCarTV can play by its type or its file name, never a channel list")
     func playablePages() throws {
         let stream = try #require(URL(string: "https://cdn.example.com/live/master.m3u8"))
         let file = try #require(URL(string: "https://cdn.example.com/films/trip.mp4?token=1"))
@@ -56,7 +56,7 @@ struct WebAddressTests {
         #expect(!WebMedia.isPlayablePage(unnamed, mimeType: "video/webm")) // AVPlayer can't play it.
     }
 
-    @Test("A video a page started plays in Roadivo unless the page assembles it itself")
+    @Test("A video a page started plays in PlayCarTV unless the page assembles it itself")
     func playableSources() throws {
         #expect(try WebMedia.isPlayableSource(#require(URL(string: "https://cdn.example.com/v?id=1"))))
         #expect(!WebMedia.isPlayableSource(URL(string: "blob:https://example.com/5f2c")))

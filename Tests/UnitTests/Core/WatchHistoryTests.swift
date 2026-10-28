@@ -1,7 +1,7 @@
 import Foundation
 import SwiftData
 import Testing
-@testable import Roadivo
+@testable import PlayCarTV
 
 @Suite("Watch history")
 @MainActor

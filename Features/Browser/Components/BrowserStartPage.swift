@@ -17,7 +17,7 @@ struct BrowserStartPage: View {
                 }
                 Text("""
                 Search or type a website. A page's videos can go to your car with AirPlay, and direct video \
-                links play in Roadivo.
+                links play in PlayCarTV.
                 """)
                 .font(Typography.caption)
                 .foregroundStyle(.roadMuted)

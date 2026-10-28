@@ -34,7 +34,7 @@ def main(paths):
         info_catalog["strings"][key] = {"extractionState": "manual", "localizations": {"en": unit(info[key])}}
     info_catalog["strings"]["CFBundleDisplayName"] = {
         "extractionState": "manual",
-        "localizations": {"en": unit("Roadivo")},
+        "localizations": {"en": unit("PlayCarTV")},
     }
 
     problems = 0
@@ -57,7 +57,7 @@ def main(paths):
             value = data.get("infoPlist", {}).get(key)
             if value:
                 info_catalog["strings"][key]["localizations"][lang] = unit(value)
-        info_catalog["strings"]["CFBundleDisplayName"]["localizations"][lang] = unit("Roadivo")
+        info_catalog["strings"]["CFBundleDisplayName"]["localizations"][lang] = unit("PlayCarTV")
 
     catalog_path.write_text(json.dumps(catalog, ensure_ascii=False, indent=2, sort_keys=True) + "\n")
     Path("Resources/InfoPlist.xcstrings").write_text(

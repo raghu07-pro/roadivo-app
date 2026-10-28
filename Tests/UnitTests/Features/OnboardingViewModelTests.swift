@@ -1,5 +1,5 @@
 import Testing
-@testable import Roadivo
+@testable import PlayCarTV
 
 @Suite("Onboarding")
 @MainActor

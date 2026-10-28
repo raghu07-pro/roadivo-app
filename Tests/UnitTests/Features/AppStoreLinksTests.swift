@@ -1,6 +1,6 @@
 import Foundation
 import Testing
-@testable import Roadivo
+@testable import PlayCarTV
 
 @Suite("App Store links")
 struct AppStoreLinksTests {
@@ -21,7 +21,7 @@ struct AppStoreLinksTests {
         #expect(links.writeReview == nil)
     }
 
-    @Test("The shipped build links to Roadivo's App Store listing")
+    @Test("The shipped build links to PlayCarTV's App Store listing")
     func currentBuild() {
         // APP_STORE_ID in Config/Shared.xcconfig: the App Store Connect record's Apple ID.
         #expect(AppStoreLinks.current.page?.absoluteString == "https://apps.apple.com/app/id6824396756")

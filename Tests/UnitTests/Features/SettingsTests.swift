@@ -3,13 +3,13 @@ import CoreImage.CIFilterBuiltins
 import Foundation
 import Testing
 import UIKit
-@testable import Roadivo
+@testable import PlayCarTV
 
 @Suite("Settings and helpers", .serialized)
 @MainActor
 struct SettingsTests {
     private func defaults() -> UserDefaults {
-        let name = "roadivo.tests.\(UUID().uuidString)"
+        let name = "playcartv.tests.\(UUID().uuidString)"
         return UserDefaults(suiteName: name) ?? .standard
     }
 

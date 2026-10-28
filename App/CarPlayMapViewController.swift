@@ -2,7 +2,7 @@ import CarPlay
 import MapKit
 import SwiftUI
 
-/// The map in the car's window, under CarPlay's map screen (DECISIONS 147): Roadivo's muted map without shop pins,
+/// The map in the car's window, under CarPlay's map screen (DECISIONS 147): PlayCarTV's muted map without shop pins,
 /// the routes in the theme's colours, the place's flag and the car. Only the map is drawn here, as Apple requires.
 final class CarPlayMapViewController: UIViewController {
     private let mapView = MKMapView()

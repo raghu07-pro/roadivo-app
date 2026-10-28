@@ -1,7 +1,7 @@
 import Foundation
 import MapKit
 import Testing
-@testable import Roadivo
+@testable import PlayCarTV
 
 @Suite("Directions")
 @MainActor

@@ -9,20 +9,20 @@ CATALOG="Resources/Localizable.xcstrings"
 DERIVED="${1:-}"
 
 if [[ -z "$DERIVED" ]]; then
-  DERIVED="$(mktemp -d -t roadivo-strings)"
-  echo "Building Roadivo for the simulator into $DERIVED …"
+  DERIVED="$(mktemp -d -t playcartv-strings)"
+  echo "Building PlayCarTV for the simulator into $DERIVED …"
   xcodebuild \
-    -workspace Roadivo.xcworkspace \
-    -scheme Roadivo \
+    -workspace PlayCarTV.xcworkspace \
+    -scheme PlayCarTV \
     -configuration Debug \
     -destination "generic/platform=iOS Simulator" \
     -derivedDataPath "$DERIVED" \
     build >/dev/null
 fi
 
-OBJECTS="$DERIVED/Build/Intermediates.noindex/Roadivo.build/Debug-iphonesimulator/Roadivo.build/Objects-normal"
+OBJECTS="$DERIVED/Build/Intermediates.noindex/PlayCarTV.build/Debug-iphonesimulator/PlayCarTV.build/Objects-normal"
 if [[ ! -d "$OBJECTS" ]]; then
-  echo "No Roadivo build in $DERIVED (looked for $OBJECTS)." >&2
+  echo "No PlayCarTV build in $DERIVED (looked for $OBJECTS)." >&2
   exit 1
 fi
 

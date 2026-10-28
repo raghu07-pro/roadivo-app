@@ -5,7 +5,7 @@ struct HelpView: View {
     @Environment(\.openURL) private var openURL
 
     /// Opens the user's mail app addressed to support, with the subject filled in.
-    private static let supportMail = URL(string: "mailto:dhavalbhanderi880@gmail.com?subject=Roadivo%20support")
+    private static let supportMail = URL(string: "mailto:dhavalbhanderi880@gmail.com?subject=PlayCarTV%20support")
 
     var body: some View {
         ScrollView {
@@ -49,7 +49,7 @@ struct HelpView: View {
                     .foregroundStyle(.primary)
                     .multilineTextAlignment(.leading)
                 Spacer(minLength: 0)
-                // Mail opens outside Roadivo.
+                // Mail opens outside PlayCarTV.
                 Image(systemName: "arrow.up.forward")
                     .font(.footnote.weight(.semibold))
                     .foregroundStyle(.roadMuted)

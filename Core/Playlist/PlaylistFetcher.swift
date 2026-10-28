@@ -17,7 +17,7 @@ struct URLSessionPlaylistFetcher: PlaylistFetching {
     func fetchText(from url: URL) async throws -> String {
         var request = URLRequest(url: url, timeoutInterval: 30)
         // Some IPTV servers reject requests without a player-style user agent.
-        request.setValue("Roadivo/1.0 (iPhone)", forHTTPHeaderField: "User-Agent")
+        request.setValue("PlayCarTV/1.0 (iPhone)", forHTTPHeaderField: "User-Agent")
         let bytes: URLSession.AsyncBytes
         let response: URLResponse
         do {

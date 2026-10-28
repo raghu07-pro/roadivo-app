@@ -22,7 +22,7 @@ struct LanguageView: View {
             } header: {
                 Text("All Languages")
             } footer: {
-                Text("Roadivo follows your iPhone's language unless you choose one here.")
+                Text("PlayCarTV follows your iPhone's language unless you choose one here.")
             }
         }
         .scrollContentBackground(.hidden)

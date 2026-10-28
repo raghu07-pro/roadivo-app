@@ -13,8 +13,8 @@ final class DisplayProfileStore {
     @ObservationIgnored var onChange: (() -> Void)?
 
     @ObservationIgnored private let defaults: UserDefaults
-    @ObservationIgnored private let logger = Logger(subsystem: "com.roadivo", category: "Profiles")
-    private static let key = "roadivo.displayProfiles"
+    @ObservationIgnored private let logger = Logger(subsystem: "com.playcartv", category: "Profiles")
+    private static let key = "playcartv.displayProfiles"
 
     init(defaults: UserDefaults = .standard) {
         self.defaults = defaults
@@ -25,7 +25,7 @@ final class DisplayProfileStore {
             if stored == nil {
                 // Not a list at all: kept aside, as the next save would overwrite it.
                 defaults.set(data, forKey: Self.key + ".unreadable")
-                Logger(subsystem: "com.roadivo", category: "Profiles")
+                Logger(subsystem: "com.playcartv", category: "Profiles")
                     .fault("Saved profiles were unreadable; starting from the defaults")
             }
         }

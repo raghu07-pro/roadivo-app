@@ -1,6 +1,6 @@
 import Foundation
 import Testing
-@testable import Roadivo
+@testable import PlayCarTV
 
 /// Answers every request from a handler; the API client never reaches a server.
 final class MockURLProtocol: URLProtocol, @unchecked Sendable {

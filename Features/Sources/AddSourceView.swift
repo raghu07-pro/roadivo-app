@@ -1,6 +1,6 @@
 import SwiftUI
 
-/// Add a Source, Roadivo's own way (DECISIONS 166): first how the channels come, a playlist or a media server, then
+/// Add a Source, PlayCarTV's own way (DECISIONS 166): first how the channels come, a playlist or a media server, then
 /// only that way's controls. `Help` is injected by the app, so this feature doesn't depend on Settings.
 struct AddSourceView<Help: View>: View {
     @State var viewModel: AddSourceViewModel
@@ -164,7 +164,7 @@ struct AddSourceView<Help: View>: View {
     }
 
     private var disclaimer: some View {
-        Text("Roadivo doesn't provide, host or endorse any content. Add only sources you have the right to use.")
+        Text("PlayCarTV doesn't provide, host or endorse any content. Add only sources you have the right to use.")
             .font(Typography.caption)
             .foregroundStyle(.roadMuted)
             .multilineTextAlignment(.center)

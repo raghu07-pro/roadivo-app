@@ -1,7 +1,7 @@
 import CarPlay
 import OSLog
 
-/// Roadivo's own CarPlay window when `ROADIVO_CARPLAY_APP` is `window` (DECISIONS 152–154): no map; the four tabs as
+/// PlayCarTV's own CarPlay window when `PLAYCARTV_CARPLAY_APP` is `window` (DECISIONS 152–154): no map; the four tabs as
 /// buttons along the top, the chosen video while parked, a drag to move its place, and Close to stop it.
 final class CarPlayWindowSceneDelegate: UIResponder, CPTemplateApplicationSceneDelegate,
     CPSessionConfigurationDelegate, CPMapTemplateDelegate {
@@ -22,7 +22,7 @@ final class CarPlayWindowSceneDelegate: UIResponder, CPTemplateApplicationSceneD
     private var shownLive: Bool?
     private let mirror = CarPlayMirror()
     private var tabs: CarPlayTabs?
-    private let logger = Logger(subsystem: "com.roadivo", category: "CarPlay")
+    private let logger = Logger(subsystem: "com.playcartv", category: "CarPlay")
 
     func templateApplicationScene(
         _ templateApplicationScene: CPTemplateApplicationScene,

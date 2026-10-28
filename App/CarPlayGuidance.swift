@@ -20,7 +20,7 @@ final class CarPlayGuidance {
     private var isRerouting = false
     private var lastReroute: Date?
     private let usesMiles = RoadDistance.usesMiles(in: AppLocale.current)
-    private let logger = Logger(subsystem: "com.roadivo", category: "CarPlay")
+    private let logger = Logger(subsystem: "com.playcartv", category: "CarPlay")
     /// Seconds between attempts at a new route, so a long detour doesn't ask Maps on every fix.
     private static let rerouteInterval: TimeInterval = 15
 

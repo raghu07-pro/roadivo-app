@@ -2,7 +2,7 @@ import Foundation
 import Observation
 
 /// The Browser: the start page (sites and search) or the open page, its address bar,
-/// and a video found on it that Roadivo's player can take (DECISIONS 118).
+/// and a video found on it that PlayCarTV's player can take (DECISIONS 118).
 @Observable
 @MainActor
 final class BrowserViewModel {
@@ -15,10 +15,10 @@ final class BrowserViewModel {
         didSet { addressFocusChanged() }
     }
 
-    /// A video on the open page that can play in Roadivo.
+    /// A video on the open page that can play in PlayCarTV.
     private(set) var foundVideo: URL?
 
-    /// The page started playing something; Roadivo's own playback makes way.
+    /// The page started playing something; PlayCarTV's own playback makes way.
     @ObservationIgnored private let onWebMediaStarted: () -> Void
     @ObservationIgnored private var controller: WebPageController?
 
@@ -95,7 +95,7 @@ final class BrowserViewModel {
         foundVideo = nil
     }
 
-    /// The found video as a Roadivo item: named after the page, grouped under its site. It isn't saved
+    /// The found video as a PlayCarTV item: named after the page, grouped under its site. It isn't saved
     /// to the library, so it plays without adding a source (and without counting against the free one).
     func takeVideo() -> MediaItem? {
         guard let url = foundVideo else { return nil }

@@ -1,14 +1,14 @@
 import AVFoundation
 import Observation
 
-/// What the car sees right now: whether Roadivo is on CarPlay, and where audio and video go
+/// What the car sees right now: whether PlayCarTV is on CarPlay, and where audio and video go
 /// (an AirPlay display, the car's audio). Car Mode and the display profiles use this.
 @Observable
 @MainActor
 final class CarConnection {
     /// Set by `CarPlaySceneDelegate` when the CarPlay scene connects.
     var isCarPlayConnected = false
-    /// Roadivo's CarPlay window is showing this iPhone's Screen Broadcast (`CarPlayMirror`).
+    /// PlayCarTV's CarPlay window is showing this iPhone's Screen Broadcast (`CarPlayMirror`).
     var isMirroringToCar = false
     /// The AirPlay receiver video is going to ("Living Room TV", "Car Display").
     private(set) var airPlayDestination: String?

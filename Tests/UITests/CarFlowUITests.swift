@@ -9,7 +9,7 @@ final class CarFlowUITests: XCTestCase {
 
     /// Discover shows only its two options, whether a car is connected or not; Cast from an app is gone.
     func testDiscoverShowsTheTwoOptions() throws {
-        let app = XCUIApplication.roadivo(skipOnboarding: true)
+        let app = XCUIApplication.playcartv(skipOnboarding: true)
         app.tabBars.buttons["Discover"].tap()
         XCTAssertTrue(app.buttons["cast.browser"].waitForExistence(timeout: 5))
         XCTAssertTrue(app.buttons["cast.mirroring"].exists)
@@ -19,7 +19,7 @@ final class CarFlowUITests: XCTestCase {
         snapshot("18d-Cast-Options", app: app)
         try auditIgnoringBottomEdge(app, for: [.dynamicType, .sufficientElementDescription, .hitRegion])
 
-        let connected = XCUIApplication.roadivo(skipOnboarding: true, carConnected: true)
+        let connected = XCUIApplication.playcartv(skipOnboarding: true, carConnected: true)
         connected.tabBars.buttons["Discover"].tap()
         XCTAssertTrue(connected.buttons["cast.browser"].waitForExistence(timeout: 5))
         XCTAssertFalse(connected.descendants(matching: .any)["cast.airplay"].exists)
@@ -29,7 +29,7 @@ final class CarFlowUITests: XCTestCase {
     /// Cast to Screen, as simple as CarTV's: where the iPhone is, and one button, Start mirroring. (The broadcast
     /// itself needs a real iPhone.)
     func testCastToScreen() throws {
-        let app = XCUIApplication.roadivo(skipOnboarding: true, carConnected: true)
+        let app = XCUIApplication.playcartv(skipOnboarding: true, carConnected: true)
         app.tabBars.buttons["Discover"].tap()
         let castToScreen = app.buttons["cast.mirroring"]
         XCTAssertTrue(castToScreen.waitForExistence(timeout: 5))
@@ -44,7 +44,7 @@ final class CarFlowUITests: XCTestCase {
 
     /// While the iPhone broadcasts, the one button becomes End mirroring.
     func testCastToScreenWhileMirroring() throws {
-        let app = XCUIApplication.roadivo(skipOnboarding: true, carConnected: true, broadcasting: true)
+        let app = XCUIApplication.playcartv(skipOnboarding: true, carConnected: true, broadcasting: true)
         app.tabBars.buttons["Discover"].tap()
         let castToScreen = app.buttons["cast.mirroring"]
         XCTAssertTrue(castToScreen.waitForExistence(timeout: 5))
@@ -61,7 +61,7 @@ final class CarFlowUITests: XCTestCase {
     func testDriveViewHidesTheVideoAndComesBack() throws {
         // The player's car button is gone (DECISIONS 155); Car Mode opens only from a car's display profile for now.
         try XCTSkipIf(true, "Car Mode has no button in the player; its look is covered by ScreenSnapshotTests")
-        let app = XCUIApplication.roadivo(skipOnboarding: true, demoLibrary: true, pro: true, carConnected: true)
+        let app = XCUIApplication.playcartv(skipOnboarding: true, demoLibrary: true, pro: true, carConnected: true)
         let channel = app.buttons["channel.Steel Horizon · 1080p"]
         XCTAssertTrue(channel.waitForExistence(timeout: 10))
         channel.tap()
@@ -97,7 +97,7 @@ final class CarFlowUITests: XCTestCase {
     /// A film that ends counts down to the next over the player, where Play Now and Cancel keep their own names and
     /// pass the audit (UI tests count from 120).
     func testUpNextWhenAFilmEnds() throws {
-        let app = XCUIApplication.roadivo(skipOnboarding: true, demoLibrary: true, pro: true)
+        let app = XCUIApplication.playcartv(skipOnboarding: true, demoLibrary: true, pro: true)
         let film = app.buttons["channel.Steel Horizon · 1080p"]
         XCTAssertTrue(film.waitForExistence(timeout: 10))
         film.tap()
@@ -125,7 +125,7 @@ final class CarFlowUITests: XCTestCase {
     /// In the car the iPhone is locked: the sound plays on in the background. iOS pauses a player still drawing video
     /// when the app leaves the screen, so the mini player lets go of it there (DECISIONS 127).
     func testSoundPlaysOnInTheBackground() {
-        let app = XCUIApplication.roadivo(skipOnboarding: true, demoLibrary: true)
+        let app = XCUIApplication.playcartv(skipOnboarding: true, demoLibrary: true)
         let channel = app.buttons["channel.Football Tonight"]
         XCTAssertTrue(channel.waitForExistence(timeout: 10))
         channel.tap()

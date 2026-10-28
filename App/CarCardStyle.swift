@@ -1,7 +1,7 @@
 #if DEBUG
     import SwiftUI
 
-    /// A row on the car's lists, as Roadivo's cards on the iPhone (`cardStyle()`): the surface colour with a hairline
+    /// A row on the car's lists, as PlayCarTV's cards on the iPhone (`cardStyle()`): the surface colour with a hairline
     /// edge on the canvas, washed in the theme's fill while pressed.
     struct CarCardStyle: ButtonStyle {
         func makeBody(configuration: Configuration) -> some View {

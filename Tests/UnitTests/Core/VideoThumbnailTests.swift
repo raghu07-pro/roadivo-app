@@ -1,7 +1,7 @@
 import AVFoundation
 import Foundation
 import Testing
-@testable import Roadivo
+@testable import PlayCarTV
 
 @Suite("Video thumbnails")
 struct VideoThumbnailTests {

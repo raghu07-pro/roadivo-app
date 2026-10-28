@@ -70,7 +70,7 @@ struct LibraryView: View {
                     }
                     Button("Cancel", role: .cancel) {}
                 } message: {
-                    Text("Turn on Microphone and Speech Recognition for Roadivo in Settings to search by voice.")
+                    Text("Turn on Microphone and Speech Recognition for PlayCarTV in Settings to search by voice.")
                 }
                 .alert("Voice search isn't available right now.", isPresented: alertBinding(.failed)) {
                     Button("OK", role: .cancel) {}

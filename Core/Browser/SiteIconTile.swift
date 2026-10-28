@@ -7,7 +7,7 @@ enum SiteIconTile {
     /// In pixels; CarPlay scales the tile to the car's grid.
     static let side: CGFloat = 180
 
-    /// As on the iPhone's start page (owner, 2026-10-23): the site's own icon inset on Roadivo's surface colour, edge
+    /// As on the iPhone's start page (owner, 2026-10-23): the site's own icon inset on PlayCarTV's surface colour, edge
     /// to edge so CarPlay adds no see-through tile of its own. Light and dark, for the car's day and night looks.
     static func carTile(from image: UIImage) -> UIImage {
         let asset = UIImageAsset()

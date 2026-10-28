@@ -15,7 +15,7 @@ final class SiteIconStore {
     @ObservationIgnored private var fetched: [String: Date] = [:]
     /// The download under way, in its own task so a closing screen (Discover opening the Browser) can't cancel it.
     @ObservationIgnored private var running: Task<Void, Never>?
-    @ObservationIgnored private let logger = Logger(subsystem: "com.roadivo", category: "SiteIcons")
+    @ObservationIgnored private let logger = Logger(subsystem: "com.playcartv", category: "SiteIcons")
 
     nonisolated static let maxAge: TimeInterval = 30 * 24 * 60 * 60
 

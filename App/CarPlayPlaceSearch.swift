@@ -10,7 +10,7 @@ final class CarPlayPlaceSearch: NSObject, CPSearchTemplateDelegate {
     private let finder: PlaceFinding
     /// Takes the driver back to the map, where the routes appear.
     private let onChoose: () -> Void
-    private let logger = Logger(subsystem: "com.roadivo", category: "CarPlay")
+    private let logger = Logger(subsystem: "com.playcartv", category: "CarPlay")
 
     init(environment: AppEnvironment, onChoose: @escaping () -> Void) {
         directions = environment.directions

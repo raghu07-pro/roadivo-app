@@ -8,7 +8,7 @@ final class VoiceSearchModel {
     enum State: Equatable {
         case idle
         case listening
-        /// Microphone or speech recognition is off for Roadivo.
+        /// Microphone or speech recognition is off for PlayCarTV.
         case denied
         case failed
     }

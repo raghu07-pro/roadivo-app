@@ -47,7 +47,7 @@ enum PlexError: LocalizedError, Equatable {
         case .codeExpired: String(appLocalized: "The code expired. Get a new one.")
         case .noServers:
             String(appLocalized: """
-            This Plex account has no media server. Roadivo plays your own Plex Media Server (on a computer or \
+            This Plex account has no media server. PlayCarTV plays your own Plex Media Server (on a computer or \
             NAS) or one shared with you, not Plex's free Movies & TV.
             """)
         case .serverUnreachable: String(appLocalized: "Couldn't reach this Plex server. Check that it's on and online.")
@@ -103,7 +103,7 @@ struct PlexClient: PlexLinking {
         let resources: [Resource] = try await decode(request)
         // Counts and kinds only (never names or tokens), to tell "no server" from a missed one.
         let kinds = resources.map(\.provides).joined(separator: " | ")
-        Logger(subsystem: "com.roadivo", category: "Plex")
+        Logger(subsystem: "com.playcartv", category: "Plex")
             .info("Plex resources: \(resources.count, privacy: .public) [\(kinds, privacy: .public)]")
         let servers = resources.filter { $0.provides.split(separator: ",").contains("server") }.compactMap { resource in
             resource.accessToken.map { token in
@@ -205,12 +205,12 @@ struct PlexClient: PlexLinking {
     private func addHeaders(to request: inout URLRequest, token: String?) {
         let headers = [
             "Accept": "application/json",
-            "X-Plex-Product": "Roadivo",
+            "X-Plex-Product": "PlayCarTV",
             "X-Plex-Version": "1.0",
             "X-Plex-Client-Identifier": clientID,
             "X-Plex-Platform": "iOS",
             "X-Plex-Device": "iPhone",
-            "X-Plex-Device-Name": "Roadivo"
+            "X-Plex-Device-Name": "PlayCarTV"
         ]
         headers.forEach { request.setValue($0.value, forHTTPHeaderField: $0.key) }
         if let token {
@@ -282,9 +282,9 @@ struct PlexClient: PlexLinking {
             "fastSeek": "1",
             "maxVideoBitrate": "8000",
             "videoResolution": "1920x1080",
-            "session": "roadivo-\(item.ratingKey)",
+            "session": "playcartv-\(item.ratingKey)",
             "X-Plex-Client-Identifier": clientID,
-            "X-Plex-Product": "Roadivo",
+            "X-Plex-Product": "PlayCarTV",
             "X-Plex-Platform": "iOS"
         ])
     }

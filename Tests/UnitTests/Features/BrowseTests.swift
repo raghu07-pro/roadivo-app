@@ -1,6 +1,6 @@
 import Foundation
 import Testing
-@testable import Roadivo
+@testable import PlayCarTV
 
 /// Browsing like the reference app: Home's source filter, group chips, a source's own screen,
 /// and server films as posters.

@@ -5,7 +5,7 @@ import os
 /// Stands in for the broadcast extension's `FrameServer` on a free loopback port: answers each known path once.
 final class LoopbackBroadcast: @unchecked Sendable {
     private let listener: NWListener
-    private let queue = DispatchQueue(label: "com.roadivo.tests.loopback")
+    private let queue = DispatchQueue(label: "com.playcartv.tests.loopback")
     private let answers: [String: Data]
     private var connections: [NWConnection] = []
 

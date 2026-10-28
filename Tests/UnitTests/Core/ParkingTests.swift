@@ -1,8 +1,8 @@
 import Foundation
 import Testing
-@testable import Roadivo
+@testable import PlayCarTV
 
-/// Video in Roadivo's CarPlay window shows only while parked (DECISIONS 152).
+/// Video in PlayCarTV's CarPlay window shows only while parked (DECISIONS 152).
 @Suite("Parking")
 @MainActor
 struct ParkingTests {
@@ -156,7 +156,7 @@ struct ParkingTests {
         #expect(!monitor.isParked)
     }
 
-    @Test("Location off for Roadivo is passed on from the sampler")
+    @Test("Location off for PlayCarTV is passed on from the sampler")
     func monitorReportsLocationOff() {
         #expect(ParkingMonitor(sampler: SilentSampler(isLocationDenied: true)).isLocationDenied)
         #expect(!ParkingMonitor(sampler: SilentSampler()).isLocationDenied)

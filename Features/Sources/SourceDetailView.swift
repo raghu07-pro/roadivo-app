@@ -90,10 +90,10 @@ struct SourceDetailView: View {
             Button("Cancel", role: .cancel) {}
         } message: {
             if viewModel.kind == .localVideos {
-                Text("All your imported videos are removed from Roadivo. The originals stay in Photos or Files.")
+                Text("All your imported videos are removed from PlayCarTV. The originals stay in Photos or Files.")
             } else {
                 Text("""
-                Its channels, favorites and watch history are removed from Roadivo. To add it again, you'll need \
+                Its channels, favorites and watch history are removed from PlayCarTV. To add it again, you'll need \
                 its link or login.
                 """)
             }

@@ -1,7 +1,7 @@
 import SnapshotTesting
 import SwiftUI
 import XCTest
-@testable import Roadivo
+@testable import PlayCarTV
 
 /// Visual regression for the key screens, light and dark. To re-record, delete the reference image
 /// in __Snapshots__ and run once (the recording run fails, the next passes).

@@ -56,7 +56,7 @@ final class UpdatePromptModel {
     }
 
     private enum Keys {
-        static let lastCheck = "roadivo.update.lastCheck"
-        static let closedVersion = "roadivo.update.closedVersion"
+        static let lastCheck = "playcartv.update.lastCheck"
+        static let closedVersion = "playcartv.update.closedVersion"
     }
 }

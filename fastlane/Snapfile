@@ -1,5 +1,5 @@
-# App Store screenshots for Roadivo: `fastlane screenshots`. See /app-screenshots.
-# Roadivo is iPhone-only; the 6.9-inch device is the size App Store Connect requires.
+# App Store screenshots for PlayCarTV: `fastlane screenshots`. See /app-screenshots.
+# PlayCarTV is iPhone-only; the 6.9-inch device is the size App Store Connect requires.
 devices([
   "iPhone 17 Pro Max",
   "iPhone 16"
@@ -7,8 +7,8 @@ devices([
 
 languages(["en-US"])
 
-scheme("Roadivo")
-only_testing(["RoadivoUITests/ScreenshotUITests"])
+scheme("PlayCarTV")
+only_testing(["PlayCarTVUITests/ScreenshotUITests"])
 clear_previous_screenshots(true)
 output_directory("./fastlane/screenshots")
 override_status_bar(true)

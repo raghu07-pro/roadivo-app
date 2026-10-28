@@ -1,15 +1,15 @@
 import StoreKitTest
 import Testing
-@testable import Roadivo
+@testable import PlayCarTV
 
-/// Loads StoreKit/Roadivo.storekit through Apple's test session and the real `StoreKitClient`, so a
+/// Loads StoreKit/PlayCarTV.storekit through Apple's test session and the real `StoreKitClient`, so a
 /// malformed file or product-ID typo fails here, not as "Plans aren't available".
 @Suite("StoreKit configuration", .serialized)
 @MainActor
 struct StoreKitConfigurationTests {
     @Test("All three plans load with prices, intro offer and per-week price")
     func loadsPlans() async throws {
-        let session = try SKTestSession(configurationFileNamed: "Roadivo")
+        let session = try SKTestSession(configurationFileNamed: "PlayCarTV")
         session.resetToDefaultState()
         session.disableDialogs = true
         session.clearTransactions() // The first-week price is only for someone who never subscribed.
@@ -24,7 +24,7 @@ struct StoreKitConfigurationTests {
 
     @Test("Buying lifetime grants Pro")
     func purchase() async throws {
-        let session = try SKTestSession(configurationFileNamed: "Roadivo")
+        let session = try SKTestSession(configurationFileNamed: "PlayCarTV")
         session.resetToDefaultState()
         session.disableDialogs = true
         let client = StoreKitClient()

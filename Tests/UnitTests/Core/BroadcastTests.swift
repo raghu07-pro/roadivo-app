@@ -1,7 +1,7 @@
 import Foundation
 import Network
 import Testing
-@testable import Roadivo
+@testable import PlayCarTV
 
 @Suite("Screen Broadcast server")
 struct BroadcastHTTPTests {
@@ -48,9 +48,9 @@ struct BroadcastHTTPTests {
 
     @Test("The app and its extension work out the same code, however iOS spells the path")
     func code() {
-        let app = URL(filePath: "/var/containers/Bundle/Application/7A1C/Roadivo.app")
-        let privateApp = URL(filePath: "/private/var/containers/Bundle/Application/7A1C/Roadivo.app")
-        let broadcast = privateApp.appending(path: "PlugIns/RoadivoBroadcast.appex")
+        let app = URL(filePath: "/var/containers/Bundle/Application/7A1C/PlayCarTV.app")
+        let privateApp = URL(filePath: "/private/var/containers/Bundle/Application/7A1C/PlayCarTV.app")
+        let broadcast = privateApp.appending(path: "PlugIns/PlayCarTVBroadcast.appex")
 
         let code = BroadcastHTTP.code(forBundleAt: app)
         #expect(code.count == 6)
@@ -61,8 +61,8 @@ struct BroadcastHTTPTests {
 
     @Test("Another install folder gets another code")
     func codePerInstall() {
-        let app = URL(filePath: "/var/containers/Bundle/Application/7A1C/Roadivo.app")
-        let reinstalled = URL(filePath: "/var/containers/Bundle/Application/93FE/Roadivo.app")
+        let app = URL(filePath: "/var/containers/Bundle/Application/7A1C/PlayCarTV.app")
+        let reinstalled = URL(filePath: "/var/containers/Bundle/Application/93FE/PlayCarTV.app")
         #expect(BroadcastHTTP.code(forBundleAt: reinstalled) != BroadcastHTTP.code(forBundleAt: app))
     }
 

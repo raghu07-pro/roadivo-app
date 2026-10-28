@@ -1,7 +1,7 @@
 import AVFoundation
 import SwiftUI
 
-/// Roadivo's CarPlay window (DECISIONS 152, 154): the video while parked with Car Mode's progress bar, otherwise the
+/// PlayCarTV's CarPlay window (DECISIONS 152, 154): the video while parked with Car Mode's progress bar, otherwise the
 /// road and one line. CarPlay's buttons sit on top; a drag across the window moves the video's place.
 final class CarPlayWindowController: UIViewController {
     private let video = PlayerLayerView()
@@ -17,10 +17,10 @@ final class CarPlayWindowController: UIViewController {
     /// Each minute while the car is connected, for the road's hour (`updateMoment`).
     private var clock: Timer?
     private var browser: CarBrowserController?
-    /// The road and its line behind everything but the video; Roadivo's plain car window draws its own screens and
+    /// The road and its line behind everything but the video; PlayCarTV's plain car window draws its own screens and
     /// never shows them (owner, 2026-10-26; DECISIONS 163).
     var showsRoad = true
-    /// Car Mode's bar along the video; Roadivo's plain car window draws one to tap and drag in its controls instead.
+    /// Car Mode's bar along the video; PlayCarTV's plain car window draws one to tap and drag in its controls instead.
     var showsProgress = true
     private var gravity: AVLayerVideoGravity?
     /// The whole iPhone from Screen Broadcast, over everything else while parked.
@@ -160,7 +160,7 @@ final class CarPlayWindowController: UIViewController {
         }
         updateProgress()
         card.view.isHidden = showsVideo || !showsRoad
-        // The title only for what the car is playing; on the tabs or the Pro line, Roadivo's tagline.
+        // The title only for what the car is playing; on the tabs or the Pro line, PlayCarTV's tagline.
         let title = state == .driving || state == .needsLocation ? playback.current?.title : nil
         let content = CarWindowCard.Content(state: state, title: title)
         if card.rootView.content != content {
@@ -323,13 +323,15 @@ struct CarWindowCard: View {
         var message: String? {
             switch state {
             case .upgrade:
-                String(appLocalized: "Watching in the car is part of Roadivo Pro. Unlock it on your iPhone.")
+                String(appLocalized: "Watching in the car is part of PlayCarTV Pro. Unlock it on your iPhone.")
             case .home:
                 String(appLocalized: "Choose what to watch from Home, Favorites or Browser, or cast your iPhone.")
             case .driving:
                 String(appLocalized: "Video is off while driving. Sound keeps playing.")
             case .needsLocation:
-                String(appLocalized: "Allow Location for Roadivo on your iPhone, so video can play when you're parked.")
+                String(
+                    appLocalized: "Allow Location for PlayCarTV on your iPhone, so video can play when you're parked."
+                )
             case .video:
                 nil
             }

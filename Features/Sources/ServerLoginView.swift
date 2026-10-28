@@ -146,7 +146,7 @@ struct ServerLoginView: View {
         switch viewModel.kind {
         case .xtream: "Your login is kept in this iPhone's Keychain and sent only to that server."
         case .jellyfin, .emby, .plex:
-            "Your password is used once to sign in. Roadivo keeps only the server's access token, in the Keychain."
+            "Your password is used once to sign in. PlayCarTV keeps only the server's access token, in the Keychain."
         }
     }
 

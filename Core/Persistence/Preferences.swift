@@ -46,10 +46,10 @@ final class Preferences {
     }
 
     private enum Keys {
-        static let videosOpened = "roadivo.videosOpened"
-        static let onboarding = "roadivo.hasCompletedOnboarding"
-        static let introPaywall = "roadivo.hasSeenIntroPaywall"
-        static let deviceID = "roadivo.deviceID"
-        static let driveView = "roadivo.carMode.driveView"
+        static let videosOpened = "playcartv.videosOpened"
+        static let onboarding = "playcartv.hasCompletedOnboarding"
+        static let introPaywall = "playcartv.hasSeenIntroPaywall"
+        static let deviceID = "playcartv.deviceID"
+        static let driveView = "playcartv.carMode.driveView"
     }
 }

@@ -30,7 +30,7 @@
                 let splitWidth = model.isPlayerSplit ? proxy.size.width * CarScreenModel.splitWidth : 0
                 ZStack(alignment: .leading) {
                     ZStack {
-                        // Over the video, nothing; without it, Roadivo's canvas, with why above play.
+                        // Over the video, nothing; without it, PlayCarTV's canvas, with why above play.
                         Group {
                             if isVideo {
                                 Color.clear

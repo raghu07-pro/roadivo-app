@@ -2,7 +2,7 @@
 # Re-captures Screenshots/review from the UI tests: every numbered snapshot("NN-Name") they take.
 # Usage: Scripts/export-review-screenshots.sh ["iPhone 16e"]   (DERIVED_DATA overrides the build folder)
 # OUT and ONLY pick another folder and test list, e.g. App Store sizes:
-#   OUT=Screenshots/AppStore/6.9 ONLY=RoadivoUITests/ScreenshotUITests Scripts/export-review-screenshots.sh "iPhone 17 Pro Max"
+#   OUT=Screenshots/AppStore/6.9 ONLY=PlayCarTVUITests/ScreenshotUITests Scripts/export-review-screenshots.sh "iPhone 17 Pro Max"
 # WORKERS simulator clones run the tests side by side (3 by default; 1 for one at a time). No code coverage, and a test
 # stuck past 10 minutes fails instead of holding up the run (the longest screenshot walks take over 3). The log stays in .build/ui-tests.log.
 set -euo pipefail
@@ -11,12 +11,12 @@ cd "$(dirname "$0")/.."
 device="${1:-iPhone 17 Pro}"
 derived="${DERIVED_DATA:-.build/DerivedData}"
 target="${OUT:-Screenshots/review}"
-only="${ONLY:-RoadivoUITests}"
+only="${ONLY:-PlayCarTVUITests}"
 workers="${WORKERS:-3}"
 work="$(mktemp -d)"
 trap 'cp "$work/test.log" .build/ui-tests.log 2>/dev/null || true; rm -rf "$work"' EXIT
 
-xcodebuild -workspace Roadivo.xcworkspace -scheme Roadivo \
+xcodebuild -workspace PlayCarTV.xcworkspace -scheme PlayCarTV \
   -destination "platform=iOS Simulator,name=$device" \
   -derivedDataPath "$derived" -resultBundlePath "$work/run.xcresult" \
   -parallel-testing-enabled YES -parallel-testing-worker-count "$workers" \

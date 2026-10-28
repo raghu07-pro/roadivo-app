@@ -1,7 +1,7 @@
 #if DEBUG
     import SwiftUI
 
-    /// Why there's no picture, on Roadivo's canvas (DECISIONS 163–164): watching needs Pro, video is off while
+    /// Why there's no picture, on PlayCarTV's canvas (DECISIONS 163–164): watching needs Pro, video is off while
     /// driving, or Location is off, in the CarPlay window card's words under what's playing.
     struct CarScreenNotice: View {
         let model: CarScreenModel

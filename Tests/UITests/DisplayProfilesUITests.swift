@@ -9,7 +9,7 @@ final class DisplayProfilesUITests: XCTestCase {
     }
 
     func testSaveAndEditProfileFromSettings() throws {
-        let app = XCUIApplication.roadivo(skipOnboarding: true, pro: true, carConnected: true)
+        let app = XCUIApplication.playcartv(skipOnboarding: true, pro: true, carConnected: true)
         app.tabBars.buttons["Settings"].tap()
         app.buttons["settings.displayProfiles"].tap()
         let save = app.buttons["profiles.saveCurrent"]
@@ -38,7 +38,7 @@ final class DisplayProfilesUITests: XCTestCase {
     }
 
     func testSettingsListsThisIPhoneAndSavedProfiles() throws {
-        let app = XCUIApplication.roadivo(skipOnboarding: true, carConnected: true)
+        let app = XCUIApplication.playcartv(skipOnboarding: true, carConnected: true)
         app.settingsTab.tap()
         app.buttons["settings.displayProfiles"].tap()
         let save = app.buttons["profiles.saveCurrent"]

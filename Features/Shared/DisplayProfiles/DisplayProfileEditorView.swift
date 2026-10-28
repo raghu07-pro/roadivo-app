@@ -69,7 +69,7 @@ struct DisplayProfileEditorView: View {
                         VStack(alignment: .leading, spacing: 2) {
                             Text("Open Car Mode When Connected")
                             if !isPro {
-                                Text("Included with Roadivo Pro").font(Typography.caption).foregroundStyle(.roadMuted)
+                                Text("Included with PlayCarTV Pro").font(Typography.caption).foregroundStyle(.roadMuted)
                             }
                         }
                     }
@@ -133,7 +133,7 @@ struct DisplayProfileEditorView: View {
             }
             Button("Cancel", role: .cancel) {}
         } message: {
-            Text("When it connects again, Roadivo uses This iPhone's settings.")
+            Text("When it connects again, PlayCarTV uses This iPhone's settings.")
         }
     }
 

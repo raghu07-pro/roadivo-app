@@ -4,7 +4,7 @@ import PhotosUI
 import SwiftUI
 import VisionKit
 
-private let scannerLogger = Logger(subsystem: "com.roadivo", category: "Scanner")
+private let scannerLogger = Logger(subsystem: "com.playcartv", category: "Scanner")
 
 /// Live camera QR scanner. Returns the first code's text (a playlist link or
 /// M3U content). Only offered where `isAvailable` is true (not the simulator).

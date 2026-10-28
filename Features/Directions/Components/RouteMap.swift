@@ -17,7 +17,7 @@ struct RouteMap: View {
             ForEach(drawOrder) { option in
                 let path = option.path.map(\.location)
                 if option.id == viewModel.selectedRoute?.id {
-                    // Drawn as Roadivo's road: asphalt edged in the theme's golden light, with the yellow centre line
+                    // Drawn as PlayCarTV's road: asphalt edged in the theme's golden light, with the yellow centre line
                     // of the app's road scenes, readable on light and dark maps (DECISIONS 172).
                     MapPolyline(coordinates: path)
                         .stroke(.roadBrandGradient, style: Self.line(width: 15))
@@ -39,7 +39,7 @@ struct RouteMap: View {
                 }
             }
         }
-        // Muted streets and no shop or restaurant pins, so Roadivo's route and markers stand out.
+        // Muted streets and no shop or restaurant pins, so PlayCarTV's route and markers stand out.
         .mapStyle(.standard(elevation: .flat, emphasis: .muted, pointsOfInterest: .excludingAll))
         .tint(.roadAccent)
     }

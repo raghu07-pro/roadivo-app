@@ -101,7 +101,7 @@ struct SettingsView<SourcesScreen: View, ProfilesScreen: View>: View {
 
                 Section {
                     Button(action: rate) {
-                        row(symbol: "star.fill", title: "Rate Roadivo", detail: nil, leavesApp: true)
+                        row(symbol: "star.fill", title: "Rate PlayCarTV", detail: nil, leavesApp: true)
                     }
                     .accessibilityIdentifier("settings.rate")
                     shareRow
@@ -121,7 +121,7 @@ struct SettingsView<SourcesScreen: View, ProfilesScreen: View>: View {
                 } footer: {
                     VStack(alignment: .leading, spacing: Spacing.xxs) {
                         Text(app: Brand.tagline).fontWeight(.semibold)
-                        Text("Roadivo is a player only. It doesn't provide, host or recommend any content.")
+                        Text("PlayCarTV is a player only. It doesn't provide, host or recommend any content.")
                     }
                 }
             }
@@ -158,7 +158,7 @@ struct SettingsView<SourcesScreen: View, ProfilesScreen: View>: View {
     }
 
     private var planSubtitle: Text {
-        guard let currentPlan else { return Text("Active. Thanks for supporting Roadivo.") }
+        guard let currentPlan else { return Text("Active. Thanks for supporting PlayCarTV.") }
         return Text("\(String(appLocalized: currentPlan.title)) plan · Active")
     }
 
@@ -171,7 +171,7 @@ struct SettingsView<SourcesScreen: View, ProfilesScreen: View>: View {
                 .background(Color.roadOnBrand.opacity(0.18), in: Circle())
                 .accessibilityHidden(true)
             VStack(alignment: .leading, spacing: 2) {
-                Text("Roadivo Pro").font(Typography.button)
+                Text("PlayCarTV Pro").font(Typography.button)
                 subtitle.font(Typography.caption)
             }
             .multilineTextAlignment(.leading)
@@ -225,12 +225,12 @@ struct SettingsView<SourcesScreen: View, ProfilesScreen: View>: View {
 
     @ViewBuilder private var shareRow: some View {
         let message = Text(app: Brand.shareMessage)
-        let label = row(symbol: "square.and.arrow.up", title: "Share Roadivo", detail: nil, leavesApp: true)
+        let label = row(symbol: "square.and.arrow.up", title: "Share PlayCarTV", detail: nil, leavesApp: true)
         Group {
             if let page = appStore.page {
-                ShareLink(item: page, subject: Text("Roadivo"), message: message) { label }
+                ShareLink(item: page, subject: Text("PlayCarTV"), message: message) { label }
             } else {
-                ShareLink(item: String(appLocalized: Brand.shareMessage), subject: Text("Roadivo")) { label }
+                ShareLink(item: String(appLocalized: Brand.shareMessage), subject: Text("PlayCarTV")) { label }
             }
         }
         .accessibilityIdentifier("settings.share")

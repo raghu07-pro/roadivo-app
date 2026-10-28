@@ -1,6 +1,6 @@
 import Foundation
 import Testing
-@testable import Roadivo
+@testable import PlayCarTV
 
 @Suite("Paywall")
 @MainActor
@@ -88,7 +88,7 @@ struct PaywallViewModelTests {
     func restore() async {
         let (none, _) = make()
         #expect(await !none.restore())
-        #expect(none.message?.contains("No active Roadivo Pro purchase") == true)
+        #expect(none.message?.contains("No active PlayCarTV Pro purchase") == true)
 
         let (owned, access) = make(FakeStoreClient(isPro: true))
         #expect(await owned.restore())

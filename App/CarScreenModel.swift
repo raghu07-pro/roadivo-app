@@ -42,7 +42,7 @@
         func choosePlace(_ suggestion: PlaceSuggestion)
         /// Show on iPhone, from the car's route card.
         func showRouteOnPhone()
-        /// How to type on a search page: speak, or Roadivo's keyboard.
+        /// How to type on a search page: speak, or PlayCarTV's keyboard.
         func chooseKeyboard()
         func startVoice()
         func stopVoice()
@@ -65,7 +65,7 @@
         func toggleMirrorFill()
     }
 
-    /// Roadivo's own car screen on the plain CarPlay window (DECISIONS 161–162), drawn by `CarScreenView`: the tabs,
+    /// PlayCarTV's own car screen on the plain CarPlay window (DECISIONS 161–162), drawn by `CarScreenView`: the tabs,
     /// the controls over a video or the iPhone's screen, the browser's toolbar, and full-screen pages for typing.
     @Observable
     @MainActor
@@ -90,7 +90,7 @@
                 }
             }
 
-            /// Maps only while the iPhone shows it too (`ROADIVO_DIRECTIONS`).
+            /// Maps only while the iPhone shows it too (`PLAYCARTV_DIRECTIONS`).
             static var shown: [Tab] {
                 allCases.filter { $0 != .maps || DirectionsAvailability.isEnabled }
             }
@@ -157,19 +157,19 @@
             var isSecure = false
             /// A number or phone field: the keyboard opens on its numbers.
             var startsWithNumbers = false
-            /// Roadivo's own channels and titles rather than the web: results play, and searches are remembered.
+            /// PlayCarTV's own channels and titles rather than the web: results play, and searches are remembered.
             var isLibrary = false
             /// Maps' place search: a place found opens its routes (DECISIONS 172).
             var isPlace = false
         }
 
-        /// How a search page is being typed into: first a choice of voice, the iPhone or Roadivo's keyboard, as in
+        /// How a search page is being typed into: first a choice of voice, the iPhone or PlayCarTV's keyboard, as in
         /// CarTV.
         enum SearchInput: Equatable {
             case choose
             case keyboard
             case voice
-            /// The iPhone's own keyboard, in a sheet in Roadivo on the iPhone (`CarPhoneInput`).
+            /// The iPhone's own keyboard, in a sheet in PlayCarTV on the iPhone (`CarPhoneInput`).
             case phone
         }
 

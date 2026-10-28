@@ -1,6 +1,6 @@
 import Foundation
 import Testing
-@testable import Roadivo
+@testable import PlayCarTV
 
 /// Its own URLProtocol so these tests never race APIClientTests' handler.
 final class ServerMockURLProtocol: URLProtocol, @unchecked Sendable {

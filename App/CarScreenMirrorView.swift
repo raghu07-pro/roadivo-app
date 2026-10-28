@@ -16,7 +16,7 @@
 
         var body: some View {
             ZStack {
-                // Over the iPhone's screen, nothing; without it, why, on Roadivo's canvas.
+                // Over the iPhone's screen, nothing; without it, why, on PlayCarTV's canvas.
                 Group {
                     if showsPicture {
                         Color.clear

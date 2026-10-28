@@ -1,4 +1,4 @@
-# App Review notes — Roadivo 1.0
+# App Review notes — PlayCarTV 1.0
 
 Paste the text below into App Store Connect › App Review Information › Notes (it is under the
 4,000-character limit). No sign-in is needed, so leave the demo account fields empty.
@@ -7,7 +7,7 @@ parking as the real check (non-Debug builds must not assume a parked car, `AppEn
 
 ---
 
-Roadivo is a player for media the user already has. It ships with no channels, playlists or video and
+PlayCarTV is a player for media the user already has. It ships with no channels, playlists or video and
 is not affiliated with any TV provider. Users add their own M3U/M3U8 playlist (link, file, pasted text
 or QR code), sign in to their own Jellyfin, Emby, Plex or Xtream server, or import videos from Photos
 or Files.
@@ -26,17 +26,17 @@ https://devstreaming-cdn.apple.com/videos/streaming/examples/bipbop_16x9/bipbop_
    leave the app, and "Up next in 5" when a video ends. The same box takes a
    single stream link. "Media servers" signs in to a server instead.
 
-IN-APP PURCHASES (Roadivo Pro)
+IN-APP PURCHASES (PlayCarTV Pro)
 - Free: one source, unlimited imported videos, AirPlay, Picture in Picture, Maps and the Browser.
 - Pro (Weekly or Yearly auto-renewable subscription, or Lifetime one-time purchase): unlimited
   sources, Car Mode and CarPlay.
-- Plans show after onboarding, on a second source and in Settings › Roadivo Pro, with price, period,
+- Plans show after onboarding, on a second source and in Settings › PlayCarTV Pro, with price, period,
   first-week offer, renewal terms, Terms of Use (Apple's standard EULA), Privacy Policy and Restore.
 
 CAR MODE AND CARPLAY (Pro)
 Car Mode (large landscape controls for a dashboard mount) opens when a saved car connects with
 Settings › Car & Display Profiles › Open Car Mode When Connected on.
-On CarPlay, Roadivo uses the navigation entitlement for its window but draws no map. Home, Favorites,
+On CarPlay, PlayCarTV uses the navigation entitlement for its window but draws no map. Home, Favorites,
 Library, Cast and Browser are CarPlay template tabs. While the car is parked the window shows a chosen
 item's video; Close stops it. Cast shows the iPhone's own screen there while parked.
 Parked means CarPlay stops limiting its keyboard, or Core Location reports the car still for 30 seconds;
@@ -46,9 +46,9 @@ Browser. Test it in the CarPlay Simulator after buying Pro in the sandbox.
 
 DISCOVER TAB
 - Browser: a web browser whose start page links to popular video websites (as websites, never their
-  apps); a direct video link can play in Roadivo's player.
-- Cast to Screen: Start mirroring opens Apple's broadcast sheet (Roadivo's Broadcast Upload Extension).
-  With Roadivo on CarPlay and the car parked, the car's screen shows the iPhone's; frames stay on the
+  apps); a direct video link can play in PlayCarTV's player.
+- Cast to Screen: Start mirroring opens Apple's broadcast sheet (PlayCarTV's Broadcast Upload Extension).
+  With PlayCarTV on CarPlay and the car parked, the car's screen shows the iPhone's; frames stay on the
   device (loopback only), never recorded or uploaded. Real iPhone only.
 
 MAPS TAB (free)
@@ -64,7 +64,7 @@ PERMISSIONS (each asked on first use)
 APP TRANSPORT SECURITY
 NSAllowsArbitraryLoads is set because users' playlists and servers are often plain http on hosts we
 cannot list in advance, including home servers. NSAllowsArbitraryLoadsForMedia alone would not cover
-playlist downloads or the server APIs, which use URLSession. Roadivo connects
+playlist downloads or the server APIs, which use URLSession. PlayCarTV connects
 only to addresses the user enters, Apple's App Store lookup for update notices and plex.tv for Plex sign-in.
 
 PRIVACY

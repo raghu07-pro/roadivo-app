@@ -1,6 +1,6 @@
 import AVFoundation
 import Testing
-@testable import Roadivo
+@testable import PlayCarTV
 
 @Suite("Playback controller")
 @MainActor

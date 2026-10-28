@@ -23,7 +23,7 @@ extension PlaybackController {
         return true
     }
 
-    /// Set at launch too, so CarPlay and the lock screen treat Roadivo as a video player from the start.
+    /// Set at launch too, so CarPlay and the lock screen treat PlayCarTV as a video player from the start.
     func configureAudioSession() {
         do {
             try AVAudioSession.sharedInstance().setCategory(.playback, mode: .moviePlayback, policy: .longFormVideo)

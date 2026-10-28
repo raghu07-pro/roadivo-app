@@ -1,7 +1,7 @@
 import AVFoundation
 import Foundation
 import Testing
-@testable import Roadivo
+@testable import PlayCarTV
 
 @Suite("Display profiles")
 @MainActor
@@ -9,7 +9,7 @@ struct DisplayProfileTests {
     private let livingRoom = Receiver(kind: .airPlay, uid: "AA:BB-airplay", name: "Living Room TV")
 
     private func freshDefaults() throws -> UserDefaults {
-        let name = "roadivo.tests.\(UUID().uuidString)"
+        let name = "playcartv.tests.\(UUID().uuidString)"
         return try #require(UserDefaults(suiteName: name))
     }
 
@@ -84,7 +84,7 @@ struct DisplayProfileTests {
     @Test("Unreadable saved profiles start again from today's behaviour")
     func unreadable() throws {
         let defaults = try freshDefaults()
-        defaults.set(Data("not json".utf8), forKey: "roadivo.displayProfiles")
+        defaults.set(Data("not json".utf8), forKey: "playcartv.displayProfiles")
         let store = DisplayProfileStore(defaults: defaults)
         #expect(store.saved.isEmpty)
         #expect(store.thisIPhone.aspect == .fit)
@@ -120,7 +120,7 @@ struct DisplayProfileTests {
         second.aspect = .stretch
         try defaults.set(
             JSONEncoder().encode([DisplayProfile.thisIPhone(), first, second]),
-            forKey: "roadivo.displayProfiles"
+            forKey: "playcartv.displayProfiles"
         )
 
         let store = DisplayProfileStore(defaults: defaults)
@@ -140,7 +140,7 @@ struct DisplayProfileTests {
           "aspect":"zoom","futureSetting":42},
          {"name":"no id"}]
         """
-        defaults.set(Data(json.utf8), forKey: "roadivo.displayProfiles")
+        defaults.set(Data(json.utf8), forKey: "playcartv.displayProfiles")
 
         let store = DisplayProfileStore(defaults: defaults)
 
@@ -153,9 +153,9 @@ struct DisplayProfileTests {
     @Test("Saved data that isn't a list at all is kept aside, not overwritten")
     func unreadableKeptAside() throws {
         let defaults = try freshDefaults()
-        defaults.set(Data("not json".utf8), forKey: "roadivo.displayProfiles")
+        defaults.set(Data("not json".utf8), forKey: "playcartv.displayProfiles")
         _ = DisplayProfileStore(defaults: defaults)
-        #expect(defaults.data(forKey: "roadivo.displayProfiles.unreadable") == Data("not json".utf8))
+        #expect(defaults.data(forKey: "playcartv.displayProfiles.unreadable") == Data("not json".utf8))
     }
 
     @Test("Connecting acts once: Home's source, and Car Mode only over something playing, for Pro")

@@ -1,6 +1,6 @@
 import SwiftUI
 
-/// Location is off for Roadivo, so routes have no start; Settings is where it's turned back on.
+/// Location is off for PlayCarTV, so routes have no start; Settings is where it's turned back on.
 struct LocationOffNotice: View {
     /// On its own under the search field; inside the route card it drops its own card.
     var isCard = true
@@ -11,7 +11,7 @@ struct LocationOffNotice: View {
         let notice = VStack(alignment: .leading, spacing: Spacing.xs) {
             Label {
                 VStack(alignment: .leading, spacing: 2) {
-                    Text("Location is off for Roadivo")
+                    Text("Location is off for PlayCarTV")
                         .font(Typography.cardTitle)
                     Text("Turn on Location in Settings to see routes from where you are.")
                         .font(Typography.secondary)

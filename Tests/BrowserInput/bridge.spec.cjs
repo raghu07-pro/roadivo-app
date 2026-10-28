@@ -20,7 +20,7 @@ document.querySelector('output').textContent=document.querySelector('#query').va
 
 async function isolated(session, frameId) {
   const { executionContextId } = await session.send('Page.createIsolatedWorld', {
-    frameId, worldName: 'RoadivoCarInput'
+    frameId, worldName: 'PlayCarTVCarInput'
   });
   async function evaluate(expression) {
     const result = await session.send('Runtime.evaluate', {
@@ -29,20 +29,20 @@ async function isolated(session, frameId) {
     if (result.exceptionDetails) throw new Error(result.exceptionDetails.text);
     return result.result.value;
   }
-  await evaluate(`globalThis.messages=[];globalThis.webkit={messageHandlers:{roadivoCarInput:{
+  await evaluate(`globalThis.messages=[];globalThis.webkit={messageHandlers:{playcartvCarInput:{
     postMessage(message){messages.push(message);}}}};${source}`);
   return {
     evaluate,
     messages: () => evaluate('messages'),
     edits: () => evaluate('messages.filter(m=>m.kind==="edit")'),
-    apply: (request, text, submit = true) => evaluate(`roadivoCarInput.apply(
+    apply: (request, text, submit = true) => evaluate(`playcartvCarInput.apply(
       ${JSON.stringify(request.documentID)},${JSON.stringify(request.requestID)},${JSON.stringify(text)},${submit})`)
   };
 }
 
 (async () => {
   const browser = await chromium.launch({ headless: true, args: ['--no-sandbox'],
-    executablePath: process.env.ROADIVO_CHROMIUM_PATH });
+    executablePath: process.env.PLAYCARTV_CHROMIUM_PATH });
   const page = await browser.newPage();
   const session = await page.context().newCDPSession(page);
   let tests = 0;
@@ -53,7 +53,7 @@ async function isolated(session, frameId) {
     const bridge = await isolated(session, frameTree.frame.id);
     await test('isolated bridge is ready and invisible to website JavaScript', async () => {
       assert.equal((await bridge.messages())[0].kind, 'ready');
-      assert.equal(await page.evaluate(() => typeof globalThis.roadivoCarInput), 'undefined');
+      assert.equal(await page.evaluate(() => typeof globalThis.playcartvCarInput), 'undefined');
     });
     await test('trusted field click opens the editor request without reading the field value', async () => {
       await page.locator('#query').click();

@@ -7,67 +7,67 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Roadivo"
+            "value" : "PlayCarTV"
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Roadivo"
+            "value" : "PlayCarTV"
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Roadivo"
+            "value" : "PlayCarTV"
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Roadivo"
+            "value" : "PlayCarTV"
           }
         },
         "hi" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Roadivo"
+            "value" : "PlayCarTV"
           }
         },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Roadivo"
+            "value" : "PlayCarTV"
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Roadivo"
+            "value" : "PlayCarTV"
           }
         },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Roadivo"
+            "value" : "PlayCarTV"
           }
         },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Roadivo"
+            "value" : "PlayCarTV"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Roadivo"
+            "value" : "PlayCarTV"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Roadivo"
+            "value" : "PlayCarTV"
           }
         }
       }
@@ -79,7 +79,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "new",
-            "value" : "Roadivo"
+            "value" : "PlayCarTV"
           }
         }
       }
@@ -90,67 +90,67 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Roadivo verwendet die Kamera nur, um einen QR-Code mit einem Playlist-Link zu scannen."
+            "value" : "PlayCarTV verwendet die Kamera nur, um einen QR-Code mit einem Playlist-Link zu scannen."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Roadivo uses the camera only to scan a QR code that contains a playlist link."
+            "value" : "PlayCarTV uses the camera only to scan a QR code that contains a playlist link."
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Roadivo usa la cámara solo para escanear un código QR que contiene un enlace a una lista de reproducción."
+            "value" : "PlayCarTV usa la cámara solo para escanear un código QR que contiene un enlace a una lista de reproducción."
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Roadivo utilise l’appareil photo uniquement pour scanner un code QR contenant un lien de playlist."
+            "value" : "PlayCarTV utilise l’appareil photo uniquement pour scanner un code QR contenant un lien de playlist."
           }
         },
         "hi" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Roadivo कैमरे का इस्तेमाल सिर्फ़ प्लेलिस्ट लिंक वाला QR कोड स्कैन करने के लिए करता है।"
+            "value" : "PlayCarTV कैमरे का इस्तेमाल सिर्फ़ प्लेलिस्ट लिंक वाला QR कोड स्कैन करने के लिए करता है।"
           }
         },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Roadivo usa la fotocamera solo per scansionare un codice QR che contiene il link a una playlist."
+            "value" : "PlayCarTV usa la fotocamera solo per scansionare un codice QR che contiene il link a una playlist."
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Roadivo は、プレイリストのリンクを含む QR コードをスキャンするためにのみカメラを使用します。"
+            "value" : "PlayCarTV は、プレイリストのリンクを含む QR コードをスキャンするためにのみカメラを使用します。"
           }
         },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Roadivo는 재생목록 링크가 포함된 QR 코드를 스캔할 때만 카메라를 사용합니다."
+            "value" : "PlayCarTV는 재생목록 링크가 포함된 QR 코드를 스캔할 때만 카메라를 사용합니다."
           }
         },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "O Roadivo usa a câmera apenas para ler um código QR que contém um link de playlist."
+            "value" : "O PlayCarTV usa a câmera apenas para ler um código QR que contém um link de playlist."
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Roadivo 仅使用相机扫描包含播放列表链接的 QR 码。"
+            "value" : "PlayCarTV 仅使用相机扫描包含播放列表链接的 QR 码。"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Roadivo 僅使用相機掃描包含播放列表連結的 QR 碼。"
+            "value" : "PlayCarTV 僅使用相機掃描包含播放列表連結的 QR 碼。"
           }
         }
       }
@@ -161,67 +161,67 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Roadivo verbindet sich mit Playlists und Videoservern in deinem lokalen Netzwerk und zeigt dein iPhone auf dem Bildschirm deines Autos, wenn du überträgst."
+            "value" : "PlayCarTV verbindet sich mit Playlists und Videoservern in deinem lokalen Netzwerk und zeigt dein iPhone auf dem Bildschirm deines Autos, wenn du überträgst."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Roadivo connects to playlists and video servers on your local network, and shows your iPhone on your car's screen when you broadcast."
+            "value" : "PlayCarTV connects to playlists and video servers on your local network, and shows your iPhone on your car's screen when you broadcast."
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Roadivo se conecta a listas y servidores de vídeo de tu red local, y muestra tu iPhone en la pantalla del coche cuando emites."
+            "value" : "PlayCarTV se conecta a listas y servidores de vídeo de tu red local, y muestra tu iPhone en la pantalla del coche cuando emites."
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Roadivo se connecte aux playlists et serveurs vidéo de votre réseau local, et affiche votre iPhone sur l’écran de la voiture quand vous diffusez."
+            "value" : "PlayCarTV se connecte aux playlists et serveurs vidéo de votre réseau local, et affiche votre iPhone sur l’écran de la voiture quand vous diffusez."
           }
         },
         "hi" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Roadivo आपके लोकल नेटवर्क पर प्लेलिस्ट और वीडियो सर्वर से कनेक्ट होता है, और ब्रॉडकास्ट करने पर आपका iPhone कार की स्क्रीन पर दिखाता है।"
+            "value" : "PlayCarTV आपके लोकल नेटवर्क पर प्लेलिस्ट और वीडियो सर्वर से कनेक्ट होता है, और ब्रॉडकास्ट करने पर आपका iPhone कार की स्क्रीन पर दिखाता है।"
           }
         },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Roadivo si collega a playlist e server video sulla tua rete locale e mostra l’iPhone sullo schermo dell’auto quando trasmetti."
+            "value" : "PlayCarTV si collega a playlist e server video sulla tua rete locale e mostra l’iPhone sullo schermo dell’auto quando trasmetti."
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Roadivoはローカルネットワーク上のプレイリストやビデオサーバに接続し、ブロードキャスト中はiPhoneの画面を車の画面に表示します。"
+            "value" : "PlayCarTVはローカルネットワーク上のプレイリストやビデオサーバに接続し、ブロードキャスト中はiPhoneの画面を車の画面に表示します。"
           }
         },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Roadivo는 로컬 네트워크의 재생목록과 비디오 서버에 연결하며, 방송하면 iPhone 화면을 차량 화면에 표시합니다."
+            "value" : "PlayCarTV는 로컬 네트워크의 재생목록과 비디오 서버에 연결하며, 방송하면 iPhone 화면을 차량 화면에 표시합니다."
           }
         },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "O Roadivo se conecta a playlists e servidores de vídeo na sua rede local e mostra o seu iPhone na tela do carro quando você transmite."
+            "value" : "O PlayCarTV se conecta a playlists e servidores de vídeo na sua rede local e mostra o seu iPhone na tela do carro quando você transmite."
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Roadivo 会连接你本地网络上的播放列表和视频服务器，并在你广播时将 iPhone 画面显示在车载屏幕上。"
+            "value" : "PlayCarTV 会连接你本地网络上的播放列表和视频服务器，并在你广播时将 iPhone 画面显示在车载屏幕上。"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Roadivo 會連接你區域網路上的播放列表和影片伺服器，並在你廣播時將 iPhone 畫面顯示在車上螢幕。"
+            "value" : "PlayCarTV 會連接你區域網路上的播放列表和影片伺服器，並在你廣播時將 iPhone 畫面顯示在車上螢幕。"
           }
         }
       }
@@ -232,67 +232,67 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Roadivo verwendet deinen Standort, um in Karten Routen von deinem Standort aus zu zeigen, und in CarPlay, um zu erkennen, wann das Auto parkt, damit Videos nur dann laufen. Roadivo speichert ihn nicht; Routen kommen von Apple Karten."
+            "value" : "PlayCarTV verwendet deinen Standort, um in Karten Routen von deinem Standort aus zu zeigen, und in CarPlay, um zu erkennen, wann das Auto parkt, damit Videos nur dann laufen. PlayCarTV speichert ihn nicht; Routen kommen von Apple Karten."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Roadivo uses your location to show routes from where you are in Maps, and on CarPlay to tell when the car is parked, so video plays only then. Roadivo doesn't store it; routes come from Apple Maps."
+            "value" : "PlayCarTV uses your location to show routes from where you are in Maps, and on CarPlay to tell when the car is parked, so video plays only then. PlayCarTV doesn't store it; routes come from Apple Maps."
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Roadivo usa tu ubicación para mostrar rutas desde donde estás en Mapas, y en CarPlay para saber cuándo el coche está aparcado, para que el vídeo se reproduzca solo entonces. Roadivo no la guarda; las rutas vienen de Apple Mapas."
+            "value" : "PlayCarTV usa tu ubicación para mostrar rutas desde donde estás en Mapas, y en CarPlay para saber cuándo el coche está aparcado, para que el vídeo se reproduzca solo entonces. PlayCarTV no la guarda; las rutas vienen de Apple Mapas."
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Roadivo utilise votre position pour afficher des itinéraires depuis l’endroit où vous êtes dans Cartes, et sur CarPlay pour savoir quand la voiture est garée, afin que la vidéo ne s’affiche qu’à ce moment-là. Roadivo ne l’enregistre pas ; les itinéraires viennent d’Apple Plans."
+            "value" : "PlayCarTV utilise votre position pour afficher des itinéraires depuis l’endroit où vous êtes dans Cartes, et sur CarPlay pour savoir quand la voiture est garée, afin que la vidéo ne s’affiche qu’à ce moment-là. PlayCarTV ne l’enregistre pas ; les itinéraires viennent d’Apple Plans."
           }
         },
         "hi" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Roadivo आपकी लोकेशन का इस्तेमाल मैप्स में आपकी जगह से रास्ते दिखाने के लिए और CarPlay पर यह जानने के लिए करता है कि कार पार्क है या नहीं, ताकि वीडियो सिर्फ़ तभी चले। Roadivo इसे सेव नहीं करता; रास्ते Apple मैप्स से आते हैं।"
+            "value" : "PlayCarTV आपकी लोकेशन का इस्तेमाल मैप्स में आपकी जगह से रास्ते दिखाने के लिए और CarPlay पर यह जानने के लिए करता है कि कार पार्क है या नहीं, ताकि वीडियो सिर्फ़ तभी चले। PlayCarTV इसे सेव नहीं करता; रास्ते Apple मैप्स से आते हैं।"
           }
         },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Roadivo usa la tua posizione per mostrare i percorsi da dove ti trovi in Mappe e, su CarPlay, per capire quando l’auto è parcheggiata, così il video viene riprodotto solo allora. Roadivo non la salva; i percorsi provengono da Mappe di Apple."
+            "value" : "PlayCarTV usa la tua posizione per mostrare i percorsi da dove ti trovi in Mappe e, su CarPlay, per capire quando l’auto è parcheggiata, così il video viene riprodotto solo allora. PlayCarTV non la salva; i percorsi provengono da Mappe di Apple."
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Roadivoは、マップで現在地からの経路を表示するため、またCarPlayで車が駐車中かどうかを判断するために位置情報を使用し、ビデオは駐車中のみ再生されます。Roadivoは位置情報を保存しません。経路はAppleのマップから取得されます。"
+            "value" : "PlayCarTVは、マップで現在地からの経路を表示するため、またCarPlayで車が駐車中かどうかを判断するために位置情報を使用し、ビデオは駐車中のみ再生されます。PlayCarTVは位置情報を保存しません。経路はAppleのマップから取得されます。"
           }
         },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Roadivo는 지도에서 현재 위치로부터의 경로를 표시하고, CarPlay에서 차량이 주차 중인지 확인하는 데 위치를 사용하며, 비디오는 주차 중에만 재생됩니다. Roadivo는 위치를 저장하지 않으며, 경로는 Apple 지도에서 제공됩니다."
+            "value" : "PlayCarTV는 지도에서 현재 위치로부터의 경로를 표시하고, CarPlay에서 차량이 주차 중인지 확인하는 데 위치를 사용하며, 비디오는 주차 중에만 재생됩니다. PlayCarTV는 위치를 저장하지 않으며, 경로는 Apple 지도에서 제공됩니다."
           }
         },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "O Roadivo usa sua localização para mostrar rotas a partir de onde você está em Mapas e, no CarPlay, para saber quando o carro está estacionado, para que o vídeo passe apenas nesse momento. O Roadivo não a armazena; as rotas vêm do Apple Mapas."
+            "value" : "O PlayCarTV usa sua localização para mostrar rotas a partir de onde você está em Mapas e, no CarPlay, para saber quando o carro está estacionado, para que o vídeo passe apenas nesse momento. O PlayCarTV não a armazena; as rotas vêm do Apple Mapas."
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Roadivo 使用你的位置在“地图”中显示从你所在位置出发的路线，并在 CarPlay 中判断汽车是否已停好，视频只会在停车时播放。Roadivo 不会存储你的位置；路线来自 Apple 地图。"
+            "value" : "PlayCarTV 使用你的位置在“地图”中显示从你所在位置出发的路线，并在 CarPlay 中判断汽车是否已停好，视频只会在停车时播放。PlayCarTV 不会存储你的位置；路线来自 Apple 地图。"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Roadivo 會使用你的位置在「地圖」中顯示從你所在位置出發的路線，並在 CarPlay 中判斷汽車是否已停好，影片只會在停車時播放。Roadivo 不會儲存你的位置；路線來自 Apple 地圖。"
+            "value" : "PlayCarTV 會使用你的位置在「地圖」中顯示從你所在位置出發的路線，並在 CarPlay 中判斷汽車是否已停好，影片只會在停車時播放。PlayCarTV 不會儲存你的位置；路線來自 Apple 地圖。"
           }
         }
       }
@@ -303,67 +303,67 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Roadivo verwendet das Mikrofon nur, während du per Sprache suchst."
+            "value" : "PlayCarTV verwendet das Mikrofon nur, während du per Sprache suchst."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Roadivo uses the microphone only while you search by voice."
+            "value" : "PlayCarTV uses the microphone only while you search by voice."
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Roadivo usa el micrófono solo mientras buscas por voz."
+            "value" : "PlayCarTV usa el micrófono solo mientras buscas por voz."
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Roadivo utilise le micro uniquement pendant que vous recherchez par la voix."
+            "value" : "PlayCarTV utilise le micro uniquement pendant que vous recherchez par la voix."
           }
         },
         "hi" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Roadivo माइक्रोफ़ोन का इस्तेमाल सिर्फ़ तब करता है जब आप बोलकर खोजते हैं।"
+            "value" : "PlayCarTV माइक्रोफ़ोन का इस्तेमाल सिर्फ़ तब करता है जब आप बोलकर खोजते हैं।"
           }
         },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Roadivo usa il microfono solo mentre cerchi con la voce."
+            "value" : "PlayCarTV usa il microfono solo mentre cerchi con la voce."
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Roadivo は、音声で検索している間だけマイクを使用します。"
+            "value" : "PlayCarTV は、音声で検索している間だけマイクを使用します。"
           }
         },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Roadivo는 음성으로 검색하는 동안에만 마이크를 사용합니다."
+            "value" : "PlayCarTV는 음성으로 검색하는 동안에만 마이크를 사용합니다."
           }
         },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "O Roadivo usa o microfone apenas enquanto você busca por voz."
+            "value" : "O PlayCarTV usa o microfone apenas enquanto você busca por voz."
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Roadivo 仅在你进行语音搜索时使用麦克风。"
+            "value" : "PlayCarTV 仅在你进行语音搜索时使用麦克风。"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Roadivo 僅在你進行語音搜尋時使用麥克風。"
+            "value" : "PlayCarTV 僅在你進行語音搜尋時使用麥克風。"
           }
         }
       }
@@ -374,67 +374,67 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Roadivo wandelt deine Worte in Suchtext um – auf deinem iPhone, wenn deine Sprache es erlaubt."
+            "value" : "PlayCarTV wandelt deine Worte in Suchtext um – auf deinem iPhone, wenn deine Sprache es erlaubt."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Roadivo turns what you say into search text, on your iPhone when your language allows it."
+            "value" : "PlayCarTV turns what you say into search text, on your iPhone when your language allows it."
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Roadivo convierte lo que dices en texto de búsqueda, en tu iPhone cuando tu idioma lo permite."
+            "value" : "PlayCarTV convierte lo que dices en texto de búsqueda, en tu iPhone cuando tu idioma lo permite."
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Roadivo transforme vos paroles en texte de recherche, sur votre iPhone quand votre langue le permet."
+            "value" : "PlayCarTV transforme vos paroles en texte de recherche, sur votre iPhone quand votre langue le permet."
           }
         },
         "hi" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Roadivo आपकी बोली को खोज के टेक्स्ट में बदलता है, जहाँ आपकी भाषा में संभव हो वहाँ आपके iPhone पर ही।"
+            "value" : "PlayCarTV आपकी बोली को खोज के टेक्स्ट में बदलता है, जहाँ आपकी भाषा में संभव हो वहाँ आपके iPhone पर ही।"
           }
         },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Roadivo trasforma ciò che dici in testo di ricerca, sul tuo iPhone quando la tua lingua lo consente."
+            "value" : "PlayCarTV trasforma ciò che dici in testo di ricerca, sul tuo iPhone quando la tua lingua lo consente."
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Roadivo は、話した内容を検索テキストに変換します。言語が対応していれば iPhone 上で処理します。"
+            "value" : "PlayCarTV は、話した内容を検索テキストに変換します。言語が対応していれば iPhone 上で処理します。"
           }
         },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Roadivo는 말한 내용을 검색어로 변환하며, 언어가 지원되면 iPhone에서 처리합니다."
+            "value" : "PlayCarTV는 말한 내용을 검색어로 변환하며, 언어가 지원되면 iPhone에서 처리합니다."
           }
         },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "O Roadivo transforma o que você fala em texto de busca, no seu iPhone quando seu idioma permite."
+            "value" : "O PlayCarTV transforma o que você fala em texto de busca, no seu iPhone quando seu idioma permite."
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Roadivo 会把你说的话转换为搜索文字；在你的语言支持时，会在 iPhone 上完成。"
+            "value" : "PlayCarTV 会把你说的话转换为搜索文字；在你的语言支持时，会在 iPhone 上完成。"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Roadivo 會把你說的話轉換為搜尋文字；在你的語言支援時，會在 iPhone 上完成。"
+            "value" : "PlayCarTV 會把你說的話轉換為搜尋文字；在你的語言支援時，會在 iPhone 上完成。"
           }
         }
       }

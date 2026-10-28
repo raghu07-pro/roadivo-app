@@ -1,12 +1,12 @@
 import Foundation
 import Testing
-@testable import Roadivo
+@testable import PlayCarTV
 
 /// The iPhone's player while the video is on the car: Play on iPhone, Play on Car Display, and picks (DECISIONS 165).
 @Suite("Player on the car")
 @MainActor
 struct PlayerOnCarTests {
-    @Test("Play on Car Display shows only with Roadivo on the car's screen and the video on the iPhone")
+    @Test("Play on Car Display shows only with PlayCarTV on the car's screen and the video on the iPhone")
     func playOnCar() throws {
         let library = try TestLibrary()
         let playback = PlaybackController()

@@ -8,15 +8,15 @@ final class SettingsUITests: XCTestCase {
 
     /// Media lists Manage Sources; adding a source lives on Home and in Manage Sources.
     func testMediaHasSources() {
-        let app = XCUIApplication.roadivo(skipOnboarding: true)
+        let app = XCUIApplication.playcartv(skipOnboarding: true)
         app.settingsTab.tap()
         XCTAssertTrue(app.buttons["settings.sources"].waitForExistence(timeout: 5))
         XCTAssertFalse(app.buttons["settings.addSource"].exists)
     }
 
-    /// Share Roadivo opens the system share sheet.
+    /// Share PlayCarTV opens the system share sheet.
     func testShareOpensTheShareSheet() {
-        let app = XCUIApplication.roadivo(skipOnboarding: true)
+        let app = XCUIApplication.playcartv(skipOnboarding: true)
         app.settingsTab.tap()
         XCTAssertTrue(app.buttons["settings.theme"].waitForExistence(timeout: 5))
         // About is below the fold, and a List only builds rows on screen.
@@ -28,11 +28,11 @@ final class SettingsUITests: XCTestCase {
         snapshot("30-Share", app: app)
     }
 
-    /// UI tests run without an App Store ID, so there's no review page and Rate Roadivo is hidden.
+    /// UI tests run without an App Store ID, so there's no review page and Rate PlayCarTV is hidden.
     /// Rate is always offered (the system prompt until the App Store ID exists); not tapped, as the
     /// prompt is the system's.
     func testRateIsOffered() {
-        let app = XCUIApplication.roadivo(skipOnboarding: true)
+        let app = XCUIApplication.playcartv(skipOnboarding: true)
         app.settingsTab.tap()
         XCTAssertTrue(app.buttons["settings.theme"].waitForExistence(timeout: 5))
         app.swipeUp()
@@ -43,7 +43,7 @@ final class SettingsUITests: XCTestCase {
 
     /// Pro users can reach their subscription; it isn't tapped, as the App Store sheet is the system's.
     func testProOffersManageSubscription() {
-        let app = XCUIApplication.roadivo(skipOnboarding: true, pro: true)
+        let app = XCUIApplication.playcartv(skipOnboarding: true, pro: true)
         app.settingsTab.tap()
         let manage = app.buttons["settings.manageSubscription"]
         XCTAssertTrue(manage.waitForExistence(timeout: 5))
@@ -52,7 +52,7 @@ final class SettingsUITests: XCTestCase {
 
     /// Free users have nothing to manage; the Pro banner offers the upgrade instead.
     func testFreeUsersHaveNoManageSubscription() {
-        let app = XCUIApplication.roadivo(skipOnboarding: true)
+        let app = XCUIApplication.playcartv(skipOnboarding: true)
         app.settingsTab.tap()
         XCTAssertTrue(app.buttons["settings.pro"].waitForExistence(timeout: 5))
         XCTAssertFalse(app.buttons["settings.manageSubscription"].exists)
@@ -60,7 +60,7 @@ final class SettingsUITests: XCTestCase {
 
     /// Help & FAQ ends with Contact Support; not tapped, as Mail opens outside the app.
     func testHelpOffersContactSupport() {
-        let app = XCUIApplication.roadivo(skipOnboarding: true)
+        let app = XCUIApplication.playcartv(skipOnboarding: true)
         app.settingsTab.tap()
         XCTAssertTrue(app.buttons["settings.theme"].waitForExistence(timeout: 5))
         app.swipeUp()
@@ -79,7 +79,7 @@ final class SettingsUITests: XCTestCase {
     /// screenshot is for checking the lift; Delete (red) is in Sources' menu.
     /// Favorites only lists favourites: its menu removes from Favorites, and has no Delete.
     func testFavoritesMenuHasNoDelete() {
-        let app = XCUIApplication.roadivo(skipOnboarding: true, demoLibrary: true)
+        let app = XCUIApplication.playcartv(skipOnboarding: true, demoLibrary: true)
         let card = app.buttons["channel.Football Tonight"]
         XCTAssertTrue(card.waitForExistence(timeout: 10))
         card.press(forDuration: 1.2)
@@ -95,7 +95,7 @@ final class SettingsUITests: XCTestCase {
     }
 
     func testLongPressShowsPreviewAndMenu() {
-        let app = XCUIApplication.roadivo(skipOnboarding: true, demoLibrary: true)
+        let app = XCUIApplication.playcartv(skipOnboarding: true, demoLibrary: true)
         let card = app.buttons["channel.Football Tonight"]
         XCTAssertTrue(card.waitForExistence(timeout: 10))
         card.press(forDuration: 1.2)

@@ -1,6 +1,6 @@
 import Foundation
 import Testing
-@testable import Roadivo
+@testable import PlayCarTV
 
 /// How a video starts: a file on the iPhone at once, a stream once it has enough to play smoothly.
 @Suite("Playback start")

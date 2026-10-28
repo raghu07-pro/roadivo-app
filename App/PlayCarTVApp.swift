@@ -2,7 +2,7 @@ import SwiftUI
 import UIKit
 
 @main
-struct RoadivoApp: App {
+struct PlayCarTVApp: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) private var appDelegate
     @State private var environment = AppEnvironment.live(arguments: ProcessInfo.processInfo.arguments)
     @State private var language = AppLanguage.shared

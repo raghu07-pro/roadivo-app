@@ -1,6 +1,6 @@
 import Foundation
 import Testing
-@testable import Roadivo
+@testable import PlayCarTV
 
 @Suite("Review prompt and video delete")
 @MainActor
@@ -13,7 +13,7 @@ struct ReviewAndDeleteTests {
 
     @Test("Opening videos counts toward the prompt and requests it at milestones")
     func countsOpens() throws {
-        let defaults = try #require(UserDefaults(suiteName: "roadivo.tests.\(UUID().uuidString)"))
+        let defaults = try #require(UserDefaults(suiteName: "playcartv.tests.\(UUID().uuidString)"))
         let environment = try AppEnvironment(
             store: SwiftDataStore(inMemory: true),
             secureStore: InMemorySecureStore(),

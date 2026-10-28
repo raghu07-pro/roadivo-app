@@ -1,7 +1,7 @@
 import ReplayKit
 
-/// Roadivo's Screen Broadcast (DECISIONS 124, 157): while iOS records the screen, each frame is shrunk to a JPEG and
-/// served on this iPhone's loopback address, where Roadivo's CarPlay window shows it. Nothing is saved or sent.
+/// PlayCarTV's Screen Broadcast (DECISIONS 124, 157): while iOS records the screen, each frame is shrunk to a JPEG and
+/// served on this iPhone's loopback address, where PlayCarTV's CarPlay window shows it. Nothing is saved or sent.
 /// Unchecked Sendable: ReplayKit calls `processSampleBuffer` on one queue, the only place `lastFrame` changes.
 final class SampleHandler: RPBroadcastSampleHandler, @unchecked Sendable {
     private let server = FrameServer(port: BroadcastHTTP.port, code: BroadcastHTTP.code)
@@ -18,7 +18,7 @@ final class SampleHandler: RPBroadcastSampleHandler, @unchecked Sendable {
             // iOS shows this as the broadcast ends. The extension has no in-app language, so it follows the system's.
             let message = String(localized: "Screen Broadcast couldn't start on this network. Try again in a moment.")
             let error = NSError(
-                domain: "com.roadivo.broadcast",
+                domain: "com.playcartv.broadcast",
                 code: 1,
                 userInfo: [NSLocalizedDescriptionKey: message]
             )
@@ -33,7 +33,7 @@ final class SampleHandler: RPBroadcastSampleHandler, @unchecked Sendable {
         server.stop()
     }
 
-    /// End Mirroring in Roadivo, on the car or the iPhone (`BroadcastSignal`): only iOS can end the broadcast.
+    /// End Mirroring in PlayCarTV, on the car or the iPhone (`BroadcastSignal`): only iOS can end the broadcast.
     private func listenForStop() {
         CFNotificationCenterAddObserver(
             CFNotificationCenterGetDarwinNotifyCenter(),
@@ -51,7 +51,7 @@ final class SampleHandler: RPBroadcastSampleHandler, @unchecked Sendable {
     private func endMirroring() {
         let message = String(localized: "You ended mirroring.")
         finishBroadcastWithError(NSError(
-            domain: "com.roadivo.broadcast", code: 2, userInfo: [NSLocalizedDescriptionKey: message]
+            domain: "com.playcartv.broadcast", code: 2, userInfo: [NSLocalizedDescriptionKey: message]
         ))
     }
 

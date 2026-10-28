@@ -72,8 +72,8 @@ final class AppTheme {
     }
 
     enum Keys {
-        static let appearance = "roadivo.theme.appearance"
-        static let accent = "roadivo.theme.accent"
-        static let font = "roadivo.theme.font"
+        static let appearance = "playcartv.theme.appearance"
+        static let accent = "playcartv.theme.accent"
+        static let font = "playcartv.theme.font"
     }
 }

@@ -1,7 +1,7 @@
 #if DEBUG
     import Observation
 
-    /// Phone Input, as CarTV's: the car's search page asks, and Roadivo on the iPhone shows a sheet with the iPhone's
+    /// Phone Input, as CarTV's: the car's search page asks, and PlayCarTV on the iPhone shows a sheet with the iPhone's
     /// own keyboard whose text appears in the car's field as it's typed (owner, 2026-10-26; DECISIONS 163). One for
     /// the app, shared by the car's screen and the iPhone's.
     @Observable

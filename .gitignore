@@ -1,4 +1,4 @@
-# Roadivo — this app folder is its own git repo, so the workspace root's
+# PlayCarTV — this app folder is its own git repo, so the workspace root's
 # .gitignore does not apply here.
 
 # Build output. Build with `-derivedDataPath .build/DerivedData` (see CLAUDE.md).

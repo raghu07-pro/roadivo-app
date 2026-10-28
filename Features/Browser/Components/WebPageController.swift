@@ -2,7 +2,7 @@ import SwiftUI
 import WebKit
 
 /// The Browser's one web view and what it reports: where it is, whether it can go back or forward,
-/// how far it has loaded, and videos Roadivo's player can take. Owned by
+/// how far it has loaded, and videos PlayCarTV's player can take. Owned by
 /// `BrowserViewModel`, so an open page survives switching tabs.
 @MainActor
 final class WebPageController: NSObject {
@@ -18,15 +18,15 @@ final class WebPageController: NSObject {
     let webView: WKWebView
     var onState: ((State) -> Void)?
     var onNavigationStarted: (() -> Void)?
-    /// A video Roadivo's player can take: the page itself, or a `<video>` the page started.
+    /// A video PlayCarTV's player can take: the page itself, or a `<video>` the page started.
     var onVideo: ((URL) -> Void)?
-    /// The page started playing anything, so Roadivo's own playback can make way.
+    /// The page started playing anything, so PlayCarTV's own playback can make way.
     var onMediaStarted: (() -> Void)?
     var onLoadError: (() -> Void)?
 
     private var observations: [NSKeyValueObservation] = []
     private let allowsExternalLinks: Bool
-    private static let messageName = "roadivoMedia"
+    private static let messageName = "playcartvMedia"
 
     /// Reports every `<video>` or `<audio>` that starts, with the video's address when it has one.
     private static let mediaScript = """

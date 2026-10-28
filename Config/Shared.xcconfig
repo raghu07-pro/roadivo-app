@@ -1,4 +1,4 @@
-// Roadivo settings shared by Debug and Release. Committed, so nothing secret: secrets go in
+// PlayCarTV settings shared by Debug and Release. Committed, so nothing secret: secrets go in
 // a gitignored Secrets.xcconfig or the Keychain.
 
 // The Apple Developer Team ID (developer.apple.com → Membership): D.I. Solutions.
@@ -8,7 +8,7 @@ DEVELOPMENT_TEAM = JX6Q67DW6M
 WEB_SCHEME = https:$()/$()/
 
 // Terms link shown in Settings and the paywall: Apple's standard EULA. The privacy policy
-// is the bundled Docs/Website/roadivo-policy.html (DECISIONS 81, 174), so it needs no URL here.
+// is the bundled Docs/Website/playcartv-policy.html (DECISIONS 81, 176), so it needs no URL here.
 TERMS_URL = $(WEB_SCHEME)www.apple.com/legal/internet-services/itunes/dev/stdeula/
 
 // The App Store listing's Apple ID (App Store Connect → App Information), for Rate and Share (DECISIONS 64).
@@ -16,38 +16,38 @@ APP_STORE_ID = 6824396756
 
 // CarPlay Audio was granted by Apple on 2026-10-20 (DECISIONS 25, 127). Signing needs CarPlay Audio App enabled on
 // the App ID; NO again hides every CarPlay promise and drops the entitlement from device builds.
-ROADIVO_CARPLAY = YES
-ROADIVO_CARPLAY_ENTITLEMENTS_YES = $(ROADIVO_CARPLAY_FILE_$(ROADIVO_CARPLAY_APP))
-ROADIVO_CARPLAY_ENTITLEMENTS_NO =
+PLAYCARTV_CARPLAY = YES
+PLAYCARTV_CARPLAY_ENTITLEMENTS_YES = $(PLAYCARTV_CARPLAY_FILE_$(PLAYCARTV_CARPLAY_APP))
+PLAYCARTV_CARPLAY_ENTITLEMENTS_NO =
 // The simulator doesn't check Apple's approval, so its builds carry the entitlement either way and the CarPlay
-// window shows Roadivo's CarPlay app.
-ROADIVO_CARPLAY_ENTITLEMENTS_NO[sdk=iphonesimulator*] = $(ROADIVO_CARPLAY_FILE_$(ROADIVO_CARPLAY_APP))
+// window shows PlayCarTV's CarPlay app.
+PLAYCARTV_CARPLAY_ENTITLEMENTS_NO[sdk=iphonesimulator*] = $(PLAYCARTV_CARPLAY_FILE_$(PLAYCARTV_CARPLAY_APP))
 
 // Which CarPlay app the car shows; an app has one (owner, 2026-10-23; DECISIONS 152):
-// window: Roadivo's own screen, the four tabs as buttons and video while parked (navigation entitlement, no map).
-// media: CarPlay's template tabs, video only where the car offers it (Audio, or Video per ROADIVO_CARPLAY_VIDEO).
+// window: PlayCarTV's own screen, the four tabs as buttons and video while parked (navigation entitlement, no map).
+// media: CarPlay's template tabs, video only where the car offers it (Audio, or Video per PLAYCARTV_CARPLAY_VIDEO).
 // map: the navigation map and guidance, kept for a later release (DECISIONS 147–149).
 // screen: a plain window that takes the car's taps, for the Debug car browser experiment (Debug.xcconfig, DECISIONS
 // 161). It signs with CarPlay Audio + Video, as the open-source Cafari Lite needs for that window to appear.
-ROADIVO_CARPLAY_APP = window
-ROADIVO_CARPLAY_FILE_window = Resources/RoadivoNavigation.entitlements
-ROADIVO_CARPLAY_FILE_map = Resources/RoadivoNavigation.entitlements
-ROADIVO_CARPLAY_FILE_screen = Resources/RoadivoCarScreen.entitlements
-ROADIVO_CARPLAY_FILE_media = $(ROADIVO_MEDIA_ENTITLEMENTS_$(ROADIVO_CARPLAY_VIDEO))
-// The media app signs with CarPlay Audio, or Video only where ROADIVO_CARPLAY_VIDEO (Debug/Release.xcconfig) is YES:
+PLAYCARTV_CARPLAY_APP = window
+PLAYCARTV_CARPLAY_FILE_window = Resources/PlayCarTVNavigation.entitlements
+PLAYCARTV_CARPLAY_FILE_map = Resources/PlayCarTVNavigation.entitlements
+PLAYCARTV_CARPLAY_FILE_screen = Resources/PlayCarTVCarScreen.entitlements
+PLAYCARTV_CARPLAY_FILE_media = $(PLAYCARTV_MEDIA_ENTITLEMENTS_$(PLAYCARTV_CARPLAY_VIDEO))
+// The media app signs with CarPlay Audio, or Video only where PLAYCARTV_CARPLAY_VIDEO (Debug/Release.xcconfig) is YES:
 // Apple's iOS 27.2 guide lets an app hold one or the other, never both (DECISIONS 150–151).
-ROADIVO_MEDIA_ENTITLEMENTS_NO = Resources/Roadivo.entitlements
-ROADIVO_MEDIA_ENTITLEMENTS_YES = Resources/RoadivoVideo.entitlements
+PLAYCARTV_MEDIA_ENTITLEMENTS_NO = Resources/PlayCarTV.entitlements
+PLAYCARTV_MEDIA_ENTITLEMENTS_YES = Resources/PlayCarTVVideo.entitlements
 // The car's scene delegate, named in Info.plist: iOS reads the manifest for CarPlay rather than asking AppDelegate.
-ROADIVO_CARPLAY_SCENE_DELEGATE = $(ROADIVO_CARPLAY_DELEGATE_$(ROADIVO_CARPLAY_APP))
-ROADIVO_CARPLAY_DELEGATE_window = CarPlayWindowSceneDelegate
-ROADIVO_CARPLAY_DELEGATE_media = CarPlaySceneDelegate
-ROADIVO_CARPLAY_DELEGATE_map = CarPlayNavigationSceneDelegate
+PLAYCARTV_CARPLAY_SCENE_DELEGATE = $(PLAYCARTV_CARPLAY_DELEGATE_$(PLAYCARTV_CARPLAY_APP))
+PLAYCARTV_CARPLAY_DELEGATE_window = CarPlayWindowSceneDelegate
+PLAYCARTV_CARPLAY_DELEGATE_media = CarPlaySceneDelegate
+PLAYCARTV_CARPLAY_DELEGATE_map = CarPlayNavigationSceneDelegate
 // The screen app has no template scene: the build drops it from Info.plist (Project.swift).
-ROADIVO_CARPLAY_DELEGATE_screen = CarPlayWindowSceneDelegate
+PLAYCARTV_CARPLAY_DELEGATE_screen = CarPlayWindowSceneDelegate
 
 // Maps, the iPhone's Directions tab, its route card and the car screen's Maps tab (DECISIONS 145–146, 172): on again
 // (owner, 2026-10-27). NO hides them everywhere, as from 149; the code stays.
-ROADIVO_DIRECTIONS = YES
+PLAYCARTV_DIRECTIONS = YES
 
-PRODUCT_NAME = Roadivo
+PRODUCT_NAME = PlayCarTV

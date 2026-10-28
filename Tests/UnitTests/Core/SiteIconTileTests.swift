@@ -1,6 +1,6 @@
 import Testing
 import UIKit
-@testable import Roadivo
+@testable import PlayCarTV
 
 @Suite("CarPlay site tiles")
 struct SiteIconTileTests {

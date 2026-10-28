@@ -5,7 +5,7 @@ import WebKit
 /// player, as before inline playback (owner: "as old"); anything else fills the page and the car hides its bar.
 @MainActor
 final class CarPageFullscreen: NSObject, WKScriptMessageHandler {
-    static let messageName = "roadivoFullscreen"
+    static let messageName = "playcartvFullscreen"
     /// The page went full screen, or left it.
     var onChange: ((Bool) -> Void)?
 
@@ -21,10 +21,10 @@ final class CarPageFullscreen: NSObject, WKScriptMessageHandler {
         (() => {
           let current = null;
           const style = document.createElement('style');
-          style.textContent = '.roadivo-fullscreen { position: fixed !important; inset: 0 !important; ' +
+          style.textContent = '.playcartv-fullscreen { position: fixed !important; inset: 0 !important; ' +
             'width: 100vw !important; height: 100vh !important; max-width: none !important; ' +
             'max-height: none !important; margin: 0 !important; z-index: 2147483647 !important; ' +
-            'background: #000 !important; } html.roadivo-fullscreen-on, html.roadivo-fullscreen-on body ' +
+            'background: #000 !important; } html.playcartv-fullscreen-on, html.playcartv-fullscreen-on body ' +
             '{ overflow: hidden !important; }';
           const tell = isOn => window.webkit.messageHandlers.\(messageName).postMessage(isOn);
           const changed = () => {
@@ -45,19 +45,19 @@ final class CarPageFullscreen: NSObject, WKScriptMessageHandler {
               } catch (error) {}
             }
             if (!style.isConnected) (document.head || document.documentElement).appendChild(style);
-            if (current && current !== this) current.classList.remove('roadivo-fullscreen');
+            if (current && current !== this) current.classList.remove('playcartv-fullscreen');
             current = this;
-            this.classList.add('roadivo-fullscreen');
-            document.documentElement.classList.add('roadivo-fullscreen-on');
+            this.classList.add('playcartv-fullscreen');
+            document.documentElement.classList.add('playcartv-fullscreen-on');
             tell(true);
             setTimeout(changed, 0);
             return Promise.resolve();
           };
           const exit = () => {
             if (!current) return Promise.resolve();
-            current.classList.remove('roadivo-fullscreen');
+            current.classList.remove('playcartv-fullscreen');
             current = null;
-            document.documentElement.classList.remove('roadivo-fullscreen-on');
+            document.documentElement.classList.remove('playcartv-fullscreen-on');
             tell(false);
             setTimeout(changed, 0);
             return Promise.resolve();

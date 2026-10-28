@@ -87,7 +87,7 @@ struct PlexLoginView: View {
                 .textSelection(.enabled)
                 .accessibilityLabel(Text(code.map(String.init).joined(separator: " ")))
                 .accessibilityIdentifier("plex.code")
-            Text("Enter this code at plex.tv/link, then come back to Roadivo.")
+            Text("Enter this code at plex.tv/link, then come back to PlayCarTV.")
                 .font(Typography.secondary)
                 .foregroundStyle(.roadMuted)
                 .multilineTextAlignment(.center)

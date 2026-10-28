@@ -2,7 +2,7 @@ import CarPlay
 import Foundation
 import Testing
 import WebKit
-@testable import Roadivo
+@testable import PlayCarTV
 
 @Suite("Independent car browser")
 @MainActor
@@ -47,7 +47,7 @@ struct CarBrowserTests {
         #expect(carData.identifier == CarBrowserSession.carWebsiteDataID)
         #expect(carData !== phone.web.webView.configuration.websiteDataStore)
         #expect(phone.web.webView.configuration.websiteDataStore.isPersistent)
-        // A page's own full-screen button works in the car, through Roadivo's script; the iPhone's browser has none.
+        // A page's own full-screen button works in the car, through PlayCarTV's script; the iPhone's browser has none.
         let carScripts = car.page.webView.configuration.userContentController.userScripts
         #expect(carScripts.contains { $0.source.contains(CarPageFullscreen.messageName) })
         #expect(!phone.web.webView.configuration.userContentController.userScripts.contains {

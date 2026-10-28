@@ -1,6 +1,6 @@
 import Foundation
 import Testing
-@testable import Roadivo
+@testable import PlayCarTV
 
 @Suite("Screen Broadcast stream reading")
 struct MJPEGParserTests {
@@ -35,11 +35,11 @@ struct MJPEGParserTests {
     @Test("A frame without its length, or one far too large, ends the stream")
     func refusesBrokenParts() {
         var missing = MJPEGParser()
-        let part = Data("--roadivo-frame\r\nContent-Type: image/jpeg\r\n\r\n".utf8)
+        let part = Data("--playcartv-frame\r\nContent-Type: image/jpeg\r\n\r\n".utf8)
         _ = missing.append(BroadcastHTTP.streamHeader + part)
         #expect(missing.hasFailed)
         var huge = MJPEGParser()
-        let header = "--roadivo-frame\r\nContent-Length: \(MJPEGParser.frameLimit + 1)\r\n\r\n"
+        let header = "--playcartv-frame\r\nContent-Length: \(MJPEGParser.frameLimit + 1)\r\n\r\n"
         _ = huge.append(BroadcastHTTP.streamHeader + Data(header.utf8))
         #expect(huge.hasFailed)
     }

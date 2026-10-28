@@ -8,7 +8,7 @@ final class OnboardingFlowUITests: XCTestCase {
 
     /// The first-launch flow: 4 onboarding pages → Buy a plan → close → Home.
     func testFirstLaunchFlowEndsOnHome() {
-        let app = XCUIApplication.roadivo()
+        let app = XCUIApplication.playcartv()
         let continueButton = app.buttons["onboarding.continue"]
         XCTAssertTrue(continueButton.waitForExistence(timeout: 5))
         for _ in 0..<4 {
@@ -24,7 +24,7 @@ final class OnboardingFlowUITests: XCTestCase {
     }
 
     func testBuyingOnTheIntroPaywallUnlocksPro() {
-        let app = XCUIApplication.roadivo()
+        let app = XCUIApplication.playcartv()
         XCTAssertTrue(app.buttons["onboarding.skip"].waitForExistence(timeout: 5))
         app.buttons["onboarding.skip"].tap()
         let buy = app.buttons["paywall.buy"]
@@ -41,7 +41,7 @@ final class OnboardingFlowUITests: XCTestCase {
     /// First launch: Restore brings back an earlier purchase, closes the paywall onto Home, and
     /// Settings then names the plan.
     func testRestoreOnTheIntroPaywallUnlocksPro() {
-        let app = XCUIApplication.roadivo(restorable: true)
+        let app = XCUIApplication.playcartv(restorable: true)
         XCTAssertTrue(app.buttons["onboarding.skip"].waitForExistence(timeout: 5))
         app.buttons["onboarding.skip"].tap()
         let restore = app.buttons["paywall.restore"]
@@ -54,7 +54,7 @@ final class OnboardingFlowUITests: XCTestCase {
 
     /// From Settings: Restore closes the paywall onto Home, with the plan active.
     func testRestoreFromSettingsGoesHome() {
-        let app = XCUIApplication.roadivo(skipOnboarding: true, restorable: true)
+        let app = XCUIApplication.playcartv(skipOnboarding: true, restorable: true)
         app.tabBars.buttons["Settings"].tap()
         let upgrade = app.buttons["settings.pro"]
         XCTAssertTrue(upgrade.waitForExistence(timeout: 5))
@@ -69,7 +69,7 @@ final class OnboardingFlowUITests: XCTestCase {
 
     /// A subscriber opening the plans sees theirs selected and can't buy it again.
     func testPaywallOpensOnTheCurrentPlan() {
-        let app = XCUIApplication.roadivo(skipOnboarding: true, pro: true) // The fake Pro user has Yearly.
+        let app = XCUIApplication.playcartv(skipOnboarding: true, pro: true) // The fake Pro user has Yearly.
         app.tabBars.buttons["Settings"].tap()
         let plan = app.buttons["settings.plan"]
         XCTAssertTrue(plan.waitForExistence(timeout: 5))
@@ -83,7 +83,7 @@ final class OnboardingFlowUITests: XCTestCase {
 
     /// Nothing to restore: the paywall stays and says so.
     func testRestoreWithNothingBoughtSaysSo() {
-        let app = XCUIApplication.roadivo()
+        let app = XCUIApplication.playcartv()
         XCTAssertTrue(app.buttons["onboarding.skip"].waitForExistence(timeout: 5))
         app.buttons["onboarding.skip"].tap()
         let restore = app.buttons["paywall.restore"]
@@ -94,7 +94,7 @@ final class OnboardingFlowUITests: XCTestCase {
     }
 
     func testSkipGoesToThePaywall() {
-        let app = XCUIApplication.roadivo()
+        let app = XCUIApplication.playcartv()
         let skip = app.buttons["onboarding.skip"]
         XCTAssertTrue(skip.waitForExistence(timeout: 5))
         skip.tap()
@@ -102,7 +102,7 @@ final class OnboardingFlowUITests: XCTestCase {
     }
 
     func testOnboardingAccessibilityAudit() throws {
-        let app = XCUIApplication.roadivo()
+        let app = XCUIApplication.playcartv()
         XCTAssertTrue(app.buttons["onboarding.continue"].waitForExistence(timeout: 5))
         // The system page indicator is outside our control; contrast is checked
         // separately in the light and dark snapshots.
@@ -110,7 +110,7 @@ final class OnboardingFlowUITests: XCTestCase {
     }
 
     func testPaywallAccessibilityAudit() throws {
-        let app = XCUIApplication.roadivo()
+        let app = XCUIApplication.playcartv()
         app.buttons["onboarding.skip"].tap()
         XCTAssertTrue(app.buttons["paywall.plan.lifetime"].waitForExistence(timeout: 5))
         try app.performAccessibilityAudit(for: [.sufficientElementDescription, .hitRegion])
@@ -138,7 +138,7 @@ final class LocalizationUITests: XCTestCase {
 final class LanguageSwitchUITests: XCTestCase {
     /// Picking a language in Settings changes the app at once, no relaunch.
     func testChoosingGermanSwitchesImmediately() {
-        let app = XCUIApplication.roadivo(skipOnboarding: true)
+        let app = XCUIApplication.playcartv(skipOnboarding: true)
         app.tabBars.buttons["Settings"].tap()
         app.buttons["settings.language"].tap()
         let german = app.buttons["language.de"]

@@ -1,6 +1,6 @@
 import SwiftUI
 
-/// "Unlock Roadivo Pro". Shown once after onboarding (closable) and whenever a
+/// "Unlock PlayCarTV Pro". Shown once after onboarding (closable) and whenever a
 /// free user reaches a Pro feature. Always dark, like the night-road hero.
 struct PaywallView: View {
     @State var viewModel: PaywallViewModel
@@ -57,15 +57,15 @@ struct PaywallView: View {
     }
 
     #if DEBUG
-        private static let developerNote = "Developer note: prices come from StoreKit/Roadivo.storekit only when "
-            + "Xcode launches the Roadivo scheme. Elsewhere they come from App Store Connect."
+        private static let developerNote = "Developer note: prices come from StoreKit/PlayCarTV.storekit only when "
+            + "Xcode launches the PlayCarTV scheme. Elsewhere they come from App Store Connect."
     #endif
 
-    /// "Unlock Roadivo Pro" as one translatable sentence, with the brand name
+    /// "Unlock PlayCarTV Pro" as one translatable sentence, with the brand name
     /// picked out in the theme's accent wherever the translation puts it.
     private static var title: AttributedString {
-        var title = AttributedString(appLocalized: "Unlock Roadivo Pro")
-        if let range = title.range(of: "Roadivo") {
+        var title = AttributedString(appLocalized: "Unlock PlayCarTV Pro")
+        if let range = title.range(of: "PlayCarTV") {
             title[range].foregroundColor = Color.roadAccent
         }
         return title

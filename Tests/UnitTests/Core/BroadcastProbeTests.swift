@@ -1,6 +1,6 @@
 import Foundation
 import Testing
-@testable import Roadivo
+@testable import PlayCarTV
 
 @Suite("Is Screen Broadcast running")
 struct BroadcastProbeTests {
@@ -13,7 +13,7 @@ struct BroadcastProbeTests {
     }
 
     @Test(
-        "Nothing listening, or something that isn't Roadivo's broadcast, counts as no broadcast",
+        "Nothing listening, or something that isn't PlayCarTV's broadcast, counts as no broadcast",
         .timeLimit(.minutes(1))
     )
     func noBroadcast() async throws {

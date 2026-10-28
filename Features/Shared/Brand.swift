@@ -2,11 +2,11 @@ import Foundation
 
 /// Product-level copy shared by several screens.
 enum Brand {
-    static let tagline: LocalizedStringResource = "Let the Journey Play."
+    static let tagline: LocalizedStringResource = "TV for the Road."
 
-    /// Sent with Settings › Share Roadivo; reads well with or without a link.
+    /// Sent with Settings › Share PlayCarTV; reads well with or without a link.
     static let shareMessage: LocalizedStringResource =
-        "I watch my playlists and videos on the road with Roadivo. Find it on the App Store."
+        "I watch my playlists and videos on the road with PlayCarTV. Find it on the App Store."
 }
 
 /// Legal links. Terms are Apple's standard EULA (`TERMS_URL`); the privacy
@@ -17,7 +17,7 @@ enum LegalLinks {
     }
 }
 
-/// Roadivo's App Store listing, from `APP_STORE_ID` (Config/Shared.xcconfig).
+/// PlayCarTV's App Store listing, from `APP_STORE_ID` (Config/Shared.xcconfig).
 /// Both links are `nil` until the ID is set.
 struct AppStoreLinks: Equatable {
     /// The listing, for sharing.

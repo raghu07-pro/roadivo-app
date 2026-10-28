@@ -2,8 +2,8 @@ import CarPlay
 import MapKit
 import OSLog
 
-/// Roadivo's CarPlay navigation app, when `ROADIVO_CARPLAY_APP` is `map` (DECISIONS 147, 152): Apple's map screen
-/// over Roadivo's map, a search for places, Directions' routes as a trip to choose from, then turn-by-turn guidance.
+/// PlayCarTV's CarPlay navigation app, when `PLAYCARTV_CARPLAY_APP` is `map` (DECISIONS 147, 152): Apple's map screen
+/// over PlayCarTV's map, a search for places, Directions' routes as a trip to choose from, then turn-by-turn guidance.
 final class CarPlayNavigationSceneDelegate: UIResponder, CPTemplateApplicationSceneDelegate, CPMapTemplateDelegate {
     private var interfaceController: CPInterfaceController?
     private var carWindow: CPWindow?
@@ -17,7 +17,7 @@ final class CarPlayNavigationSceneDelegate: UIResponder, CPTemplateApplicationSc
     private var previewKey: String?
     /// The place and outcome last reported in an alert, so each problem is told once.
     private var alertKey: String?
-    private let logger = Logger(subsystem: "com.roadivo", category: "CarPlay")
+    private let logger = Logger(subsystem: "com.playcartv", category: "CarPlay")
 
     func templateApplicationScene(
         _ templateApplicationScene: CPTemplateApplicationScene,

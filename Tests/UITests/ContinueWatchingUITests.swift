@@ -15,7 +15,7 @@ final class ContinueWatchingUITests: XCTestCase {
 
     /// The film reads out its time left; the live channel, with no place to pick up, its group.
     func testRowShowsProgressAndRemovesItems() throws {
-        let app = XCUIApplication.roadivo(skipOnboarding: true, demoHistory: true)
+        let app = XCUIApplication.playcartv(skipOnboarding: true, demoHistory: true)
         let row = continueWatchingRow(app)
         let film = row.buttons["channel.Steel Horizon · 1080p"]
         let channel = row.buttons["channel.Football Tonight"]
@@ -45,7 +45,7 @@ final class ContinueWatchingUITests: XCTestCase {
 
     /// The film still shows its place in its group's row, where Continue Watching's actions aren't offered.
     func testGroupRowShowsProgressWithoutHistoryActions() {
-        let app = XCUIApplication.roadivo(skipOnboarding: true, demoHistory: true)
+        let app = XCUIApplication.playcartv(skipOnboarding: true, demoHistory: true)
         _ = continueWatchingRow(app)
         let inGroup = app.buttons.matching(identifier: "channel.Steel Horizon · 1080p").element(boundBy: 1)
         XCTAssertTrue(inGroup.waitForExistence(timeout: 5))
@@ -56,7 +56,7 @@ final class ContinueWatchingUITests: XCTestCase {
     }
 
     func testPlayFromBeginningOpensThePlayer() {
-        let app = XCUIApplication.roadivo(skipOnboarding: true, demoHistory: true)
+        let app = XCUIApplication.playcartv(skipOnboarding: true, demoHistory: true)
         let film = continueWatchingRow(app).buttons["channel.Steel Horizon · 1080p"]
         XCTAssertTrue(film.waitForExistence(timeout: 5))
         film.press(forDuration: 1.2)

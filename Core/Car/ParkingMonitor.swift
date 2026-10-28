@@ -4,14 +4,14 @@ import Observation
 /// Where `ParkingMonitor` gets its readings: the iPhone's location, or a script in tests and Debug runs.
 @MainActor
 protocol MotionSampling: AnyObject {
-    /// Location is off for Roadivo, so parked can never be known.
+    /// Location is off for PlayCarTV, so parked can never be known.
     var isLocationDenied: Bool { get }
     /// Shows iOS's question on the iPhone the first time; does nothing once it's answered.
     func requestAccess()
     func samples() -> AsyncStream<MotionSample>
 }
 
-/// Whether the car is parked, for video in Roadivo's CarPlay window (DECISIONS 152–153). Listens only while started.
+/// Whether the car is parked, for video in PlayCarTV's CarPlay window (DECISIONS 152–153). Listens only while started.
 @Observable
 @MainActor
 final class ParkingMonitor {

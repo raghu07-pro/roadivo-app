@@ -1,6 +1,6 @@
 import SwiftUI
 
-/// "What is a source?": what Roadivo can play from, and how to find the one a provider gave you. No web
+/// "What is a source?": what PlayCarTV can play from, and how to find the one a provider gave you. No web
 /// search for playlists (DECISIONS 117). `Help` is injected by the app, as on Add a Source.
 struct WhatIsASourceView<Help: View>: View {
     @ViewBuilder let help: () -> Help
@@ -12,7 +12,7 @@ struct WhatIsASourceView<Help: View>: View {
                     heading(
                         "A source is where your channels come from",
                         detail: """
-                        Roadivo is just a player and comes with no channels. A source tells it where to find yours:
+                        PlayCarTV is just a player and comes with no channels. A source tells it where to find yours:
                         """
                     )
                     kind("list.bullet.rectangle", "An M3U / M3U8 playlist link, also called an IPTV subscription link")
@@ -58,7 +58,7 @@ struct WhatIsASourceView<Help: View>: View {
                 .cardStyle(padding: Spacing.lg)
 
                 Text("""
-                Roadivo does not provide, host, or endorse any content. Add only sources you own or have the legal \
+                PlayCarTV does not provide, host, or endorse any content. Add only sources you own or have the legal \
                 right to access.
                 """)
                 .font(Typography.caption)

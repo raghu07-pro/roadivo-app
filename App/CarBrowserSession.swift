@@ -45,7 +45,7 @@ final class CarBrowserSession {
                 scripts.addUserScript(script)
             }
             CarBrowserInputBridge.userScripts.forEach(scripts.addUserScript)
-            page.webView.evaluateJavaScript("window.roadivoViewport?.(\(layoutWidth));", completionHandler: nil)
+            page.webView.evaluateJavaScript("window.playcartvViewport?.(\(layoutWidth));", completionHandler: nil)
         }
 
         /// A Mac with no touch and the car's screen: sites treat a touch Mac as an iPad and send tablet pages
@@ -104,7 +104,7 @@ final class CarBrowserSession {
                     }
                   };
                   // A new page size, for the page that's open (`applyPageSize`).
-                  window.roadivoViewport = width => {
+                  window.playcartvViewport = width => {
                     base = width;
                     current = width;
                     widened = 0;

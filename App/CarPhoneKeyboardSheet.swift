@@ -1,7 +1,7 @@
 #if DEBUG
     import SwiftUI
 
-    /// Phone Input on the iPhone, as CarTV's "CarPlay Keyboard" sheet in Roadivo's theme: the iPhone's own keyboard,
+    /// Phone Input on the iPhone, as CarTV's "CarPlay Keyboard" sheet in PlayCarTV's theme: the iPhone's own keyboard,
     /// its text on the car's screen as it's typed, and its return key searching there (DECISIONS 163).
     struct CarPhoneKeyboardSheet: View {
         @Bindable var input: CarPhoneInput

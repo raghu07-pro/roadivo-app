@@ -7,7 +7,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
-	<string>Roadivo</string>
+	<string>PlayCarTV</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -32,25 +32,25 @@
 		<true/>
 	</dict>
 	<key>NSCameraUsageDescription</key>
-	<string>Roadivo uses the camera only to scan a QR code that contains a playlist link.</string>
+	<string>PlayCarTV uses the camera only to scan a QR code that contains a playlist link.</string>
 	<key>NSLocalNetworkUsageDescription</key>
-	<string>Roadivo connects to playlists and video servers on your local network, and shows your iPhone on your car's screen when you broadcast.</string>
+	<string>PlayCarTV connects to playlists and video servers on your local network, and shows your iPhone on your car's screen when you broadcast.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Roadivo uses your location to show routes from where you are in Maps, and on CarPlay to tell when the car is parked, so video plays only then. Roadivo doesn't store it; routes come from Apple Maps.</string>
+	<string>PlayCarTV uses your location to show routes from where you are in Maps, and on CarPlay to tell when the car is parked, so video plays only then. PlayCarTV doesn't store it; routes come from Apple Maps.</string>
 	<key>NSMicrophoneUsageDescription</key>
-	<string>Roadivo uses the microphone only while you search by voice.</string>
+	<string>PlayCarTV uses the microphone only while you search by voice.</string>
 	<key>NSSpeechRecognitionUsageDescription</key>
-	<string>Roadivo turns what you say into search text, on your iPhone when your language allows it.</string>
-	<key>ROADIVO_CARPLAY</key>
-	<string>$(ROADIVO_CARPLAY)</string>
-	<key>ROADIVO_CARPLAY_APP</key>
-	<string>$(ROADIVO_CARPLAY_APP)</string>
-	<key>ROADIVO_CARPLAY_VIDEO</key>
-	<string>$(ROADIVO_CARPLAY_VIDEO)</string>
-	<key>ROADIVO_CAR_BROWSER</key>
-	<string>$(ROADIVO_CAR_BROWSER)</string>
-	<key>ROADIVO_DIRECTIONS</key>
-	<string>$(ROADIVO_DIRECTIONS)</string>
+	<string>PlayCarTV turns what you say into search text, on your iPhone when your language allows it.</string>
+	<key>PLAYCARTV_CARPLAY</key>
+	<string>$(PLAYCARTV_CARPLAY)</string>
+	<key>PLAYCARTV_CARPLAY_APP</key>
+	<string>$(PLAYCARTV_CARPLAY_APP)</string>
+	<key>PLAYCARTV_CARPLAY_VIDEO</key>
+	<string>$(PLAYCARTV_CARPLAY_VIDEO)</string>
+	<key>PLAYCARTV_CAR_BROWSER</key>
+	<string>$(PLAYCARTV_CAR_BROWSER)</string>
+	<key>PLAYCARTV_DIRECTIONS</key>
+	<string>$(PLAYCARTV_DIRECTIONS)</string>
 	<key>TERMS_URL</key>
 	<string>$(TERMS_URL)</string>
 	<key>UIAppFonts</key>
@@ -74,7 +74,7 @@
 					<key>UISceneConfigurationName</key>
 					<string>CarPlay</string>
 					<key>UISceneDelegateClassName</key>
-					<string>$(PRODUCT_MODULE_NAME).$(ROADIVO_CARPLAY_SCENE_DELEGATE)</string>
+					<string>$(PRODUCT_MODULE_NAME).$(PLAYCARTV_CARPLAY_SCENE_DELEGATE)</string>
 				</dict>
 			</array>
 		</dict>

@@ -159,7 +159,7 @@ final class CarBrowserController: UIViewController {
         page.webView.evaluateJavaScript(CarPageFullscreen.exit, completionHandler: nil)
     }
 
-    /// Open with no page yet, for a start page drawn over the browser (Roadivo's car screen, DECISIONS 163).
+    /// Open with no page yet, for a start page drawn over the browser (PlayCarTV's car screen, DECISIONS 163).
     func openBlank() {
         loadViewIfNeeded()
         isOpen = true
@@ -194,7 +194,7 @@ final class CarBrowserController: UIViewController {
         progress.isHidden = !allowed || !state.isLoading
         if !allowed {
             message.text = String(
-                appLocalized: "Watching in the car is part of Roadivo Pro. Unlock it on your iPhone."
+                appLocalized: "Watching in the car is part of PlayCarTV Pro. Unlock it on your iPhone."
             )
             message.isHidden = false
         } else if changed {

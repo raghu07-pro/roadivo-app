@@ -6,7 +6,7 @@ import Foundation
 /// Compiled into the app (its address, its tests) and the broadcast extension (the server).
 enum BroadcastHTTP {
     static let port: UInt16 = 8080
-    static let boundary = "roadivo-frame"
+    static let boundary = "playcartv-frame"
 
     /// This install's private code, so others on the same Wi-Fi can't guess the address. The app and its extension
     /// share no storage, but both live in the app's install folder, whose random name is theirs alone.
@@ -17,7 +17,7 @@ enum BroadcastHTTP {
     /// Six easy-to-type characters (no 0/o, 1/l/i) from the install folder; an update or reinstall changes it.
     static func code(forBundleAt bundleURL: URL) -> String {
         var components = bundleURL.standardizedFileURL.pathComponents
-        // Only "<install folder>/Roadivo.app": the extension sits inside the app, and `/var` may read `/private/var`.
+        // Only "<install folder>/PlayCarTV.app": the extension sits inside the app, and `/var` may read `/private/var`.
         if let app = components.firstIndex(where: { $0.hasSuffix(".app") }) {
             components = Array(components[max(app - 1, 0)...app])
         }
@@ -101,7 +101,7 @@ enum BroadcastHTTP {
         """
         <!doctype html>
         <html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-        <title>Roadivo</title><link rel="icon" href="data:,">
+        <title>PlayCarTV</title><link rel="icon" href="data:,">
         <style>html,body{margin:0;height:100%;background:#000;overflow:hidden}
         img{width:100%;height:100%;object-fit:contain;display:block}</style></head>
         <body><img id="s" alt="">
@@ -117,7 +117,7 @@ enum BroadcastHTTP {
 /// app and its extension share no storage; another app could only end the broadcast early.
 enum BroadcastSignal {
     static var stop: CFString {
-        "com.roadivo.broadcast.stop" as CFString
+        "com.playcartv.broadcast.stop" as CFString
     }
 
     static func requestStop() {

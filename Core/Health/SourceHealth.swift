@@ -1,6 +1,6 @@
 import Foundation
 
-/// What Roadivo knows about a source's health: its refreshes, the entries it couldn't read and the
+/// What PlayCarTV knows about a source's health: its refreshes, the entries it couldn't read and the
 /// last stream check. Shown by Source Health.
 struct SourceHealth: Equatable {
     let kind: PlaylistKind

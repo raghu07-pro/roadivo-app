@@ -5,7 +5,7 @@ import SwiftUI
 /// subtitle/audio-track menus for free.
 struct SystemVideoPlayer: UIViewControllerRepresentable {
     let player: AVPlayer
-    /// Off when Roadivo draws its own controls on top.
+    /// Off when PlayCarTV draws its own controls on top.
     var showsControls = true
     /// From the connected screen's display profile.
     var gravity: AVLayerVideoGravity = .resizeAspect

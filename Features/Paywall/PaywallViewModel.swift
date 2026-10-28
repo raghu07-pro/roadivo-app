@@ -138,7 +138,7 @@ final class PaywallViewModel {
         }
         await access.refresh()
         if !access.isPro {
-            message = String(appLocalized: "No active Roadivo Pro purchase was found for this Apple Account.")
+            message = String(appLocalized: "No active PlayCarTV Pro purchase was found for this Apple Account.")
         }
         return access.isPro
     }

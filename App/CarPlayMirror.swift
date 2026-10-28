@@ -1,6 +1,6 @@
 import CarPlay
 
-/// The whole iPhone in Roadivo's CarPlay window, from its own Screen Broadcast: no address to open on the car. Shown
+/// The whole iPhone in PlayCarTV's CarPlay window, from its own Screen Broadcast: no address to open on the car. Shown
 /// only while parked, as video is. As in CarTV: Home steps back to the tabs (Cast shows the iPhone again while it
 /// still casts), End Mirroring stops the broadcast, and Fit fills the screen.
 @MainActor
@@ -48,7 +48,7 @@ final class CarPlayMirror {
         let template = CPListTemplate(title: String(appLocalized: "Cast"), sections: [])
         template.emptyViewTitleVariants = [String(appLocalized: "Cast anything to this screen")]
         template.emptyViewSubtitleVariants = [
-            String(appLocalized: "On your iPhone, open Roadivo and go to Discover › Cast to Screen to get started.")
+            String(appLocalized: "On your iPhone, open PlayCarTV and go to Discover › Cast to Screen to get started.")
         ]
         return template
     }

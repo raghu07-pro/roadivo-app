@@ -1,6 +1,6 @@
 import SwiftUI
 
-/// Roadivo's opening (owner, 2026-10-20; DECISIONS 130). From the launch screen's plain indigo, the road comes up
+/// PlayCarTV's opening (owner, 2026-10-20; DECISIONS 130). From the launch screen's plain indigo, the road comes up
 /// as it is outside (sunrise, midday, sunset, or night with stars) with the logo's idea in it: the sun, or the
 /// moon at night, is a play button, in that hour's own colours. In the morning it rises from behind the mountains;
 /// in the evening it sinks and sets behind them. The logo's car rolls along the road below; no words (owner). Then

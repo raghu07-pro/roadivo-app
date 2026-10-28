@@ -18,7 +18,7 @@
                 } else {
                     Text(app: "Cast anything to this screen")
                         .font(.title3.bold())
-                    Text(app: "On your iPhone, open Roadivo and go to Discover › Cast to Screen to get started.")
+                    Text(app: "On your iPhone, open PlayCarTV and go to Discover › Cast to Screen to get started.")
                         .font(.body)
                         .foregroundStyle(.secondary)
                 }

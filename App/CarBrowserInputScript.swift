@@ -4,12 +4,12 @@ import Foundation
 enum CarBrowserInputScript {
     static let source = #"""
     (() => {
-      const handler = window.webkit.messageHandlers.roadivoCarInput;
+      const handler = window.webkit.messageHandlers.playcartvCarInput;
       const documentID = String(Date.now()) + ':' + Math.random().toString(36).slice(2);
       let selected = null;
       let requestID = 0;
       // Every box that takes typing: text, search, address, email, phone, password and number fields, text areas,
-      // and rich editors (contenteditable), so Roadivo's keyboard opens on any site (owner, 2026-10-26).
+      // and rich editors (contenteditable), so PlayCarTV's keyboard opens on any site (owner, 2026-10-26).
       function textual(element) {
         if (element instanceof HTMLTextAreaElement) return true;
         return element instanceof HTMLInputElement &&
@@ -50,7 +50,7 @@ enum CarBrowserInputScript {
         if (secure(element)) return '';
         return (textual(element) ? element.value : element.innerText || '').slice(0, 4096);
       }
-      // A dropdown, whose options Roadivo lists on the car screen, which shows no picker of its own.
+      // A dropdown, whose options PlayCarTV lists on the car screen, which shows no picker of its own.
       function choosable(element) {
         return element instanceof HTMLSelectElement && !element.disabled && element.isConnected;
       }
@@ -75,7 +75,7 @@ enum CarBrowserInputScript {
       document.addEventListener('pointerup', event => {
         if (event.isTrusted) handler.postMessage({kind: 'pointer'});
       }, true);
-      // Neither the system keyboard nor a system picker opens; Roadivo's own pages answer the click below.
+      // Neither the system keyboard nor a system picker opens; PlayCarTV's own pages answer the click below.
       for (const type of ['pointerdown', 'mousedown']) {
         document.addEventListener(type, event => {
           if (event.isTrusted && handled(event)) event.preventDefault();
@@ -91,7 +91,7 @@ enum CarBrowserInputScript {
             search: Boolean(searchField(field)), secure: secure(field), numeric: numeric(field),
             value: currentValue(field)
           }));
-          // YouTube focuses its own box on click; Roadivo's keyboard types instead, so nothing zooms in to it.
+          // YouTube focuses its own box on click; PlayCarTV's keyboard types instead, so nothing zooms in to it.
           setTimeout(() => field.blur(), 0);
           return;
         }
@@ -104,7 +104,7 @@ enum CarBrowserInputScript {
         }));
         handler.postMessage(Object.assign(request('choose', dropdown), {options}));
       }, true);
-      globalThis.roadivoCarInput = {
+      globalThis.playcartvCarInput = {
         apply(documentToken, fieldToken, value, submit) {
           if (documentToken !== documentID || fieldToken !== String(requestID) || !eligible(selected)) return false;
           if (typeof value !== 'string' || value.length > 4096) return false;
@@ -152,10 +152,10 @@ enum CarBrowserInputScript {
     """#
 
     static let apply = """
-    return globalThis.roadivoCarInput?.apply(documentToken, fieldToken, value, submit) === true;
+    return globalThis.playcartvCarInput?.apply(documentToken, fieldToken, value, submit) === true;
     """
 
     static let choose = """
-    return globalThis.roadivoCarInput?.choose(documentToken, fieldToken, index) === true;
+    return globalThis.playcartvCarInput?.choose(documentToken, fieldToken, index) === true;
     """
 }

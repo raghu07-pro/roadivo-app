@@ -1,6 +1,6 @@
-# Roadivo — app brief
+# PlayCarTV — app brief
 
-Auto-loads whenever Claude works in `app/roadivo-app/`. The competitor review,
+Auto-loads whenever Claude works in `app/playcartv-app/`. The competitor review,
 feature map, user flow, roadmap and name review are in `Docs/PRODUCT.md`.
 
 ## What this app is
@@ -13,15 +13,16 @@ or adapter, or in a landscape **Car Mode** for a dashboard mount.
 It is for passengers, and for drivers who are parked, who already have an IPTV
 subscription or their own videos. It competes with "CarTV - M3U IPTV Player &
 Cast", with a more polished UI, an honest account of what works in the car, and
-no ads or tracking. The name is *road* + *vivo* ("alive / live"), meaning live
-TV on the road.
+no ads or tracking. The app is **PlayCarTV** (DECISIONS 175, 178, 179). Its bundle ID (`Project.swift`) predates the
+name and never changes (owner, 2026-10-28); in these docs `<bundle ID>` stands for it and `<old name>` for the app's
+first name. Users never see either.
 
 ## First-launch flow & Pro
 
 Onboarding (4 pages) → "Buy a plan" paywall (closable, shown once) → five
 tabs: **Home · Favorites · Discover · Maps · Settings**.
 
-- **Maps is on** (owner, 2026-10-27; DECISIONS 172, reversing 149's pause): `ROADIVO_DIRECTIONS = YES` in
+- **Maps is on** (owner, 2026-10-27; DECISIONS 172, reversing 149's pause): `PLAYCARTV_DIRECTIONS = YES` in
   `Config/Shared.xcconfig` shows the iPhone's **Maps** tab (the Directions feature, renamed), its route card, and a
   **Maps** tab on the touch car screen (`CarScreenMapView`, after Library). A route shows on the screen it was
   chosen on and moves like a video: Show on Car Display / Show on iPhone beside ✕ (`DirectionsViewModel.screen`). The car
@@ -29,47 +30,48 @@ tabs: **Home · Favorites · Discover · Maps · Settings**.
   NO hides all of it. CarPlay's navigation app (`map`) stays kept for later.
   The feature (`Features/Directions`, `Core/Directions`; DECISIONS 145, free): search a place (Apple Maps' autocomplete, `PlaceCompleter`, several suggestions as you type),
   see the driving routes from the iPhone's location on a map and pick one. No Apple Maps button on either screen
-  (owner, 2026-10-27): Roadivo shows routes, not turn-by-turn guidance.
+  (owner, 2026-10-27): PlayCarTV shows routes, not turn-by-turn guidance.
   Location is asked the first time the tab opens. `DirectionsUITests` skip while it's off. UI tests use `ScriptedPlaceFinder` and `ScriptedLocation` (`-location-denied` for Location off).
   An open route follows to the other tabs as an upright window in the bottom-right corner, like Maps' own, above the
   mini player (`RouteMiniCard`, `RouteSnapshot`; DECISIONS 146).
 
 - **Free:** 1 source, unlimited videos On this iPhone, AirPlay and PiP.
-- **Pro:** unlimited sources and Car Mode, including Roadivo on CarPlay.
+- **Pro:** unlimited sources and Car Mode, including PlayCarTV on CarPlay.
 - StoreKit 2 runs through `StoreClient` (`StoreKitClient`; `FakeStoreClient` for
-  tests and `-ui-testing`). Simulator runs use `StoreKit/Roadivo.storekit`.
-- Product IDs are `com.disolutions.roadivo.pro.{weekly,yearly,lifetime}` and must match App Store Connect (DECISIONS 23).
+  tests and `-ui-testing`). Simulator runs use `StoreKit/PlayCarTV.storekit`.
+- Product IDs are `com.disolutions.playcartv.pro.{weekly,yearly,lifetime}` and must match App Store Connect
+  (DECISIONS 23, 179).
 
 ## Discover and the car
 
-- **Independent car browser prototype** (owner, 2026-10-23): Debug window builds with `ROADIVO_CAR_BROWSER = YES`
+- **Independent car browser prototype** (owner, 2026-10-23): Debug window builds with `PLAYCARTV_CAR_BROWSER = YES`
   open sites in `CarBrowserController`, never in the phone browser. It reuses `WebPageController` with isolated,
   website storage of its own that persists between drives (cookies, history, sign-ins; DECISIONS 164) and desktop sites,
   as CarTV shows youtube.com (DECISIONS 162). `CarBrowserControls`
   provides template search, navigation, scrolling and ordinary-link selection. It requires Pro but no parking or Location evidence in Debug, per the owner's
   request (2026-10-23), and is hard-disabled in Release. Native video parking rules are unchanged. See `Docs/CarBrowserPrototype.md` for limitations and the required Mac/device checks.
   General webpage taps/forms and distribution approval are unverified; do not describe this as a complete browser.
-  Browser shortcuts fill one row the car wraps across its width, each site's icon inset on Roadivo's surface colour as on the iPhone (light and dark) and 256 px icon requests. The More menu adds Start Page,
+  Browser shortcuts fill one row the car wraps across its width, each site's icon inset on PlayCarTV's surface colour as on the iPhone (light and dark) and 256 px icon requests. The More menu adds Start Page,
   Reload, Forward, up to six car-only tabs, session-only saved pages, page zoom and auto-hiding controls.
   YouTube has native search through `CarPlayBrowserTab.showSearch(on:)`; page links stay in native template lists.
   Direct webpage taps are unsupported by CPMapTemplate's base view; these actions do not establish general form input.
   The Debug input prototype installs `CarBrowserInputBridge` in car tabs only: trusted webpage field and dropdown taps
   reach the car's editor, then update the original field/frame through an isolated script world. More → Input test
   exposes a local form and input counters.
-  **Direct taps (DECISIONS 161–163):** Debug iPhone builds use `ROADIVO_CARPLAY_APP = screen`: a plain window under
+  **Direct taps (DECISIONS 161–163):** Debug iPhone builds use `PLAYCARTV_CARPLAY_APP = screen`: a plain window under
   CarPlay's undocumented `UIWindowSceneSessionRoleCarPlay` role (Audio + Video signing, `carScreenScene` script in
-  Project.swift), where taps reach Roadivo's own views and the page. `CarScreenController` draws the whole car app
+  Project.swift), where taps reach PlayCarTV's own views and the page. `CarScreenController` draws the whole car app
   there over `CarPlayWindowController`: the five tabs, playback and Cast controls, and the browser at 75% under
   CarTV's style of bar along the top (Close, Back, Forward, the address, Reload, Full screen). Tapped fields open
-  `CarSearchPage` (Roadivo's keyboard), dropdowns `CarChoicesPage`. Delete the two lines in `Config/Debug.xcconfig`
+  `CarSearchPage` (PlayCarTV's keyboard), dropdowns `CarChoicesPage`. Delete the two lines in `Config/Debug.xcconfig`
   to bring back the CarPlay window and tabs.
 
-- **Which CarPlay app the car shows** is `ROADIVO_CARPLAY_APP` in `Config/Shared.xcconfig` (one per app; DECISIONS 152):
+- **Which CarPlay app the car shows** is `PLAYCARTV_CARPLAY_APP` in `Config/Shared.xcconfig` (one per app; DECISIONS 152):
   `window` (now), `media` or `map`. `CarPlayAvailability.app` reads it; `AppDelegate` and the Info.plist manifest pick
   the scene delegate, and the xcconfig picks the entitlements.
-- **`window`, Roadivo's own CarPlay window** (owner, 2026-10-23; DECISIONS 152; `App/CarPlayWindowSceneDelegate.swift`,
+- **`window`, PlayCarTV's own CarPlay window** (owner, 2026-10-23; DECISIONS 152; `App/CarPlayWindowSceneDelegate.swift`,
   `CarPlayWindowController`, `Core/Car/CarWindowState.swift`). Signed with the navigation entitlement
-  (`RoadivoNavigation.entitlements`) for its `CPWindow`, but no map is drawn: the window shows Roadivo's still road
+  (`PlayCarTVNavigation.entitlements`) for its `CPWindow`, but no map is drawn: the window shows PlayCarTV's still road
   at the hour's light, as on the splash (`CarWindowCard`, `SplashMoment`; DECISIONS 158) or the chosen video. Home · Favorites · Library · Cast · Browser are a
   centered `CPTabBarTemplate` on the home screen (`CarPlayTabs`; DECISIONS 159), Home a plain list of recent picks; video,
   casting and the browser switch the root back to the window. Without the bar, `CPMapTemplate`'s four corner buttons
@@ -91,36 +93,36 @@ tabs: **Home · Favorites · Discover · Maps · Settings**.
   `PlaybackOrigin` (`car` from the CarPlay apps); the CarPlay window shows only `car` picks. One player: the latest pick
   plays. **Play on iPhone / Play on Car Display** (DECISIONS 165) move it between the screens from the same place
   (`PlaybackController.move(to:)`): with the video on the car, the iPhone's player and mini player show its controls but
-  no picture; Play on Car Display shows while Roadivo is on the car's screen.
+  no picture; Play on Car Display shows while PlayCarTV is on the car's screen.
   The iPhone player has no Car Mode or AirPlay button any more.
-- **`media`**: Roadivo's CarPlay template app (`App/CarPlaySceneDelegate.swift`) shows Favorites,
+- **`media`**: PlayCarTV's CarPlay template app (`App/CarPlaySceneDelegate.swift`) shows Favorites,
   Recent and Library, then hands playback to the shared player. A fourth **Browser** tab lists the Browser's
   sites; tapping one opens it in Discover › Browser on the iPhone, as CarPlay can't show web pages (DECISIONS 131).
   Now Playing has a ♥ for what's playing and Up Next for the rest of its group (DECISIONS 140); rows show each
   item's logo, still or video frame (`Core/Car/CarPlayArtwork.swift`, DECISIONS 141).
 - **`media`: video on the car screen, under the Audio entitlement** (DECISIONS 139, 150). The App ID has CarPlay Audio,
-  Navigation and Video enabled, but the app signs with **Audio only** (`Resources/Roadivo.entitlements`): Apple's
+  Navigation and Video enabled, but the app signs with **Audio only** (`Resources/PlayCarTV.entitlements`): Apple's
   iOS 27.2 guide says Audio and Video can't be held together and Audio covers apps that mix in video; Audio + Video
-  left the car screen blank, and Video alone hid Roadivo (DECISIONS 133, 142). Navigation is kept for later (149).
+  left the car screen blank, and Video alone hid PlayCarTV (DECISIONS 133, 142). Navigation is kept for later (149).
   On iOS 27, in a car whose `CPSessionConfiguration.supportsVideoPlayback` is true, every playable row carries
   `CPPlaybackConfiguration(preferredPresentation: .video)` (`CarPlaySceneDelegate.playsAsVideo`): CarPlay shows the
-  video while parked and Now Playing with sound while driving; the car decides, Roadivo never checks. Test with a
+  video while parked and Now Playing with sound while driving; the car decides, PlayCarTV never checks. Test with a
   real iPhone on USB: Device Hub › select the iPhone › Device › CarPlay Simulator › vehicle "Standard Video Playback".
-- **`media`: Video-entitlement test builds** (owner, 2026-10-23; DECISIONS 151): `ROADIVO_CARPLAY_VIDEO` picks
-  `Resources/RoadivoVideo.entitlements` (Video only). It's YES for Debug builds on an iPhone, NO for simulator builds
+- **`media`: Video-entitlement test builds** (owner, 2026-10-23; DECISIONS 151): `PLAYCARTV_CARPLAY_VIDEO` picks
+  `Resources/PlayCarTVVideo.entitlements` (Video only). It's YES for Debug builds on an iPhone, NO for simulator builds
   and NO in `Config/Release.xcconfig`, so archives stay on Audio. Flip Release only after a Debug build shows video in
-  the CarPlay Simulator; Video alone hides Roadivo in cars without CarPlay video. The trace logs `signed: Video/Audio`.
+  the CarPlay Simulator; Video alone hides PlayCarTV in cars without CarPlay video. The trace logs `signed: Video/Audio`.
 - **`map`, CarPlay Navigation: approved by Apple, kept for a later release** (owner, 2026-10-23; DECISIONS 147–149,
-  152). `CarPlayNavigationSceneDelegate`: Roadivo's map, place search, route previews and turn-by-turn guidance
-  (`CarPlayGuidance`, `RouteGuide`), signed with `RoadivoNavigation.entitlements`. Don't use it until the owner says.
+  152). `CarPlayNavigationSceneDelegate`: PlayCarTV's map, place search, route previews and turn-by-turn guidance
+  (`CarPlayGuidance`, `RouteGuide`), signed with `PlayCarTVNavigation.entitlements`. Don't use it until the owner says.
 - Video plays over AirPlay, parked only, in cars with CarPlay video. While
   driving, the car plays sound only.
 - The **Discover** tab (`DiscoverView`, once "Cast to Car") has two cards (DECISIONS 118–124, 135–136; the Browser's card links its first four sites):
   **Browser** (`Features/Browser`, `Core/Browser`: full screen, a grid of sites with icons loaded at run time; nothing
-  kept, no bookmarks or Recent; pages never open their apps; direct videos offer Play in Roadivo; its menu has only
+  kept, no bookmarks or Recent; pages never open their apps; direct videos offer Play in PlayCarTV; its menu has only
   Start Page and Leave Browser) and **Cast to Screen** (`CastToScreenView`, as simple as CarTV's; DECISIONS 157: where
-  the iPhone is and one Start/End mirroring button; the `RoadivoBroadcast` extension serves loopback only, for
-  Roadivo's CarPlay window; End mirroring is `BroadcastSignal`; real iPhone only). Cast from an app was removed (owner, 2026-10-21). Car Mode has no
+  the iPhone is and one Start/End mirroring button; the `PlayCarTVBroadcast` extension serves loopback only, for
+  PlayCarTV's CarPlay window; End mirroring is `BroadcastSignal`; real iPhone only). Cast from an app was removed (owner, 2026-10-21). Car Mode has no
   button since DECISIONS 155: it opens when a saved car connects with Open Car Mode When Connected (owner to decide its
   way in). Car Mode shows a progress bar with large times, and Drive View hides the video for the driver (DECISIONS 114).
 - The **CarPlay Browser tab** (`App/CarPlayBrowserTab.swift`, DECISIONS 134): on iOS 27 a search row (`CPSearchTemplate`,
@@ -129,7 +131,7 @@ tabs: **Home · Favorites · Discover · Maps · Settings**.
   searches open in the iPhone's Browser (`AppEnvironment.browser`, `AppRouter.openInBrowser`).
 - How to Connect was removed (owner, 2026-10-26; DECISIONS 164). Its numbered-step row lives on as `GuideStep` for the ? help sheets.
 - **Car & Display Profiles** (`Core/Display`, `Features/Shared/DisplayProfiles`; DECISIONS 110–113): This iPhone plus a profile per AirPlay receiver, CarPlay or wired display, with aspect ratio, Play Next Automatically, subtitles, preferred source and Open Car Mode When Connected (Pro). `CarConnection.receiver` picks the profile; `AppEnvironment` applies it to the player.
-- CarPlay Audio was granted on 2026-10-20 and is on (`ROADIVO_CARPLAY = YES` in `Config/Shared.xcconfig`,
+- CarPlay Audio was granted on 2026-10-20 and is on (`PLAYCARTV_CARPLAY = YES` in `Config/Shared.xcconfig`,
   DECISIONS 25, 127). Set to NO, the app hides every CarPlay promise (`CarPlayAvailability`, DECISIONS 84). Simulator builds carry
   the entitlements so Xcode's CarPlay window shows the app (DECISIONS 121). CarPlay Video was tried on
   2026-10-21 and dropped (DECISIONS 133, 139); the signing steps are in DECISIONS 127. Video views let go of the player in the
@@ -156,8 +158,9 @@ Graphite). `AppTheme.shared` holds the choice and both apply live
   floating mini player never covers its content (DECISIONS 100).
 - Type: Overpass by default; Settings › Theme › Font Style also offers Standard, Rounded and Serif. Use `Typography` tokens, never a hard-coded font (DECISIONS 93).
 
-The tagline is "Let the Journey Play." (`Brand.tagline`). No green. See
-DECISIONS 33, 37 and 53–57.
+The App Store name is "PlayCarTV: TV for the Road" and the tagline matches it: "TV for the Road." (`Brand.tagline`;
+German and Italian keep it in English). Onboarding's brand tile shows the app icon (`AppLogo`, written by the icon
+script). No green. See DECISIONS 33, 37, 53–57, 175 and 177.
 
 ## Code style
 
@@ -193,7 +196,7 @@ DECISIONS 33, 37 and 53–57.
 - **Channel** (SwiftData):
   - Fields: name, `group` (from `group-title`), logo URL, stream URL, `sortIndex` (file order), `isFavorite`, `lastPlayedAt`.
   - Watch history: `resumePosition` (where the next play starts), `duration`, `finishedAt` (watched to the end). Rules in `PlaybackProgress`.
-  - An imported video is stored as `roadivo-local:<file name>`, never as an absolute path.
+  - An imported video is stored as `playcartv-local:<file name>`, never as an absolute path.
 - **MediaItem**: a value snapshot of a Channel. Views and the player only see this.
 - **M3UParser**: a tolerant extended-M3U parser. It handles a BOM, CRLF, a missing header, quoted commas, `#EXTGRP`, `tvg-name` and relative URLs, and skips junk lines.
 
@@ -229,8 +232,8 @@ None in v1 (DECISIONS 6). Everything is stored on the device.
 ## Constraints & non-goals
 
 - **Device:** iPhone only, iOS 17+, portrait and landscape.
-- **CarPlay:** Roadivo's own window (navigation entitlement, no map) with the four tabs as buttons and video only
-  while parked (DECISIONS 152); the CarPlay Audio template app is the fallback (`ROADIVO_CARPLAY_APP = media`, DECISIONS
+- **CarPlay:** PlayCarTV's own window (navigation entitlement, no map) with the four tabs as buttons and video only
+  while parked (DECISIONS 152); the CarPlay Audio template app is the fallback (`PLAYCARTV_CARPLAY_APP = media`, DECISIONS
   139, 150). The navigation map is approved by Apple but kept for a later release (DECISIONS 147–149).
 - **Not in v1:**
   - EPG
@@ -239,21 +242,21 @@ None in v1 (DECISIONS 6). Everything is stored on the device.
   - Arabic and other right-to-left languages
 - **ATS:** `NSAllowsArbitraryLoads` is on (DECISIONS 8). Justify it in the App Review notes.
 - **Privacy:** no tracking, no ATT prompt, no third-party SDKs.
-- **Legal page:** `Docs/Website/roadivo-policy.html` is one self-contained file (privacy,
+- **Legal page:** `Docs/Website/playcartv-policy.html` is one self-contained file (privacy,
   terms, support). It is hosted for App Store Connect, and the app shows the same
   file at Settings › Privacy Policy. Edit it directly; it is English only (DECISIONS 81).
-- **Hosted:** `Docs/Website/roadivo-policy.html` is live at https://www.disolutions.net/roadivo-policy, the App Store's
-  Privacy Policy and Support URL. Upload it again whenever the file changes (DECISIONS 174).
+- **Hosted:** `Docs/Website/playcartv-policy.html` goes at https://www.disolutions.net/playcartv-policy, the App Store's
+  Privacy Policy and Support URL. Upload it again whenever the file changes (DECISIONS 176).
 - **Debug mode in Release, for TestFlight testing** (owner, 2026-10-27; DECISIONS 170): the block at the end of
   `Config/Release.xcconfig` puts the touch car screen and all `#if DEBUG` code in archives. Delete it before an App Store
   archive; Apple is likely to reject it.
 - **Uploads:** the next upload of 1.0.0 is build 11 (owner, 2026-10-28). Raise `buildNumber` in `Project.swift` by one for every upload
   (App Store Connect refuses a number it has seen), keep `marketingVersion` until 1.0.0 is released, run
-  `tuist generate`, and archive with the `Roadivo` scheme (DECISIONS 126).
+  `tuist generate`, and archive with the `PlayCarTV` scheme (DECISIONS 126).
 
 ## Commands
 
-Xcode 26.4 or later builds CarPlay's video rows (their APIs need Swift 6.3); Xcode 26.2 and 26.3 still build Roadivo, without them.
+Xcode 26.4 or later builds CarPlay's video rows (their APIs need Swift 6.3); Xcode 26.2 and 26.3 still build PlayCarTV, without them.
 Xcode 27 needs macOS 26.6 or later.
 
 ```bash
@@ -264,11 +267,11 @@ tuist generate --no-open
 # Build output goes to .build/DerivedData (gitignored). Never into Derived/:
 # that folder holds Tuist's generated sources, which are committed.
 # Use any installed iPhone simulator (`xcrun simctl list devices available`).
-xcodebuild -workspace Roadivo.xcworkspace -scheme Roadivo \
+xcodebuild -workspace PlayCarTV.xcworkspace -scheme PlayCarTV \
   -destination 'platform=iOS Simulator,name=iPhone 17' \
   -derivedDataPath .build/DerivedData test
 swiftlint --strict && swiftformat .
-swift Scripts/generate-app-icon.swift   # redraws AppIcon (car) and AppIcon-Classic, light/dark/tinted
+swift Scripts/generate-app-icon.swift   # redraws AppIcon (car to the play-pin) and AppIcon-Classic, light/dark/tinted
 Scripts/export-review-screenshots.sh "iPhone 16e"   # re-runs the UI tests and refreshes Screenshots/review
 ```
 

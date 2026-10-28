@@ -18,7 +18,7 @@ final class ThemeUITests: XCTestCase {
 
     /// Each launch under -ui-testing starts from System + Golden Hour.
     func testThemeStartsFromTheDefaults() {
-        let app = XCUIApplication.roadivo(skipOnboarding: true)
+        let app = XCUIApplication.playcartv(skipOnboarding: true)
         openTheme(app)
         XCTAssertTrue(app.buttons["theme.appearance.system"].isSelected)
         XCTAssertTrue(app.buttons["theme.accent.golden"].isSelected)
@@ -27,7 +27,7 @@ final class ThemeUITests: XCTestCase {
     /// Picking an appearance selects it alone, and stays picked after leaving
     /// the screen.
     func testChoosingDarkSelectsIt() {
-        let app = XCUIApplication.roadivo(skipOnboarding: true)
+        let app = XCUIApplication.playcartv(skipOnboarding: true)
         openTheme(app)
         app.buttons["theme.appearance.dark"].tap()
         XCTAssertTrue(app.buttons["theme.appearance.dark"].isSelected)
@@ -47,7 +47,7 @@ final class ThemeUITests: XCTestCase {
     /// Dark really darkens the screen, and System hands it back to the
     /// iPhone's setting (the simulator runs in Light) without a relaunch.
     func testDarkThenSystemFollowsTheIPhoneAgain() throws {
-        let app = XCUIApplication.roadivo(skipOnboarding: true)
+        let app = XCUIApplication.playcartv(skipOnboarding: true)
         openTheme(app)
         let startsDark = try backgroundIsDark(app)
 
@@ -60,7 +60,7 @@ final class ThemeUITests: XCTestCase {
 
     /// Every accent can be picked, and only one is ever selected.
     func testChoosingEachAccentSelectsOnlyIt() {
-        let app = XCUIApplication.roadivo(skipOnboarding: true)
+        let app = XCUIApplication.playcartv(skipOnboarding: true)
         openTheme(app)
         let accents = ["sunset", "ocean", "twilight", "rose", "golden", "graphite"]
         for accent in accents {
@@ -76,7 +76,7 @@ final class ThemeUITests: XCTestCase {
     }
 
     func testChoosingEachFontStyleSelectsOnlyIt() {
-        let app = XCUIApplication.roadivo(skipOnboarding: true)
+        let app = XCUIApplication.playcartv(skipOnboarding: true)
         openTheme(app)
         app.swipeUp() // Font Style sits below the accents.
         let fonts = ["roadSign", "standard", "rounded", "serif"]
@@ -131,7 +131,7 @@ final class ThemeUITests: XCTestCase {
     }
 
     func testThemeAccessibilityAuditLightAndDark() throws {
-        let app = XCUIApplication.roadivo(skipOnboarding: true)
+        let app = XCUIApplication.playcartv(skipOnboarding: true)
         openTheme(app)
         try audit(app)
         app.buttons["theme.appearance.dark"].tap()
@@ -140,7 +140,7 @@ final class ThemeUITests: XCTestCase {
     }
 
     func testSettingsAccessibilityAudit() throws {
-        let app = XCUIApplication.roadivo(skipOnboarding: true)
+        let app = XCUIApplication.playcartv(skipOnboarding: true)
         app.settingsTab.tap()
         let theme = app.buttons["settings.theme"]
         XCTAssertTrue(theme.waitForExistence(timeout: 5))

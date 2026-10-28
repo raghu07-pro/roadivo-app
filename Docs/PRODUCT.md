@@ -1,4 +1,4 @@
-# Roadivo: product review and plan
+# PlayCarTV: product review and plan
 
 **Reference app:** CarTV - M3U IPTV Player & Cast (Lyntra Technology Ltd, App Store id6800211040).
 **Reviewed:** 2026-10-12, using its App Store listing and the owner's 26 screenshots.
@@ -37,9 +37,9 @@
 - **Monetisation comes first.** The paywall and ads appear before the user has played anything, and there is tracking.
 - **Dead-end empty states.**
 
-## 2. Roadivo vs CarTV
+## 2. PlayCarTV vs CarTV
 
-| CarTV | Roadivo (built) |
+| CarTV | PlayCarTV (built) |
 |---|---|
 | Grey tiles | Every item gets art: its logo, or a gradient with its initials |
 | Flat groups | **Continue Watching** row (films and episodes resume where they stopped, with progress bars and time left), then a carousel per group, with **See All** grids |
@@ -51,9 +51,9 @@
 | Ads + ATT tracking | **No ads, no tracking, no account**. Playlist links are stored in the **Keychain**. |
 | Light only | Warm "night drive" palette that works in light and dark, Dynamic Type, VoiceOver, Reduce Motion |
 
-## 3. Roadivo's flow
+## 3. PlayCarTV's flow
 
-1. **Onboarding** (4 pages, can be skipped): Meet Roadivo → Their favorites, on the big screen → Charging stops become movie time → Bring your own playlists.
+1. **Onboarding** (4 pages, can be skipped): Meet PlayCarTV → Their favorites, on the big screen → Charging stops become movie time → Bring your own playlists.
 2. **Home** (empty at first) → **Add a Source** sheet with three options: Link or M3U, M3U File, or Videos.
 3. **Home** shows Continue Watching, the group carousels and search.
 4. **Player** → **minimise** to the mini player, or switch to **Car Mode**.
@@ -77,7 +77,7 @@ Not in v1, in priority order:
 
 | Name | Meaning | App Store (search API) | Web / other | Verdict |
 |---|---|---|---|---|
-| **Roadivo** | road + *vivo* (Latin, Italian, Spanish, Portuguese: "alive / live") → "live on the road" | no apps | No brand found ("Roadio" dashcam and "Roadly" are only similar-sounding). roadivo.com is registered. | ✅ **Chosen** |
+| **<old name>** | road + *vivo* (Latin, Italian, Spanish, Portuguese: "alive / live") → "live on the road" | no apps | No brand found ("Roadio" dashcam and "Roadly" are only similar-sounding). Its .com was registered. | ✅ Chosen, later replaced by **PlayCarTV** (DECISIONS 175) |
 | Dashora | dash(board) + *-ora* | no apps | No brand found. dashora.com is registered. | Good backup |
 | Cruvanta | cruise + *avanti* ("forward") | no apps | No brand found | OK, harder to say and spell |
 | Moventra | move / movie + entertainment | no apps | "Movent" and "Moventur" (a car-rental app) are close | Confusion risk |
@@ -86,19 +86,19 @@ Not in v1, in priority order:
 
 Before launch:
 - Run trademark searches at USPTO, WIPO and EUIPO in classes 9 and 41.
-- Secure a domain (roadivo.app or getroadivo.com).
-- Suggested App Store title (30 characters max): **"Roadivo: M3U & IPTV Player"**.
+- Secure a domain (playcartv.app or getplaycartv.com).
+- Suggested App Store title (30 characters max): **"PlayCarTV: M3U & IPTV Player"**.
 
 ## 6. Parity with CarTV (2026-10-13)
 
-| CarTV screen | Roadivo |
+| CarTV screen | PlayCarTV |
 |---|---|
 | 4 onboarding pages | ✅ Illustrated road scenes from golden hour to night |
 | Paywall (weekly, yearly, lifetime) → close | ✅ Same plans, lifetime preselected, closable, Restore, renewal terms |
-| ATT tracking prompt | ✗ On purpose: Roadivo doesn't track |
+| ATT tracking prompt | ✗ On purpose: PlayCarTV doesn't track |
 | Home: search plus grouped channels | ✅ Plus a road-scene hero, Continue Watching and highway-sign groups |
 | Favorites: Favorites / Local, import from Photos, video files or a folder | ✅ |
-| Cast to Car | ✅ Roadivo's own CarPlay app (needs Apple's entitlement), AirPlay and Car Mode, with live status |
+| Cast to Car | ✅ PlayCarTV's own CarPlay app (needs Apple's entitlement), AirPlay and Car Mode, with live status |
 | Add a Source: paste link or config, QR from camera or photo, inline "No usable link found", Jellyfin / Emby / Xtream, Get Help | ✅ Plex not yet |
 | Settings: Pro, Manage Sources, Language, Privacy, Terms, Help & FAQ, Version | ✅ |
 | Real-time subtitles, rotary-knob support | Roadmap |

@@ -1,5 +1,5 @@
-// Draws AppIcon (a car driving toward the play-sun) and AppIcon-Classic (the empty road, an alternate),
-// each light, dark and tinted. Run from the app folder: swift Scripts/generate-app-icon.swift
+// Draws AppIcon (a car on a winding road to the play-pin) and AppIcon-Classic (the empty road to the play-sun, an
+// alternate), each light, dark and tinted. Run from the app folder: swift Scripts/generate-app-icon.swift
 import AppKit
 import CoreGraphics
 
@@ -17,7 +17,7 @@ struct Palette {
     /// The original icon's three-stop sky, kept exactly for AppIcon-Classic.
     let classicSky: [CGColor]
     let farRidge, nearRidge, ground, road, sun, mark, dash, edge: CGColor
-    let glow, cloud: CGColor
+    let glow, cloud, pinShade: CGColor
     let carBody, carCabin, windowTop, windowBottom, tailLight, plate: CGColor
 }
 
@@ -30,7 +30,7 @@ func palette(_ variant: Variant) -> Palette {
             farRidge: rgb(0.42, 0.23, 0.36), nearRidge: rgb(0.24, 0.15, 0.25), ground: rgb(0.16, 0.13, 0.16),
             road: rgb(0.11, 0.11, 0.13), sun: rgb(1.00, 0.714, 0.153), mark: rgb(0.09, 0.098, 0.114),
             dash: rgb(1.00, 0.714, 0.153), edge: rgb(1, 1, 1, 0.55),
-            glow: rgb(1.0, 0.75, 0.3, 0.45), cloud: rgb(1.0, 0.55, 0.35, 0.55),
+            glow: rgb(1.0, 0.75, 0.3, 0.45), cloud: rgb(1.0, 0.55, 0.35, 0.55), pinShade: rgb(0.75, 0.42, 0.05, 0.55),
             carBody: rgb(0.13, 0.15, 0.24), carCabin: rgb(0.10, 0.12, 0.20),
             windowTop: rgb(0.98, 0.55, 0.30, 0.9), windowBottom: rgb(0.30, 0.20, 0.38, 0.95),
             tailLight: rgb(1, 0.18, 0.16), plate: rgb(1.00, 0.714, 0.153)
@@ -42,7 +42,7 @@ func palette(_ variant: Variant) -> Palette {
             farRidge: rgb(0.20, 0.13, 0.28), nearRidge: rgb(0.11, 0.08, 0.17), ground: rgb(0.07, 0.06, 0.09),
             road: rgb(0.05, 0.05, 0.07), sun: rgb(1.00, 0.714, 0.153), mark: rgb(0.09, 0.098, 0.114),
             dash: rgb(1.00, 0.714, 0.153), edge: rgb(1, 1, 1, 0.4),
-            glow: rgb(1.0, 0.7, 0.25, 0.35), cloud: rgb(0.75, 0.40, 0.45, 0.45),
+            glow: rgb(1.0, 0.7, 0.25, 0.35), cloud: rgb(0.75, 0.40, 0.45, 0.45), pinShade: rgb(0.75, 0.42, 0.05, 0.55),
             carBody: rgb(0.10, 0.11, 0.17), carCabin: rgb(0.07, 0.08, 0.13),
             windowTop: rgb(0.80, 0.42, 0.30, 0.85), windowBottom: rgb(0.18, 0.12, 0.25, 0.95),
             tailLight: rgb(1, 0.18, 0.16), plate: rgb(1.00, 0.714, 0.153)
@@ -54,7 +54,7 @@ func palette(_ variant: Variant) -> Palette {
             farRidge: rgb(0.22, 0.22, 0.22), nearRidge: rgb(0.15, 0.15, 0.15), ground: rgb(0.10, 0.10, 0.10),
             road: rgb(0.30, 0.30, 0.30), sun: rgb(1, 1, 1), mark: rgb(0, 0, 0),
             dash: rgb(0.85, 0.85, 0.85), edge: rgb(1, 1, 1, 0.5),
-            glow: rgb(1, 1, 1, 0.15), cloud: rgb(1, 1, 1, 0.25),
+            glow: rgb(1, 1, 1, 0.15), cloud: rgb(1, 1, 1, 0.25), pinShade: rgb(0.55, 0.55, 0.55, 0.5),
             carBody: rgb(0.55, 0.55, 0.55), carCabin: rgb(0.45, 0.45, 0.45),
             windowTop: rgb(0.85, 0.85, 0.85, 0.9), windowBottom: rgb(0.35, 0.35, 0.35, 0.95),
             tailLight: rgb(1, 1, 1), plate: rgb(0.9, 0.9, 0.9)
@@ -206,75 +206,125 @@ func car(_ ctx: CGContext, center: CGPoint, width: Double, colors: Palette) {
     ctx.fillPath()
 }
 
-// MARK: The icon
+// MARK: The icons
 
-func icon(_ variant: Variant, withCar: Bool) -> CGImage {
-    // App icons must be opaque: no alpha channel.
-    guard let ctx = CGContext(
-        data: nil, width: Int(size), height: Int(size), bitsPerComponent: 8, bytesPerRow: 0,
-        space: space, bitmapInfo: CGImageAlphaInfo.noneSkipLast.rawValue
-    ) else { fatalError("context") }
-    let colors = palette(variant)
-    let horizon = size * 0.40
+enum Design { case route, classic }
 
-    let skyColors = withCar ? colors.sky : colors.classicSky
-    if let sky = CGGradient(
-        colorsSpace: space,
-        colors: skyColors as CFArray,
-        locations: withCar ? [0, 0.3, 0.7, 1] : nil
-    ) {
-        ctx.drawLinearGradient(sky, start: CGPoint(x: 0, y: horizon), end: CGPoint(x: 0, y: size), options: [])
-    }
-    if withCar {
-        ctx.setFillColor(colors.cloud)
-        for (cloudX, cloudY, cloudW) in [
-            (70.0, 760.0, 260.0),
-            (700.0, 800.0, 250.0),
-            (40.0, 690.0, 170.0),
-            (780.0, 720.0, 200.0)
-        ] {
-            let cloud = CGRect(x: cloudX, y: cloudY, width: cloudW, height: 22)
-            ctx.addPath(CGPath(roundedRect: cloud, cornerWidth: 11, cornerHeight: 11, transform: nil))
-            ctx.fillPath()
-        }
-    }
-
-    // The sun is a play button, centred over the road.
-    let radius = size * 0.2
-    let sun = CGRect(x: size / 2 - radius, y: horizon + radius * 0.05, width: radius * 2, height: radius * 2)
-    if withCar {
-        glow(ctx, center: CGPoint(x: sun.midX, y: sun.midY), radius: radius * 1.6, color: colors.glow)
-    } else {
-        // The original's flat halo.
-        ctx.setFillColor(colors.sun.copy(alpha: 0.2) ?? colors.sun)
-        ctx.fillEllipse(in: sun.insetBy(dx: -radius * 0.4, dy: -radius * 0.4))
-    }
-    ridge(ctx, horizon: horizon, height: size * 0.15, seed: 1, color: colors.farRidge)
-    ctx.setFillColor(colors.sun)
-    ctx.fillEllipse(in: sun)
+/// The play mark, in proportion to the circle it sits in.
+func play(_ ctx: CGContext, center: CGPoint, radius: Double, color: CGColor) {
     let side = radius * 0.95
-    let mid = CGPoint(x: sun.midX + side * 0.1, y: sun.midY)
+    let mid = CGPoint(x: center.x + side * 0.1, y: center.y)
     ctx.beginPath()
     ctx.move(to: CGPoint(x: mid.x + side * 0.55, y: mid.y))
     ctx.addLine(to: CGPoint(x: mid.x - side * 0.45, y: mid.y + side * 0.58))
     ctx.addLine(to: CGPoint(x: mid.x - side * 0.45, y: mid.y - side * 0.58))
     ctx.closePath()
-    ctx.setFillColor(colors.mark)
+    ctx.setFillColor(color)
     ctx.fillPath()
+}
+
+/// AppIcon (DECISIONS 175): the car drives a winding road to a map pin whose head is the play button.
+func routeIcon(_ ctx: CGContext, _ colors: Palette) {
+    let horizon = size * 0.34
+    if let sky = CGGradient(colorsSpace: space, colors: colors.sky as CFArray, locations: [0, 0.3, 0.7, 1]) {
+        ctx.drawLinearGradient(sky, start: CGPoint(x: 0, y: horizon), end: CGPoint(x: 0, y: size), options: [])
+    }
+    ctx.setFillColor(colors.cloud)
+    for (cloudX, cloudY, cloudW) in [(40.0, 760.0, 250.0), (740.0, 800.0, 250.0), (20.0, 690.0, 160.0), (800.0, 720.0, 190.0)] {
+        let cloud = CGRect(x: cloudX, y: cloudY, width: cloudW, height: 22)
+        ctx.addPath(CGPath(roundedRect: cloud, cornerWidth: 11, cornerHeight: 11, transform: nil))
+        ctx.fillPath()
+    }
+
+    let head = CGPoint(x: size / 2, y: size * 0.70)
+    let headRadius = 168.0
+    glow(ctx, center: head, radius: headRadius * 2.1, color: colors.glow)
+    ridge(ctx, horizon: horizon, height: size * 0.14, seed: 1, color: colors.farRidge)
+    ridge(ctx, horizon: horizon, height: size * 0.055, seed: 2, color: colors.nearRidge)
+    ctx.setFillColor(colors.ground)
+    ctx.fill(CGRect(x: 0, y: 0, width: size, height: horizon))
+    glow(ctx, center: CGPoint(x: size / 2, y: horizon), radius: size * 0.3, color: colors.glow)
+
+    // The winding road is laid flat on the ground and seen in perspective, so its edges never fold over.
+    let lateral = 260.0, rise = horizon + 40, roadWidth = 0.9
+    func roadX(_ depth: Double) -> Double {
+        2.4 * sin(0.62 * (depth - 1)) * min(1, (depth - 1) / 2.5) * exp(-max(0, depth - 7) / 4)
+    }
+    func project(_ across: Double, _ depth: Double) -> CGPoint {
+        CGPoint(x: size / 2 + (roadX(depth) + across) * lateral / depth, y: horizon - rise / depth)
+    }
+    func strip(_ from: Double, _ to: Double, near: Double, far: Double) {
+        let depths = (0...160).map { near * pow(far / near, Double($0) / 160) }
+        ctx.beginPath()
+        ctx.addLines(between: depths.map { project(from, $0) } + depths.reversed().map { project(to, $0) })
+        ctx.closePath()
+        ctx.fillPath()
+    }
+    ctx.setFillColor(colors.road)
+    strip(-roadWidth, roadWidth, near: 1, far: 500)
+    ctx.setFillColor(colors.edge)
+    strip(-roadWidth * 0.90, -roadWidth * 0.84, near: 1, far: 500)
+    strip(roadWidth * 0.84, roadWidth * 0.90, near: 1, far: 500)
+    ctx.setFillColor(colors.dash)
+    var dash = 1.2
+    while dash < 80 {
+        strip(-0.06, 0.06, near: dash, far: dash + 0.7)
+        dash += 1.6
+    }
+    let depth = 1.35
+    car(ctx, center: project(0, depth), width: 0.78 * 2 * roadWidth * lateral / depth, colors: colors)
+
+    // The pin stands where the road meets the horizon.
+    let tip = CGPoint(x: size / 2, y: horizon + 4)
+    ctx.setFillColor(rgb(0, 0, 0, 0.45))
+    ctx.fillEllipse(in: CGRect(x: tip.x - 46, y: tip.y - 9, width: 92, height: 18))
+    let spread = acos(headRadius / (head.y - tip.y))
+    let pin = CGMutablePath()
+    pin.move(to: tip)
+    pin.addArc(center: head, radius: headRadius, startAngle: -.pi / 2 + spread, endAngle: .pi * 1.5 - spread, clockwise: false)
+    pin.closeSubpath()
+    ctx.addPath(pin)
+    ctx.setFillColor(colors.sun)
+    ctx.fillPath()
+    ctx.saveGState()
+    ctx.addPath(pin)
+    ctx.clip()
+    if let shade = CGGradient(
+        colorsSpace: space,
+        colors: [colors.pinShade, colors.sun.copy(alpha: 0) ?? colors.sun] as CFArray,
+        locations: [0, 1]
+    ) {
+        ctx.drawLinearGradient(shade, start: tip, end: CGPoint(x: tip.x, y: head.y - headRadius * 0.2), options: [])
+    }
+    ctx.restoreGState()
+    play(ctx, center: head, radius: headRadius * 0.86, color: colors.mark)
+}
+
+/// AppIcon-Classic: the original icon, an empty road to the play-sun.
+func classicIcon(_ ctx: CGContext, _ colors: Palette) {
+    let horizon = size * 0.40
+    if let sky = CGGradient(colorsSpace: space, colors: colors.classicSky as CFArray, locations: nil) {
+        ctx.drawLinearGradient(sky, start: CGPoint(x: 0, y: horizon), end: CGPoint(x: 0, y: size), options: [])
+    }
+    let radius = size * 0.2
+    let sun = CGRect(x: size / 2 - radius, y: horizon + radius * 0.05, width: radius * 2, height: radius * 2)
+    ctx.setFillColor(colors.sun.copy(alpha: 0.2) ?? colors.sun)
+    ctx.fillEllipse(in: sun.insetBy(dx: -radius * 0.4, dy: -radius * 0.4))
+    ridge(ctx, horizon: horizon, height: size * 0.15, seed: 1, color: colors.farRidge)
+    ctx.setFillColor(colors.sun)
+    ctx.fillEllipse(in: sun)
+    play(ctx, center: CGPoint(x: sun.midX, y: sun.midY), radius: radius, color: colors.mark)
     ridge(ctx, horizon: horizon, height: size * 0.06, seed: 2, color: colors.nearRidge)
 
     ctx.setFillColor(colors.ground)
     ctx.fill(CGRect(x: 0, y: 0, width: size, height: horizon))
-    if withCar {
-        glow(ctx, center: CGPoint(x: size / 2, y: horizon), radius: size * 0.35, color: colors.glow)
-    }
     ctx.beginPath()
     ctx.move(to: CGPoint(x: size * 0.48, y: horizon))
     ctx.addLine(to: CGPoint(x: size * 0.52, y: horizon))
     ctx.addLine(to: CGPoint(x: size * 0.98, y: 0))
     ctx.addLine(to: CGPoint(x: size * 0.02, y: 0))
     ctx.closePath()
-    ctx.setFillColor(withCar ? (colors.road.copy(alpha: 0.92) ?? colors.road) : colors.road)
+    ctx.setFillColor(colors.road)
     ctx.fillPath()
 
     ctx.setStrokeColor(colors.edge)
@@ -294,11 +344,18 @@ func icon(_ variant: Variant, withCar: Bool) -> CGImage {
         let width = max(4, size * 0.05 * near)
         ctx.fill(CGRect(x: size / 2 - width / 2, y: bottom, width: width, height: top - bottom))
     }
+}
 
-    if withCar {
-        car(ctx, center: CGPoint(x: size / 2, y: horizon - size * 0.21), width: size * 0.36, colors: colors)
+func icon(_ variant: Variant, _ design: Design) -> CGImage {
+    // App icons must be opaque: no alpha channel.
+    guard let ctx = CGContext(
+        data: nil, width: Int(size), height: Int(size), bitsPerComponent: 8, bytesPerRow: 0,
+        space: space, bitmapInfo: CGImageAlphaInfo.noneSkipLast.rawValue
+    ) else { fatalError("context") }
+    switch design {
+    case .route: routeIcon(ctx, palette(variant))
+    case .classic: classicIcon(ctx, palette(variant))
     }
-
     guard let image = ctx.makeImage() else { fatalError("image") }
     return image
 }
@@ -310,8 +367,19 @@ func write(_ image: CGImage, to path: String) throws {
 }
 
 let catalog = "Resources/Assets.xcassets"
-for (set, withCar) in [("AppIcon", true), ("AppIcon-Classic", false)] {
-    try write(icon(.light, withCar: withCar), to: "\(catalog)/\(set).appiconset/AppIcon.png")
-    try write(icon(.dark, withCar: withCar), to: "\(catalog)/\(set).appiconset/AppIcon-Dark.png")
-    try write(icon(.tinted, withCar: withCar), to: "\(catalog)/\(set).appiconset/AppIcon-Tinted.png")
+for (set, design) in [("AppIcon", Design.route), ("AppIcon-Classic", Design.classic)] {
+    try write(icon(.light, design), to: "\(catalog)/\(set).appiconset/AppIcon.png")
+    try write(icon(.dark, design), to: "\(catalog)/\(set).appiconset/AppIcon-Dark.png")
+    try write(icon(.tinted, design), to: "\(catalog)/\(set).appiconset/AppIcon-Tinted.png")
 }
+
+// AppLogo: the icon at 256 px for screens that show it, such as onboarding's brand tile.
+let logoSide = 256
+guard let logo = CGContext(
+    data: nil, width: logoSide, height: logoSide, bitsPerComponent: 8, bytesPerRow: 0,
+    space: space, bitmapInfo: CGImageAlphaInfo.noneSkipLast.rawValue
+) else { fatalError("logo") }
+logo.interpolationQuality = .high
+logo.draw(icon(.light, .route), in: CGRect(x: 0, y: 0, width: logoSide, height: logoSide))
+guard let logoImage = logo.makeImage() else { fatalError("logo image") }
+try write(logoImage, to: "\(catalog)/AppLogo.imageset/AppLogo.png")

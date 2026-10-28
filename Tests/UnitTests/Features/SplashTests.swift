@@ -1,6 +1,6 @@
 import Foundation
 import Testing
-@testable import Roadivo
+@testable import PlayCarTV
 
 @Suite("Opening splash")
 struct SplashTests {
@@ -39,7 +39,7 @@ struct SplashTests {
 
     @Test("UI tests skip the splash unless they ask for it, unit tests always skip it; the app always shows it")
     func whenItShows() {
-        let hostingTests = ["XCTestConfigurationFilePath": "/tmp/Roadivo.xctestconfiguration"]
+        let hostingTests = ["XCTestConfigurationFilePath": "/tmp/PlayCarTV.xctestconfiguration"]
         #expect(SplashView.isWanted(arguments: []))
         #expect(!SplashView.isWanted(arguments: ["-ui-testing"]))
         #expect(SplashView.isWanted(arguments: ["-ui-testing", "-show-splash"]))

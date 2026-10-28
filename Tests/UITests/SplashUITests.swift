@@ -4,7 +4,7 @@ import XCTest
 @MainActor
 final class SplashUITests: XCTestCase {
     func testSplashGivesWayToTheApp() {
-        let app = XCUIApplication.roadivo(skipOnboarding: true, showSplash: true)
+        let app = XCUIApplication.playcartv(skipOnboarding: true, showSplash: true)
         let addSource = app.buttons["library.empty.addSource"]
         XCTAssertTrue(addSource.waitForExistence(timeout: 10))
 

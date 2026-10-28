@@ -11,12 +11,12 @@
       "localizations" : [
         {
           "description" : "Unlimited sources and Car Mode, forever",
-          "displayName" : "Roadivo Pro Lifetime",
+          "displayName" : "PlayCarTV Pro Lifetime",
           "locale" : "en_US"
         }
       ],
-      "productID" : "com.disolutions.roadivo.pro.lifetime",
-      "referenceName" : "Roadivo Pro Lifetime",
+      "productID" : "com.disolutions.playcartv.pro.lifetime",
+      "referenceName" : "PlayCarTV Pro Lifetime",
       "type" : "NonConsumable"
     }
   ],
@@ -34,7 +34,7 @@
       "localizations" : [
 
       ],
-      "name" : "Roadivo Pro",
+      "name" : "PlayCarTV Pro",
       "subscriptions" : [
         {
           "adHocOffers" : [
@@ -51,13 +51,13 @@
           "localizations" : [
             {
               "description" : "Unlimited sources and Car Mode",
-              "displayName" : "Roadivo Pro Yearly",
+              "displayName" : "PlayCarTV Pro Yearly",
               "locale" : "en_US"
             }
           ],
-          "productID" : "com.disolutions.roadivo.pro.yearly",
+          "productID" : "com.disolutions.playcartv.pro.yearly",
           "recurringSubscriptionPeriod" : "P1Y",
-          "referenceName" : "Roadivo Pro Yearly",
+          "referenceName" : "PlayCarTV Pro Yearly",
           "subscriptionGroupID" : "21700001",
           "type" : "RecurringSubscription"
         },
@@ -82,13 +82,13 @@
           "localizations" : [
             {
               "description" : "Unlimited sources and Car Mode",
-              "displayName" : "Roadivo Pro Weekly",
+              "displayName" : "PlayCarTV Pro Weekly",
               "locale" : "en_US"
             }
           ],
-          "productID" : "com.disolutions.roadivo.pro.weekly",
+          "productID" : "com.disolutions.playcartv.pro.weekly",
           "recurringSubscriptionPeriod" : "P1W",
-          "referenceName" : "Roadivo Pro Weekly",
+          "referenceName" : "PlayCarTV Pro Weekly",
           "subscriptionGroupID" : "21700001",
           "type" : "RecurringSubscription"
         }

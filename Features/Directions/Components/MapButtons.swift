@@ -1,7 +1,7 @@
 import SwiftUI
 
 /// The map's two buttons, stacked in its top corner on the iPhone and the car (owner, 2026-10-27; DECISIONS 172):
-/// search, which opens the place search, and under it the arrow that follows where you are. Roadivo's own, as Maps'
+/// search, which opens the place search, and under it the arrow that follows where you are. PlayCarTV's own, as Maps'
 /// location button can't have another stacked on it.
 struct MapButtons: View {
     /// The map follows where you are: the arrow is filled.

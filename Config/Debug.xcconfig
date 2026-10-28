@@ -1,19 +1,19 @@
-// Roadivo — Debug build settings. Committed; nothing secret here.
+// PlayCarTV — Debug build settings. Committed; nothing secret here.
 
 #include "Shared.xcconfig"
 
 SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG
 ENABLE_TESTABILITY = YES
-ROADIVO_CAR_BROWSER = YES
+PLAYCARTV_CAR_BROWSER = YES
 
 // CarPlay Video on an iPhone run from Xcode, for the CarPlay Simulator's video vehicle (DECISIONS 151). Simulator
 // builds keep Audio, so Xcode's CarPlay window still shows the tabs.
-ROADIVO_CARPLAY_VIDEO = YES
-ROADIVO_CARPLAY_VIDEO[sdk=iphonesimulator*] = NO
+PLAYCARTV_CARPLAY_VIDEO = YES
+PLAYCARTV_CARPLAY_VIDEO[sdk=iphonesimulator*] = NO
 
 // The car browser experiment (owner, 2026-10-26; DECISIONS 161): iPhone runs give the car a plain window that takes
-// its taps, through CarPlay's undocumented window role, instead of Roadivo's CarPlay window and tabs. Delete these two
+// its taps, through CarPlay's undocumented window role, instead of PlayCarTV's CarPlay window and tabs. Delete these two
 // lines to bring the CarPlay window back. Simulator builds keep the CarPlay window: Xcode's Simulator can't show the
 // plain one (Cafari Lite's README).
-ROADIVO_CARPLAY_APP = screen
-ROADIVO_CARPLAY_APP[sdk=iphonesimulator*] = window
+PLAYCARTV_CARPLAY_APP = screen
+PLAYCARTV_CARPLAY_APP[sdk=iphonesimulator*] = window

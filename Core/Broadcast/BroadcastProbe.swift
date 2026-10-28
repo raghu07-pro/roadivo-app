@@ -2,7 +2,7 @@ import Foundation
 import Network
 import os
 
-/// Whether this iPhone's Screen Broadcast is running: Roadivo's extension answers its page on the loopback address.
+/// Whether this iPhone's Screen Broadcast is running: PlayCarTV's extension answers its page on the loopback address.
 enum BroadcastProbe {
     /// A broadcast answers at once; anything slower counts as none, so Cast to Screen never waits on it.
     private static let timeout = Duration.seconds(2)

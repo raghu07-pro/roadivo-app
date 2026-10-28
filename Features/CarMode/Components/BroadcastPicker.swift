@@ -2,16 +2,16 @@ import OSLog
 import ReplayKit
 import SwiftUI
 
-/// Apple's Screen Broadcast sheet, opened from Roadivo's own button. Apple offers no call to open it, so the
+/// Apple's Screen Broadcast sheet, opened from PlayCarTV's own button. Apple offers no call to open it, so the
 /// system picker stays out of sight and its button is tapped for it.
 @MainActor
 final class BroadcastPicker {
-    private static let logger = Logger(subsystem: "com.roadivo", category: "Broadcast")
+    private static let logger = Logger(subsystem: "com.playcartv", category: "Broadcast")
 
     /// Built on first use, so the throwaway copies `@State` makes on every parent render never build one.
     private(set) lazy var view: RPSystemBroadcastPickerView = {
         let picker = RPSystemBroadcastPickerView(frame: CGRect(x: 0, y: 0, width: 44, height: 44))
-        // Roadivo's own extension is preselected, so the sheet lists it ready to start.
+        // PlayCarTV's own extension is preselected, so the sheet lists it ready to start.
         picker.preferredExtension = Bundle.main.bundleIdentifier.map { $0 + ".broadcast" }
         picker.showsMicrophoneButton = false
         return picker
@@ -37,7 +37,7 @@ struct BroadcastPickerHost: UIViewRepresentable {
     func updateUIView(_ view: RPSystemBroadcastPickerView, context: Context) {}
 }
 
-/// Whether Roadivo's Screen Broadcast is running, so Cast to Screen's one button starts or ends it.
+/// Whether PlayCarTV's Screen Broadcast is running, so Cast to Screen's one button starts or ends it.
 @MainActor
 @Observable
 final class BroadcastStatus {

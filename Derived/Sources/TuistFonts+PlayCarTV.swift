@@ -19,18 +19,18 @@
 // MARK: - Fonts
 
 // swiftlint:disable identifier_name line_length type_body_length
-public enum RoadivoFontFamily: Sendable {
+public enum PlayCarTVFontFamily: Sendable {
   public enum Overpass: Sendable {
-    public static let black = RoadivoFontConvertible(name: "Overpass-Black", family: "Overpass", path: "Overpass-Black.ttf")
-    public static let bold = RoadivoFontConvertible(name: "Overpass-Bold", family: "Overpass", path: "Overpass-Bold.ttf")
-    public static let extraBold = RoadivoFontConvertible(name: "Overpass-ExtraBold", family: "Overpass", path: "Overpass-ExtraBold.ttf")
-    public static let all: [RoadivoFontConvertible] = [black, bold, extraBold]
+    public static let black = PlayCarTVFontConvertible(name: "Overpass-Black", family: "Overpass", path: "Overpass-Black.ttf")
+    public static let bold = PlayCarTVFontConvertible(name: "Overpass-Bold", family: "Overpass", path: "Overpass-Bold.ttf")
+    public static let extraBold = PlayCarTVFontConvertible(name: "Overpass-ExtraBold", family: "Overpass", path: "Overpass-ExtraBold.ttf")
+    public static let all: [PlayCarTVFontConvertible] = [black, bold, extraBold]
   }
   public enum OverpassMono: Sendable {
-    public static let semiBold = RoadivoFontConvertible(name: "OverpassMono-SemiBold", family: "Overpass Mono", path: "OverpassMono-SemiBold.ttf")
-    public static let all: [RoadivoFontConvertible] = [semiBold]
+    public static let semiBold = PlayCarTVFontConvertible(name: "OverpassMono-SemiBold", family: "Overpass Mono", path: "OverpassMono-SemiBold.ttf")
+    public static let all: [PlayCarTVFontConvertible] = [semiBold]
   }
-  public static let allCustomFonts: [RoadivoFontConvertible] = [Overpass.all, OverpassMono.all].flatMap { $0 }
+  public static let allCustomFonts: [PlayCarTVFontConvertible] = [Overpass.all, OverpassMono.all].flatMap { $0 }
   public static func registerAllCustomFonts() {
     allCustomFonts.forEach { $0.register() }
   }
@@ -39,7 +39,7 @@ public enum RoadivoFontFamily: Sendable {
 
 // MARK: - Implementation Details
 
-public struct RoadivoFontConvertible: Sendable {
+public struct PlayCarTVFontConvertible: Sendable {
   public let name: String
   public let family: String
   public let path: String
@@ -83,8 +83,8 @@ public struct RoadivoFontConvertible: Sendable {
   }
 }
 
-public extension RoadivoFontConvertible.Font {
-  convenience init?(font: RoadivoFontConvertible, size: CGFloat) {
+public extension PlayCarTVFontConvertible.Font {
+  convenience init?(font: PlayCarTVFontConvertible, size: CGFloat) {
     #if os(iOS) || os(tvOS) || os(watchOS) || os(visionOS)
     if !UIFont.fontNames(forFamilyName: font.family).contains(font.name) {
       font.register()

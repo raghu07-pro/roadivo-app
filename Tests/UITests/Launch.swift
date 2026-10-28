@@ -8,8 +8,8 @@ extension XCUIApplication {
     /// `demoHistory`: the demo library with a film part-watched and a channel played.
     /// `broadcasting`: Screen Broadcast counts as running, which needs a real iPhone.
     /// `showSplash`: plays the opening splash, which UI tests otherwise skip.
-    /// `locationDenied`: Location is off for Roadivo, for Directions.
-    static func roadivo(
+    /// `locationDenied`: Location is off for PlayCarTV, for Directions.
+    static func playcartv(
         skipOnboarding: Bool = false,
         demoLibrary: Bool = false,
         demoHistory: Bool = false,
@@ -60,7 +60,7 @@ extension XCUIApplication {
         return tabs.element(boundBy: max(0, tabs.count - 1))
     }
 
-    /// Directions is the fourth of five tabs while `ROADIVO_DIRECTIONS` is YES; nil while it's switched off.
+    /// Directions is the fourth of five tabs while `PLAYCARTV_DIRECTIONS` is YES; nil while it's switched off.
     var directionsTab: XCUIElement? {
         let tabs = tabBars.buttons
         _ = tabs.firstMatch.waitForExistence(timeout: 5)

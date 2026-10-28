@@ -104,7 +104,7 @@ struct ChannelCard: View {
             Button("Delete Video", role: .destructive) { onDelete?() }
             Button("Cancel", role: .cancel) {}
         } message: {
-            Text("The video is removed from Roadivo. The original stays in Photos or Files.")
+            Text("The video is removed from PlayCarTV. The original stays in Photos or Files.")
         }
         .accessibilityElement(children: .ignore)
         .accessibilityLabel(Text(item.title))

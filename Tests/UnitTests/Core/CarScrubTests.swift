@@ -1,8 +1,8 @@
 import Foundation
 import Testing
-@testable import Roadivo
+@testable import PlayCarTV
 
-/// Dragging across Roadivo's CarPlay window moves the video's place (DECISIONS 154).
+/// Dragging across PlayCarTV's CarPlay window moves the video's place (DECISIONS 154).
 @Suite("Car scrub")
 struct CarScrubTests {
     @Test("The window's full width is the whole video")

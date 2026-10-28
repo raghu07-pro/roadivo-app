@@ -31,7 +31,7 @@ final class AppEnvironment {
     let location: LocationProviding
     /// The Directions tab, shared with the CarPlay map so both show the same place and routes (DECISIONS 147).
     let directions: DirectionsViewModel
-    /// Whether the car is parked, so Roadivo's CarPlay window shows video only then (DECISIONS 152).
+    /// Whether the car is parked, so PlayCarTV's CarPlay window shows video only then (DECISIONS 152).
     let parking: ParkingMonitor
 
     enum DirectionsSetup {
@@ -83,7 +83,7 @@ final class AppEnvironment {
         playback = PlaybackController()
         playback.progressStore = repository
         router = AppRouter()
-        // A web page that starts playing takes over: Roadivo's own video stops, keeping its place, so CarPlay,
+        // A web page that starts playing takes over: PlayCarTV's own video stops, keeping its place, so CarPlay,
         // the lock screen and the steering wheel control the page's video, not a paused one behind it.
         browser = BrowserViewModel(icons: siteIcons) { [playback] in
             if playback.isActive {
@@ -114,7 +114,7 @@ final class AppEnvironment {
     static func live(arguments: [String]) -> AppEnvironment {
         let switches = TestSwitches(arguments: arguments)
         let isUITesting = switches.isUITesting
-        let logger = Logger(subsystem: "com.roadivo", category: "App")
+        let logger = Logger(subsystem: "com.playcartv", category: "App")
 
         let store = openLibrary(inMemory: isUITesting, logger: logger)
         let secureStore: SecureStore = isUITesting ? InMemorySecureStore() : KeychainStore()
@@ -192,7 +192,7 @@ final class AppEnvironment {
         logger: Logger
     ) {
         let defaults = UserDefaults.standard
-        let flag = "roadivo.keychainInitialized"
+        let flag = "playcartv.keychainInitialized"
         let isOnDisk = library.container.configurations.allSatisfy { !$0.isStoredInMemoryOnly }
         guard isOnDisk, !defaults.bool(forKey: flag) else { return }
         // A failed count keeps the secrets: wiping a live library's logins is worse than a stale item.
@@ -236,7 +236,7 @@ final class AppEnvironment {
     }
 
     private static func volatileDefaults() -> UserDefaults {
-        let name = "roadivo.uitests"
+        let name = "playcartv.uitests"
         UserDefaults().removePersistentDomain(forName: name)
         return UserDefaults(suiteName: name) ?? .standard
     }
@@ -249,7 +249,7 @@ private struct TestSwitches {
     let skipsOnboarding: Bool
     /// `-car-connected`: the iPhone acts as if plugged into a car, for the car-connected paths.
     let isCarConnected: Bool
-    /// `-location-denied`: Location is off for Roadivo, for Directions' "turn it on" path.
+    /// `-location-denied`: Location is off for PlayCarTV, for Directions' "turn it on" path.
     let isLocationDenied: Bool
     /// `-car-parked`: the car always says it's stopped, so the CarPlay window shows video at a desk (DECISIONS 154).
     let isCarParked: Bool

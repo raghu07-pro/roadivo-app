@@ -1,6 +1,6 @@
 import Foundation
 import Testing
-@testable import Roadivo
+@testable import PlayCarTV
 
 @Suite("Car & Display Profiles screens")
 @MainActor
@@ -16,7 +16,7 @@ struct DisplayProfilesViewModelTests {
 
     private func make() throws -> Setup {
         let library = try TestLibrary()
-        let defaults = try #require(UserDefaults(suiteName: "roadivo.tests.\(UUID().uuidString)"))
+        let defaults = try #require(UserDefaults(suiteName: "playcartv.tests.\(UUID().uuidString)"))
         let store = DisplayProfileStore(defaults: defaults)
         let connection = CarConnection()
         let viewModel = DisplayProfilesViewModel(store: store, connection: connection, repository: library.repository)

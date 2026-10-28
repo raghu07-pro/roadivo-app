@@ -17,17 +17,17 @@ struct FAQEntry: Identifiable {
         FAQEntry(
             id: 0,
             question: "What should I do if something goes wrong while using the app?",
-            answer: "Close Roadivo from the app switcher and open it again. If a channel still won't play, refresh its source in Settings › Manage Sources. Still stuck? Tap Contact Support at the end of Help & FAQ."
+            answer: "Close PlayCarTV from the app switcher and open it again. If a channel still won't play, refresh its source in Settings › Manage Sources. Still stuck? Tap Contact Support at the end of Help & FAQ."
         ),
         FAQEntry(
             id: 1,
-            question: "I bought Roadivo Pro, but it still says I'm not a member.",
+            question: "I bought PlayCarTV Pro, but it still says I'm not a member.",
             answer: "Open the Pro screen and tap Restore. Make sure you're signed in with the same Apple Account you bought with. Purchases waiting for Ask to Buy approval unlock once approved."
         ),
         FAQEntry(
             id: 2,
-            question: "What is a source? Does Roadivo come with channels?",
-            answer: "A source is a playlist link or a media server you own or subscribe to. Roadivo is a player only: it doesn't provide, host or recommend any content."
+            question: "What is a source? Does PlayCarTV come with channels?",
+            answer: "A source is a playlist link or a media server you own or subscribe to. PlayCarTV is a player only: it doesn't provide, host or recommend any content."
         ),
         FAQEntry(
             id: 3,
@@ -67,7 +67,7 @@ struct FAQEntry: Identifiable {
         FAQEntry(
             id: 10,
             question: "Is my data private?",
-            answer: "Everything you add stays on this iPhone: logins in the Keychain, channel lists in the app's private storage. Roadivo has no account, no ads and no tracking."
+            answer: "Everything you add stays on this iPhone: logins in the Keychain, channel lists in the app's private storage. PlayCarTV has no account, no ads and no tracking."
         )
     ]
 }

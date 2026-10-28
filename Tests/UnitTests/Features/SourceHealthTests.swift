@@ -1,6 +1,6 @@
 import Foundation
 import Testing
-@testable import Roadivo
+@testable import PlayCarTV
 
 /// Answers each request with a status and content type, or an error.
 final class HealthMockURLProtocol: URLProtocol, @unchecked Sendable {
@@ -94,7 +94,7 @@ struct SourceHealthTests {
 
     // MARK: Reading the playlist
 
-    @Test("The parser reports entries with no link and links Roadivo can't play, not stray text")
+    @Test("The parser reports entries with no link and links PlayCarTV can't play, not stray text")
     func parseIssues() {
         let report = M3UParser.report(mixedPlaylist)
 

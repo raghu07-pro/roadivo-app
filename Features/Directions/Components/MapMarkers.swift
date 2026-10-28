@@ -1,6 +1,6 @@
 import SwiftUI
 
-/// Where the iPhone is: a car in the theme's colours, Roadivo's own instead of Maps' blue dot.
+/// Where the iPhone is: a car in the theme's colours, PlayCarTV's own instead of Maps' blue dot.
 struct CarMarker: View {
     @ScaledMetric(relativeTo: .body) private var side: CGFloat = 34
 

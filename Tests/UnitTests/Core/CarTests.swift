@@ -1,7 +1,7 @@
 import AVFoundation
 import Foundation
 import Testing
-@testable import Roadivo
+@testable import PlayCarTV
 
 @Suite("Car")
 @MainActor
@@ -20,7 +20,7 @@ struct CarTests {
 
     @Test("Car Mode reopens in Drive View when it was left that way")
     func driveViewRemembered() throws {
-        let defaults = try #require(UserDefaults(suiteName: "roadivo.tests.\(UUID().uuidString)"))
+        let defaults = try #require(UserDefaults(suiteName: "playcartv.tests.\(UUID().uuidString)"))
         #expect(!Preferences(defaults: defaults).prefersDriveView)
         Preferences(defaults: defaults).prefersDriveView = true
         #expect(Preferences(defaults: defaults).prefersDriveView)

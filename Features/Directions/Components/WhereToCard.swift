@@ -1,6 +1,6 @@
 import SwiftUI
 
-/// Before a place is chosen: Roadivo's road at the hour's light, as on the splash and the app's icon, asking where to
+/// Before a place is chosen: PlayCarTV's road at the hour's light, as on the splash and the app's icon, asking where to
 /// (owner, 2026-10-27; DECISIONS 172).
 struct WhereToCard: View {
     /// The hour's light, which the app works out (`SplashMoment`).

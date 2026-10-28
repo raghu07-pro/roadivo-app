@@ -1,6 +1,6 @@
 import Foundation
 
-/// Asks Apple's public App Store lookup for Roadivo's current version in this storefront. It sends
+/// Asks Apple's public App Store lookup for PlayCarTV's current version in this storefront. It sends
 /// only the app's bundle ID and the country, nothing about the user.
 struct AppStoreUpdateChecker: AppUpdateChecking {
     let bundleID: String

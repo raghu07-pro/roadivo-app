@@ -27,7 +27,7 @@ struct OnboardingView: View {
 
                 PageDots(count: viewModel.pages.count, current: viewModel.currentIndex)
 
-                Text("Roadivo is a player only. It doesn't include or sell any channels or content.")
+                Text("PlayCarTV is a player only. It doesn't include or sell any channels or content.")
                     .font(Typography.caption)
                     .foregroundStyle(.roadMuted)
                     .multilineTextAlignment(.center)

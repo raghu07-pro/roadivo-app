@@ -1,8 +1,8 @@
 import CarPlay
 
 /// Centered tabs like CarTV's on the car's home screen (owner, 2026-10-23): Home, Favorites, Library, Cast and
-/// Browser in CarPlay's own tab bar, plain lists on CarPlay's wallpaper. The bar covers Roadivo's window, so video,
-/// casting and the browser switch back to it. Where CarPlay allows too few tabs for Roadivo's entitlement, the window
+/// Browser in CarPlay's own tab bar, plain lists on CarPlay's wallpaper. The bar covers PlayCarTV's window, so video,
+/// casting and the browser switch back to it. Where CarPlay allows too few tabs for PlayCarTV's entitlement, the window
 /// keeps its corner buttons.
 @MainActor
 final class CarPlayTabs: NSObject, CPTabBarTemplateDelegate {
@@ -26,7 +26,7 @@ final class CarPlayTabs: NSObject, CPTabBarTemplateDelegate {
         library.emptyViewTitleVariants = [String(appLocalized: "Add a source on your iPhone")]
     }
 
-    /// CarPlay sets how many tabs an app may show by its entitlements, so Roadivo asks rather than assumes.
+    /// CarPlay sets how many tabs an app may show by its entitlements, so PlayCarTV asks rather than assumes.
     func install(home: CPListTemplate, favorites: CPListTemplate, cast: CPListTemplate, browser: CPListTemplate) {
         self.home = home
         self.cast = cast

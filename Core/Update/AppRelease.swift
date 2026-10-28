@@ -1,6 +1,6 @@
 import Foundation
 
-/// The newest Roadivo on the App Store, for the "New Version Available" prompt.
+/// The newest PlayCarTV on the App Store, for the "New Version Available" prompt.
 struct AppRelease: Equatable, Sendable {
     let version: String
     let notes: String

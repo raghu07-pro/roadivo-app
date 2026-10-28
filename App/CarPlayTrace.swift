@@ -3,7 +3,7 @@ import OSLog
 
 /// Debug builds only: each CarPlay step in Caches/CarPlayTrace.log, which can be copied off a device (DECISIONS 137).
 enum CarPlayTrace {
-    private static let logger = Logger(subsystem: "com.roadivo", category: "CarPlay")
+    private static let logger = Logger(subsystem: "com.playcartv", category: "CarPlay")
 
     static func write(_ line: String) {
         #if DEBUG

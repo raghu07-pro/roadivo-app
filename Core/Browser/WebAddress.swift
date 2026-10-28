@@ -70,7 +70,7 @@ enum WebAddress {
     }
 }
 
-/// A video on a web page that Roadivo's own player can take: an HLS stream or a video file. A channel
+/// A video on a web page that PlayCarTV's own player can take: an HLS stream or a video file. A channel
 /// list (.m3u) is a source, not a video, so it stays with the page.
 enum WebMedia {
     private static let types: Set<String> = [

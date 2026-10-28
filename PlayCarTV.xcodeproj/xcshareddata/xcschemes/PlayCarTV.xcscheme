@@ -14,10 +14,10 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "EE0AF8DED2067FE97ACA6993"
-               BuildableName = "Roadivo.app"
-               BlueprintName = "Roadivo"
-               ReferencedContainer = "container:Roadivo.xcodeproj">
+               BlueprintIdentifier = "DC581B769478F85A24FA9721"
+               BuildableName = "PlayCarTV.app"
+               BlueprintName = "PlayCarTV"
+               ReferencedContainer = "container:PlayCarTV.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -35,10 +35,10 @@
             parallelizable = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "5FB42D04C7C088365429BB3A"
-               BuildableName = "RoadivoTests.xctest"
-               BlueprintName = "RoadivoTests"
-               ReferencedContainer = "container:Roadivo.xcodeproj">
+               BlueprintIdentifier = "A3E14C8448D285585D5F13D5"
+               BuildableName = "PlayCarTVTests.xctest"
+               BlueprintName = "PlayCarTVTests"
+               ReferencedContainer = "container:PlayCarTV.xcodeproj">
             </BuildableReference>
          </TestableReference>
          <TestableReference
@@ -46,20 +46,20 @@
             parallelizable = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "DE58DCA6B07054276D5CBFD2"
-               BuildableName = "RoadivoUITests.xctest"
-               BlueprintName = "RoadivoUITests"
-               ReferencedContainer = "container:Roadivo.xcodeproj">
+               BlueprintIdentifier = "871E5FF6998E4577EA6D1A5E"
+               BuildableName = "PlayCarTVUITests.xctest"
+               BlueprintName = "PlayCarTVUITests"
+               ReferencedContainer = "container:PlayCarTV.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
       <CodeCoverageTargets>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "EE0AF8DED2067FE97ACA6993"
-            BuildableName = "Roadivo.app"
-            BlueprintName = "Roadivo"
-            ReferencedContainer = "container:Roadivo.xcodeproj">
+            BlueprintIdentifier = "DC581B769478F85A24FA9721"
+            BuildableName = "PlayCarTV.app"
+            BlueprintName = "PlayCarTV"
+            ReferencedContainer = "container:PlayCarTV.xcodeproj">
          </BuildableReference>
       </CodeCoverageTargets>
    </TestAction>
@@ -77,10 +77,10 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "EE0AF8DED2067FE97ACA6993"
-            BuildableName = "Roadivo.app"
-            BlueprintName = "Roadivo"
-            ReferencedContainer = "container:Roadivo.xcodeproj">
+            BlueprintIdentifier = "DC581B769478F85A24FA9721"
+            BuildableName = "PlayCarTV.app"
+            BlueprintName = "PlayCarTV"
+            ReferencedContainer = "container:PlayCarTV.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
       <CommandLineArguments>
@@ -97,7 +97,7 @@
          </EnvironmentVariable>
       </EnvironmentVariables>
       <StoreKitConfigurationFileReference
-         identifier = "../StoreKit/Roadivo.storekit">
+         identifier = "../StoreKit/PlayCarTV.storekit">
       </StoreKitConfigurationFileReference>
    </LaunchAction>
    <ProfileAction
@@ -110,10 +110,10 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "EE0AF8DED2067FE97ACA6993"
-            BuildableName = "Roadivo.app"
-            BlueprintName = "Roadivo"
-            ReferencedContainer = "container:Roadivo.xcodeproj">
+            BlueprintIdentifier = "DC581B769478F85A24FA9721"
+            BuildableName = "PlayCarTV.app"
+            BlueprintName = "PlayCarTV"
+            ReferencedContainer = "container:PlayCarTV.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

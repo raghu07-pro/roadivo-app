@@ -1,6 +1,6 @@
 import Foundation
 import Testing
-@testable import Roadivo
+@testable import PlayCarTV
 
 /// Which screen shows the video, the iPhone or the car's, and moving it between them (DECISIONS 155, 165).
 @Suite("Playback origin")

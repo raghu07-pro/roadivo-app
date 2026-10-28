@@ -2,7 +2,7 @@
     import SwiftUI
     import UIKit
 
-    /// Roadivo's own car app on the plain CarPlay window (DECISIONS 161–163). The window's video, road and cast
+    /// PlayCarTV's own car app on the plain CarPlay window (DECISIONS 161–163). The window's video, road and cast
     /// picture (`CarPlayWindowController`) lie underneath; the car browser sits under its bar, beside the iPhone's
     /// screen in the split view, or alone in full screen; `CarScreenView` draws the rest. Every tap lands directly,
     /// with no CarPlay template. Taps are answered in `CarScreenController+Actions.swift`, so members are internal.
@@ -14,7 +14,7 @@
             let request: CarBrowserInputBridge.Request
         }
 
-        /// Roadivo's screen background (`roadCanvas`), light by day and dark by night.
+        /// PlayCarTV's screen background (`roadCanvas`), light by day and dark by night.
         static let canvas = UIColor(named: "CanvasBackground") ?? .systemBackground
 
         let model = CarScreenModel()
@@ -53,7 +53,7 @@
         lazy var stageSplit = stage.view.leadingAnchor.constraint(equalTo: splitPanel.trailingAnchor)
         lazy var splitUnderBar = splitPanel.topAnchor.constraint(equalTo: browserArea.topAnchor)
         lazy var splitFullHeight = splitPanel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor)
-        /// Roadivo's pages over the whole screen, or over the browser's side only, the iPhone's screen kept beside it.
+        /// PlayCarTV's pages over the whole screen, or over the browser's side only, the iPhone's screen kept beside it.
         lazy var overlayFull = overlay.view.leadingAnchor.constraint(equalTo: view.leadingAnchor)
         lazy var overlayBeside = overlay.view.leadingAnchor.constraint(equalTo: splitPanel.trailingAnchor)
         /// Each tab's page when last on screen, for its card on the Tabs page.
@@ -70,7 +70,7 @@
             setUpModel()
             // The video and road stay clear of CarPlay's dock and the screen's corners, as the page does.
             addStage()
-            stage.showsRoad = false // Roadivo's own screens fill everything but the video.
+            stage.showsRoad = false // PlayCarTV's own screens fill everything but the video.
             stage.showsProgress = false // The player's controls carry a bar to tap and drag.
             view.addSubview(browserArea)
             embed(browser, in: browserArea)
@@ -152,7 +152,7 @@
             ])
         }
 
-        /// The car's screen arrived: what plays, the lists and the Cast receiver start following Roadivo.
+        /// The car's screen arrived: what plays, the lists and the Cast receiver start following PlayCarTV.
         func connect() {
             loadViewIfNeeded()
             isConnected = true
@@ -184,7 +184,7 @@
             let browsing = model.mode == .browser
             let showsPicture = (model.mode == .player || model.mode == .mirror) && model.state == .video
             let pageShown = browsing && model.page == nil
-            // CarPlay's dock is see-through: Roadivo's canvas behind it, the webpage's white, or black by a video.
+            // CarPlay's dock is see-through: PlayCarTV's canvas behind it, the webpage's white, or black by a video.
             view.backgroundColor = showsPicture ? .black : pageShown ? .systemBackground : Self.canvas
             if !browsing {
                 isFullScreen = false

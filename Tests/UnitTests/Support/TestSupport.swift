@@ -1,6 +1,6 @@
 import AVFoundation
 import Foundation
-@testable import Roadivo
+@testable import PlayCarTV
 
 /// Serves canned playlist text per URL; never touches the network.
 final class StubFetcher: PlaylistFetching, @unchecked Sendable {

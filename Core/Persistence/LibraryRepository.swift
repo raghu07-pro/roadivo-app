@@ -11,7 +11,7 @@ final class LibraryRepository {
     private let fetcher: PlaylistFetching
     private let mediaServers: MediaServerConnecting
     private let fileManager: FileManager
-    let logger = Logger(subsystem: "com.roadivo", category: "Library")
+    let logger = Logger(subsystem: "com.playcartv", category: "Library")
 
     init(
         store: SwiftDataStore,

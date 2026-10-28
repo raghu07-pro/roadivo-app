@@ -1,5 +1,5 @@
 import Testing
-@testable import Roadivo
+@testable import PlayCarTV
 
 @Suite("Turn kind")
 struct TurnKindTests {

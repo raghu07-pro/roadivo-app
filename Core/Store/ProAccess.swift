@@ -1,7 +1,7 @@
 import Foundation
 import Observation
 
-/// Whether this user has Roadivo Pro. Free: one source (plus videos on this
+/// Whether this user has PlayCarTV Pro. Free: one source (plus videos on this
 /// iPhone). Pro: unlimited sources and Car Mode (DECISIONS 22).
 @Observable
 @MainActor

@@ -1,7 +1,7 @@
 #if DEBUG
     import SwiftUI
 
-    /// Everything Roadivo draws on the plain CarPlay window over its video, road and the iPhone's screen
+    /// Everything PlayCarTV draws on the plain CarPlay window over its video, road and the iPhone's screen
     /// (`CarPlayWindowController`): a page, or what the mode shows. The browser's page and toolbar are separate
     /// (`CarScreenController`), so taps reach the webpage.
     struct CarScreenView: View {

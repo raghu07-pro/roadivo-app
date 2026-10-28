@@ -1,7 +1,7 @@
 #if DEBUG
     import SwiftUI
 
-    /// The library search's results, laid out like CarTV's in Roadivo's theme (DECISIONS 163): back, the search with
+    /// The library search's results, laid out like CarTV's in PlayCarTV's theme (DECISIONS 163): back, the search with
     /// its microphone, and reload along the top; then each source's matches in a row, or one source's in a grid.
     struct CarSearchResultsPage: View {
         let model: CarScreenModel

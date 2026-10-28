@@ -7,7 +7,7 @@ enum M3UParser {
     struct Issues: Codable, Equatable, Sendable {
         /// An `#EXTINF` with no link after it.
         var withoutLink = 0
-        /// A link Roadivo can't play (udp, file, or not a link at all).
+        /// A link PlayCarTV can't play (udp, file, or not a link at all).
         var unsupportedLink = 0
 
         var total: Int {

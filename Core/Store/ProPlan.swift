@@ -1,6 +1,6 @@
 import Foundation
 
-/// The three ways to buy Roadivo Pro. Product IDs must match App Store Connect.
+/// The three ways to buy PlayCarTV Pro. Product IDs must match App Store Connect.
 enum ProPlan: String, CaseIterable, Identifiable, Sendable {
     case weekly
     case yearly
@@ -12,7 +12,7 @@ enum ProPlan: String, CaseIterable, Identifiable, Sendable {
 
     /// Must match the products in App Store Connect exactly (DECISIONS 23).
     var productID: String {
-        "com.disolutions.roadivo.pro.\(rawValue)"
+        "com.disolutions.playcartv.pro.\(rawValue)"
     }
 
     static var productIDs: Set<String> {

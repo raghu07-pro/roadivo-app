@@ -14,7 +14,7 @@ struct StringCatalogTests {
             .deletingLastPathComponent() // Core
             .deletingLastPathComponent() // UnitTests
             .deletingLastPathComponent() // Tests
-            .deletingLastPathComponent() // apps/Roadivo
+            .deletingLastPathComponent() // apps/PlayCarTV
             .appending(path: "Resources/Localizable.xcstrings")
         return try JSONDecoder().decode(CatalogFile.self, from: Data(contentsOf: url))
     }

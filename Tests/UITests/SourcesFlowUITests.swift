@@ -7,7 +7,7 @@ final class SourcesFlowUITests: XCTestCase {
     }
 
     func testDeletingASourceAsksFirst() {
-        let app = XCUIApplication.roadivo(skipOnboarding: true, demoLibrary: true)
+        let app = XCUIApplication.playcartv(skipOnboarding: true, demoLibrary: true)
         XCTAssertTrue(app.buttons["channel.Football Tonight"].waitForExistence(timeout: 10))
         app.tabBars.buttons["Settings"].tap()
         app.buttons["settings.sources"].tap()
@@ -28,7 +28,7 @@ final class SourcesFlowUITests: XCTestCase {
 
     /// A source opens its own channels: a chip per group, and a More menu to rename or delete it.
     func testSourceShowsItsChannelsByGroup() throws {
-        let app = XCUIApplication.roadivo(skipOnboarding: true, demoLibrary: true)
+        let app = XCUIApplication.playcartv(skipOnboarding: true, demoLibrary: true)
         XCTAssertTrue(app.buttons["channel.Football Tonight"].waitForExistence(timeout: 10))
         app.tabBars.buttons["Settings"].tap()
         app.buttons["settings.sources"].tap()
@@ -69,7 +69,7 @@ final class SourcesFlowUITests: XCTestCase {
     /// A channel on a source's screen plays once; closing the player leaves that one screen, and Back
     /// returns to Manage Sources (it never opens the same screen again).
     func testPlayingFromASourceKeepsOneScreen() {
-        let app = XCUIApplication.roadivo(skipOnboarding: true, demoLibrary: true)
+        let app = XCUIApplication.playcartv(skipOnboarding: true, demoLibrary: true)
         XCTAssertTrue(app.buttons["channel.Football Tonight"].waitForExistence(timeout: 10))
         app.tabBars.buttons["Settings"].tap()
         app.buttons["settings.sources"].tap()
@@ -98,7 +98,7 @@ final class SourcesFlowUITests: XCTestCase {
     /// Source Health, from a source's More menu: the stream check counts working and failing streams
     /// (the scripted check fails the 6 "_variant" demo streams), lists them, and the row shows it.
     func testSourceHealthChecksStreams() throws {
-        let app = XCUIApplication.roadivo(skipOnboarding: true, demoLibrary: true)
+        let app = XCUIApplication.playcartv(skipOnboarding: true, demoLibrary: true)
         XCTAssertTrue(app.buttons["channel.Football Tonight"].waitForExistence(timeout: 10))
         app.tabBars.buttons["Settings"].tap()
         app.buttons["settings.sources"].tap()
