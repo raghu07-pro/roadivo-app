@@ -8,7 +8,7 @@ DEVELOPMENT_TEAM = JX6Q67DW6M
 WEB_SCHEME = https:$()/$()/
 
 // Terms link shown in Settings and the paywall: Apple's standard EULA. The privacy policy
-// is the bundled Docs/Website/roadivo.html (DECISIONS 81), so it needs no URL here.
+// is the bundled Docs/Website/roadivo-policy.html (DECISIONS 81, 174), so it needs no URL here.
 TERMS_URL = $(WEB_SCHEME)www.apple.com/legal/internet-services/itunes/dev/stdeula/
 
 // The App Store listing's Apple ID (App Store Connect → App Information), for Rate and Share (DECISIONS 64).

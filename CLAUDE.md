@@ -239,10 +239,11 @@ None in v1 (DECISIONS 6). Everything is stored on the device.
   - Arabic and other right-to-left languages
 - **ATS:** `NSAllowsArbitraryLoads` is on (DECISIONS 8). Justify it in the App Review notes.
 - **Privacy:** no tracking, no ATT prompt, no third-party SDKs.
-- **Legal page:** `Docs/Website/roadivo.html` is one self-contained file (privacy,
+- **Legal page:** `Docs/Website/roadivo-policy.html` is one self-contained file (privacy,
   terms, support). It is hosted for App Store Connect, and the app shows the same
   file at Settings › Privacy Policy. Edit it directly; it is English only (DECISIONS 81).
-- **Before release:** host `Docs/Website/roadivo.html` for the App Store's Privacy Policy and Support URLs.
+- **Before release:** host `Docs/Website/roadivo-policy.html` at the website's `/roadivo-policy` path for the App Store's
+  Privacy Policy and Support URLs (DECISIONS 174).
 - **Debug mode in Release, for TestFlight testing** (owner, 2026-10-27; DECISIONS 170): the block at the end of
   `Config/Release.xcconfig` puts the touch car screen and all `#if DEBUG` code in archives. Delete it before an App Store
   archive; Apple is likely to reject it.

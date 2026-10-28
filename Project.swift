@@ -89,7 +89,7 @@ let project = Project(
                 "Resources/Fonts/Overpass-Black.ttf",
                 "Resources/Fonts/OverpassMono-SemiBold.ttf",
                 // The privacy page: the one file hosted for the App Store is also shown in the app.
-                "Docs/Website/roadivo.html"
+                "Docs/Website/roadivo-policy.html"
             ],
             scripts: [carScreenScene],
             // Screen Broadcast: Apple's screen recording, streamed to a car screen's browser (DECISIONS 124).

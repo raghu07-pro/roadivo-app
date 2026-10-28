@@ -62,7 +62,7 @@ The free version includes one source, unlimited imported videos, AirPlay, Pictur
 Payment is charged to your Apple Account at confirmation of purchase. Subscriptions renew automatically unless canceled at least 24 hours before the end of the current period, and your account is charged for renewal within the 24 hours before the period ends. An introductory price, where offered, is for new subscribers only. Manage or cancel your subscription in Settings › Apple Account › Subscriptions.
 
 Terms of Use: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
-Privacy Policy: https://www.disolutions.net/roadivo
+Privacy Policy: https://www.disolutions.net/roadivo-policy
 
 Roadivo is a player only. It does not provide, host or sell any channels or video; add only sources you have the right to use. Never watch video while driving.
 ```

@@ -100,6 +100,7 @@
 		44D92AE0F9ED52AC75DB52CC /* LibraryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 033020A4D5486455175E9A5F /* LibraryView.swift */; };
 		466DFF2A2E978048A7FA314D /* BottomAccessorySpace.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3A6E9C4BD785347AB016515 /* BottomAccessorySpace.swift */; };
 		469682206641D588D25DFBC6 /* PlaybackController+Screens.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0049B7474FF5205273F03217 /* PlaybackController+Screens.swift */; };
+		469F3F4652D8857CEDB25F00 /* roadivo-policy.html in Resources */ = {isa = PBXBuildFile; fileRef = A59AB2F4F978A2FDCE7D9719 /* roadivo-policy.html */; };
 		4707547565BA20E648912185 /* SplashTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E38B3A83F69EBE0A9D3EB447 /* SplashTests.swift */; };
 		47D7B7DDC980B43AD15D6F58 /* Place.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09627EF15A421D6763E42E33 /* Place.swift */; };
 		4846FF61C26646BCA334BF4E /* CockpitView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 338C0067E2DC9DB50EFF4A32 /* CockpitView.swift */; };
@@ -258,7 +259,6 @@
 		A4422BD3A9E9556C5912332E /* ErrorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB72B7044308A7EB528C9FA9 /* ErrorView.swift */; };
 		A50135C28561D83CAE2120C4 /* PaywallViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D407F14F64022D002B7C6E7A /* PaywallViewModel.swift */; };
 		A58A3B52F7B192A772C32599 /* CarScreenMapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D60EC5C24C8BFBFEDE95FD8 /* CarScreenMapView.swift */; };
-		A5EBE44D784C3464F32D9E7D /* roadivo.html in Resources */ = {isa = PBXBuildFile; fileRef = 075D0EFF6ED6ACF5041F1504 /* roadivo.html */; };
 		A61653F70BB31A4434F95A91 /* DisplayProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DEE2337C5E46A3A1B297DA9 /* DisplayProfile.swift */; };
 		A6367D1A03630A9AA4F141E5 /* UpNextCountdownView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 155884B6F74B5291D5EBE429 /* UpNextCountdownView.swift */; };
 		A6E2C7E5AFE3C541D4E73D26 /* CarConnection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C1EAFF4F0F5656C4D3CF582 /* CarConnection.swift */; };
@@ -482,7 +482,6 @@
 		06926A8D78E6BD51A5B7031B /* MotionSample.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MotionSample.swift; sourceTree = "<group>"; };
 		06D4EAFCC4F8929698C389EF /* DisplayProfileLabels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisplayProfileLabels.swift; sourceTree = "<group>"; };
 		074C53F6A829FC928A8486AB /* PlexLoginViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlexLoginViewModel.swift; sourceTree = "<group>"; };
-		075D0EFF6ED6ACF5041F1504 /* roadivo.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = roadivo.html; sourceTree = "<group>"; };
 		076683FB6B4E1F6F0A509A5A /* ArtworkTile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArtworkTile.swift; sourceTree = "<group>"; };
 		07ABE07C03C7B8363EBD4AB6 /* SiteIconTileTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SiteIconTileTests.swift; sourceTree = "<group>"; };
 		0908B73A03E53526A6273D51 /* MapButtons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapButtons.swift; sourceTree = "<group>"; };
@@ -718,6 +717,7 @@
 		A4D51FF1EB3E6009B7F2DB50 /* BrowseTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowseTests.swift; sourceTree = "<group>"; };
 		A56C1D526DF0151F60DEC8F7 /* SpeechTranscribing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeechTranscribing.swift; sourceTree = "<group>"; };
 		A57221306098A24641495305 /* ScreenMirrorReceiverTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenMirrorReceiverTests.swift; sourceTree = "<group>"; };
+		A59AB2F4F978A2FDCE7D9719 /* roadivo-policy.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = "roadivo-policy.html"; sourceTree = "<group>"; };
 		A5A4DCEEB63AF7F180482CDC /* LocalVideosViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalVideosViewModel.swift; sourceTree = "<group>"; };
 		A6010D934520A60E2A1748D8 /* RouteSnapshot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteSnapshot.swift; sourceTree = "<group>"; };
 		A66D673708EF88A6B97E815D /* DirectionsViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DirectionsViewModelTests.swift; sourceTree = "<group>"; };
@@ -1550,7 +1550,7 @@
 		A9B3DCB571153833872AA6AB /* Website */ = {
 			isa = PBXGroup;
 			children = (
-				075D0EFF6ED6ACF5041F1504 /* roadivo.html */,
+				A59AB2F4F978A2FDCE7D9719 /* roadivo-policy.html */,
 			);
 			path = Website;
 			sourceTree = "<group>";
@@ -1946,7 +1946,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A5EBE44D784C3464F32D9E7D /* roadivo.html in Resources */,
+				469F3F4652D8857CEDB25F00 /* roadivo-policy.html in Resources */,
 				84AF40B09417F502EF86709E /* Assets.xcassets in Resources */,
 				DA48F1E36AAAF8F050FBD8CA /* Overpass-Black.ttf in Resources */,
 				73CA14D5F1F371E0DF4A7C09 /* Overpass-Bold.ttf in Resources */,
