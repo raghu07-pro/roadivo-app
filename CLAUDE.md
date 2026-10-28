@@ -242,12 +242,12 @@ None in v1 (DECISIONS 6). Everything is stored on the device.
 - **Legal page:** `Docs/Website/roadivo-policy.html` is one self-contained file (privacy,
   terms, support). It is hosted for App Store Connect, and the app shows the same
   file at Settings › Privacy Policy. Edit it directly; it is English only (DECISIONS 81).
-- **Before release:** host `Docs/Website/roadivo-policy.html` at the website's `/roadivo-policy` path for the App Store's
-  Privacy Policy and Support URLs (DECISIONS 174).
+- **Hosted:** `Docs/Website/roadivo-policy.html` is live at https://www.disolutions.net/roadivo-policy, the App Store's
+  Privacy Policy and Support URL. Upload it again whenever the file changes (DECISIONS 174).
 - **Debug mode in Release, for TestFlight testing** (owner, 2026-10-27; DECISIONS 170): the block at the end of
   `Config/Release.xcconfig` puts the touch car screen and all `#if DEBUG` code in archives. Delete it before an App Store
   archive; Apple is likely to reject it.
-- **Uploads:** the next upload of 1.0.0 is build 10 (owner, 2026-10-27). Raise `buildNumber` in `Project.swift` by one for every upload
+- **Uploads:** the next upload of 1.0.0 is build 11 (owner, 2026-10-28). Raise `buildNumber` in `Project.swift` by one for every upload
   (App Store Connect refuses a number it has seen), keep `marketingVersion` until 1.0.0 is released, run
   `tuist generate`, and archive with the `Roadivo` scheme (DECISIONS 126).
 
