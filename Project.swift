@@ -8,7 +8,7 @@ private let bundleID = "com.disolutions.roadivo"
 private let deploymentTarget = "17.0"
 private let marketingVersion = "1.0.0"
 // One higher for every upload: App Store Connect refuses a build number it has seen (1 and 2 are on TestFlight).
-private let buildNumber = "11"
+private let buildNumber = "12"
 
 private let baseSettings: SettingsDictionary = [
     "SWIFT_VERSION": "6.0",
