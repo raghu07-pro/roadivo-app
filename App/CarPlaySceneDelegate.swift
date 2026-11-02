@@ -235,7 +235,7 @@ final class CarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegat
         return item
     }
 
-    /// In Xcode's console: whether this build and the connected car can show video, for "sound only" reports.
+    /// In Xcode's console: whether the connected car can show video, for "sound only" reports.
     @MainActor
     private func logVideoSupport() {
         var carSupportsVideo = false
@@ -247,7 +247,7 @@ final class CarPlaySceneDelegate: UIResponder, CPTemplateApplicationSceneDelegat
         logger.info("CarPlay connected. Car offers video: \(carSupportsVideo, privacy: .public)")
         trace("""
         connect, iOS \(UIDevice.current.systemVersion), Pro: \(AppEnvironment.current?.proAccess.isPro ?? false), \
-        signed: \(CarPlayAvailability.isVideoBuild ? "Video" : "Audio"), car video: \(carSupportsVideo), \
+        car video: \(carSupportsVideo), \
         tabs allowed: \(CPTabBarTemplate.maximumTabCount), \
         rows allowed: \(CPListTemplate.maximumItemCount)
         """)

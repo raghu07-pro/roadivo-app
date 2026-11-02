@@ -25,7 +25,7 @@ PLAYCARTV_CARPLAY_ENTITLEMENTS_NO[sdk=iphonesimulator*] = $(PLAYCARTV_CARPLAY_FI
 
 // Which CarPlay app the car shows; an app has one (owner, 2026-10-23; DECISIONS 152):
 // window: PlayCarTV's own screen, the four tabs as buttons and video while parked (navigation entitlement, no map).
-// media: CarPlay's template tabs, video only where the car offers it (Audio, or Video per PLAYCARTV_CARPLAY_VIDEO).
+// media: CarPlay's template tabs, video only where the car offers it (CarPlay Audio).
 // map: the navigation map and guidance, kept for a later release (DECISIONS 147–149).
 // screen: a plain window that takes the car's taps, for the Debug car browser experiment (Debug.xcconfig, DECISIONS
 // 161). It signs with CarPlay Audio + Video, as the open-source Cafari Lite needs for that window to appear.
@@ -33,11 +33,8 @@ PLAYCARTV_CARPLAY_APP = window
 PLAYCARTV_CARPLAY_FILE_window = Resources/PlayCarTVNavigation.entitlements
 PLAYCARTV_CARPLAY_FILE_map = Resources/PlayCarTVNavigation.entitlements
 PLAYCARTV_CARPLAY_FILE_screen = Resources/PlayCarTVCarScreen.entitlements
-PLAYCARTV_CARPLAY_FILE_media = $(PLAYCARTV_MEDIA_ENTITLEMENTS_$(PLAYCARTV_CARPLAY_VIDEO))
-// The media app signs with CarPlay Audio, or Video only where PLAYCARTV_CARPLAY_VIDEO (Debug/Release.xcconfig) is YES:
-// Apple's iOS 27.2 guide lets an app hold one or the other, never both (DECISIONS 150–151).
-PLAYCARTV_MEDIA_ENTITLEMENTS_NO = Resources/PlayCarTV.entitlements
-PLAYCARTV_MEDIA_ENTITLEMENTS_YES = Resources/PlayCarTVVideo.entitlements
+// Audio alone: Apple's iOS 27.2 guide lets an app hold Audio or Video, never both, and Audio covers video (DECISIONS 180).
+PLAYCARTV_CARPLAY_FILE_media = Resources/PlayCarTV.entitlements
 // The car's scene delegate, named in Info.plist: iOS reads the manifest for CarPlay rather than asking AppDelegate.
 PLAYCARTV_CARPLAY_SCENE_DELEGATE = $(PLAYCARTV_CARPLAY_DELEGATE_$(PLAYCARTV_CARPLAY_APP))
 PLAYCARTV_CARPLAY_DELEGATE_window = CarPlayWindowSceneDelegate

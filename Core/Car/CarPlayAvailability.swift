@@ -31,10 +31,4 @@ enum CarPlayAvailability {
         (Bundle.main.object(forInfoDictionaryKey: "PLAYCARTV_CARPLAY_APP") as? String).flatMap(App.init(rawValue:))
             ?? .media
     }
-
-    /// `PLAYCARTV_CARPLAY_VIDEO`: signed with CarPlay Video instead of Audio, so the app shows only in cars that
-    /// support video (DECISIONS 151). For the CarPlay trace.
-    static var isVideoBuild: Bool {
-        (Bundle.main.object(forInfoDictionaryKey: "PLAYCARTV_CARPLAY_VIDEO") as? String) == "YES"
-    }
 }

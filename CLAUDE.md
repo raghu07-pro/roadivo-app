@@ -108,10 +108,10 @@ tabs: **Home · Favorites · Discover · Maps · Settings**.
   `CPPlaybackConfiguration(preferredPresentation: .video)` (`CarPlaySceneDelegate.playsAsVideo`): CarPlay shows the
   video while parked and Now Playing with sound while driving; the car decides, PlayCarTV never checks. Test with a
   real iPhone on USB: Device Hub › select the iPhone › Device › CarPlay Simulator › vehicle "Standard Video Playback".
-- **`media`: Video-entitlement test builds** (owner, 2026-10-23; DECISIONS 151): `PLAYCARTV_CARPLAY_VIDEO` picks
-  `Resources/PlayCarTVVideo.entitlements` (Video only). It's YES for Debug builds on an iPhone, NO for simulator builds
-  and NO in `Config/Release.xcconfig`, so archives stay on Audio. Flip Release only after a Debug build shows video in
-  the CarPlay Simulator; Video alone hides PlayCarTV in cars without CarPlay video. The trace logs `signed: Video/Audio`.
+- **No Video-only builds** (owner, 2026-11-02; DECISIONS 180): `PLAYCARTV_CARPLAY_VIDEO` and
+  `PlayCarTVVideo.entitlements` are gone after App Review flagged build 12 for holding CarPlay Audio and Video (2.5.1).
+  `media` always signs with Audio. Only `screen` (`PlayCarTVCarScreen.entitlements`) still asks for Video, so CarPlay
+  Video stays on the App ID while that experiment does.
 - **`map`, CarPlay Navigation: approved by Apple, kept for a later release** (owner, 2026-10-23; DECISIONS 147–149,
   152). `CarPlayNavigationSceneDelegate`: PlayCarTV's map, place search, route previews and turn-by-turn guidance
   (`CarPlayGuidance`, `RouteGuide`), signed with `PlayCarTVNavigation.entitlements`. Don't use it until the owner says.
@@ -250,7 +250,7 @@ None in v1 (DECISIONS 6). Everything is stored on the device.
 - **Debug mode in Release, for TestFlight testing** (owner, 2026-10-27; DECISIONS 170): the block at the end of
   `Config/Release.xcconfig` puts the touch car screen and all `#if DEBUG` code in archives. Delete it before an App Store
   archive; Apple is likely to reject it.
-- **Uploads:** the next upload of 1.0.0 is build 12 (owner, 2026-10-28). Raise `buildNumber` in `Project.swift` by one for every upload
+- **Uploads:** the next upload of 1.0.0 is build 13 (owner, 2026-11-02). Raise `buildNumber` in `Project.swift` by one for every upload
   (App Store Connect refuses a number it has seen), keep `marketingVersion` until 1.0.0 is released, run
   `tuist generate`, and archive with the `PlayCarTV` scheme (DECISIONS 126).
 

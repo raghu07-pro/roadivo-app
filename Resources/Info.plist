@@ -45,8 +45,6 @@
 	<string>$(PLAYCARTV_CARPLAY)</string>
 	<key>PLAYCARTV_CARPLAY_APP</key>
 	<string>$(PLAYCARTV_CARPLAY_APP)</string>
-	<key>PLAYCARTV_CARPLAY_VIDEO</key>
-	<string>$(PLAYCARTV_CARPLAY_VIDEO)</string>
 	<key>PLAYCARTV_CAR_BROWSER</key>
 	<string>$(PLAYCARTV_CAR_BROWSER)</string>
 	<key>PLAYCARTV_DIRECTIONS</key>
