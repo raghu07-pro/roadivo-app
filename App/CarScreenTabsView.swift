@@ -1,7 +1,8 @@
 #if DEBUG
     import SwiftUI
 
-    /// The car screen's home (DECISIONS 162–164, 167, 172), all tapped directly in PlayCarTV's theme: its mark, the tabs
+    /// The car screen's home (DECISIONS 162–164, 167, 172), all tapped directly in PlayCarTV's theme: its mark, the
+    /// tabs
     /// and the search along the top; Home's shelves, Favorites' and Library's grids of pictures, Maps, and Cast's
     /// three steps under them.
     struct CarScreenTabsView: View {
@@ -21,19 +22,7 @@
                     }
             }
             .padding(Spacing.sm)
-            .background {
-                // The theme's glow from the top corner, so the screen has depth rather than a flat fill.
-                ZStack {
-                    Color.roadCanvas
-                    RadialGradient(
-                        colors: [Color.roadBrand.opacity(0.22), .clear],
-                        center: .topLeading,
-                        startRadius: 0,
-                        endRadius: 700
-                    )
-                }
-                .ignoresSafeArea()
-            }
+            .background { CarScreenBackdrop() }
         }
 
         // MARK: - Along the top
