@@ -14,7 +14,7 @@
                     // Pages saved with the browser's star, below the sites, as icons like theirs (owner, 2026-10-26).
                     if !model.savedPages.isEmpty {
                         Text(app: "Bookmarks")
-                            .font(.headline)
+                            .font(Typography.sectionTitle)
                             .padding(.top, Spacing.sm)
                         grid(model.savedPages.map(\.site))
                     }

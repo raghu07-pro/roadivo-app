@@ -10,7 +10,7 @@
             CarScreenSitesView(model: model)
                 .padding(Spacing.md)
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
-                .background(Color(.systemBackground).ignoresSafeArea())
+                .background { CarScreenBackdrop() }
         }
     }
 #endif

@@ -62,7 +62,9 @@ tabs: **Home · Favorites · Discover · Maps · Settings**.
   CarPlay's undocumented `UIWindowSceneSessionRoleCarPlay` role (Audio + Video signing, `carScreenScene` script in
   Project.swift), where taps reach PlayCarTV's own views and the page. `CarScreenController` draws the whole car app
   there over `CarPlayWindowController`: the five tabs, playback and Cast controls, and the browser at 75% under
-  CarTV's style of bar along the top (Close, Back, Forward, the address, Reload, Full screen). Tapped fields open
+  a bar along the top in PlayCarTV's theme (Close, Back, Forward, the address, Reload, Full screen; DECISIONS 181).
+  Every car page uses the theme's tokens (`roadCanvas`/`CarScreenBackdrop`, `roadSurface`, `roadMuted`,
+  `Typography`), never system greys or green. Tapped fields open
   `CarSearchPage` (PlayCarTV's keyboard), dropdowns `CarChoicesPage`. Delete the two lines in `Config/Debug.xcconfig`
   to bring back the CarPlay window and tabs.
 

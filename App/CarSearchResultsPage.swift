@@ -14,7 +14,7 @@
                 header
                 if sections.isEmpty {
                     Text(app: "No results found")
-                        .font(.title2)
+                        .font(Typography.sectionTitle)
                         .foregroundStyle(.roadMuted)
                         .padding(.leading, Spacing.xs)
                 } else if let section = sections.first(where: { $0.id == source }) {

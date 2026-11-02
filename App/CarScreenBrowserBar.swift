@@ -1,10 +1,8 @@
 #if DEBUG
     import SwiftUI
 
-    /// The car browser's white bar along the top, as CarTV's (DECISIONS 163): Close, Back, Forward, split view and
-    /// Start Page;
-    /// the page's address, which opens the search page; then Reload, Tabs, the star that saves the page, Full screen,
-    /// and Page size. The options are the CarPlay browser's More menu.
+    /// The car browser's bar along the top, in PlayCarTV's theme (DECISIONS 163, 181): Close, Back, Forward, split
+    /// view, Start Page, the page's address (opens the search page), Reload, Tabs, Save, Full screen and Page size.
     struct CarScreenBrowserBar: View {
         let model: CarScreenModel
 
@@ -33,7 +31,7 @@
             // A slim bar, as CarTV's: 34-point buttons in 40 points (owner, 2026-10-26).
             .padding(.horizontal, Spacing.xs)
             .padding(.vertical, 3)
-            .background(Color(.systemBackground).ignoresSafeArea())
+            .background(Color.roadCanvas.ignoresSafeArea())
         }
 
         /// The page's site, as in CarTV's bar; a tap searches or opens another address.
@@ -46,10 +44,10 @@
                         Text(WebAddress.displayName(of: page))
                     } else {
                         Text(app: "Search or enter website")
-                            .foregroundStyle(.secondary)
+                            .foregroundStyle(.roadMuted)
                     }
                 }
-                .font(.body)
+                .font(Typography.body)
                 .lineLimit(1)
                 .padding(.horizontal, Spacing.md)
                 .frame(maxWidth: .infinity, minHeight: 34)

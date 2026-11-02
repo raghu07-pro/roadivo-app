@@ -21,7 +21,7 @@
                     .buttonStyle(CarKeyStyle())
                     .accessibilityLabel(Text(app: "Cancel"))
                     Text(title)
-                        .font(.title2.bold())
+                        .font(Typography.screenTitle)
                         .lineLimit(1)
                 }
                 ScrollView {

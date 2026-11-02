@@ -18,8 +18,8 @@
                     .onTapGesture { model.actions?.closePage() }
                 VStack(alignment: .leading, spacing: 0) {
                     Text(Double(model.pageSize).formatted(.percent.precision(.fractionLength(0))))
-                        .font(.headline)
-                        .foregroundStyle(.secondary)
+                        .font(Typography.sign)
+                        .foregroundStyle(.roadMuted)
                         .padding(.horizontal, Spacing.md)
                         .padding(.vertical, Spacing.sm)
                     item("minus", title: "Zoom out", enabled: model.pageSize > 0.51) {
@@ -32,7 +32,9 @@
                 }
                 .padding(.vertical, Spacing.xs)
                 .frame(width: 260)
-                .carGlass(in: RoundedRectangle(cornerRadius: Radius.lg, style: .continuous))
+                // A PlayCarTV card floating over the page, as the car's other menus.
+                .cardStyle(padding: 0)
+                .shadow(color: .black.opacity(0.18), radius: 16, y: 6)
                 .padding(.top, Spacing.xs)
                 .padding(.trailing, Spacing.sm)
             }

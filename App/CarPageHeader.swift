@@ -9,7 +9,7 @@
         var body: some View {
             HStack(spacing: Spacing.sm) {
                 Text(app: title)
-                    .font(.title2.bold())
+                    .font(Typography.screenTitle)
                     .lineLimit(1)
                 Spacer(minLength: 0)
                 Button(action: onClose) {

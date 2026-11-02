@@ -54,12 +54,14 @@ final class CarBrowserController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .systemBackground
+        // PlayCarTV's canvas around the page and behind its notices, as the rest of the car screen.
+        let canvas = UIColor(named: "CanvasBackground") ?? .systemBackground
+        view.backgroundColor = canvas
         message.font = .preferredFont(forTextStyle: .body)
         message.adjustsFontForContentSizeCategory = true
         message.numberOfLines = 0
         message.textAlignment = .center
-        message.backgroundColor = .systemBackground
+        message.backgroundColor = canvas
         for child in [message, progress] {
             child.translatesAutoresizingMaskIntoConstraints = false
             view.addSubview(child)

@@ -75,7 +75,7 @@
                             model.actions?.endMirroring()
                         } label: {
                             Text(app: "End mirroring")
-                                .font(.headline)
+                                .font(Typography.button)
                                 .padding(.horizontal, Spacing.lg)
                                 .frame(minHeight: 56)
                         }
